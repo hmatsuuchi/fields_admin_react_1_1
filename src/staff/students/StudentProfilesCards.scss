@@ -1,0 +1,70 @@
+$teal: #00B8A9;
+$beige: #F8F3D4;
+$red: #F6416C;
+$yellow: #FFDE7D;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$grey: #3a3939;
+
+/* Header */
+.student-profile-header-container {
+    margin-bottom: .4rem;
+    padding: .5rem;
+
+    display: grid;
+    justify-content: right;
+    align-content: center;
+
+    .status {
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: #fff;
+
+    }
+}
+
+/* Header - Status */
+.pre-enrolled {
+    background-color: $pre-enrolled;
+}
+
+.enrolled {
+    background-color: $teal;
+}
+
+.short-absence {
+    background-color: $red;
+}
+
+.long-absence {
+    background-color: #000;
+}
+
+.status-unknown {
+    background-color: $grey;
+}
+
+/* Body - Name */
+.student-profile-body-container {
+    padding: .5rem;
+
+    .name-container {
+        margin-bottom: 1rem;
+    
+        .name-kanji-grade {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .name-katakana {
+            color: $grey;
+            margin-left: .1rem;
+        }
+
+        .name-romaji {
+            color: $grey;
+            margin-left: .3rem
+        }
+    }
+}
