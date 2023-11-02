@@ -1,6 +1,7 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
+import { useEffect } from "react";
 // Axios
-import instance from "../../staff/axios/axios_authenticated";
+import instance from "../axios/axios_authenticated";
 // CSS
 import "./StudentProfilesCards.scss";
 // Components

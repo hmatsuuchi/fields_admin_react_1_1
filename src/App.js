@@ -2,10 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 // COMPONENTS
-import Navigation from "./navigation/Navigation";
 import Login from "./authentication/Login";
+import Logout from "./authentication/Logout";
+// COMPONENTS - STAFF
+import Navigation from "./staff/navigation/Navigation";
+import Dashboard from "./staff/Dashboard";
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
-import StudentProfilesList from "./staff/students/StudentProfilesList";
 
 // CSS
 import "./App.css";
@@ -27,13 +29,13 @@ function App() {
     <BrowserRouter>
       {isAuth && <Navigation setIsAuth={setIsAuth} />}
       <Routes>
+        <Route path="/" element={<Login setIsAuth={setIsAuth} />} />
         <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
+        <Route path="/logout" element={<Logout setIsAuth={setIsAuth} />} />
+        <Route path="/staff/dashboard" element={<Dashboard />}></Route>
         <Route
-          path="/students/profiles/cards"
+          path="/staff/students/profiles/cards"
           element={<StudentProfilesCards />}></Route>
-        <Route
-          path="/students/profiles/list"
-          element={<StudentProfilesList />}></Route>
       </Routes>
     </BrowserRouter>
   );

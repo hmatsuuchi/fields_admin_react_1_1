@@ -56,11 +56,38 @@ button {
 
 /* Cards */
 .card-container {
-  margin: 1rem;
+  margin: 4rem 1rem 1rem 1rem;
+  max-width: 2000px;
 
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 1rem;
+  grid-column-gap: 1rem;
+}
+
+@media screen and (min-width: 650px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 975px) {
+  .card-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .card-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1625px) {
+  .card-container {
+    grid-template-columns: repeat(5, 1fr);
+    margin: 4rem auto;
+  }
 }
 
 .card {
@@ -73,5 +100,6 @@ button {
 
 /* List */
 .list-container {
-  margin: 1rem;
+  margin-top: 2.75rem;
+  text-wrap: nowrap;
 }

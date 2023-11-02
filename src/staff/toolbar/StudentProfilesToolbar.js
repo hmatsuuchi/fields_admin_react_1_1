@@ -1,8 +1,10 @@
 import React from "react";
 // CSS
-import "./StudentProfilesCardsToolbar.scss";
+import "./StudentProfilesToolbar.scss";
+// COMPONENTS
+import ResultCount from "../micro/ResultCount";
 
-function StudentProfilesCardsToolbar({ setSearchInput }) {
+function StudentProfilesToolbar({ setSearchInput, resultCount }) {
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
   };
@@ -13,11 +15,12 @@ function StudentProfilesCardsToolbar({ setSearchInput }) {
         <input
           id="search-input"
           type="text"
-          tabIndex="1"
+          tabIndex="-1"
           onChange={handleInputChange}></input>
       </div>
+      <ResultCount resultCount={resultCount} />
     </div>
   );
 }
 
-export default StudentProfilesCardsToolbar;
+export default StudentProfilesToolbar;

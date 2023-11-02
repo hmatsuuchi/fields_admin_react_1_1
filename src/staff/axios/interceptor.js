@@ -1,0 +1,74 @@
+import instance from "./axios_authenticated";
+
+// request interceptor
+instance.interceptors.request.use(
+  async (config) => {
+    // get access token
+    const accessToken = localStorage.getItem("access_token");
+
+    // if access token is in local storage, attaches token to request header
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// response interceptor
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    // saves original request
+    const originalRequest = error.config;
+
+    // 401 unauthorized error
+    if (error.response.status === 401 && !originalRequest._retry) {
+      console.error("Response intercerptor 401 error");
+      originalRequest._retry = true;
+
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      if (refreshToken) {
+        // send refresh token to API endpoint and get new access token
+        const response = await instance.post("api/token/refresh/", {
+          refresh: refreshToken,
+        });
+
+        // new access and refresh token
+        const newAccessToken = response.data.access;
+        const newRefreshToken = response.data.refresh;
+
+        // saves new access and refresh token to local storage
+        localStorage.setItem("access_token", newAccessToken);
+        localStorage.setItem("refresh_token", newRefreshToken);
+
+        // attach new access token to original request
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        // if access token refresh successful
+        if (response.status === 200) {
+          // retry original requst
+          return instance(originalRequest);
+        } else {
+          console.error("Error refreshing token");
+          // if error refreshing access token, redirect to login page
+          window.location.href = "/login/";
+        }
+      } else {
+        console.error("Refresh token not in local storage");
+        // if refresh token not in local storage, redirect to login page
+        window.location.href = "/login/";
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default instance;

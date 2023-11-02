@@ -1,0 +1,14 @@
+$grey: #3a3939;
+
+.result-container {
+  width: 4rem;
+  display: grid;
+  place-content: center;
+  color: #fff;
+  margin-right: .5rem;
+
+  .result {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+}

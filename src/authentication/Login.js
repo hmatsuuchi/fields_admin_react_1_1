@@ -1,12 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import instance_public from "../axios/axios_public";
+import instance_public from "../staff/axios/axios_public";
 
 function Login({ setIsAuth }) {
-  const [username, setUsername] = useState("fields_admin");
-  const [password, setPassword] = useState(
-    "znH8Cd5i!BN*gHYCj5*KsW6Cf9gqEfqypvM8W&dGjmGQED2tKqBQJBd@bKMVkRVn*kGPB64oH%dLF9A^@RjNFQ%mfu9MJ%P&cqdgxS!U!omZS$d7dBX3V9&vRQJd2hxD"
-  );
+  // !!! username and password hardcoded !!!
+  // !!! remove before pushing to production server !!!
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ function Login({ setIsAuth }) {
       localStorage.setItem("refresh_token", data.refresh);
 
       // redirect
-      window.location.href = "/students/profiles/cards";
+      window.location.href = "/staff/dashboard";
       // is authenticated bool
       setIsAuth(true);
     } else {

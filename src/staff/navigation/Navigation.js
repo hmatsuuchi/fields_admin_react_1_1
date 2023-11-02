@@ -1,6 +1,4 @@
 import React from "react";
-// Axios
-import instance from "../axios/axios";
 // React Router DOM
 import { NavLink } from "react-router-dom";
 // CSS
@@ -33,64 +31,55 @@ function Navigation({ setIsAuth }) {
     window.removeEventListener("scroll", closeNavOnScroll);
   }
 
-  // disables clicks to nav
-  function closeDisableNav() {
-    document.getElementById("navigation").classList.add("nav-disabled");
+  // disables clicks to nav and closes nav
+  // function closeDisableNav() {
+  //   document.getElementById("navigation").classList.add("nav-disabled");
 
-    const navigation = document.getElementById("navigation");
-    if (navigation.classList.contains("nav-active")) {
-      navigation.classList.add("nav-inactive");
-      navigation.classList.remove("nav-active");
-      window.removeEventListener("scroll", closeNavOnScroll);
-    }
+  //   const navigation = document.getElementById("navigation");
+  //   if (navigation.classList.contains("nav-active")) {
+  //     navigation.classList.add("nav-inactive");
+  //     navigation.classList.remove("nav-active");
+  //     window.removeEventListener("scroll", closeNavOnScroll);
+  //   }
+  // }
+
+  // disables clicks to toolbar
+  // function disableToolbar() {
+  //   document.getElementById("toolbar").classList.add("toolbar-disabled");
+  // }
+
+  // removes focus from search field
+  // function removeFocusFromSearchInput() {
+  //   document.getElementById("search-input").blur();
+  // }
+
+  function clicksToNavHousekeeping() {
+    closeNavOnScroll();
+    // closeDisableNav();
+    // disableToolbar();
+    // removeFocusFromSearchInput();
   }
 
-  const logout = () =>
-    (async () => {
-      try {
-        await instance
-          .post("api/logout/", {
-            refresh_token: localStorage.getItem("refresh_token"),
-          })
-          .then(() => {
-            localStorage.clear();
-            setIsAuth(false);
-          })
-          .catch((e) => {});
-      } catch (e) {
-        console.log("logout not working", e);
-      }
-    })();
-
   return (
-    <nav id="navigation" className="nav-disabled">
+    <nav id="navigation">
       <div id="link-list-container">
         <NavLink
-          id="link-item-03"
-          to="/login"
+          id="link-item-01"
+          to="/staff/dashboard"
           className={({ isActive, isPending }) =>
             isPending ? "pending" : isActive ? "active" : ""
           }
-          onClick={logout}>
-          ログアウト
+          onClick={clicksToNavHousekeeping}>
+          ダッシュボード
         </NavLink>
         <NavLink
           id="link-item-02"
-          to="/students/profiles/cards"
+          to="/staff/students/profiles/cards"
           className={({ isActive, isPending }) =>
             isPending ? "pending" : isActive ? "active" : ""
           }
-          onClick={closeDisableNav}>
+          onClick={clicksToNavHousekeeping}>
           生徒カード
-        </NavLink>
-        <NavLink
-          id="link-item-01"
-          to="/students/profiles/list"
-          className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "active" : ""
-          }
-          onClick={closeDisableNav}>
-          生徒リスト
         </NavLink>
       </div>
       <button id="hamburger-button" onClick={toggleNavigation}>
