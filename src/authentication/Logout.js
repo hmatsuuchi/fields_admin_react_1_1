@@ -18,7 +18,6 @@ function Logout({ setIsAuth }) {
         // sets auth bool to false
         setIsAuth(false);
       } catch (error) {
-        console.error("Error blacklisting refresh token:", error);
         // Handle error (e.g., show an error message)
       }
     };

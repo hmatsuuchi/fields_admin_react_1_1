@@ -3,8 +3,6 @@ import { useState } from "react";
 import instance_public from "../staff/axios/axios_public";
 
 function Login({ setIsAuth }) {
-  // !!! username and password hardcoded !!!
-  // !!! remove before pushing to production server !!!
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

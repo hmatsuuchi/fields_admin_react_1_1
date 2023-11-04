@@ -29,7 +29,6 @@ instance.interceptors.response.use(
 
     // 401 unauthorized error
     if (error.response.status === 401 && !originalRequest._retry) {
-      console.error("Response intercerptor 401 error");
       originalRequest._retry = true;
 
       const refreshToken = localStorage.getItem("refresh_token");
@@ -48,20 +47,19 @@ instance.interceptors.response.use(
         localStorage.setItem("access_token", newAccessToken);
         localStorage.setItem("refresh_token", newRefreshToken);
 
-        // attach new access token to original request
+        // attach new access and refresh token to original request
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.data = { refresh_token: newRefreshToken };
 
         // if access token refresh successful
         if (response.status === 200) {
           // retry original requst
           return instance(originalRequest);
         } else {
-          console.error("Error refreshing token");
           // if error refreshing access token, redirect to login page
           window.location.href = "/login/";
         }
       } else {
-        console.error("Refresh token not in local storage");
         // if refresh token not in local storage, redirect to login page
         window.location.href = "/login/";
       }
