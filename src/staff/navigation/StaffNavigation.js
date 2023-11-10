@@ -2,9 +2,9 @@ import React from "react";
 // React Router DOM
 import { NavLink } from "react-router-dom";
 // CSS
-import "./Navigation.scss";
+import "./StaffNavigation.scss";
 
-function Navigation({ setIsAuth }) {
+function StaffNavigation() {
   // toggles navigation open/closed
   // adds/removes closeNavOnScroll event listener when nav is open/closed
   function toggleNavigation() {
@@ -31,33 +31,8 @@ function Navigation({ setIsAuth }) {
     window.removeEventListener("scroll", closeNavOnScroll);
   }
 
-  // disables clicks to nav and closes nav
-  // function closeDisableNav() {
-  //   document.getElementById("navigation").classList.add("nav-disabled");
-
-  //   const navigation = document.getElementById("navigation");
-  //   if (navigation.classList.contains("nav-active")) {
-  //     navigation.classList.add("nav-inactive");
-  //     navigation.classList.remove("nav-active");
-  //     window.removeEventListener("scroll", closeNavOnScroll);
-  //   }
-  // }
-
-  // disables clicks to toolbar
-  // function disableToolbar() {
-  //   document.getElementById("toolbar").classList.add("toolbar-disabled");
-  // }
-
-  // removes focus from search field
-  // function removeFocusFromSearchInput() {
-  //   document.getElementById("search-input").blur();
-  // }
-
   function clicksToNavHousekeeping() {
     closeNavOnScroll();
-    // closeDisableNav();
-    // disableToolbar();
-    // removeFocusFromSearchInput();
   }
 
   return (
@@ -93,4 +68,4 @@ function Navigation({ setIsAuth }) {
   );
 }
 
-export default Navigation;
+export default StaffNavigation;

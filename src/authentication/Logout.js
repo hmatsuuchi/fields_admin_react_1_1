@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import instance from "../staff/axios/axios_authenticated";
 
-function Logout({ setIsAuth }) {
+function Logout({ setIsAuth, setIsStaff }) {
   useEffect(() => {
     const logoutUser = async () => {
       const refreshToken = localStorage.getItem("refresh_token");
@@ -15,16 +15,17 @@ function Logout({ setIsAuth }) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
 
-        // sets auth bool to false
+        // sets auth and staff bool to false
         setIsAuth(false);
+        setIsStaff(null);
       } catch (error) {
-        // Handle error (e.g., show an error message)
+        console.error("logout error: ", error);
       }
     };
 
     // calls logout function
     logoutUser();
-  }, [setIsAuth]);
+  }, [setIsAuth, setIsStaff]);
 
   return <h1>you have been logged out</h1>;
 }
