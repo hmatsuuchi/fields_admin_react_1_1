@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 // COMPONENTS
 import Login from "./authentication/Login";
 import Logout from "./authentication/Logout";
+import StaffProtectedRoute from "./authentication/StaffProtectedRoute";
+import CustomerProtectedRoute from "./authentication/CustomerProtectedRoute";
 // COMPONENTS - STAFF
 import StaffNavigation from "./staff/navigation/StaffNavigation";
 import StaffDashboard from "./staff/Dashboard";
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
+import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 // COMPNENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -20,23 +22,31 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [isStaff, setIsStaff] = useState(null);
+  const [isCustomer, setIsCustomer] = useState(null);
 
   useEffect(() => {
+    // gets authentication bool from local storage
     if (localStorage.getItem("refresh_token")) {
       setIsAuth(true);
     } else {
       setIsAuth(false);
     }
-
-    console.log(isAuth, isStaff);
-  }, [isAuth, isStaff]);
+    // gets isStaff bool from local storage
+    if (localStorage.getItem("is_staff")) {
+      setIsStaff(true);
+    }
+    // gets isStaff bool from local storage
+    if (localStorage.getItem("is_customer")) {
+      setIsCustomer(true);
+    }
+  }, []);
 
   return (
     <BrowserRouter>
       {isAuth && isStaff ? (
         <StaffNavigation />
       ) : (
-        isAuth && <CustomerNavigation />
+        isAuth && isCustomer && <CustomerNavigation />
       )}
       <Routes>
         <Route
@@ -47,6 +57,8 @@ function App() {
               setIsAuth={setIsAuth}
               isStaff={isStaff}
               setIsStaff={setIsStaff}
+              isCustomer={isCustomer}
+              setIsCustomer={setIsCustomer}
             />
           }
         />
@@ -58,22 +70,51 @@ function App() {
               setIsAuth={setIsAuth}
               isStaff={isStaff}
               setIsStaff={setIsStaff}
+              isCustomer={isCustomer}
+              setIsCustomer={setIsCustomer}
             />
           }
         />
         <Route
           path="/logout"
-          element={<Logout setIsAuth={setIsAuth} setIsStaff={setIsStaff} />}
+          element={
+            <Logout
+              setIsAuth={setIsAuth}
+              setIsStaff={setIsStaff}
+              setIsCustomer={setIsCustomer}
+            />
+          }
         />
         {/* STAFF ROUTES */}
-        <Route path="/staff/dashboard" element={<StaffDashboard />}></Route>
+        <Route
+          path="/staff/dashboard"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StaffDashboard />
+            </StaffProtectedRoute>
+          }></Route>
         <Route
           path="/staff/students/profiles/cards"
-          element={<StudentProfilesCards />}></Route>
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StudentProfilesCards />
+            </StaffProtectedRoute>
+          }></Route>
+        <Route
+          path="/staff/students/profiles/details/:profileId"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StudentProfilesDetails />
+            </StaffProtectedRoute>
+          }></Route>
         {/* CUSTOMER ROUTES */}
         <Route
           path="/customer/dashboard"
-          element={<CustomerDashboard />}></Route>
+          element={
+            <CustomerProtectedRoute isAuth={isAuth} isCustomer={isCustomer}>
+              <CustomerDashboard />
+            </CustomerProtectedRoute>
+          }></Route>
       </Routes>
     </BrowserRouter>
   );

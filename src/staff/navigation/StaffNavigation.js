@@ -54,7 +54,7 @@ function StaffNavigation() {
             isPending ? "pending" : isActive ? "active" : ""
           }
           onClick={clicksToNavHousekeeping}>
-          生徒カード
+          生徒情報
         </NavLink>
       </div>
       <button id="hamburger-button" onClick={toggleNavigation}>

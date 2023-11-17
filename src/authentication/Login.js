@@ -4,7 +4,14 @@ import { Navigate } from "react-router-dom";
 import instance_public from "../staff/axios/axios_public";
 import instance_authenticated from "../staff/axios/axios_authenticated";
 
-function Login({ isAuth, setIsAuth, isStaff, setIsStaff }) {
+function Login({
+  isAuth,
+  setIsAuth,
+  isStaff,
+  setIsStaff,
+  isCustomer,
+  setIsCustomer,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -46,9 +53,13 @@ function Login({ isAuth, setIsAuth, isStaff, setIsStaff }) {
               ) {
                 // set staff bool
                 setIsStaff(true);
+                // set staff bool in local storage
+                localStorage.setItem("is_staff", true);
               } else {
-                // set sfaff bool
-                setIsStaff(false);
+                // set customer bool
+                setIsCustomer(true);
+                // set customer bool in local storage
+                localStorage.setItem("is_customer", true);
               }
             });
         } catch (e) {
@@ -65,7 +76,7 @@ function Login({ isAuth, setIsAuth, isStaff, setIsStaff }) {
   if (isAuth && isStaff) {
     // staff redirect
     return <Navigate replace to="/staff/dashboard" />;
-  } else if (isAuth && isStaff === false) {
+  } else if (isAuth && isCustomer) {
     // customer redirect
     return <Navigate replace to="/customer/dashboard" />;
   } else {

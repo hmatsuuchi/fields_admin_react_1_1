@@ -1,4 +1,5 @@
 import instance from "./axios_authenticated";
+// import { Navigate } from "react-router-dom";
 
 // request interceptor
 instance.interceptors.request.use(
@@ -57,11 +58,25 @@ instance.interceptors.response.use(
           return instance(originalRequest);
         } else {
           // if error refreshing access token, redirect to login page
-          window.location.href = "/login/";
+          // window.location.href = "/login/";
+
+          // Clear tokens from local storage
+          console.error(
+            "request retry error, removing access and refresh tokens from local storage"
+          );
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
         }
       } else {
         // if refresh token not in local storage, redirect to login page
-        window.location.href = "/login/";
+        // window.location.href = "/login/";
+
+        // Clear tokens from local storage
+        console.error(
+          "refresh token not found in local storage, removing access and refresh tokens from local storage"
+        );
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
       }
     }
 

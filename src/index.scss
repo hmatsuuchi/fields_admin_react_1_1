@@ -29,6 +29,7 @@ button {
 
 a {
   text-decoration: none;
+  color: #000;
 }
 
 li {
@@ -54,10 +55,14 @@ button {
   font-weight: 500;
 }
 
-/* Cards */
+/* Cards - Responsive Columns */
+.card-section {
+  display: grid;
+}
+
 .card-container {
   margin: 4rem 1rem 1rem 1rem;
-  max-width: 2000px;
+  max-width: 2600px;
 
   display: grid;
   grid-auto-flow: row;
@@ -86,7 +91,22 @@ button {
 @media screen and (min-width: 1625px) {
   .card-container {
     grid-template-columns: repeat(5, 1fr);
-    margin: 4rem auto;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .card-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media screen and (min-width: 2500px) {
+  .card-section {
+    justify-content: center;
+  }
+  
+  .card-container {
+    grid-template-columns: repeat(7, 1fr);
   }
 }
 
@@ -98,8 +118,26 @@ button {
   overflow: hidden;
 }
 
-/* List */
-.list-container {
-  margin-top: 2.75rem;
-  text-wrap: nowrap;
+/* Cards - Full Width */
+.card-section-full-width {
+  display: grid;
+}
+
+.card-container-full-width {
+  margin: 4rem auto 1rem auto;
+  width: calc(100% - 2rem);
+  max-width: 800px;
+
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 1rem;
+  grid-column-gap: 1rem;
+}
+
+.card-full-width {
+  background-color: #fff;
+  border: 1px solid $light-grey;
+  border-radius: .3rem;
+  box-shadow: .2rem .2rem .4rem rgba(0, 0, 0, .15);
+  overflow: hidden;
 }

@@ -13,7 +13,8 @@ $grey: #3a3939;
     padding: .5rem;
 
     display: grid;
-    justify-content: right;
+    grid-auto-flow: column;
+    justify-content: space-between;
     align-content: center;
 
     .status {
@@ -25,6 +26,13 @@ $grey: #3a3939;
 }
 
 /* Header - Status */
+.archived {
+    width: 1.5rem;
+    background-image: url("./img/archived.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
 .pre-enrolled {
     background-color: $pre-enrolled;
 }

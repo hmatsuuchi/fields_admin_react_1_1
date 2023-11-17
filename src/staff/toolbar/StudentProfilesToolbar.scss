@@ -24,7 +24,7 @@ $grey: #3a3939;
     grid-auto-flow: column;
 
     #search-container {
-        margin-right: .5rem;
+        margin: 0 .5rem 0 .5rem;
 
         display: grid;
         grid-auto-flow: column;
@@ -57,7 +57,3 @@ $grey: #3a3939;
         }
     }
 }
-
-// #toolbar.toolbar-disabled {
-//     pointer-events: none;
-// }
