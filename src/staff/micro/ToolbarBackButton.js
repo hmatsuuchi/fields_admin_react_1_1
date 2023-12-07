@@ -3,10 +3,10 @@ import React from "react";
 import "./ToolbarBackButton.scss";
 import { Link } from "react-router-dom";
 
-function ToolbarBackButton() {
+function ToolbarBackButton({ backButtonLink, backButtonText }) {
   return (
-    <Link to="/staff/students/profiles/cards" className="toolbar-back-button">
-      生徒情報
+    <Link to={backButtonLink} className="toolbar-back-button">
+      {backButtonText}
     </Link>
   );
 }

@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import instance_public from "../staff/axios/axios_public";
 import instance_authenticated from "../staff/axios/axios_authenticated";
@@ -14,6 +13,16 @@ function Login({
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    // clear local storage
+    localStorage.clear();
+
+    // sets auth and staff bool to false
+    setIsAuth(false);
+    setIsStaff(null);
+    setIsCustomer(null);
+  }, [setIsAuth, setIsStaff, setIsCustomer]);
 
   const submit = async (e) => {
     e.preventDefault();

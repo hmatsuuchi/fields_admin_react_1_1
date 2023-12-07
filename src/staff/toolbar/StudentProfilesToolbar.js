@@ -3,6 +3,8 @@ import React from "react";
 import "./StudentProfilesToolbar.scss";
 // COMPONENTS
 import ResultCount from "../micro/ResultCount";
+import AddNewProfileButton from "../micro/AddNewProfileButton";
+import VerticalDividerThin from "../micro/VerticalDividerThin";
 
 function StudentProfilesToolbar({ setSearchInput, resultCount }) {
   const handleInputChange = (event) => {
@@ -11,6 +13,8 @@ function StudentProfilesToolbar({ setSearchInput, resultCount }) {
 
   return (
     <div id="toolbar">
+      <AddNewProfileButton />
+      <VerticalDividerThin />
       <div id="search-container">
         <input
           id="search-input"

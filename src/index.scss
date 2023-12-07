@@ -1,7 +1,7 @@
-$teal: #00B8A9;
-$beige: #F8F3D4;
-$red: #F6416C;
-$yellow: #FFDE7D;
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
@@ -9,15 +9,17 @@ $grey: #3a3939;
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* just some extra room to breathe at the bottom */
+  padding-bottom: 20rem;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -37,21 +39,20 @@ li {
 }
 
 /* Noto Sans JP 400, 500 */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap");
 
 body {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   background-color: #dad6d6;
 }
 
 input {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   font-weight: 500;
 }
 
 button {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: "Noto Sans JP", sans-serif;
   font-weight: 500;
 }
 
@@ -104,7 +105,7 @@ button {
   .card-section {
     justify-content: center;
   }
-  
+
   .card-container {
     grid-template-columns: repeat(7, 1fr);
   }
@@ -113,8 +114,8 @@ button {
 .card {
   background-color: #fff;
   border: 1px solid $light-grey;
-  border-radius: .3rem;
-  box-shadow: .2rem .2rem .4rem rgba(0, 0, 0, .15);
+  border-radius: 0.3rem;
+  box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
@@ -137,7 +138,7 @@ button {
 .card-full-width {
   background-color: #fff;
   border: 1px solid $light-grey;
-  border-radius: .3rem;
-  box-shadow: .2rem .2rem .4rem rgba(0, 0, 0, .15);
+  border-radius: 0.3rem;
+  box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }

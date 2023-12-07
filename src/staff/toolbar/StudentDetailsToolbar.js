@@ -7,7 +7,10 @@ import ToolbarBackButton from "../micro/ToolbarBackButton";
 function StudentDetailsToolbar() {
   return (
     <div id="details-toolbar">
-      <ToolbarBackButton />
+      <ToolbarBackButton
+        backButtonLink={"/staff/students/profiles/cards"}
+        backButtonText={"生徒情報"}
+      />
     </div>
   );
 }

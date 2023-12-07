@@ -1,5 +1,5 @@
 import instance from "./axios_authenticated";
-// import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // request interceptor
 instance.interceptors.request.use(
@@ -27,6 +27,7 @@ instance.interceptors.response.use(
   async (error) => {
     // saves original request
     const originalRequest = error.config;
+    const originalRequestData = error.config.data;
 
     // 401 unauthorized error
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -54,29 +55,30 @@ instance.interceptors.response.use(
 
         // if access token refresh successful
         if (response.status === 200) {
-          // retry original requst
+          // reset data payload and retry original requst
+          originalRequest.data = originalRequestData;
           return instance(originalRequest);
         } else {
-          // if error refreshing access token, redirect to login page
-          // window.location.href = "/login/";
-
           // Clear tokens from local storage
           console.error(
             "request retry error, removing access and refresh tokens from local storage"
           );
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
+
+          // if error refreshing access token, redirect to login page
+          return <Navigate replace to="/login" />;
         }
       } else {
-        // if refresh token not in local storage, redirect to login page
-        // window.location.href = "/login/";
-
         // Clear tokens from local storage
         console.error(
           "refresh token not found in local storage, removing access and refresh tokens from local storage"
         );
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+
+        // if refresh token not in local storage, redirect to login page
+        return <Navigate replace to="/login" />;
       }
     }
 

@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from "react";
 // Axios
 import instance from "../../staff/axios/axios_authenticated";
-// CSS
-import "./StudentProfilesCards.scss";
 // Components
 import LoadingSpinner from "../../staff/micro/LoadingSpinner";
-import DividerThin from "../../staff/micro/DividerThin";
+import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
 import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
 import { Link } from "react-router-dom";
+// CSS
+import "./StudentProfilesCards.scss";
 
 function StudentProfiles() {
   const [studentProfiles, setStudentProfiles] = useState(null);
@@ -162,7 +162,9 @@ function StudentProfiles() {
                         {profile.phone.length !== 0 &&
                           (profile.post_code !== "" ||
                             profile.address_1 !== "" ||
-                            profile.address_2 !== "") && <DividerThin />}
+                            profile.address_2 !== "") && (
+                            <HorizontalDividerThin />
+                          )}
                         <div className="address-container">
                           <div className="post-code">
                             {profile.post_code !== ""
@@ -184,7 +186,7 @@ function StudentProfiles() {
                           profile.city !== "" ||
                           profile.address_1 !== "" ||
                           profile.address_2 !== "") &&
-                          profile.birthday && <DividerThin />}
+                          profile.birthday && <HorizontalDividerThin />}
                         <div className="birthday-container">
                           <div className="birthday">
                             {profile.birthday !== null
@@ -193,7 +195,9 @@ function StudentProfiles() {
                           </div>
                         </div>
                         {profile.birthday !== null &&
-                          profile.payment_method !== null && <DividerThin />}
+                          profile.payment_method !== null && (
+                            <HorizontalDividerThin />
+                          )}
                         <div className="payment-container">
                           {profile.payment_method && (
                             <div className="payment-method">

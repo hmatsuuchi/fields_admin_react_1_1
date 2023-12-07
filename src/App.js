@@ -10,6 +10,7 @@ import StaffNavigation from "./staff/navigation/StaffNavigation";
 import StaffDashboard from "./staff/Dashboard";
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
 import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
+import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 // COMPNENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -93,6 +94,7 @@ function App() {
               <StaffDashboard />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - STUDENT PROFILES */}
         <Route
           path="/staff/students/profiles/cards"
           element={
@@ -105,6 +107,13 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesDetails />
+            </StaffProtectedRoute>
+          }></Route>
+        <Route
+          path="/staff/students/profiles/create"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StudentProfilesCreate />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES */}
