@@ -1,78 +1,95 @@
-$teal: #00B8A9;
-$beige: #F8F3D4;
-$red: #F6416C;
-$yellow: #FFDE7D;
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
+$lighter-grey: #f1f1f1;
 $grey: #3a3939;
 
 /* Header */
 .student-profile-header-container {
-    margin-bottom: .4rem;
-    padding: .5rem;
+  margin-bottom: 0.4rem;
+  padding: 0.5rem;
 
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: space-between;
-    align-content: center;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-content: center;
 
-    .status {
-        font-size: 1.3rem;
-        font-weight: 500;
-        color: #fff;
-
-    }
+  .status {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #fff;
+  }
 }
 
 /* Header - Status */
 .archived {
-    width: 1.5rem;
-    background-image: url("./img/archived.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
+  width: 1.5rem;
+  background-image: url("./img/archived.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 .pre-enrolled {
-    background-color: $pre-enrolled;
+  background-color: $pre-enrolled;
 }
 
 .enrolled {
-    background-color: $teal;
+  background-color: $teal;
 }
 
 .short-absence {
-    background-color: $red;
+  background-color: $red;
 }
 
 .long-absence {
-    background-color: #000;
+  background-color: #000;
 }
 
 .status-unknown {
-    background-color: $grey;
+  background-color: $grey;
 }
 
 /* Body - Name */
 .student-profile-body-container {
-    padding: .5rem;
+  padding: 0.5rem;
 
-    .name-container {
-        margin-bottom: 1rem;
-    
-        .name-kanji-grade {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        .name-katakana {
-            color: $grey;
-            margin-left: .1rem;
-        }
+  .name-container {
+    margin-bottom: 1rem;
 
-        .name-romaji {
-            color: $grey;
-            margin-left: .3rem
-        }
+    .name-kanji-grade {
+      font-size: 1.1rem;
+      font-weight: 500;
     }
+
+    .name-katakana {
+      color: $grey;
+      margin-left: 0.1rem;
+    }
+
+    .name-romaji {
+      color: $grey;
+      margin-left: 0.3rem;
+    }
+  }
+}
+
+/* Footer */
+.student-profile-footer-container {
+  background-color: $lighter-grey;
+  border-top: solid 1px $light-grey;
+
+  padding: 0.8rem 1rem;
+
+  display: grid;
+
+  a.profile-edit-button {
+    width: 1.8rem;
+    height: 1.8rem;
+
+    background-image: url("./img/edit.svg");
+  }
 }

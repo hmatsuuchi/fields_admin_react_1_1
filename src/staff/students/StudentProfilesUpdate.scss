@@ -200,6 +200,12 @@ $grey: #3a3939;
     justify-content: space-between;
     grid-auto-flow: column;
 
+    .button-group-container {
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 1rem;
+    }
+
     .button[type="submit"] {
       background-color: $teal;
       color: #fff;
@@ -212,6 +218,10 @@ $grey: #3a3939;
       cursor: pointer;
       background-color: $grey;
       color: #fff;
+    }
+
+    .button.delete {
+      background-color: $red;
     }
   }
 }

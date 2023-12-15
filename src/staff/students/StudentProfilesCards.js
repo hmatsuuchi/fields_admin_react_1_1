@@ -5,14 +5,17 @@ import instance from "../../staff/axios/axios_authenticated";
 import LoadingSpinner from "../../staff/micro/LoadingSpinner";
 import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
 import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
-import { Link } from "react-router-dom";
+import DisplayDescriptors from "../micro/DisplayDescriptors";
 // CSS
 import "./StudentProfilesCards.scss";
+// React Router DOM
+import { Link } from "react-router-dom";
 
 function StudentProfiles() {
   const [studentProfiles, setStudentProfiles] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [resultCount, setResultCount] = useState(0);
+  const [displayContent, setDisplayContent] = useState(false);
 
   // makes API call and fetches initial data
   useEffect(() => {
@@ -35,6 +38,8 @@ function StudentProfiles() {
             searchInput.focus();
             // sets initial result count
             setResultCount(response.data.length);
+            // displays content
+            setDisplayContent(true);
           }
         });
       } catch (e) {
@@ -55,6 +60,11 @@ function StudentProfiles() {
       <StudentProfilesToolbar
         setSearchInput={setSearchInput}
         resultCount={resultCount}
+      />
+      <DisplayDescriptors
+        displayTextArray={
+          displayContent ? [`${resultCount}件を表示しています`] : []
+        }
       />
       {studentProfiles && (
         <div className="card-section">

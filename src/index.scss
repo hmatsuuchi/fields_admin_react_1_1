@@ -48,12 +48,24 @@ body {
 
 input {
   font-family: "Noto Sans JP", sans-serif;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 button {
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 500;
+}
+
+ul,
+li {
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 400;
+}
+
+/* Content submitted */
+.content-submitted {
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 /* Cards - Responsive Columns */
@@ -62,7 +74,7 @@ button {
 }
 
 .card-container {
-  margin: 4rem 1rem 1rem 1rem;
+  margin: 0.5rem 1rem 1rem 1rem;
   max-width: 2600px;
 
   display: grid;
@@ -125,7 +137,7 @@ button {
 }
 
 .card-container-full-width {
-  margin: 4rem auto 1rem auto;
+  margin: 0.5rem auto 1rem auto;
   width: calc(100% - 2rem);
   max-width: 800px;
 

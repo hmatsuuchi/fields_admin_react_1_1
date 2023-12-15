@@ -3,20 +3,23 @@ import React, { useEffect, useState, Fragment } from "react";
 import instance from "../axios/axios_authenticated";
 // Components
 import HorizontalDividerThin from "../micro/HorizontalDividerThin";
-import StudentDetailsToolbar from "../toolbar/StudentDetailsToolbar";
+import StudentDeleteToolbar from "../toolbar/StudentDeleteToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DisplayDescriptors from "../micro/DisplayDescriptors";
 // CSS
 import "./StudentProfilesCards.scss";
-import "./StudentProfilesDetails.scss";
+import "./StudentProfilesDelete.scss";
 // React Router DOM
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
-function StudentProfilesDetails() {
+function StudentProfilesDelete() {
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState(null);
   const [displayContent, setDisplayContent] = useState(false);
+
+  // React Router DOM Navigate
+  const navigate = useNavigate();
 
   // makes API call and fetches profile details
   useEffect(() => {
@@ -39,11 +42,41 @@ function StudentProfilesDetails() {
     })();
   }, [profileId]);
 
+  const deleteProfile = async (e) => {
+    e.preventDefault();
+
+    try {
+      await instance
+        .delete("api/students/profiles/details", {
+          params: { profile_id: profileId },
+        })
+        .then((response) => {
+          if (response) {
+            if (response.status === 204) {
+              navigate("/staff/students/profiles/cards");
+            } else {
+              window.alert("An error occurred when deleting this record.");
+            }
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Fragment>
-      <StudentDetailsToolbar
-        backButtonLink={"/staff/students/profiles/cards"}
-        backButtonText={"生徒情報"}
+      <StudentDeleteToolbar
+        backButtonLink={`/staff/students/profiles/update/${profileId}`}
+        backButtonText={
+          profile
+            ? profile.last_name_kanji && profile.first_name_kanji
+              ? `${profile.last_name_kanji} ${profile.first_name_kanji} (編集)`
+              : profile.last_name_kanji || profile.first_name_kanji
+              ? `${profile.last_name_kanji}${profile.first_name_kanji} (編集)`
+              : "編集へ戻る"
+            : "編集へ戻る"
+        }
         displayContent={displayContent}
       />
       <DisplayDescriptors
@@ -53,12 +86,12 @@ function StudentProfilesDetails() {
                 `${
                   profile
                     ? profile.last_name_kanji && profile.first_name_kanji
-                      ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」の明細`
+                      ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」`
                       : profile.last_name_kanji || profile.first_name_kanji
-                      ? `「${profile.last_name_kanji}${profile.first_name_kanji}」の明細`
-                      : "明細"
-                    : "明細"
-                }を表示しています`,
+                      ? `「${profile.last_name_kanji}${profile.first_name_kanji}」`
+                      : "プロフィール"
+                    : "プロフィール"
+                }を削除しますか？`,
               ]
             : []
         }></DisplayDescriptors>
@@ -175,20 +208,28 @@ function StudentProfilesDetails() {
                     )}
                   </div>
                 </div>
-                <div className="student-profile-footer-container">
-                  <Link
-                    className="profile-edit-button"
-                    to={`/staff/students/profiles/update/${profile.id}`}></Link>
-                </div>
+                <div className="student-profile-footer-container"></div>
               </div>
             )}
           </div>
         </div>
       ) : (
         <LoadingSpinner />
+      )}{" "}
+      {displayContent && (
+        <div className="confirm-delete-bottom-button-container">
+          <Link onClick={deleteProfile} className="button delete">
+            はい、削除します
+          </Link>
+          <Link
+            to={`/staff/students/profiles/update/${profileId}`}
+            className="button cancel">
+            戻る
+          </Link>
+        </div>
       )}
     </Fragment>
   );
 }
 
-export default StudentProfilesDetails;
+export default StudentProfilesDelete;

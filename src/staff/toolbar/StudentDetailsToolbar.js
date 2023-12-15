@@ -4,13 +4,19 @@ import "./StudentDetailsToolbar.scss";
 // Components
 import ToolbarBackButton from "../micro/ToolbarBackButton";
 
-function StudentDetailsToolbar() {
+function StudentDetailsToolbar({
+  backButtonLink,
+  backButtonText,
+  displayContent,
+}) {
   return (
     <div id="details-toolbar">
-      <ToolbarBackButton
-        backButtonLink={"/staff/students/profiles/cards"}
-        backButtonText={"生徒情報"}
-      />
+      {displayContent && (
+        <ToolbarBackButton
+          backButtonLink={backButtonLink}
+          backButtonText={backButtonText}
+        />
+      )}
     </div>
   );
 }

@@ -11,6 +11,8 @@ import StaffDashboard from "./staff/Dashboard";
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
 import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
+import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
+import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
 // COMPNENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -114,6 +116,20 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesCreate />
+            </StaffProtectedRoute>
+          }></Route>
+        <Route
+          path="/staff/students/profiles/update/:profileId"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StudentProfilesUpdate />
+            </StaffProtectedRoute>
+          }></Route>
+        <Route
+          path="/staff/students/profiles/delete/:profileId"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StudentProfilesDelete />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES */}

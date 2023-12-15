@@ -2,18 +2,20 @@ import React, { Fragment, useEffect, useState } from "react";
 // Axios
 import instance from "../axios/axios_authenticated";
 // Components
-import StudentProfileCreateToolbar from "../toolbar/StudentProfileCreateToolbar";
+import StudentProfileUpdateToolbar from "../toolbar/StudentProfileUpdateToolbar";
 import ProfileSectionHeader from "../micro/ProfileSectionHeader";
 import DisplayDescriptors from "../micro/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
-
 // CSS
-import "./StudentProfilesCreate.scss";
+import "./StudentProfilesUpdate.scss";
 import "./StudentProfilesCards";
 // React Router
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-function StudentProfilesCreate() {
+function StudentProfilesUpdate() {
+  // get profile id from URL params
+  const { profileId } = useParams();
+
   // choice values
   const [prefectureChoices, setPrefectureChoices] = useState([]);
   const [phoneChoices, setPhoneChoices] = useState([]);
@@ -40,9 +42,9 @@ function StudentProfilesCreate() {
   const [archived, setArchived] = useState(false);
   // profile status name
   const [profileStatusName, setProfileStatusName] = useState(null);
-  // content was submitted bool
+  // content has been submitted bool
   const [submitted, setSubmitted] = useState(false);
-  // display content
+  // display content bool
   const [displayContent, setDisplayContent] = useState(false);
 
   // React Router DOM Navigate
@@ -63,97 +65,81 @@ function StudentProfilesCreate() {
             setProfileStatus(response.data.status_choices[0].id);
             setProfileStatusName(response.data.status_choices[0].name);
             setPaymentMethod(response.data.payment_choices[0].id);
-
-            // display content
-            setDisplayContent(true);
           }
         });
       } catch (e) {
         console.log(e);
       }
+
+      try {
+        await instance
+          .get("api/students/profiles/details", {
+            params: { profile_id: profileId },
+          })
+          .then((response) => {
+            if (response) {
+              const responseData = response.data;
+              setLastNameRomaji(responseData.last_name_romaji);
+              setFirstNameRomaji(responseData.first_name_romaji);
+              setLastNameKanji(responseData.last_name_kanji);
+              setFirstNameKanji(responseData.first_name_kanji);
+              setLastNameKatakana(responseData.last_name_katakana);
+              setFirstNameKatakana(responseData.first_name_katakana);
+              setPostCode(responseData.post_code);
+              setPrefecture(responseData.prefecture);
+              setCity(responseData.city);
+              setAddress1(responseData.address_1);
+              setAddress2(responseData.address_2);
+              setPhoneNumberArray(
+                responseData.phone.length === 0 ? [{}] : responseData.phone
+              );
+              setBirthday(responseData.birthday);
+              setGrade(responseData.grade);
+              setProfileStatus(responseData.status);
+              setPaymentMethod(responseData.payment_method);
+              setArchived(responseData.archived);
+              // displays content
+              setDisplayContent(true);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
     })();
-  }, []);
+  }, [profileId]);
 
   // updates the phone number array with phone number values
-  function updatePhoneNumber(e) {
-    const inputField = e.target;
-    const inputFieldValue = inputField.value;
-    const inputFieldParent = inputField.parentElement;
-    const inputFieldParentId = inputFieldParent.id;
-    const inputFieldParentIdInteger = parseInt(
-      inputFieldParentId.split("-").pop()
-    );
-
-    setPhoneNumberArray((phoneNumberArray) => {
-      const newPhoneNumberArray = phoneNumberArray;
-      newPhoneNumberArray[inputFieldParentIdInteger].number = inputFieldValue;
-      return newPhoneNumberArray;
-    });
+  function updatePhoneNumber(e, index) {
+    const newPhoneNumberArray = [...phoneNumberArray];
+    newPhoneNumberArray[index].number = e.target.value;
+    setPhoneNumberArray(newPhoneNumberArray);
   }
 
   // updates the phone number array with phone type values
-  function updatePhoneType(e) {
-    const inputField = e.target;
-    const inputFieldValue = inputField.value;
-    const inputFieldParent = inputField.parentElement;
-    const inputFieldParentId = inputFieldParent.id;
-    const inputFieldParentIdInteger = parseInt(
-      inputFieldParentId.split("-").pop()
-    );
-
-    setPhoneNumberArray((phoneNumberArray) => {
-      const newPhoneNumberArray = phoneNumberArray;
-      newPhoneNumberArray[inputFieldParentIdInteger].number_type =
-        inputFieldValue;
-      return newPhoneNumberArray;
-    });
-  }
-
-  // removes blank phone number dictionary elements from the phone number array
-  function removeBlankPhoneNumberFieldsFromArray() {
-    return phoneNumberArray.filter(
-      (phone) => phone.number !== undefined && phone.number !== ""
-    );
+  function updatePhoneType(e, index) {
+    const newPhoneNumberArray = [...phoneNumberArray];
+    newPhoneNumberArray[index].number_type = e.target.value;
+    setPhoneNumberArray(newPhoneNumberArray);
   }
 
   // clicks to the plus button to add a new phone number field up to 9 fields
   function addPhoneNumberField() {
     setPhoneNumberArray(phoneNumberArray.concat({}));
-
-    const addPhoneNumberButton = document.getElementById(
-      "add-phone-number-button"
-    );
-    const removePhoneNumberButton = document.getElementById(
-      "remove-phone-number-button"
-    );
-
-    // Limit the creation of "phone-number-data" elements to 9
-    if (phoneNumberArray.length >= 8) {
-      addPhoneNumberButton.classList.add("disable-button");
-    }
-
-    if (removePhoneNumberButton.classList.contains("disable-button")) {
-      removePhoneNumberButton.classList.remove("disable-button");
-    }
   }
 
   // clicks to the minus button to remove a phone number field down to 1 field
   function removePhoneNumberField() {
     setPhoneNumberArray(phoneNumberArray.slice(0, -1));
-    const addPhoneNumberButton = document.getElementById(
-      "add-phone-number-button"
-    );
-    const removePhoneNumberButton = document.getElementById(
-      "remove-phone-number-button"
-    );
+  }
 
-    // Limit the creation of "phone-number-data" elements to 9
-    if (phoneNumberArray.length <= 2) {
-      removePhoneNumberButton.classList.add("disable-button");
-    }
-    if (addPhoneNumberButton.classList.contains("disable-button")) {
-      addPhoneNumberButton.classList.remove("disable-button");
-    }
+  // removes blank phone number dictionary elements from the phone number array
+  function removeBlankPhoneNumberFieldsFromArray() {
+    let newPhoneNumberArray = [...phoneNumberArray];
+    return newPhoneNumberArray.filter(
+      (phone) =>
+        (phone.number !== undefined && phone.number !== "") ||
+        (phone.id !== undefined && phone.id !== "")
+    );
   }
 
   // handles clicks to the status buttons
@@ -185,6 +171,7 @@ function StudentProfilesCreate() {
     event.preventDefault();
 
     const data = {
+      id: profileId,
       last_name_romaji: lastNameRomaji,
       first_name_romaji: firstNameRomaji,
       last_name_kanji: lastNameKanji,
@@ -206,11 +193,11 @@ function StudentProfilesCreate() {
 
     try {
       await instance
-        .post("api/students/profiles/details", data)
+        .put("api/students/profiles/details", data)
         .then((response) => {
           if (response) {
             if (response.status === 201) {
-              navigate("/staff/students/profiles/cards");
+              navigate(`/staff/students/profiles/details/${profileId}`);
             } else {
               setSubmitted(false);
               window.alert("An error occurred.");
@@ -224,14 +211,31 @@ function StudentProfilesCreate() {
 
   return (
     <Fragment>
-      <StudentProfileCreateToolbar
-        backButtonLink={"/staff/students/profiles/cards"}
-        backButtonText={"生徒情報"}
+      <StudentProfileUpdateToolbar
+        backButtonLink={`/staff/students/profiles/details/${profileId}`}
+        backButtonText={
+          lastNameKanji && firstNameKanji
+            ? `${lastNameKanji} ${firstNameKanji} (明細)`
+            : lastNameKanji || firstNameKanji
+            ? `${lastNameKanji}${firstNameKanji} (明細)`
+            : "明細へ戻る"
+        }
         displayContent={displayContent}
       />
+
       <DisplayDescriptors
         displayTextArray={
-          displayContent ? ["新しいプロフィールを作成しています"] : []
+          displayContent
+            ? [
+                `${
+                  lastNameKanji && firstNameKanji
+                    ? `「${lastNameKanji} ${firstNameKanji}」`
+                    : lastNameKanji || firstNameKanji
+                    ? `「${lastNameKanji}${firstNameKanji}」`
+                    : "プロフィール"
+                }を編集しています`,
+              ]
+            : []
         }
       />
       {displayContent ? (
@@ -330,7 +334,7 @@ function StudentProfilesCreate() {
                       className="input-width-7"
                       name="post_code"
                       value={postCode}
-                      onChange={(e) => setPostCode(e.target.value)}></input>
+                      onChange={(e) => postCode(e.target.value)}></input>
                     <label htmlFor="prefecture">府県</label>
                     <select
                       type="text"
@@ -392,7 +396,10 @@ function StudentProfilesCreate() {
                               type="text"
                               id="phone"
                               name="number"
-                              onChange={updatePhoneNumber}></input>
+                              value={phone.number}
+                              onChange={(e) =>
+                                updatePhoneNumber(e, index)
+                              }></input>
                             <label
                               htmlFor="number_type"
                               className="number-type-label">
@@ -403,7 +410,8 @@ function StudentProfilesCreate() {
                               type="text"
                               id="phone-type"
                               name="number_type"
-                              onChange={updatePhoneType}>
+                              value={phone.number_type && phone.number_type}
+                              onChange={(e) => updatePhoneType(e, index)}>
                               <option value="">----------</option>
                               {phoneChoices.map((phone) => {
                                 return (
@@ -424,7 +432,9 @@ function StudentProfilesCreate() {
                           onClick={addPhoneNumberField}
                           type="button"
                           id="add-phone-number-button"
-                          className="add-phone-number-button">
+                          className={`add-phone-number-button${
+                            phoneNumberArray.length > 8 ? " disable-button" : ""
+                          }`}>
                           <div className="vertical-line"></div>
                           <div className="horizontal-line"></div>
                         </button>
@@ -432,7 +442,9 @@ function StudentProfilesCreate() {
                           onClick={removePhoneNumberField}
                           type="button"
                           id="remove-phone-number-button"
-                          className="remove-phone-number-button disable-button">
+                          className={`remove-phone-number-button${
+                            phoneNumberArray.length < 2 ? " disable-button" : ""
+                          }`}>
                           <div className="horizontal-line"></div>
                         </button>
                       </div>
@@ -520,13 +532,20 @@ function StudentProfilesCreate() {
                     {/* Bottom Buttons Section */}
                     <div className="bottom-buttons-container">
                       <Link
-                        to="/staff/students/profiles/cards"
-                        className="button cancel">
-                        キャンセル
+                        to={`/staff/students/profiles/delete/${profileId}`}
+                        className="button delete">
+                        削除
                       </Link>
-                      <button type="submit" className="button submit">
-                        作成
-                      </button>
+                      <div className="button-group-container">
+                        <Link
+                          to={`/staff/students/profiles/details/${profileId}`}
+                          className="button cancel">
+                          キャンセル
+                        </Link>
+                        <button type="submit" className="button submit">
+                          編集
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -541,4 +560,4 @@ function StudentProfilesCreate() {
   );
 }
 
-export default StudentProfilesCreate;
+export default StudentProfilesUpdate;
