@@ -18,7 +18,7 @@ function StudentProfilesToolbar({
   };
 
   return (
-    <div id="toolbar">
+    <div id="student-profile-list-toolbar">
       <FilterSortButton
         displayFilterSortMenu={displayFilterSortMenu}
         setDisplayFilterSortMenu={setDisplayFilterSortMenu}

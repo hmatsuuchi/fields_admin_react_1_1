@@ -7,12 +7,13 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
-#details-toolbar {
+#student-profile-delete-toolbar {
   z-index: 3;
   position: fixed;
   top: 0;
+  padding: 0 0.5rem;
 
-  width: 100%;
+  width: calc(100% - 1rem);
   height: 2.75rem;
 
   background-color: $teal;

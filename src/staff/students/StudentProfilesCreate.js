@@ -35,11 +35,11 @@ function StudentProfilesCreate() {
   const [phoneNumberArray, setPhoneNumberArray] = useState([{}]);
   const [birthday, setBirthday] = useState("");
   const [grade, setGrade] = useState("");
-  const [profileStatus, setProfileStatus] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [profileStatus, setProfileStatus] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [archived, setArchived] = useState(false);
   // profile status name
-  const [profileStatusName, setProfileStatusName] = useState(null);
+  const [profileStatusName, setProfileStatusName] = useState("");
   // content was submitted bool
   const [submitted, setSubmitted] = useState(false);
   // display content

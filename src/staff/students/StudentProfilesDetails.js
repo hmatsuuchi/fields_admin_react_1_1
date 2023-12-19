@@ -15,7 +15,7 @@ import { useParams, Link } from "react-router-dom";
 function StudentProfilesDetails() {
   const { profileId } = useParams();
 
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState("");
   const [displayContent, setDisplayContent] = useState(false);
 
   // makes API call and fetches profile details

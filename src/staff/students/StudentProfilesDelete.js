@@ -15,8 +15,9 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 function StudentProfilesDelete() {
   const { profileId } = useParams();
 
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState("");
   const [displayContent, setDisplayContent] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   // React Router DOM Navigate
   const navigate = useNavigate();
@@ -45,6 +46,8 @@ function StudentProfilesDelete() {
   const deleteProfile = async (e) => {
     e.preventDefault();
 
+    setSubmitted(true);
+
     try {
       await instance
         .delete("api/students/profiles/details", {
@@ -61,6 +64,7 @@ function StudentProfilesDelete() {
         });
     } catch (e) {
       console.log(e);
+      setSubmitted(false);
     }
   };
 
@@ -96,7 +100,10 @@ function StudentProfilesDelete() {
             : []
         }></DisplayDescriptors>
       {displayContent ? (
-        <div className="card-section-full-width">
+        <div
+          className={`card-section-full-width${
+            submitted ? " content-submitted" : ""
+          }`}>
           <div className="card-container-full-width">
             {profile && (
               <div className="card-full-width">

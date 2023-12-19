@@ -10,7 +10,7 @@ function StudentDeleteToolbar({
   displayContent,
 }) {
   return (
-    <div id="details-toolbar">
+    <div id="student-profile-delete-toolbar">
       {displayContent && (
         <ToolbarBackButton
           backButtonLink={backButtonLink}

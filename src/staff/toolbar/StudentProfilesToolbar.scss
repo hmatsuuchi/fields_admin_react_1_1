@@ -1,59 +1,60 @@
-$teal: #00B8A9;
-$beige: #F8F3D4;
-$red: #F6416C;
-$yellow: #FFDE7D;
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
-#toolbar {
-    z-index: 3;
-    position: fixed;
-    top: 0;
+#student-profile-list-toolbar {
+  z-index: 3;
+  position: fixed;
+  top: 0;
+  padding: 0 0.5rem;
 
-    width: 100%;
-    height: 2.75rem;
+  width: calc(100% - 1rem);
+  height: 2.75rem;
 
-    background-color: $teal;
-    box-shadow: 0 0 0.3rem 0.3rem rgba(0,0,0,.2);
+  background-color: $teal;
+  box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.2);
+
+  display: grid;
+  justify-content: right;
+  align-content: center;
+  grid-auto-flow: column;
+
+  #search-container {
+    margin: 0 0.25rem;
 
     display: grid;
-    justify-content: right;
-    align-content: center;
     grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
 
-    #search-container {
-        margin: 0 .25rem;
+    #search-input {
+      width: calc(100% - 2.6rem);
+      height: 2rem;
+      font-size: 1.2rem;
+      border-radius: 0.3rem;
+      border: none;
+      padding: 0 0.5rem 0 2.1rem;
+      color: $grey;
 
-        display: grid;
-        grid-auto-flow: column;
-        grid-column-gap: .5rem;
-
-        #search-input {
-            width: calc(100% - 2.6rem);
-            height: 2rem;
-            font-size: 1.2rem;
-            border-radius: .3rem;
-            border: none;
-            padding: 0 .5rem 0 2.1rem;
-            color: $grey;
-    
-            background-image: url('./img/magnifying_glass.svg');
-            background-repeat: no-repeat;
-            background-position: .5rem 50%;
-            background-size: auto 60%;
-        }
-
-        #search-input:focus {
-            outline: $grey solid 2px;
-        }
-
-        #search-button {
-            color: #fff;
-            font-size: 1rem;
-            border: solid 2px #fff;
-            border-radius: .3rem;
-        }
+      background-image: url("./img/magnifying_glass.svg");
+      background-repeat: no-repeat;
+      background-position: 0.5rem 50%;
+      background-size: auto 60%;
     }
+
+    #search-input:focus {
+      outline: $grey solid 2px;
+    }
+
+    #search-button {
+      color: #fff;
+      font-size: 1rem;
+      border: solid 2px #fff;
+      border-radius: 0.3rem;
+    }
+  }
 }

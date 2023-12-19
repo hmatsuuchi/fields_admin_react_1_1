@@ -10,7 +10,7 @@ function StudentDetailsToolbar({
   displayContent,
 }) {
   return (
-    <div id="details-toolbar">
+    <div id="student-profile-details-toolbar">
       {displayContent && (
         <ToolbarBackButton
           backButtonLink={backButtonLink}
