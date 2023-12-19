@@ -1,25 +1,25 @@
-$teal: #00B8A9;
-$beige: #F8F3D4;
-$red: #F6416C;
-$yellow: #FFDE7D;
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
 #details-toolbar {
-    z-index: 3;
-    position: fixed;
-    top: 0;
+  z-index: 3;
+  position: fixed;
+  top: 0;
 
-    width: 100%;
-    height: 2.75rem;
+  width: 100%;
+  height: 2.75rem;
 
-    background-color: $teal;
-    box-shadow: 0 0 0.3rem 0.3rem rgba(0,0,0,.2);
+  background-color: $teal;
+  box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.2);
 
-    display: grid;
-    justify-content: left;
-    align-content: center;
-    grid-auto-flow: column;
+  display: grid;
+  justify-content: left;
+  align-content: center;
+  grid-auto-flow: column;
 }

@@ -5,10 +5,18 @@ $grey: #3a3939;
   display: grid;
   place-content: center;
   color: #fff;
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 
   .result {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: center;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .result-container {
+    .result {
+      font-size: 1.2rem;
+    }
   }
 }

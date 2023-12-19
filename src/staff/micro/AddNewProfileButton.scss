@@ -1,7 +1,8 @@
 .add-new-profile-button {
   height: 2rem;
   width: 2rem;
-  border-radius: .3rem;
+  border-radius: 0.3rem;
+  margin-left: 0.5rem;
 
   display: grid;
   place-items: center;
@@ -31,5 +32,5 @@
 }
 
 .add-new-profile-button:hover {
-  background-color: rgba(255, 255, 255, .2);
+  background-color: rgba(255, 255, 255, 0.2);
 }

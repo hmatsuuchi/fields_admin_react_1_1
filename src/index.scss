@@ -14,8 +14,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* just some extra room to breathe at the bottom */
-  padding-bottom: 20rem;
 }
 
 code {
@@ -27,6 +25,11 @@ button {
   border: none;
   cursor: pointer;
   background: none;
+
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 500;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -51,15 +54,14 @@ input {
   font-weight: 400;
 }
 
-button {
-  font-family: "Noto Sans JP", sans-serif;
-  font-weight: 500;
-}
-
 ul,
 li {
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 400;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Content submitted */
@@ -71,11 +73,11 @@ li {
 /* Cards - Responsive Columns */
 .card-section {
   display: grid;
+  margin-bottom: 10rem;
 }
 
 .card-container {
   margin: 0.5rem 1rem 1rem 1rem;
-  max-width: 2600px;
 
   display: grid;
   grid-auto-flow: row;
@@ -115,7 +117,8 @@ li {
 
 @media screen and (min-width: 2500px) {
   .card-section {
-    justify-content: center;
+    max-width: 2800px;
+    margin: 0 auto 10rem auto;
   }
 
   .card-container {
@@ -134,6 +137,9 @@ li {
 /* Cards - Full Width */
 .card-section-full-width {
   display: grid;
+  justify-items: center;
+
+  margin-bottom: 10rem;
 }
 
 .card-container-full-width {

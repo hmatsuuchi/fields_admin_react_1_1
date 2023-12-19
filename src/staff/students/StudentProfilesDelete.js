@@ -212,22 +212,20 @@ function StudentProfilesDelete() {
               </div>
             )}
           </div>
+          <div className="confirm-delete-bottom-button-container">
+            <Link onClick={deleteProfile} className="button delete">
+              はい、削除します
+            </Link>
+            <Link
+              to={`/staff/students/profiles/update/${profileId}`}
+              className="button cancel">
+              戻る
+            </Link>
+          </div>
         </div>
       ) : (
         <LoadingSpinner />
       )}{" "}
-      {displayContent && (
-        <div className="confirm-delete-bottom-button-container">
-          <Link onClick={deleteProfile} className="button delete">
-            はい、削除します
-          </Link>
-          <Link
-            to={`/staff/students/profiles/update/${profileId}`}
-            className="button cancel">
-            戻る
-          </Link>
-        </div>
-      )}
     </Fragment>
   );
 }

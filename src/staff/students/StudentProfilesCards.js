@@ -2,20 +2,22 @@ import React, { Fragment, useState, useEffect } from "react";
 // Axios
 import instance from "../../staff/axios/axios_authenticated";
 // Components
-import LoadingSpinner from "../../staff/micro/LoadingSpinner";
-import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
-import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
 import DisplayDescriptors from "../micro/DisplayDescriptors";
+import FilterSortMenu from "../micro/FilterSortMenu";
+import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
+import LoadingSpinner from "../../staff/micro/LoadingSpinner";
+import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
 // CSS
 import "./StudentProfilesCards.scss";
 // React Router DOM
 import { Link } from "react-router-dom";
 
 function StudentProfiles() {
-  const [studentProfiles, setStudentProfiles] = useState(null);
+  const [studentProfiles, setStudentProfiles] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [resultCount, setResultCount] = useState(0);
   const [displayContent, setDisplayContent] = useState(false);
+  const [displayFilterSortMenu, setDisplayFilterSortMenu] = useState(false);
 
   // makes API call and fetches initial data
   useEffect(() => {
@@ -24,18 +26,6 @@ function StudentProfiles() {
         await instance.get("api/students/profiles").then((response) => {
           if (response) {
             setStudentProfiles(response.data);
-            // re-enables nav after content loads
-            document
-              .getElementById("navigation")
-              .classList.remove("nav-disabled");
-            // re-enables toolbar after content loads
-            document
-              .getElementById("toolbar")
-              .classList.remove("toolbar-disabled");
-            // re-sets search box tab index and sets focus
-            let searchInput = document.getElementById("search-input");
-            searchInput.tabIndex = 1;
-            searchInput.focus();
             // sets initial result count
             setResultCount(response.data.length);
             // displays content
@@ -57,9 +47,12 @@ function StudentProfiles() {
 
   return (
     <Fragment>
+      {displayFilterSortMenu && <FilterSortMenu />}
       <StudentProfilesToolbar
         setSearchInput={setSearchInput}
         resultCount={resultCount}
+        displayFilterSortMenu={displayFilterSortMenu}
+        setDisplayFilterSortMenu={setDisplayFilterSortMenu}
       />
       <DisplayDescriptors
         displayTextArray={

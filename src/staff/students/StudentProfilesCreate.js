@@ -8,7 +8,7 @@ import DisplayDescriptors from "../micro/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
 
 // CSS
-import "./StudentProfilesCreate.scss";
+import "./StudentProfilesCreateUpdate.scss";
 import "./StudentProfilesCards";
 // React Router
 import { Link, useNavigate } from "react-router-dom";
@@ -253,7 +253,7 @@ function StudentProfilesCreate() {
                     ? " long-absence"
                     : ""
                 }`}>
-                <div></div>
+                {archived ? <div className="archived"></div> : <div></div>}
                 <div className="status">{profileStatusName}</div>
               </div>
               <div className="student-profile-body-container create-new-profile-body-container">
@@ -265,7 +265,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="last-name-romaji"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="last_name_romaji"
                       value={lastNameRomaji}
                       onChange={(e) =>
@@ -275,7 +275,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="first-name-romaji"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="first_name_romaji"
                       value={firstNameRomaji}
                       onChange={(e) =>
@@ -285,7 +285,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="last-name-kanji"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="last_name_kanji"
                       value={lastNameKanji}
                       onChange={(e) =>
@@ -295,7 +295,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="first-name-kanji"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="first_name_kanji"
                       value={firstNameKanji}
                       onChange={(e) =>
@@ -305,7 +305,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="last-name-katakana"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="last_name_katakana"
                       value={lastNameKatakana}
                       onChange={(e) =>
@@ -315,7 +315,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="first-name-katakana"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="first_name_katakana"
                       value={firstNameKatakana}
                       onChange={(e) =>
@@ -339,7 +339,7 @@ function StudentProfilesCreate() {
                       name="prefecture"
                       value={prefecture}
                       onChange={(e) => setPrefecture(e.target.value)}>
-                      <option value="">----------</option>
+                      <option value="">-------</option>
                       {prefectureChoices.map((prefecture) => {
                         return (
                           <option
@@ -354,7 +354,7 @@ function StudentProfilesCreate() {
                     <input
                       type="text"
                       id="city"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="city"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}></input>
@@ -404,7 +404,7 @@ function StudentProfilesCreate() {
                               id="phone-type"
                               name="number_type"
                               onChange={updatePhoneType}>
-                              <option value="">----------</option>
+                              <option value="">-------</option>
                               {phoneChoices.map((phone) => {
                                 return (
                                   <option
@@ -443,7 +443,7 @@ function StudentProfilesCreate() {
                     <input
                       type="date"
                       id="birthday"
-                      className="input-width-10"
+                      className="input-width-s"
                       name="birthday"
                       value={birthday}
                       onChange={(e) => setBirthday(e.target.value)}></input>
@@ -455,7 +455,7 @@ function StudentProfilesCreate() {
                       name="grade"
                       value={grade}
                       onChange={(e) => setGrade(e.target.value)}>
-                      <option value="">----------</option>
+                      <option value="">-------</option>
                       {gradeChoices.map((grade) => {
                         return (
                           <option

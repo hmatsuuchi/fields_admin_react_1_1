@@ -12,9 +12,8 @@ $grey: #3a3939;
 }
 
 .confirm-delete-bottom-button-container {
-  padding: 1rem 1rem;
+  width: calc(100% - 2rem);
   max-width: 800px;
-  margin: 0 auto;
 
   display: grid;
   grid-auto-flow: column;
