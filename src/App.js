@@ -13,7 +13,7 @@ import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
-// COMPNENTS - CUSTOMER
+// COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
 
@@ -26,6 +26,22 @@ function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [isStaff, setIsStaff] = useState(null);
   const [isCustomer, setIsCustomer] = useState(null);
+  // month filters for student profiles
+  const [monthFilters, setMonthFilters] = useState({
+    month0: true,
+    month1: true,
+    month2: true,
+    month3: true,
+    month4: true,
+    month5: true,
+    month6: true,
+    month7: true,
+    month8: true,
+    month9: true,
+    month10: true,
+    month11: true,
+    month12: true,
+  });
 
   useEffect(() => {
     // gets authentication bool from local storage
@@ -101,7 +117,10 @@ function App() {
           path="/staff/students/profiles/cards"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesCards />
+              <StudentProfilesCards
+                monthFilters={monthFilters}
+                setMonthFilters={setMonthFilters}
+              />
             </StaffProtectedRoute>
           }></Route>
         <Route

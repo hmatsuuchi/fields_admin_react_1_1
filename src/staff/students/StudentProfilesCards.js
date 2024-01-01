@@ -2,8 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 // Axios
 import instance from "../../staff/axios/axios_authenticated";
 // Components
+import DataLoadError from "../micro/DataLoadError";
 import DisplayDescriptors from "../micro/DisplayDescriptors";
-import FilterSortMenu from "../micro/FilterSortMenu";
 import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
 import LoadingSpinner from "../../staff/micro/LoadingSpinner";
 import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
@@ -12,212 +12,288 @@ import "./StudentProfilesCards.scss";
 // React Router DOM
 import { Link } from "react-router-dom";
 
-function StudentProfiles() {
-  const [studentProfiles, setStudentProfiles] = useState("");
+function StudentProfiles({ monthFilters, setMonthFilters }) {
+  // source of truth for student profiles
+  const [studentProfilesTruth, setstudentProfilesTruth] = useState([]);
+  // student profiles filtered by search input
+  const [studentProfilesFiltered, setStudentProfilesFiltered] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [resultCount, setResultCount] = useState(0);
+  // boolean used to hide content until API call is complete
   const [displayContent, setDisplayContent] = useState(false);
-  const [displayFilterSortMenu, setDisplayFilterSortMenu] = useState(false);
+  // boolean used to disable toolbar buttons until API call is complete
+  const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
+  // months to display
+  const [monthsToDisplay, setMonthsToDisplay] = useState([]);
+  // display text
+  const [displayTextArray, setDisplayTextArray] = useState([]);
+  // boolean used to indicate if filters are active
+  const [filtersActive, setFiltersActive] = useState(false);
+  // boolean used to display error message and retry button if API call fails
+  const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
 
-  // makes API call and fetches initial data
+  // fetches profile data from API
+  const fetchProfiles = async () => {
+    // disables toolbar buttons
+    setDisableToolbarButtons(true);
+    // hides content
+    setDisplayContent(false);
+    // hides error message
+    setDisplayErrorMessage(false);
+    try {
+      await instance.get("api/students/profiles").then((response) => {
+        if (response) {
+          setstudentProfilesTruth(response.data);
+          // hides error message
+          setDisplayErrorMessage(false);
+          // enables toolbar buttons
+          setDisableToolbarButtons(false);
+          // displays content
+          setDisplayContent(true);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      // displays error message
+      setDisplayErrorMessage(true);
+    }
+  };
+
+  // makes API call and fetches initial data on component mount
   useEffect(() => {
-    (async () => {
-      try {
-        await instance.get("api/students/profiles").then((response) => {
-          if (response) {
-            setStudentProfiles(response.data);
-            // sets initial result count
-            setResultCount(response.data.length);
-            // displays content
-            setDisplayContent(true);
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    })();
+    fetchProfiles();
   }, []);
 
-  // result count updates on changes to searchInput prop
+  // filter by text search field on changes to: search input field, monts filter and unfiltered student profiles
   useEffect(() => {
-    setResultCount(
-      document.getElementsByClassName("student-profile-card").length
+    const studentProfilesSearchFiltered = studentProfilesTruth.filter(
+      (profile) => {
+        const searchFields =
+          profile.last_name_romaji +
+          profile.first_name_romaji +
+          profile.last_name_kanji +
+          profile.first_name_kanji +
+          profile.last_name_katakana +
+          profile.first_name_katakana +
+          profile.post_code +
+          profile.prefecture_verbose +
+          profile.city +
+          profile.address_1 +
+          profile.address_2 +
+          profile.phone.map((number) => {
+            return number.number;
+          }) +
+          profile.birthday +
+          profile.grade_verbose +
+          profile.status_verbose +
+          profile.payment_method_verbose;
+
+        const profileBirthdayMonth = profile.birthday
+          ? new Date(profile.birthday).getMonth() + 1
+          : 0;
+
+        return (
+          searchFields
+            .toUpperCase()
+            .includes(searchInput.trim().toLocaleUpperCase()) &&
+          monthsToDisplay.includes(profileBirthdayMonth)
+        );
+      }
     );
-  }, [searchInput]);
+
+    setStudentProfilesFiltered(studentProfilesSearchFiltered);
+    setResultCount(studentProfilesSearchFiltered.length);
+  }, [searchInput, monthsToDisplay, studentProfilesTruth]);
+
+  // creates array of months
+  useEffect(() => {
+    let monthsList = [];
+
+    if (monthFilters.month0) monthsList.push(0);
+    if (monthFilters.month1) monthsList.push(1);
+    if (monthFilters.month2) monthsList.push(2);
+    if (monthFilters.month3) monthsList.push(3);
+    if (monthFilters.month4) monthsList.push(4);
+    if (monthFilters.month5) monthsList.push(5);
+    if (monthFilters.month6) monthsList.push(6);
+    if (monthFilters.month7) monthsList.push(7);
+    if (monthFilters.month8) monthsList.push(8);
+    if (monthFilters.month9) monthsList.push(9);
+    if (monthFilters.month10) monthsList.push(10);
+    if (monthFilters.month11) monthsList.push(11);
+    if (monthFilters.month12) monthsList.push(12);
+
+    setMonthsToDisplay(monthsList);
+
+    // checks if filters are active
+    monthsList.length < 13 ? setFiltersActive(true) : setFiltersActive(false);
+  }, [monthFilters]);
+
+  // generates display text
+  useEffect(() => {
+    let displayArray = [];
+    displayArray.push(`${resultCount}件を表示しています`);
+    monthsToDisplay.length < 13 &&
+      displayArray.push(`「誕生月」のフィルターが有効になっています`);
+    searchInput !== "" && displayArray.push(`「${searchInput}」で検索しました`);
+    setDisplayTextArray(displayArray);
+  }, [resultCount, monthsToDisplay, searchInput]);
 
   return (
     <Fragment>
-      {displayFilterSortMenu && <FilterSortMenu />}
+      {/* Toolbar */}
       <StudentProfilesToolbar
         setSearchInput={setSearchInput}
         resultCount={resultCount}
-        displayFilterSortMenu={displayFilterSortMenu}
-        setDisplayFilterSortMenu={setDisplayFilterSortMenu}
+        disableToolbarButtons={disableToolbarButtons}
+        monthFilters={monthFilters}
+        setMonthFilters={setMonthFilters}
+        filtersActive={filtersActive}
       />
-      <DisplayDescriptors
-        displayTextArray={
-          displayContent ? [`${resultCount}件を表示しています`] : []
-        }
-      />
-      {studentProfiles && (
+
+      {/* Error Loading Data */}
+      {displayErrorMessage && (
+        <DataLoadError
+          errorMessage={"エラーが発生されました"}
+          retryFunction={fetchProfiles}
+        />
+      )}
+
+      {/* Display Descriptors */}
+      {displayContent && (
+        <DisplayDescriptors displayTextArray={displayTextArray} />
+      )}
+
+      {/* Student Profiles */}
+      {displayContent && (
         <div className="card-section">
           <div className="card-container">
-            {
-              // searches look through these fields
-              studentProfiles.map((profile) => {
-                let searchFields =
-                  profile.last_name_romaji +
-                  profile.first_name_romaji +
-                  profile.last_name_kanji +
-                  profile.first_name_kanji +
-                  profile.last_name_katakana +
-                  profile.first_name_katakana +
-                  profile.post_code +
-                  profile.prefecture_verbose +
-                  profile.city +
-                  profile.address_1 +
-                  profile.address_2 +
-                  profile.phone.map((number) => {
-                    return number.number;
-                  }) +
-                  profile.birthday +
-                  profile.grade_verbose +
-                  profile.status_verbose +
-                  profile.payment_method_verbose;
-
-                let isMatch = searchFields
-                  .toUpperCase()
-                  .includes(searchInput.trim().toLocaleUpperCase());
-
-                return (
-                  isMatch && (
-                    <Link
-                      to={`/staff/students/profiles/details/${profile.id}`}
-                      className="student-profile-card card"
-                      key={`student-profile-${profile.id}`}>
-                      {" "}
-                      <div
-                        className={`student-profile-header-container${
-                          profile.status === 1
-                            ? " pre-enrolled"
-                            : profile.status === 2
-                            ? " enrolled"
-                            : profile.status === 3
-                            ? " short-absence"
-                            : profile.status === 4
-                            ? " long-absence"
-                            : "status-unknown"
-                        }`}>
-                        {profile.archived === true ? (
-                          <div className="archived"></div>
-                        ) : (
-                          <div></div>
-                        )}
-                        <div className="status">
-                          {profile.status_verbose !== "" &&
-                            profile.status_verbose}
-                        </div>
+            {studentProfilesFiltered.map((profile) => {
+              return (
+                <Link
+                  to={`/staff/students/profiles/details/${profile.id}`}
+                  className="student-profile-card card"
+                  key={`student-profile-${profile.id}`}>
+                  {" "}
+                  <div
+                    className={`student-profile-header-container${
+                      profile.status === 1
+                        ? " pre-enrolled"
+                        : profile.status === 2
+                        ? " enrolled"
+                        : profile.status === 3
+                        ? " short-absence"
+                        : profile.status === 4
+                        ? " long-absence"
+                        : "status-unknown"
+                    }`}>
+                    {profile.archived === true ? (
+                      <div className="archived"></div>
+                    ) : (
+                      <div></div>
+                    )}
+                    <div className="status">
+                      {profile.status_verbose !== "" && profile.status_verbose}
+                    </div>
+                  </div>
+                  <div className="student-profile-body-container">
+                    <div className="name-container">
+                      <div className="name-kanji-grade">
+                        {profile.last_name_kanji !== "" &&
+                          profile.last_name_kanji}
+                        {profile.last_name_kanji !== "" &&
+                          profile.first_name_kanji !== "" &&
+                          " "}
+                        {profile.first_name_kanji !== "" &&
+                          profile.first_name_kanji}
+                        {profile.first_name_kanji !== "" &&
+                          profile.grade_verbose !== "" &&
+                          " "}
+                        {profile.grade_verbose !== "" &&
+                          `(${profile.grade_verbose})`}
                       </div>
-                      <div className="student-profile-body-container">
-                        <div className="name-container">
-                          <div className="name-kanji-grade">
-                            {profile.last_name_kanji !== "" &&
-                              profile.last_name_kanji}
-                            {profile.last_name_kanji !== "" &&
-                              profile.first_name_kanji !== "" &&
-                              " "}
-                            {profile.first_name_kanji !== "" &&
-                              profile.first_name_kanji}
-                            {profile.first_name_kanji !== "" &&
-                              profile.grade_verbose !== "" &&
-                              " "}
-                            {profile.grade_verbose !== "" &&
-                              `(${profile.grade_verbose})`}
-                          </div>
-                          <div className="name-katakana">
-                            {profile.last_name_katakana !== "" &&
-                              profile.last_name_katakana}
-                            {profile.first_name_katakana !== "" &&
-                              ` ${profile.first_name_katakana}`}
-                          </div>
-                          <div className="name-romaji">
-                            {profile.last_name_romaji !== "" &&
-                              profile.last_name_romaji}
-                            {profile.last_name_romaji &&
-                              profile.first_name_romaji &&
-                              ", "}
-                            {profile.first_name_romaji !== "" &&
-                              profile.first_name_romaji}
-                          </div>
-                        </div>
-                        <div className="contact-container">
-                          {profile.phone.map((phone) => {
-                            return (
-                              <div className="phone" key={`phone-${phone.id}`}>
-                                {phone.number}
-                                {phone.number_type_verbose !== ""
-                                  ? ` (${phone.number_type_verbose})`
-                                  : ""}
-                              </div>
-                            );
-                          })}
-                        </div>
-                        {profile.phone.length !== 0 &&
-                          (profile.post_code !== "" ||
-                            profile.address_1 !== "" ||
-                            profile.address_2 !== "") && (
-                            <HorizontalDividerThin />
-                          )}
-                        <div className="address-container">
-                          <div className="post-code">
-                            {profile.post_code !== ""
-                              ? `〒${profile.post_code}`
-                              : ""}
-                          </div>
-                          <div className="address-line-1">
-                            {profile.prefecture_verbose !== ""
-                              ? profile.prefecture_verbose
-                              : ""}
-                            {profile.city !== "" ? profile.city : ""}
-                            {profile.address_1 !== "" ? profile.address_1 : ""}
-                          </div>
-                          <div className="address-line-2">
-                            {profile.address_2 !== "" ? profile.address_2 : ""}
-                          </div>
-                        </div>
-                        {(profile.post_code !== "" ||
-                          profile.city !== "" ||
-                          profile.address_1 !== "" ||
-                          profile.address_2 !== "") &&
-                          profile.birthday && <HorizontalDividerThin />}
-                        <div className="birthday-container">
-                          <div className="birthday">
-                            {profile.birthday !== null
-                              ? `${profile.birthday} (${profile.age}才)`
-                              : ""}
-                          </div>
-                        </div>
-                        {profile.birthday !== null &&
-                          profile.payment_method !== null && (
-                            <HorizontalDividerThin />
-                          )}
-                        <div className="payment-container">
-                          {profile.payment_method && (
-                            <div className="payment-method">
-                              {profile.payment_method_verbose}
-                            </div>
-                          )}
-                        </div>
+                      <div className="name-katakana">
+                        {profile.last_name_katakana !== "" &&
+                          profile.last_name_katakana}
+                        {profile.first_name_katakana !== "" &&
+                          ` ${profile.first_name_katakana}`}
                       </div>
-                    </Link>
-                  )
-                );
-              })
-            }
+                      <div className="name-romaji">
+                        {profile.last_name_romaji !== "" &&
+                          profile.last_name_romaji}
+                        {profile.last_name_romaji &&
+                          profile.first_name_romaji &&
+                          ", "}
+                        {profile.first_name_romaji !== "" &&
+                          profile.first_name_romaji}
+                      </div>
+                    </div>
+                    <div className="contact-container">
+                      {profile.phone.map((phone) => {
+                        return (
+                          <div className="phone" key={`phone-${phone.id}`}>
+                            {phone.number}
+                            {phone.number_type_verbose !== ""
+                              ? ` (${phone.number_type_verbose})`
+                              : ""}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {profile.phone.length !== 0 &&
+                      (profile.post_code !== "" ||
+                        profile.address_1 !== "" ||
+                        profile.address_2 !== "") && <HorizontalDividerThin />}
+                    <div className="address-container">
+                      <div className="post-code">
+                        {profile.post_code !== ""
+                          ? `〒${profile.post_code}`
+                          : ""}
+                      </div>
+                      <div className="address-line-1">
+                        {profile.prefecture_verbose !== ""
+                          ? profile.prefecture_verbose
+                          : ""}
+                        {profile.city !== "" ? profile.city : ""}
+                        {profile.address_1 !== "" ? profile.address_1 : ""}
+                      </div>
+                      <div className="address-line-2">
+                        {profile.address_2 !== "" ? profile.address_2 : ""}
+                      </div>
+                    </div>
+                    {(profile.post_code !== "" ||
+                      profile.city !== "" ||
+                      profile.address_1 !== "" ||
+                      profile.address_2 !== "") &&
+                      profile.birthday && <HorizontalDividerThin />}
+                    <div className="birthday-container">
+                      <div className="birthday">
+                        {profile.birthday !== null
+                          ? `${profile.birthday} (${profile.age}才)`
+                          : ""}
+                      </div>
+                    </div>
+                    {profile.birthday !== null &&
+                      profile.payment_method !== null && (
+                        <HorizontalDividerThin />
+                      )}
+                    <div className="payment-container">
+                      {profile.payment_method && (
+                        <div className="payment-method">
+                          {profile.payment_method_verbose}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
-      {!studentProfiles && <LoadingSpinner />}
+
+      {/* Loading Spinner */}
+      {!displayContent && !displayErrorMessage && <LoadingSpinner />}
     </Fragment>
   );
 }

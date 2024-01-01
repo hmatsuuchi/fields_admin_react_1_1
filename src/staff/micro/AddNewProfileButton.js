@@ -3,16 +3,12 @@ import React from "react";
 import "./AddNewProfileButton.scss";
 import { Link } from "react-router-dom";
 
-function AddNewProfileButton() {
+function AddNewProfileButton({ DOMOrder }) {
   return (
     <Link
       to="/staff/students/profiles/create"
-      className="add-new-profile-button">
-      <div className="cross-container">
-        <div className="vertical-bar"></div>
-        <div className="horizontal-bar"></div>
-      </div>
-    </Link>
+      className="add-new-profile-button"
+      style={{ order: DOMOrder }}></Link>
   );
 }
 
