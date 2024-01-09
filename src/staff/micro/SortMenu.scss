@@ -1,0 +1,91 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+$grey: #3a3939;
+$light-grey: #adadad;
+$lighter-grey: #f1f1f1;
+
+$font-size-small: 1rem;
+
+.sort-menu-container {
+  z-index: 1;
+  user-select: none;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  border-radius: 0.3rem;
+  box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.1);
+  border: solid 1px #fff;
+
+  display: grid;
+  grid-auto-flow: row;
+
+  .sort-main-title {
+    padding: 0.6rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .sort-item-arrow {
+    width: 1rem;
+    height: 1rem;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  .sort-item-arrow.ascending {
+    background-image: url("img/sort_arrow_black.svg");
+    transform: rotate(180deg);
+  }
+
+  .sort-item-arrow.descending {
+    background-image: url("img/sort_arrow_black.svg");
+  }
+
+  .sort-item-container {
+    -webkit-text-fill-color: #000;
+
+    font-size: 1.2rem;
+    padding: 0.6rem 2rem;
+
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: left;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+  }
+
+  .sort-item-container:hover {
+    background-color: rgba(255, 222, 125, 0.7);
+  }
+}
+
+.close-sort-menu-background-button {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+@media screen and (min-width: 576px) {
+  .sort-menu-container {
+    .sort-main-title {
+      font-size: $font-size-small;
+      padding: 0.4rem 0.5rem;
+    }
+
+    .sort-item-container {
+      font-size: 1rem;
+      padding: 0.4rem 1rem;
+
+      grid-column-gap: 0.25rem;
+    }
+  }
+}

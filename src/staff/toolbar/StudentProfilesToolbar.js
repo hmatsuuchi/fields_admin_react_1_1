@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 // CSS
 import "./StudentProfilesToolbar.scss";
 // COMPONENTS
-import ResultCount from "../micro/ResultCount";
 import AddNewProfileButton from "../micro/AddNewProfileButton";
-import VerticalDividerThin from "../micro/VerticalDividerThin";
 import FilterButton from "../micro/FilterButton";
+import ResultCount from "../micro/ResultCount";
+import SortButton from "../micro/SortButton";
+import VerticalDividerThin from "../micro/VerticalDividerThin";
 
 function StudentProfilesToolbar({
   setSearchInput,
@@ -14,7 +15,12 @@ function StudentProfilesToolbar({
   monthFilters,
   setMonthFilters,
   filtersActive,
+  sorts,
+  setSorts,
 }) {
+  const [displayFilterMenu, setDisplayFilterMenu] = useState(false);
+  const [displaySortMenu, setDisplaySortMenu] = useState(false);
+
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
   };
@@ -30,11 +36,21 @@ function StudentProfilesToolbar({
           tabIndex="0"
           onChange={handleInputChange}></input>
       </div>
+      <SortButton
+        DOMOrder={0}
+        displaySortMenu={displaySortMenu}
+        setDisplaySortMenu={setDisplaySortMenu}
+        sorts={sorts}
+        setSorts={setSorts}
+      />
       <FilterButton
         DOMOrder={1}
         monthFilters={monthFilters}
         setMonthFilters={setMonthFilters}
         filtersActive={filtersActive}
+        displayFilterMenu={displayFilterMenu}
+        setDisplayFilterMenu={setDisplayFilterMenu}
+        setDisplaySortMenu={setDisplaySortMenu}
       />
       <AddNewProfileButton DOMOrder={2} />
       <VerticalDividerThin DOMOrder={3} />

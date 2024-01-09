@@ -12,13 +12,16 @@ import "./StudentProfilesCards.scss";
 // React Router DOM
 import { Link } from "react-router-dom";
 
-function StudentProfiles({ monthFilters, setMonthFilters }) {
+function StudentProfiles({ monthFilters, setMonthFilters, sorts, setSorts }) {
   // source of truth for student profiles
   const [studentProfilesTruth, setstudentProfilesTruth] = useState([]);
   // student profiles filtered by search input
   const [studentProfilesFiltered, setStudentProfilesFiltered] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [resultCount, setResultCount] = useState(0);
+  // student profiles filtered and then sorted
+  const [studentProfilesFilteredSorted, setStudentProfilesFilteredSorted] =
+    useState([]);
   // boolean used to hide content until API call is complete
   const [displayContent, setDisplayContent] = useState(false);
   // boolean used to disable toolbar buttons until API call is complete
@@ -64,7 +67,7 @@ function StudentProfiles({ monthFilters, setMonthFilters }) {
     fetchProfiles();
   }, []);
 
-  // filter by text search field on changes to: search input field, monts filter and unfiltered student profiles
+  // filter by text search field on changes to: search input field, months filter and unfiltered student profiles
   useEffect(() => {
     const studentProfilesSearchFiltered = studentProfilesTruth.filter(
       (profile) => {
@@ -105,6 +108,51 @@ function StudentProfiles({ monthFilters, setMonthFilters }) {
     setResultCount(studentProfilesSearchFiltered.length);
   }, [searchInput, monthsToDisplay, studentProfilesTruth]);
 
+  // sort student profiles
+  useEffect(() => {
+    if (sorts.id === 1) {
+      // sorts by descending ID
+      setStudentProfilesFilteredSorted(
+        [...studentProfilesFiltered].sort((b, a) => a.id - b.id)
+      );
+    } else if (sorts.id === 2) {
+      // sorts by ascending ID
+      setStudentProfilesFilteredSorted(
+        [...studentProfilesFiltered].sort((a, b) => a.id - b.id)
+      );
+    } else if (sorts.birth_month_day === 1) {
+      // sorts by ascending birth month and day
+      setStudentProfilesFilteredSorted(
+        [...studentProfilesFiltered].sort((b, a) => {
+          const aBirthday = new Date(a.birthday);
+          const bBirthday = new Date(b.birthday);
+
+          const monthDifference = aBirthday.getMonth() - bBirthday.getMonth();
+          if (monthDifference !== 0) {
+            return monthDifference;
+          }
+
+          return aBirthday.getDate() - bBirthday.getDate();
+        })
+      );
+    } else if (sorts.birth_month_day === 2) {
+      // sorts by ascending birth month and day
+      setStudentProfilesFilteredSorted(
+        [...studentProfilesFiltered].sort((a, b) => {
+          const aBirthday = new Date(a.birthday);
+          const bBirthday = new Date(b.birthday);
+
+          const monthDifference = aBirthday.getMonth() - bBirthday.getMonth();
+          if (monthDifference !== 0) {
+            return monthDifference;
+          }
+
+          return aBirthday.getDate() - bBirthday.getDate();
+        })
+      );
+    }
+  }, [studentProfilesFiltered, sorts]);
+
   // creates array of months
   useEffect(() => {
     let monthsList = [];
@@ -132,12 +180,23 @@ function StudentProfiles({ monthFilters, setMonthFilters }) {
   // generates display text
   useEffect(() => {
     let displayArray = [];
+
     displayArray.push(`${resultCount}件を表示しています`);
+
     monthsToDisplay.length < 13 &&
       displayArray.push(`「誕生月」のフィルターが有効になっています`);
+
     searchInput !== "" && displayArray.push(`「${searchInput}」で検索しました`);
+
+    sorts.id === 1 && displayArray.push(`「ID」で降順に並べ替えました`);
+    sorts.id === 2 && displayArray.push(`「ID」で昇順に並べ替えました`);
+    sorts.birth_month_day === 1 &&
+      displayArray.push(`「誕生日」で降順に並べ替えました`);
+    sorts.birth_month_day === 2 &&
+      displayArray.push(`「誕生日」で昇順に並べ替えました`);
+
     setDisplayTextArray(displayArray);
-  }, [resultCount, monthsToDisplay, searchInput]);
+  }, [resultCount, monthsToDisplay, searchInput, sorts]);
 
   return (
     <Fragment>
@@ -149,6 +208,8 @@ function StudentProfiles({ monthFilters, setMonthFilters }) {
         monthFilters={monthFilters}
         setMonthFilters={setMonthFilters}
         filtersActive={filtersActive}
+        sorts={sorts}
+        setSorts={setSorts}
       />
 
       {/* Error Loading Data */}
@@ -168,7 +229,7 @@ function StudentProfiles({ monthFilters, setMonthFilters }) {
       {displayContent && (
         <div className="card-section">
           <div className="card-container">
-            {studentProfilesFiltered.map((profile) => {
+            {studentProfilesFilteredSorted.map((profile) => {
               return (
                 <Link
                   to={`/staff/students/profiles/details/${profile.id}`}

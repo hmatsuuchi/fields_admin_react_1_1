@@ -43,6 +43,12 @@ function App() {
     month12: true,
   });
 
+  // sorts for student profiles
+  const [sorts, setSorts] = useState({
+    id: 1,
+    birth_month_day: 0,
+  });
+
   useEffect(() => {
     // gets authentication bool from local storage
     if (localStorage.getItem("refresh_token")) {
@@ -120,6 +126,8 @@ function App() {
               <StudentProfilesCards
                 monthFilters={monthFilters}
                 setMonthFilters={setMonthFilters}
+                sorts={sorts}
+                setSorts={setSorts}
               />
             </StaffProtectedRoute>
           }></Route>

@@ -11,6 +11,7 @@ $lighter-grey: #f1f1f1;
 .filter-button-container {
   border-radius: 0.3rem;
   padding: 0;
+  margin-left: 0.5rem;
 
   cursor: pointer;
 
@@ -23,10 +24,10 @@ $lighter-grey: #f1f1f1;
     height: 2rem;
     width: 2rem;
 
-    background-image: url("img/filter_icon.svg");
+    background-image: url("img/filter_icon_white.svg");
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-size: 80% auto;
+    background-size: 75% auto;
 
     display: grid;
   }
@@ -43,23 +44,21 @@ $lighter-grey: #f1f1f1;
 
 .filter-button-container.filters-active {
   background-color: #fff;
+  outline: none;
 
   .filter-button {
-    background-image: url("img/filter_icon_active.svg");
+    background-image: url("img/filter_icon_teal.svg");
   }
 }
 
 @media screen and (min-width: 576px) {
   .filter-button-container {
-    outline: solid 1px #fff;
-    padding: 0 0.25rem;
-
-    grid-column-gap: 0.25rem;
-
     .filter-button-text {
       display: block;
+      font-size: 0.7rem;
       font-weight: 600;
       color: #fff;
+      margin-right: 0.25rem;
     }
   }
 

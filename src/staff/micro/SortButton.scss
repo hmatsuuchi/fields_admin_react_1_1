@@ -1,0 +1,58 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+$grey: #3a3939;
+$light-grey: #adadad;
+$lighter-grey: #f1f1f1;
+
+.sort-button-and-menu-container {
+  .sort-button-container {
+    border-radius: 0.3rem;
+    padding: 0;
+    margin-left: 0.5rem;
+
+    cursor: pointer;
+
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+
+    .sort-button {
+      height: 2rem;
+      width: 2rem;
+
+      background-image: url("img/sort_icon_white.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 90% auto;
+    }
+
+    .sort-button-text {
+      display: none;
+    }
+  }
+
+  .sort-button-container:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .sort-button-and-menu-container {
+    .sort-button-container {
+      .sort-button {
+        margin-right: 0.2rem;
+      }
+
+      .sort-button-text {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+}

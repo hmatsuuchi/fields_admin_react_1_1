@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 // Components
 import FilterMenu from "./FilterMenu";
 // CSS
@@ -9,9 +9,9 @@ function FilterButton({
   monthFilters,
   setMonthFilters,
   filtersActive,
+  displayFilterMenu,
+  setDisplayFilterMenu,
 }) {
-  const [displayFilterMenu, setDisplayFilterMenu] = useState(false);
-
   function handleClick() {
     setDisplayFilterMenu(!displayFilterMenu);
   }
