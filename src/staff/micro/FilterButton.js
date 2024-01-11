@@ -35,6 +35,7 @@ function FilterButton({
           setMonthFilters={setMonthFilters}
           archiveFilters={archiveFilters}
           setArchiveFilters={setArchiveFilters}
+          filtersActive={filtersActive}
         />
       )}
     </div>

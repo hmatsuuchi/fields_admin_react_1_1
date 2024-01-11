@@ -74,7 +74,7 @@ function StudentProfiles({
     fetchProfiles();
   }, []);
 
-  // filter by text search field on changes to: search input field, months filter and unfiltered student profiles
+  // filter by text search input, month filter and archived status filter
   useEffect(() => {
     const studentProfilesSearchFiltered = studentProfilesTruth.filter(
       (profile) => {
@@ -103,21 +103,21 @@ function StudentProfiles({
           : 0;
 
         return (
-          (searchFields
+          searchFields
             .toUpperCase()
             .includes(searchInput.trim().toLocaleUpperCase()) &&
-            monthsToDisplay.includes(profileBirthdayMonth) &&
-            (archiveFilters.unarchived || archiveFilters.archived) &&
-            profile.archived === !archiveFilters.unarchived) ||
-          ((archiveFilters.unarchived || archiveFilters.archived) &&
-            profile.archived === archiveFilters.archived)
+          monthsToDisplay.includes(profileBirthdayMonth) &&
+          (profile.archived === archiveFilters.archived ||
+            profile.archived === !archiveFilters.unarchived) &&
+          (archiveFilters.archived === true ||
+            archiveFilters.unarchived === true)
         );
       }
     );
 
     setStudentProfilesFiltered(studentProfilesSearchFiltered);
     setResultCount(studentProfilesSearchFiltered.length);
-  }, [searchInput, monthsToDisplay, studentProfilesTruth, archiveFilters]);
+  }, [studentProfilesTruth, searchInput, monthsToDisplay, archiveFilters]);
 
   // sort student profiles
   useEffect(() => {
@@ -164,7 +164,7 @@ function StudentProfiles({
     }
   }, [studentProfilesFiltered, sorts]);
 
-  // creates array of months
+  // creates array of months to display
   useEffect(() => {
     let monthsList = [];
 
@@ -183,27 +183,46 @@ function StudentProfiles({
     if (monthFilters.month12) monthsList.push(12);
 
     setMonthsToDisplay(monthsList);
-
-    // checks if filters are active
-    monthsList.length < 13 ? setFiltersActive(true) : setFiltersActive(false);
   }, [monthFilters]);
 
-  // updates filter button active status on changes to archive status filters
+  // updates filter button active status on changes to birth month and archive status filters
   useEffect(() => {
-    archiveFilters.unarchived === false || archiveFilters.archived === false
+    archiveFilters.unarchived === false ||
+    archiveFilters.archived === false ||
+    monthsToDisplay.length < 13
       ? setFiltersActive(true)
       : setFiltersActive(false);
-  }, [archiveFilters]);
+  }, [monthsToDisplay, archiveFilters]);
 
   // generates display text
   useEffect(() => {
     let displayArray = [];
 
+    // result count
     displayArray.push(`${resultCount}件を表示しています`);
-
-    monthsToDisplay.length < 13 &&
-      displayArray.push(`「誕生月」のフィルターが有効になっています`);
-
+    // birth month and archived status filter
+    // creates blank string
+    let filterTextList = "";
+    // adds birth month filter text
+    monthsToDisplay.length < 13 && filterTextList.length > 0
+      ? (filterTextList += "、誕生日")
+      : monthsToDisplay.length < 13 && (filterTextList = "誕生日");
+    // adds archived status filter text
+    (archiveFilters.unarchived === false ||
+      archiveFilters.archived === false) &&
+    filterTextList.length > 0
+      ? (filterTextList += "、アーカイブ")
+      : (archiveFilters.unarchived === false ||
+          archiveFilters.archived === false) &&
+        (filterTextList = "アーカイブ");
+    // adds filter text to display array
+    (monthsToDisplay.length < 13 ||
+      archiveFilters.unarchived === false ||
+      archiveFilters.archived === false) &&
+      displayArray.push(
+        `「${filterTextList}」のフィルターが有効になっています`
+      );
+    // search input
     searchInput !== "" && displayArray.push(`「${searchInput}」で検索しました`);
 
     sorts.id === 1 && displayArray.push(`「ID」で降順に並べ替えました`);
@@ -214,7 +233,7 @@ function StudentProfiles({
       displayArray.push(`「誕生日」で昇順に並べ替えました`);
 
     setDisplayTextArray(displayArray);
-  }, [resultCount, monthsToDisplay, searchInput, sorts]);
+  }, [resultCount, monthsToDisplay, archiveFilters, searchInput, sorts]);
 
   return (
     <Fragment>

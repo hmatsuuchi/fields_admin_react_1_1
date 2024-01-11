@@ -8,6 +8,7 @@ function FilterMenu({
   setMonthFilters,
   archiveFilters,
   setArchiveFilters,
+  filtersActive,
 }) {
   const [displayMonthSelectList, setDisplayMonthSelectList] = useState(false);
   const [displayArchiveStatusSelectList, setDisplayArchiveStatusSelectList] =
@@ -71,10 +72,22 @@ function FilterMenu({
     setDisplayArchiveStatusSelectList(!displayArchiveStatusSelectList);
   };
 
+  const handleClearAllFilters = () => {
+    handleSelectAllMonthTrue();
+    handleSelectAllArchiveStatusTrue();
+  };
+
   return (
     <Fragment>
       <div className="filter-menu-container">
         <div className="filter-main-title">フィルター</div>
+        {filtersActive && (
+          <button
+            className="clear-all-filters-button"
+            onClick={handleClearAllFilters}>
+            クリア
+          </button>
+        )}
         {/* birth month filter */}
         <button
           onClick={handleToggleMonthSelectList}
