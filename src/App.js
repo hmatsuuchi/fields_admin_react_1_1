@@ -26,6 +26,7 @@ function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [isStaff, setIsStaff] = useState(null);
   const [isCustomer, setIsCustomer] = useState(null);
+
   // month filters for student profiles
   const [monthFilters, setMonthFilters] = useState({
     month0: true,
@@ -41,6 +42,12 @@ function App() {
     month10: true,
     month11: true,
     month12: true,
+  });
+
+  // archive filters for student profiles
+  const [archiveFilters, setArchiveFilters] = useState({
+    unarchived: true,
+    archived: true,
   });
 
   // sorts for student profiles
@@ -126,6 +133,8 @@ function App() {
               <StudentProfilesCards
                 monthFilters={monthFilters}
                 setMonthFilters={setMonthFilters}
+                archiveFilters={archiveFilters}
+                setArchiveFilters={setArchiveFilters}
                 sorts={sorts}
                 setSorts={setSorts}
               />

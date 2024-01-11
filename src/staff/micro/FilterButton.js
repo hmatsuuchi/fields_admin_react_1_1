@@ -11,6 +11,8 @@ function FilterButton({
   filtersActive,
   displayFilterMenu,
   setDisplayFilterMenu,
+  archiveFilters,
+  setArchiveFilters,
 }) {
   function handleClick() {
     setDisplayFilterMenu(!displayFilterMenu);
@@ -31,6 +33,8 @@ function FilterButton({
           setDisplayFilterMenu={setDisplayFilterMenu}
           monthFilters={monthFilters}
           setMonthFilters={setMonthFilters}
+          archiveFilters={archiveFilters}
+          setArchiveFilters={setArchiveFilters}
         />
       )}
     </div>

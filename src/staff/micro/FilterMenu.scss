@@ -87,6 +87,8 @@ $glass-opacity: 0.9;
       grid-auto-flow: column;
       grid-column-gap: 1.5rem;
 
+      justify-items: center;
+
       button {
         grid-template-columns: auto auto;
         grid-template-rows: auto;
@@ -95,9 +97,6 @@ $glass-opacity: 0.9;
         background-color: rgba(255, 222, 125, 1);
         border-radius: 0.3rem;
         font-weight: 400;
-
-        padding: 0.2rem 1.25rem;
-
         margin: 0;
       }
 
@@ -179,7 +178,6 @@ $glass-opacity: 0.9;
 
         button {
           font-size: $font-size-small;
-          padding: 0.2rem 0.75rem;
         }
       }
     }

@@ -14,6 +14,8 @@ function StudentProfilesToolbar({
   disableToolbarButtons,
   monthFilters,
   setMonthFilters,
+  archiveFilters,
+  setArchiveFilters,
   filtersActive,
   sorts,
   setSorts,
@@ -47,6 +49,8 @@ function StudentProfilesToolbar({
         DOMOrder={1}
         monthFilters={monthFilters}
         setMonthFilters={setMonthFilters}
+        archiveFilters={archiveFilters}
+        setArchiveFilters={setArchiveFilters}
         filtersActive={filtersActive}
         displayFilterMenu={displayFilterMenu}
         setDisplayFilterMenu={setDisplayFilterMenu}

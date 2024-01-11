@@ -12,7 +12,14 @@ import "./StudentProfilesCards.scss";
 // React Router DOM
 import { Link } from "react-router-dom";
 
-function StudentProfiles({ monthFilters, setMonthFilters, sorts, setSorts }) {
+function StudentProfiles({
+  monthFilters,
+  setMonthFilters,
+  archiveFilters,
+  setArchiveFilters,
+  sorts,
+  setSorts,
+}) {
   // source of truth for student profiles
   const [studentProfilesTruth, setstudentProfilesTruth] = useState([]);
   // student profiles filtered by search input
@@ -96,17 +103,21 @@ function StudentProfiles({ monthFilters, setMonthFilters, sorts, setSorts }) {
           : 0;
 
         return (
-          searchFields
+          (searchFields
             .toUpperCase()
             .includes(searchInput.trim().toLocaleUpperCase()) &&
-          monthsToDisplay.includes(profileBirthdayMonth)
+            monthsToDisplay.includes(profileBirthdayMonth) &&
+            (archiveFilters.unarchived || archiveFilters.archived) &&
+            profile.archived === !archiveFilters.unarchived) ||
+          ((archiveFilters.unarchived || archiveFilters.archived) &&
+            profile.archived === archiveFilters.archived)
         );
       }
     );
 
     setStudentProfilesFiltered(studentProfilesSearchFiltered);
     setResultCount(studentProfilesSearchFiltered.length);
-  }, [searchInput, monthsToDisplay, studentProfilesTruth]);
+  }, [searchInput, monthsToDisplay, studentProfilesTruth, archiveFilters]);
 
   // sort student profiles
   useEffect(() => {
@@ -177,6 +188,13 @@ function StudentProfiles({ monthFilters, setMonthFilters, sorts, setSorts }) {
     monthsList.length < 13 ? setFiltersActive(true) : setFiltersActive(false);
   }, [monthFilters]);
 
+  // updates filter button active status on changes to archive status filters
+  useEffect(() => {
+    archiveFilters.unarchived === false || archiveFilters.archived === false
+      ? setFiltersActive(true)
+      : setFiltersActive(false);
+  }, [archiveFilters]);
+
   // generates display text
   useEffect(() => {
     let displayArray = [];
@@ -207,6 +225,8 @@ function StudentProfiles({ monthFilters, setMonthFilters, sorts, setSorts }) {
         disableToolbarButtons={disableToolbarButtons}
         monthFilters={monthFilters}
         setMonthFilters={setMonthFilters}
+        archiveFilters={archiveFilters}
+        setArchiveFilters={setArchiveFilters}
         filtersActive={filtersActive}
         sorts={sorts}
         setSorts={setSorts}

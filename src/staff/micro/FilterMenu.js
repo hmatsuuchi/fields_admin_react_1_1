@@ -2,8 +2,16 @@ import React, { Fragment, useState } from "react";
 // CSS
 import "./FilterMenu.scss";
 
-function FilterMenu({ setDisplayFilterMenu, monthFilters, setMonthFilters }) {
+function FilterMenu({
+  setDisplayFilterMenu,
+  monthFilters,
+  setMonthFilters,
+  archiveFilters,
+  setArchiveFilters,
+}) {
   const [displayMonthSelectList, setDisplayMonthSelectList] = useState(false);
+  const [displayArchiveStatusSelectList, setDisplayArchiveStatusSelectList] =
+    useState(false);
 
   const handleSelectAllMonthTrue = (event) => {
     setMonthFilters({
@@ -41,14 +49,33 @@ function FilterMenu({ setDisplayFilterMenu, monthFilters, setMonthFilters }) {
     });
   };
 
+  const handleSelectAllArchiveStatusTrue = (event) => {
+    setArchiveFilters({
+      unarchived: true,
+      archived: true,
+    });
+  };
+
+  const handleSelectAllArchiveStatusFalse = (event) => {
+    setArchiveFilters({
+      unarchived: false,
+      archived: false,
+    });
+  };
+
   const handleToggleMonthSelectList = (event) => {
     setDisplayMonthSelectList(!displayMonthSelectList);
+  };
+
+  const handleToggleArchiveStatusSelectList = (event) => {
+    setDisplayArchiveStatusSelectList(!displayArchiveStatusSelectList);
   };
 
   return (
     <Fragment>
       <div className="filter-menu-container">
         <div className="filter-main-title">フィルター</div>
+        {/* birth month filter */}
         <button
           onClick={handleToggleMonthSelectList}
           className="filter-title-container">
@@ -312,6 +339,65 @@ function FilterMenu({ setDisplayFilterMenu, monthFilters, setMonthFilters }) {
               }}
             />
             <label htmlFor="month-12">12月</label>
+          </button>
+        </div>
+        {/* archive status filter */}
+        <button
+          onClick={handleToggleArchiveStatusSelectList}
+          className="filter-title-container">
+          <div
+            className={`filter-title-arrow${
+              displayArchiveStatusSelectList ? " rotate-90-deg" : ""
+            }`}></div>
+          <div className="section-title">アーカイブ</div>
+        </button>
+        <div
+          className={`filter-menu-group${
+            !displayArchiveStatusSelectList
+              ? " height-zero-overflow-hidden"
+              : ""
+          }`}>
+          <div className="select-all-none-container">
+            <button onClick={handleSelectAllArchiveStatusTrue}>全部</button>
+            <button onClick={handleSelectAllArchiveStatusFalse}>解除</button>
+          </div>
+          {/* Unarchived */}
+          <button
+            onClick={(event) => {
+              setArchiveFilters((prevArchiveFilters) => ({
+                ...archiveFilters,
+                unarchived: !prevArchiveFilters.unarchived,
+              }));
+            }}>
+            <input
+              type="checkbox"
+              name="unarchived"
+              checked={archiveFilters.unarchived}
+              // not necessary; used to prevent console errors
+              onChange={(event) => {
+                event.target.checked = archiveFilters.unarchived;
+              }}
+            />
+            <label htmlFor="unarchived">アーカイブ対象外</label>
+          </button>
+          {/* Archived */}
+          <button
+            onClick={(event) => {
+              setArchiveFilters((prevArchiveFilters) => ({
+                ...archiveFilters,
+                archived: !prevArchiveFilters.archived,
+              }));
+            }}>
+            <input
+              type="checkbox"
+              name="archived"
+              checked={archiveFilters.archived}
+              // not necessary; used to prevent console errors
+              onChange={(event) => {
+                event.target.checked = archiveFilters.archived;
+              }}
+            />
+            <label htmlFor="archived">アーカイブ対象</label>
           </button>
         </div>
       </div>
