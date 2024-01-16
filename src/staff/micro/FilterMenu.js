@@ -85,7 +85,7 @@ function FilterMenu({
           <button
             className="clear-all-filters-button"
             onClick={handleClearAllFilters}>
-            クリア
+            リセット
           </button>
         )}
         {/* birth month filter */}

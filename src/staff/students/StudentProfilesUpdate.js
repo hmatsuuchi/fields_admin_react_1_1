@@ -171,7 +171,7 @@ function StudentProfilesUpdate() {
     event.preventDefault();
 
     const data = {
-      id: profileId,
+      profile_id: profileId,
       last_name_romaji: lastNameRomaji,
       first_name_romaji: firstNameRomaji,
       last_name_kanji: lastNameKanji,
@@ -272,6 +272,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="last_name_romaji"
                       value={lastNameRomaji}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameRomaji(e.target.value)
                       }></input>
@@ -282,6 +283,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="first_name_romaji"
                       value={firstNameRomaji}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameRomaji(e.target.value)
                       }></input>
@@ -292,6 +294,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="last_name_kanji"
                       value={lastNameKanji}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameKanji(e.target.value)
                       }></input>
@@ -302,6 +305,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="first_name_kanji"
                       value={firstNameKanji}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameKanji(e.target.value)
                       }></input>
@@ -312,6 +316,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="last_name_katakana"
                       value={lastNameKatakana}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameKatakana(e.target.value)
                       }></input>
@@ -322,6 +327,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="first_name_katakana"
                       value={firstNameKatakana}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameKatakana(e.target.value)
                       }></input>
@@ -334,7 +340,8 @@ function StudentProfilesUpdate() {
                       className="input-width-7"
                       name="post_code"
                       value={postCode}
-                      onChange={(e) => postCode(e.target.value)}></input>
+                      maxLength={10}
+                      onChange={(e) => setPostCode(e.target.value)}></input>
                     <label htmlFor="prefecture">府県</label>
                     <select
                       type="text"
@@ -361,6 +368,7 @@ function StudentProfilesUpdate() {
                       className="input-width-s"
                       name="city"
                       value={city}
+                      maxLength={35}
                       onChange={(e) => setCity(e.target.value)}></input>
                     <label htmlFor="address_1">住所1</label>
                     <input
@@ -369,6 +377,7 @@ function StudentProfilesUpdate() {
                       className="input-width-20"
                       name="address_1"
                       value={address1}
+                      maxLength={35}
                       onChange={(e) => setAddress1(e.target.value)}></input>
                     <label htmlFor="address_2">住所2</label>
                     <input
@@ -377,6 +386,7 @@ function StudentProfilesUpdate() {
                       className="input-width-20"
                       name="address_2"
                       value={address2}
+                      maxLength={35}
                       onChange={(e) => setAddress2(e.target.value)}></input>
                     {/* Contact Section */}
                     <ProfileSectionHeader displayText="連絡先" />
@@ -410,7 +420,11 @@ function StudentProfilesUpdate() {
                               type="text"
                               id="phone-type"
                               name="number_type"
-                              value={phone.number_type && phone.number_type}
+                              value={
+                                phone.number_type
+                                  ? phone.number_type
+                                  : undefined
+                              }
                               onChange={(e) => updatePhoneType(e, index)}>
                               <option value="">-------</option>
                               {phoneChoices.map((phone) => {

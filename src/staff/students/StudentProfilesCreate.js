@@ -268,6 +268,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="last_name_romaji"
                       value={lastNameRomaji}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameRomaji(e.target.value)
                       }></input>
@@ -278,6 +279,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="first_name_romaji"
                       value={firstNameRomaji}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameRomaji(e.target.value)
                       }></input>
@@ -288,6 +290,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="last_name_kanji"
                       value={lastNameKanji}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameKanji(e.target.value)
                       }></input>
@@ -298,6 +301,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="first_name_kanji"
                       value={firstNameKanji}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameKanji(e.target.value)
                       }></input>
@@ -308,6 +312,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="last_name_katakana"
                       value={lastNameKatakana}
+                      maxLength={35}
                       onChange={(e) =>
                         setLastNameKatakana(e.target.value)
                       }></input>
@@ -318,6 +323,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="first_name_katakana"
                       value={firstNameKatakana}
+                      maxLength={35}
                       onChange={(e) =>
                         setFirstNameKatakana(e.target.value)
                       }></input>
@@ -330,6 +336,7 @@ function StudentProfilesCreate() {
                       className="input-width-7"
                       name="post_code"
                       value={postCode}
+                      maxLength={10}
                       onChange={(e) => setPostCode(e.target.value)}></input>
                     <label htmlFor="prefecture">府県</label>
                     <select
@@ -357,6 +364,7 @@ function StudentProfilesCreate() {
                       className="input-width-s"
                       name="city"
                       value={city}
+                      maxLength={35}
                       onChange={(e) => setCity(e.target.value)}></input>
                     <label htmlFor="address_1">住所1</label>
                     <input
@@ -365,6 +373,7 @@ function StudentProfilesCreate() {
                       className="input-width-20"
                       name="address_1"
                       value={address1}
+                      maxLength={35}
                       onChange={(e) => setAddress1(e.target.value)}></input>
                     <label htmlFor="address_2">住所2</label>
                     <input
@@ -373,6 +382,7 @@ function StudentProfilesCreate() {
                       className="input-width-20"
                       name="address_2"
                       value={address2}
+                      maxLength={35}
                       onChange={(e) => setAddress2(e.target.value)}></input>
                     {/* Contact Section */}
                     <ProfileSectionHeader displayText="連絡先" />
