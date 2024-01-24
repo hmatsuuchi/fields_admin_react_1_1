@@ -42,7 +42,7 @@ function StudentProfilesDetails() {
   return (
     <Fragment>
       <StudentDetailsToolbar
-        backButtonLink={"/staff/students/profiles/cards"}
+        backButtonLink={"/staff/students/profiles/cards/"}
         backButtonText={"生徒情報"}
         displayContent={displayContent}
       />

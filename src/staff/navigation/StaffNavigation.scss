@@ -8,6 +8,7 @@ $light-grey: #adadad;
 $grey: #3a3939;
 
 nav {
+  z-index: 99;
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -184,7 +185,11 @@ nav.nav-active {
 }
 
 nav.nav-inactive {
+  pointer-events: none;
+
   #hamburger-button {
+    pointer-events: auto;
+
     #hamburger-container {
       #hamburger-line-1 {
         animation: hamburger-line-1-out 400ms ease-in forwards;
@@ -246,7 +251,7 @@ nav.nav-inactive {
   }
 
   #link-list-container {
-    display: none;
+    // display: none;
     pointer-events: none;
     opacity: 1;
 

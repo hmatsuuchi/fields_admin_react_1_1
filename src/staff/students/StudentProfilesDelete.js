@@ -51,12 +51,17 @@ function StudentProfilesDelete() {
     try {
       await instance
         .delete("api/students/profiles/details", {
+          headers: {
+            "X-CSRFToken": document
+              .querySelector("[name=csrftoken]")
+              .getAttribute("content"),
+          },
           params: { profile_id: profileId },
         })
         .then((response) => {
           if (response) {
             if (response.status === 204) {
-              navigate("/staff/students/profiles/cards");
+              navigate("/staff/students/profiles/cards/");
             } else {
               window.alert("An error occurred when deleting this record.");
             }

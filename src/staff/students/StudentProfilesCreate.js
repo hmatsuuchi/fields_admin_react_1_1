@@ -206,11 +206,17 @@ function StudentProfilesCreate() {
 
     try {
       await instance
-        .post("api/students/profiles/details", data)
+        .post("api/students/profiles/details", data, {
+          headers: {
+            "X-CSRFToken": document
+              .querySelector("[name=csrftoken]")
+              .getAttribute("content"),
+          },
+        })
         .then((response) => {
           if (response) {
             if (response.status === 201) {
-              navigate("/staff/students/profiles/cards");
+              navigate("/staff/students/profiles/cards/");
             } else {
               setSubmitted(false);
               window.alert("An error occurred.");
@@ -225,7 +231,7 @@ function StudentProfilesCreate() {
   return (
     <Fragment>
       <StudentProfileCreateToolbar
-        backButtonLink={"/staff/students/profiles/cards"}
+        backButtonLink={"/staff/students/profiles/cards/"}
         backButtonText={"生徒情報"}
         displayContent={displayContent}
       />
@@ -402,6 +408,7 @@ function StudentProfilesCreate() {
                               type="text"
                               id="phone"
                               name="number"
+                              maxLength={24}
                               onChange={updatePhoneNumber}></input>
                             <label
                               htmlFor="number_type"
@@ -530,7 +537,7 @@ function StudentProfilesCreate() {
                     {/* Bottom Buttons Section */}
                     <div className="bottom-buttons-container">
                       <Link
-                        to="/staff/students/profiles/cards"
+                        to="/staff/students/profiles/cards/"
                         className="button cancel">
                         キャンセル
                       </Link>

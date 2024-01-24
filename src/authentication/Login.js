@@ -55,16 +55,26 @@ function Login({
         // is authenticated bool
         setIsAuth(true);
 
-        // initialize access and refresh tokens in localstorage
+        // clear local storage
         localStorage.clear();
-        localStorage.setItem("access_token", data.access);
-        localStorage.setItem("refresh_token", data.refresh);
+
+        // set csrf token as meta element in DOM head
+        const csrfToken = data["csrftoken"];
+        let csrfTokenElement = document.querySelector("[name=csrftoken]");
+        if (csrfTokenElement) {
+          csrfTokenElement.content = csrfToken;
+        } else {
+          csrfTokenElement = document.createElement("meta");
+          csrfTokenElement.name = "csrftoken";
+          csrfTokenElement.content = csrfToken;
+          document.head.appendChild(csrfTokenElement);
+        }
 
         // get logged in user data and redirect
         const getLoggedInUserData = async () => {
           try {
             await instance_authenticated
-              .get("api/logged_in_user_data")
+              .get("api/logged_in_user_data/")
               .then((response) => {
                 const loggedInUserGroups =
                   response.data["logged_in_user_groups"];
@@ -113,10 +123,10 @@ function Login({
 
   if (isAuth && isStaff) {
     // staff redirect
-    return <Navigate replace to="/staff/dashboard" />;
+    return <Navigate replace to="/staff/dashboard/" />;
   } else if (isAuth && isCustomer) {
     // customer redirect
-    return <Navigate replace to="/customer/dashboard" />;
+    return <Navigate replace to="/customer/dashboard/" />;
   } else if (displayContent === true) {
     return (
       <div className="authentication-background-container">

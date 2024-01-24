@@ -4,17 +4,12 @@ import instance from "../staff/axios/axios_authenticated";
 function Logout({ setIsAuth, setIsStaff, setIsCustomer }) {
   useEffect(() => {
     const logoutUser = async () => {
-      // get csrf token from DOM head
-      const csrfToken = document
-        .querySelector("[name=csrftoken]")
-        .getAttribute("content");
+      const refreshToken = localStorage.getItem("refresh_token");
 
       try {
-        await instance.post(
-          "/api/logout/",
-          {},
-          { headers: { "X-CSRFToken": csrfToken } }
-        );
+        await instance.post("/api/logout/", {
+          refresh_token: refreshToken,
+        });
 
         // clear local storage
         localStorage.clear();

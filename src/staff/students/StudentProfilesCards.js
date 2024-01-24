@@ -51,7 +51,7 @@ function StudentProfiles({
     // hides error message
     setDisplayErrorMessage(false);
     try {
-      await instance.get("api/students/profiles").then((response) => {
+      await instance.get("api/students/profiles/").then((response) => {
         if (response) {
           setstudentProfilesTruth(response.data);
           // hides error message

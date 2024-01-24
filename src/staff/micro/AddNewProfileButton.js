@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function AddNewProfileButton({ DOMOrder }) {
   return (
     <Link
-      to="/staff/students/profiles/create"
+      to="/staff/students/profiles/create/"
       className="add-new-profile-button"
       style={{ order: DOMOrder }}></Link>
   );

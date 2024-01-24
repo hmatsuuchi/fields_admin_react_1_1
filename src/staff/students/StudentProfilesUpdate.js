@@ -193,7 +193,13 @@ function StudentProfilesUpdate() {
 
     try {
       await instance
-        .put("api/students/profiles/details", data)
+        .put("api/students/profiles/details", data, {
+          headers: {
+            "X-CSRFToken": document
+              .querySelector("[name=csrftoken]")
+              .getAttribute("content"),
+          },
+        })
         .then((response) => {
           if (response) {
             if (response.status === 201) {
@@ -348,7 +354,7 @@ function StudentProfilesUpdate() {
                       id="prefecture"
                       className="input-width-7"
                       name="prefecture"
-                      value={prefecture}
+                      value={prefecture ? prefecture : ""}
                       onChange={(e) => setPrefecture(e.target.value)}>
                       <option value="">-------</option>
                       {prefectureChoices.map((prefecture) => {
@@ -406,6 +412,7 @@ function StudentProfilesUpdate() {
                               type="text"
                               id="phone"
                               name="number"
+                              maxLength={24}
                               value={phone.number}
                               onChange={(e) =>
                                 updatePhoneNumber(e, index)
@@ -420,11 +427,7 @@ function StudentProfilesUpdate() {
                               type="text"
                               id="phone-type"
                               name="number_type"
-                              value={
-                                phone.number_type
-                                  ? phone.number_type
-                                  : undefined
-                              }
+                              value={phone.number_type ? phone.number_type : ""}
                               onChange={(e) => updatePhoneType(e, index)}>
                               <option value="">-------</option>
                               {phoneChoices.map((phone) => {
@@ -471,7 +474,7 @@ function StudentProfilesUpdate() {
                       id="birthday"
                       className="input-width-s"
                       name="birthday"
-                      value={birthday}
+                      value={birthday ? birthday : ""}
                       onChange={(e) => setBirthday(e.target.value)}></input>
                     <label htmlFor="grade">学年</label>
                     <select
@@ -479,7 +482,7 @@ function StudentProfilesUpdate() {
                       id="grade"
                       className="input-width-7"
                       name="grade"
-                      value={grade}
+                      value={grade ? grade : ""}
                       onChange={(e) => setGrade(e.target.value)}>
                       <option value="">-------</option>
                       {gradeChoices.map((grade) => {

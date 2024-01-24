@@ -7,6 +7,7 @@ const instance_public = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 export default instance_public;

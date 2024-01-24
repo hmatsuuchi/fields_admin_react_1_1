@@ -40,7 +40,7 @@ function StaffNavigation() {
       <div id="link-list-container">
         <NavLink
           id="link-item-01"
-          to="/staff/dashboard"
+          to="/staff/dashboard/"
           className={({ isActive, isPending }) =>
             isPending ? "pending" : isActive ? "active" : ""
           }
@@ -49,12 +49,20 @@ function StaffNavigation() {
         </NavLink>
         <NavLink
           id="link-item-02"
-          to="/staff/students/profiles/cards"
+          to="/staff/students/profiles/cards/"
           className={({ isActive, isPending }) =>
             isPending ? "pending" : isActive ? "active" : ""
           }
           onClick={clicksToNavHousekeeping}>
           生徒情報
+        </NavLink>
+        <NavLink
+          id="link-item-03"
+          to="/logout/"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          }>
+          ログアウト
         </NavLink>
       </div>
       <button id="hamburger-button" onClick={toggleNavigation}>
