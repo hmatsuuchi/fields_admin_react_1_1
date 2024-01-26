@@ -7,7 +7,7 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
-nav {
+nav.staff-navigation {
   z-index: 99;
   position: fixed;
   bottom: 2rem;
@@ -87,7 +87,7 @@ nav {
   }
 }
 
-nav.nav-active {
+nav.staff-navigation.nav-active {
   #hamburger-button {
     border-radius: 10% 65%;
 
@@ -167,6 +167,10 @@ nav.nav-active {
       animation: nav-list-in 400ms 200ms ease-out both;
     }
 
+    #link-item-04 {
+      animation: nav-list-in 400ms 300ms ease-out both;
+    }
+
     @keyframes nav-list-in {
       0% {
         transform: scale(0, 0) translateX(5rem);
@@ -184,7 +188,7 @@ nav.nav-active {
   }
 }
 
-nav.nav-inactive {
+nav.staff-navigation.nav-inactive {
   pointer-events: none;
 
   #hamburger-button {
@@ -256,14 +260,18 @@ nav.nav-inactive {
     opacity: 1;
 
     #link-item-01 {
-      animation: nav-list-out 400ms 200ms ease-out both;
+      animation: nav-list-out 400ms 300ms ease-out both;
     }
 
     #link-item-02 {
-      animation: nav-list-out 400ms 100ms ease-out both;
+      animation: nav-list-out 400ms 200ms ease-out both;
     }
 
     #link-item-03 {
+      animation: nav-list-out 400ms 100ms ease-out both;
+    }
+
+    #link-item-04 {
       animation: nav-list-out 400ms 0ms ease-out both;
     }
 
@@ -280,7 +288,7 @@ nav.nav-inactive {
   }
 }
 
-nav.nav-disabled {
+nav.staff-navigation.nav-disabled {
   pointer-events: none;
 
   a {

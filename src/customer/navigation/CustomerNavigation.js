@@ -36,7 +36,7 @@ function StaffNavigation() {
   }
 
   return (
-    <nav id="navigation">
+    <nav id="navigation" className="customer-navigation">
       <div id="link-list-container">
         <NavLink
           id="link-item-01"

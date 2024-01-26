@@ -13,6 +13,8 @@ import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
+// COMPONENTS - SCHEDULE
+import EventsForDateRangeCalendar from "./staff/schedule/EventsForDateRangeCalendar";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -166,6 +168,13 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesDelete />
+            </StaffProtectedRoute>
+          }></Route>
+        <Route
+          path="/staff/schedule/events/calendar"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <EventsForDateRangeCalendar />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES */}

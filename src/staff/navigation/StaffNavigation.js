@@ -36,7 +36,7 @@ function StaffNavigation() {
   }
 
   return (
-    <nav id="navigation">
+    <nav id="navigation" className="staff-navigation">
       <div id="link-list-container">
         <NavLink
           id="link-item-01"
@@ -58,6 +58,15 @@ function StaffNavigation() {
         </NavLink>
         <NavLink
           id="link-item-03"
+          to="/staff/schedule/events/calendar/"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          }
+          onClick={clicksToNavHousekeeping}>
+          カレンダー
+        </NavLink>
+        <NavLink
+          id="link-item-04"
           to="/logout/"
           className={({ isActive, isPending }) =>
             isPending ? "pending" : isActive ? "active" : ""
