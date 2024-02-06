@@ -2,7 +2,7 @@ import React from "react";
 // CSS
 import "./StudentProfileCreateToolbar.scss";
 // Components
-import ToolbarBackButton from "../micro/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/students/ToolbarBackButton";
 
 function StudentProfileCreateToolbar({
   backButtonLink,

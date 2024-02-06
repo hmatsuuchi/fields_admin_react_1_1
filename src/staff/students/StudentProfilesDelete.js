@@ -2,10 +2,10 @@ import React, { useEffect, useState, Fragment } from "react";
 // Axios
 import instance from "../axios/axios_authenticated";
 // Components
-import HorizontalDividerThin from "../micro/HorizontalDividerThin";
-import StudentDeleteToolbar from "../toolbar/StudentDeleteToolbar";
+import HorizontalDividerThin from "../micro/students/HorizontalDividerThin";
+import StudentDeleteToolbar from "../toolbar/students/StudentDeleteToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
-import DisplayDescriptors from "../micro/DisplayDescriptors";
+import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 // CSS
 import "./StudentProfilesCards.scss";
 import "./StudentProfilesDelete.scss";

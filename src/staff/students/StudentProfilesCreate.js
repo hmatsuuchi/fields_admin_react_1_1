@@ -2,9 +2,9 @@ import React, { Fragment, useEffect, useState } from "react";
 // Axios
 import instance from "../axios/axios_authenticated";
 // Components
-import StudentProfileCreateToolbar from "../toolbar/StudentProfileCreateToolbar";
-import ProfileSectionHeader from "../micro/ProfileSectionHeader";
-import DisplayDescriptors from "../micro/DisplayDescriptors";
+import StudentProfileCreateToolbar from "../toolbar/students/StudentProfileCreateToolbar";
+import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
+import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
 
 // CSS

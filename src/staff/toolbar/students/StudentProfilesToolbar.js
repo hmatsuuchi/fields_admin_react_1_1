@@ -2,11 +2,11 @@ import React, { useState } from "react";
 // CSS
 import "./StudentProfilesToolbar.scss";
 // COMPONENTS
-import AddNewProfileButton from "../micro/AddNewProfileButton";
-import FilterButton from "../micro/FilterButton";
-import ResultCount from "../micro/ResultCount";
-import SortButton from "../micro/SortButton";
-import VerticalDividerThin from "../micro/VerticalDividerThin";
+import AddNewProfileButton from "../../micro/students/AddNewProfileButton";
+import FilterButton from "../../micro/students/FilterButton";
+import ResultCount from "../../micro/students/ResultCount";
+import SortButton from "../../micro/students/SortButton";
+import VerticalDividerThin from "../../micro/students/VerticalDividerThin";
 
 function StudentProfilesToolbar({
   setSearchInput,

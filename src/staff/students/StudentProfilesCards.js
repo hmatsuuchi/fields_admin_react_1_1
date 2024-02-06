@@ -2,11 +2,11 @@ import React, { Fragment, useState, useEffect } from "react";
 // Axios
 import instance from "../../staff/axios/axios_authenticated";
 // Components
-import DataLoadError from "../micro/DataLoadError";
-import DisplayDescriptors from "../micro/DisplayDescriptors";
-import HorizontalDividerThin from "../../staff/micro/HorizontalDividerThin";
-import LoadingSpinner from "../../staff/micro/LoadingSpinner";
-import StudentProfilesToolbar from "../toolbar/StudentProfilesToolbar";
+import DataLoadError from "../micro/students/DataLoadError";
+import DisplayDescriptors from "../micro/students/DisplayDescriptors";
+import HorizontalDividerThin from "../micro/students/HorizontalDividerThin";
+import LoadingSpinner from "../micro/LoadingSpinner";
+import StudentProfilesToolbar from "../toolbar/students/StudentProfilesToolbar";
 // CSS
 import "./StudentProfilesCards.scss";
 // React Router DOM

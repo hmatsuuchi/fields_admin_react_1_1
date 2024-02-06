@@ -86,14 +86,9 @@ function App() {
         <Route
           path="/"
           element={
-            <Login
-              isAuth={isAuth}
-              setIsAuth={setIsAuth}
-              isStaff={isStaff}
-              setIsStaff={setIsStaff}
-              isCustomer={isCustomer}
-              setIsCustomer={setIsCustomer}
-            />
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <StaffDashboard />
+            </StaffProtectedRoute>
           }
         />
         <Route

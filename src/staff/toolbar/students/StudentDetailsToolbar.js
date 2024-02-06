@@ -1,16 +1,16 @@
 import React from "react";
 // CSS
-import "./StudentProfileUpdateToolbar.scss";
+import "./StudentDetailsToolbar.scss";
 // Components
-import ToolbarBackButton from "../micro/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/students/ToolbarBackButton";
 
-function StudentProfileUpdateToolbar({
+function StudentDetailsToolbar({
   backButtonLink,
   backButtonText,
   displayContent,
 }) {
   return (
-    <div id="student-profile-update-toolbar">
+    <div id="student-profile-details-toolbar">
       {displayContent && (
         <ToolbarBackButton
           backButtonLink={backButtonLink}
@@ -21,4 +21,4 @@ function StudentProfileUpdateToolbar({
   );
 }
 
-export default StudentProfileUpdateToolbar;
+export default StudentDetailsToolbar;
