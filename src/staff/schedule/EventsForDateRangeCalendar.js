@@ -88,12 +88,12 @@ function EventsForDateRangeCalendar() {
           }
         });
       },
-      { root: null, rootMargin: "0px", threshold: 0.4 }
+      { root: null, rootMargin: "0px -50% 300% 0px", threshold: 0.5 }
     );
 
     // adds observers to day containers
     function addObserversToDayContainers() {
-      document.querySelectorAll(".day-container").forEach((day) => {
+      document.querySelectorAll(".snap-element").forEach((day) => {
         observer.observe(day);
       });
     }
@@ -290,74 +290,78 @@ function EventsForDateRangeCalendar() {
             /* day container */
             return (
               <div
-                id={`${dateOfDay.toISOString().slice(0, 10)}`}
-                className="day-container"
-                key={day}>
-                <div className="schedule-container card">
-                  <div className="markings-container">
-                    <div className="markings">09:00</div>
-                    <div className="markings">10:00</div>
-                    <div className="markings">11:00</div>
-                    <div className="markings">12:00</div>
-                    <div className="markings">13:00</div>
-                    <div className="markings">14:00</div>
-                    <div className="markings">15:00</div>
-                    <div className="markings">16:00</div>
-                    <div className="markings">17:00</div>
-                    <div className="markings">18:00</div>
-                    <div className="markings">19:00</div>
-                    <div className="markings">20:00</div>
-                    <div className="markings">21:00</div>
+                className="snap-element"
+                key={day}
+                id={`${dateOfDay.toISOString().slice(0, 10)}`}>
+                <div className="day-container" key={day}>
+                  <div className="schedule-container card">
+                    <div className="markings-container">
+                      <div className="markings">09:00</div>
+                      <div className="markings">10:00</div>
+                      <div className="markings">11:00</div>
+                      <div className="markings">12:00</div>
+                      <div className="markings">13:00</div>
+                      <div className="markings">14:00</div>
+                      <div className="markings">15:00</div>
+                      <div className="markings">16:00</div>
+                      <div className="markings">17:00</div>
+                      <div className="markings">18:00</div>
+                      <div className="markings">19:00</div>
+                      <div className="markings">20:00</div>
+                      <div className="markings">21:00</div>
+                    </div>
+                    {instructors && events
+                      ? instructors.map((instructor) => (
+                          /* instructor container */
+                          <div
+                            className="instructor-container"
+                            key={instructor.id}>
+                            <div className="instructor-name">
+                              {instructor.username}
+                            </div>
+                            <div className="events-container">
+                              {getEventsForDayAndInstructor(
+                                day,
+                                instructor.id
+                              ).map((event) => (
+                                /* event container */
+                                <div
+                                  className="event card"
+                                  key={event.id}
+                                  style={{
+                                    top: setTopPositionBasedOnStartTime(
+                                      event.start_time
+                                    ),
+                                    height: setHeightBasedOnEventDuration(
+                                      event.event_type.duration
+                                    ),
+                                  }}>
+                                  <div className="event-title">
+                                    <div className="event-name">
+                                      {event.event_name}
+                                    </div>
+                                    <div className="event-start-time">
+                                      {event.start_time.slice(0, 5)}
+                                    </div>
+                                  </div>
+                                  <div className="student-container">
+                                    {event.students.map((student) => {
+                                      return (
+                                        <div
+                                          className="student"
+                                          key={student.id}>
+                                          {student.first_name_romaji}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))
+                      : ""}
                   </div>
-                  {instructors && events
-                    ? instructors.map((instructor) => (
-                        /* instructor container */
-                        <div
-                          className="instructor-container"
-                          key={instructor.id}>
-                          <div className="instructor-name">
-                            {instructor.username}
-                          </div>
-                          <div className="events-container">
-                            {getEventsForDayAndInstructor(
-                              day,
-                              instructor.id
-                            ).map((event) => (
-                              /* event container */
-                              <div
-                                className="event card"
-                                key={event.id}
-                                style={{
-                                  top: setTopPositionBasedOnStartTime(
-                                    event.start_time
-                                  ),
-                                  height: setHeightBasedOnEventDuration(
-                                    event.event_type.duration
-                                  ),
-                                }}>
-                                <div className="event-title">
-                                  <div className="event-name">
-                                    {event.event_name}
-                                  </div>
-                                  <div className="event-start-time">
-                                    {event.start_time.slice(0, 5)}
-                                  </div>
-                                </div>
-                                <div className="student-container">
-                                  {event.students.map((student) => {
-                                    return (
-                                      <div className="student" key={student.id}>
-                                        {student.first_name_romaji}
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))
-                    : ""}
                 </div>
               </div>
             );

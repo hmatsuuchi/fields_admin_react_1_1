@@ -295,3 +295,16 @@ nav.staff-navigation.nav-disabled {
     pointer-events: none;
   }
 }
+
+#close-navigation {
+  display: none;
+  z-index: 98;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#close-navigation.nav-active {
+  display: block;
+}

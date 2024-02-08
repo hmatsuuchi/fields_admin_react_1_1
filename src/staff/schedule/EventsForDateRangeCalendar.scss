@@ -7,7 +7,6 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
-$events-container-height: 150rem;
 $markings-color: rgba(0, 0, 0, 0.3);
 
 #calendar-container {
@@ -15,26 +14,31 @@ $markings-color: rgba(0, 0, 0, 0.3);
 
   overflow-x: scroll;
 
+  padding: 0.5rem;
+
   display: grid;
   grid-auto-flow: column;
+  grid-column-gap: 0.5rem;
+
+  margin-bottom: 10rem;
 
   .day-container {
     scroll-snap-align: center;
+    position: relative;
 
     .schedule-container {
       position: relative;
 
-      margin: 1rem;
-      padding: 0 0.5rem;
+      padding: 0 0.35rem;
 
-      width: calc(100vw - 3rem);
+      width: calc(100vw - 1.7rem);
 
       background-color: $beige;
 
       display: grid;
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
-      grid-column-gap: 0.5rem;
+      grid-column-gap: 0.35rem;
 
       .markings-container {
         position: absolute;
@@ -64,7 +68,7 @@ $markings-color: rgba(0, 0, 0, 0.3);
 
         .events-container {
           position: relative;
-          height: $events-container-height;
+          height: 60rem;
 
           .event {
             position: absolute;
@@ -73,27 +77,34 @@ $markings-color: rgba(0, 0, 0, 0.3);
             background-color: #fff;
 
             .event-title {
-              padding: 0.15rem 0.5rem;
+              padding: 0.1rem 0.2rem;
               background-color: $teal;
 
-              font-size: 1rem;
+              overflow: hidden;
+              white-space: nowrap;
+
+              font-size: 0.45rem;
               font-weight: 500;
               color: #fff;
 
               display: grid;
               grid-auto-flow: column;
               justify-content: space-between;
+              align-items: center;
+
+              .event-start-time {
+                font-size: 0.45rem;
+              }
             }
 
             .student-container {
-              padding: 0.3rem 0.5rem;
+              padding: 0.1rem 0.2rem;
 
               display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              grid-column-gap: 0.5rem;
+              grid-template-columns: repeat(2, auto);
 
               .student {
-                font-size: 0.9rem;
+                font-size: 0.4rem;
               }
             }
           }
@@ -101,4 +112,192 @@ $markings-color: rgba(0, 0, 0, 0.3);
       }
     }
   }
+}
+
+@media screen and (min-width: 350px) {
+  #calendar-container {
+    .day-container {
+      .schedule-container {
+        .instructor-container {
+          .events-container {
+            height: 75rem;
+            .event {
+              .event-title {
+                font-size: 0.55rem;
+
+                .event-start-time {
+                  font-size: 0.55rem;
+                }
+              }
+
+              .student-container {
+                .student {
+                  font-size: 0.55rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 400px) {
+  #calendar-container {
+    .day-container {
+      .schedule-container {
+        .instructor-container {
+          .events-container {
+            height: 90rem;
+            .event {
+              .event-title {
+                font-size: 0.6rem;
+
+                .event-start-time {
+                  font-size: 0.6rem;
+                }
+              }
+
+              .student-container {
+                .student {
+                  font-size: 0.6rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #calendar-container {
+    .day-container {
+      .schedule-container {
+        .instructor-container {
+          .events-container {
+            height: 90rem;
+            .event {
+              .event-title {
+                font-size: 0.65rem;
+
+                .event-start-time {
+                  font-size: 0.65rem;
+                }
+              }
+
+              .student-container {
+                padding: 0.1rem 0.5rem;
+
+                .student {
+                  font-size: 0.65rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 500px) {
+  #calendar-container {
+    .day-container {
+      .schedule-container {
+        .instructor-container {
+          .events-container {
+            height: 100rem;
+            .event {
+              .event-title {
+                font-size: 0.75rem;
+                padding: 0.1rem 0.3rem;
+
+                .event-start-time {
+                  font-size: 0.75rem;
+                }
+              }
+
+              .student-container {
+                .student {
+                  font-size: 0.75rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 576px) {
+  #calendar-container {
+    .day-container {
+      .schedule-container {
+        .instructor-container {
+          .events-container {
+            height: 110rem;
+            .event {
+              .event-title {
+                font-size: 0.8rem;
+
+                .event-start-time {
+                  font-size: 0.8rem;
+                }
+              }
+
+              .student-container {
+                .student {
+                  font-size: 0.8rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+}
+
+@media screen and (min-width: 992px) {
+  #calendar-container {
+    grid-column-gap: 0rem;
+    padding: 0;
+    margin-top: 0.5rem;
+
+    scroll-padding-left: 50vw;
+
+    .snap-element {
+      scroll-snap-align: start;
+
+      width: 50vw;
+
+      display: grid;
+      justify-items: center;
+
+      .day-container {
+        .schedule-container {
+          padding: 0 0.5rem;
+          width: calc(50vw - 2rem);
+          grid-column-gap: 0.5rem;
+
+          .instructor-container {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+}
+
+@media screen and (min-width: 1400px) {
 }

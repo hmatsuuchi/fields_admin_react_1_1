@@ -12,7 +12,9 @@ function DateSelector({
 
   return (
     <div id="date-selector-container">
-      <div id="start-date">{startDate.toISOString().slice(0, 10)}</div>
+      <div id="start-date">{`${
+        startDate.getMonth() + 1
+      }月${startDate.getDate()}日 (日)`}</div>
       <input
         type="date"
         id="current-date"
@@ -22,7 +24,9 @@ function DateSelector({
           e.target.blur();
         }}
       />
-      <div id="end-date">{endDate.toISOString().slice(0, 10)}</div>
+      <div id="end-date">{`${
+        endDate.getMonth() + 1
+      }月${endDate.getDate()}日 (土)`}</div>
     </div>
   );
 }
