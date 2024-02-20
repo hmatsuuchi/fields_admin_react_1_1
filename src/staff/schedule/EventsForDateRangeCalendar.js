@@ -79,6 +79,32 @@ function EventsForDateRangeCalendar() {
 
   /* attaches observers to day containers */
   useEffect(() => {
+    // get viewport width
+    const viewportWidth = window.innerWidth;
+
+    // set rootMargin and threshold property
+    let rootMargin = "0px 0px 300% 0px";
+    let threshold = 0.5;
+    if (viewportWidth >= 2800) {
+      rootMargin = "0px -42% 300% -42%";
+      threshold = 0.9;
+    } else if (viewportWidth >= 2400) {
+      rootMargin = "0px -50% 300% -33%";
+      threshold = 0.65;
+    } else if (viewportWidth >= 2000) {
+      rootMargin = "0px -40% 300% -40%";
+      threshold = 0.9;
+    } else if (viewportWidth >= 1600) {
+      rootMargin = "0px -50% 300% -25%";
+      threshold = 0.65;
+    } else if (viewportWidth >= 1200) {
+      rootMargin = "0px -25% 300% -25%";
+      threshold = 0.9;
+    } else if (viewportWidth >= 992) {
+      rootMargin = "0px -50% 300% 0px";
+      threshold = 0.75;
+    }
+
     // intersection observer to change date when scrolling between days of the week
     const observer = new IntersectionObserver(
       (entries) => {
@@ -88,7 +114,7 @@ function EventsForDateRangeCalendar() {
           }
         });
       },
-      { root: null, rootMargin: "0px -50% 300% 0px", threshold: 0.5 }
+      { root: null, rootMargin: rootMargin, threshold: threshold }
     );
 
     // adds observers to day containers
@@ -269,6 +295,17 @@ function EventsForDateRangeCalendar() {
     return `${height}%`;
   }
 
+  /* day of week integer to single character Japanese string */
+  const dayIntToString = {
+    0: "日",
+    1: "月",
+    2: "火",
+    3: "水",
+    4: "木",
+    5: "金",
+    6: "土",
+  };
+
   return (
     <Fragment>
       <DateSelector
@@ -293,7 +330,18 @@ function EventsForDateRangeCalendar() {
                 className="snap-element"
                 key={day}
                 id={`${dateOfDay.toISOString().slice(0, 10)}`}>
-                <div className="day-container" key={day}>
+                <div className="date-header">
+                  {`${dateOfDay.getMonth() + 1}月${dateOfDay.getDate()}日 (${
+                    dayIntToString[dateOfDay.getDay()]
+                  })`}
+                </div>
+                <div
+                  key={day}
+                  className={`day-container${
+                    currentDateDisplay === dateOfDay.toISOString().slice(0, 10)
+                      ? " active-day"
+                      : ""
+                  }`}>
                   <div className="schedule-container card">
                     <div className="markings-container">
                       <div className="markings">09:00</div>
