@@ -110,6 +110,7 @@ function EventsForDateRangeCalendar() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            console.log(entry.target.id);
             setCurrentDateDisplay(entry.target.id);
           }
         });
@@ -321,15 +322,19 @@ function EventsForDateRangeCalendar() {
           {Array.from({ length: 7 }, (_, i) => i).map((day) => {
             /* creates new date object of first day of week*/
             const dateOfDay = getStartAndEndDates(currentDateData).startDate;
+            /* increments date object by 9 hours to account for timezone */
+            /* the .toISOString function returns a date in UTC */
+            dateOfDay.setHours(dateOfDay.getHours() + 9);
             /* increments date object for each day of week */
             dateOfDay.setDate(dateOfDay.getDate() + day);
 
-            /* day container */
             return (
+              /* snap element */
               <div
                 className="snap-element"
                 key={day}
                 id={`${dateOfDay.toISOString().slice(0, 10)}`}>
+                {/* date header */}
                 <div className="date-header">
                   {`${dateOfDay.getMonth() + 1}月${dateOfDay.getDate()}日 (${
                     dayIntToString[dateOfDay.getDay()]
@@ -398,7 +403,26 @@ function EventsForDateRangeCalendar() {
                                         <div
                                           className="student"
                                           key={student.id}>
-                                          {student.first_name_romaji}
+                                          <div
+                                            className={`enrollment-status-indicator status-${student.status}`}
+                                          />
+
+                                          <div className="student-name-kanji">
+                                            {student.last_name_kanji &&
+                                            student.first_name_kanji
+                                              ? `${student.last_name_kanji} ${student.first_name_kanji}`
+                                              : student.last_name_kanji
+                                              ? student.last_name_kanji
+                                              : student.first_name_kanji}
+                                          </div>
+                                          <div className="student-name-katakana">
+                                            {student.last_name_katakana &&
+                                            student.first_name_katakana
+                                              ? `${student.last_name_katakana} ${student.first_name_katakana}`
+                                              : student.last_name_katakana
+                                              ? student.last_name_katakana
+                                              : student.first_name_katakana}
+                                          </div>
                                         </div>
                                       );
                                     })}

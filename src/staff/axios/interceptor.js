@@ -17,6 +17,7 @@ instance.interceptors.response.use(
       !originalRequest._retry &&
       originalRequest.url !== "api/token/refresh/" // prevents requests to refresh token endpoint from being retried
     ) {
+      console.error("401 error, refreshing access token");
       originalRequest._retry = true;
       try {
         // send refresh token to API endpoint and get new access token
