@@ -1,0 +1,58 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$grey: #3a3939;
+
+#calendar-header {
+  position: fixed;
+  margin-top: 2.75rem;
+  padding: 1rem;
+
+  display: grid;
+  grid-auto-flow: column;
+
+  justify-content: left;
+
+  #day-of-week-dot,
+  #date-dot {
+    aspect-ratio: 1 / 1;
+
+    width: 3rem;
+
+    border-radius: 50%;
+
+    background-color: $grey;
+
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1rem;
+
+    display: grid;
+    place-content: center;
+  }
+
+  #date-dot {
+    position: relative;
+
+    left: -25%;
+    bottom: -25%;
+  }
+
+  #day-of-week,
+  #date {
+    margin-top: -0.15rem; /* aligns text with center of dot */
+  }
+}
+
+#calendar-lines-container {
+  margin-top: 8rem;
+
+  border: solid 1px #000;
+
+  display: grid;
+  grid-auto-rows: 5rem;
+}

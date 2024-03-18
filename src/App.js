@@ -15,6 +15,7 @@ import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
 // COMPONENTS - SCHEDULE
 import EventsForDateRangeCalendar from "./staff/schedule/EventsForDateRangeCalendar";
+import EventsForSingleDateCalendar from "./staff/schedule/EventsForSingleDateCalendar";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -122,7 +123,7 @@ function App() {
               <StaffDashboard />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - STUDENT PROFILES */}
+        {/* STAFF ROUTES - ALL STUDENT PROFILES */}
         <Route
           path="/staff/students/profiles/cards"
           element={
@@ -137,6 +138,7 @@ function App() {
               />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - STUDENT PROFILE DETAILS */}
         <Route
           path="/staff/students/profiles/details/:profileId"
           element={
@@ -144,6 +146,7 @@ function App() {
               <StudentProfilesDetails />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - CREATE PROFILE */}
         <Route
           path="/staff/students/profiles/create"
           element={
@@ -151,6 +154,7 @@ function App() {
               <StudentProfilesCreate />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - UPDATE PROFILE */}
         <Route
           path="/staff/students/profiles/update/:profileId"
           element={
@@ -158,6 +162,7 @@ function App() {
               <StudentProfilesUpdate />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - DELETE PROFILE */}
         <Route
           path="/staff/students/profiles/delete/:profileId"
           element={
@@ -165,6 +170,15 @@ function App() {
               <StudentProfilesDelete />
             </StaffProtectedRoute>
           }></Route>
+        {/* STAFF ROUTES - SINGLE DAY CALENDAR */}
+        <Route
+          path="/staff/schedule/events/calendar/day-view"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <EventsForSingleDateCalendar />
+            </StaffProtectedRoute>
+          }></Route>
+        {/* STAFF ROUTES - WEEK CALENDAR */}
         <Route
           path="/staff/schedule/events/calendar"
           element={
