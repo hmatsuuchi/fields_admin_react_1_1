@@ -8,9 +8,12 @@ $light-grey: #adadad;
 $grey: #3a3939;
 
 #calendar-header {
+  z-index: 2;
+
   position: fixed;
-  margin-top: 2.75rem;
-  padding: 1rem;
+
+  top: 3.5rem;
+  right: 1rem;
 
   display: grid;
   grid-auto-flow: column;
@@ -48,11 +51,156 @@ $grey: #3a3939;
   }
 }
 
-#calendar-lines-container {
-  margin-top: 8rem;
+#calendar-container {
+  position: relative;
 
-  border: solid 1px #000;
+  margin: 8rem 0 15rem 0;
+
+  z-index: 1;
 
   display: grid;
-  grid-auto-rows: 5rem;
+  justify-items: center;
+
+  #calendar-lines-container {
+    width: calc(100vw - 2rem);
+
+    background-color: $beige;
+
+    border-radius: 0.5rem;
+    border: solid 1px #000;
+
+    display: grid;
+    grid-auto-rows: 17rem;
+
+    .time-block-container {
+      border-bottom: solid 1px #000;
+
+      display: grid;
+
+      justify-content: left;
+
+      .time-block {
+        position: relative;
+
+        align-self: start;
+
+        padding: 0 0.25rem;
+
+        background-color: $beige;
+
+        line-height: 1rem;
+
+        margin-top: -1.8rem;
+      }
+    }
+
+    .time-block-container:last-child {
+      border-bottom: none;
+    }
+  }
+
+  #instructor-container {
+    position: absolute;
+
+    width: calc(100vw - 2rem - 1rem);
+
+    margin: 0 1rem;
+
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: center;
+    grid-column-gap: 0.5rem;
+    grid-auto-columns: 1fr;
+
+    .instructor-column {
+      position: relative;
+
+      width: 100%;
+
+      display: grid;
+
+      .instructor-header {
+        text-align: center;
+      }
+
+      .event-container {
+        position: absolute;
+
+        margin-top: -0.3rem;
+
+        width: 100%;
+
+        border: solid 1px $grey;
+        border-radius: 0.3rem;
+
+        overflow: hidden;
+
+        background-color: #fff;
+
+        .event-name {
+          background-color: $teal;
+
+          color: #fff;
+          font-weight: 500;
+
+          padding: 0.2rem 0.5rem;
+        }
+
+        .class-list-container {
+          padding: 0.5rem;
+
+          display: grid;
+
+          .student-container {
+            display: grid;
+            grid-auto-flow: column;
+            align-items: center;
+            grid-column-gap: 0.5rem;
+            grid-template-columns: 0.9rem auto auto;
+
+            .student-enrollment-status {
+              width: 0.9rem;
+              aspect-ratio: 1 / 1;
+
+              outline: solid 1px #fff;
+
+              box-shadow: 0.1rem 0.1rem 0.3rem 0.1rem rgba(0, 0, 0, 0.2);
+
+              border-radius: 50%;
+            }
+
+            .student-enrollment-status.pre-enrolled {
+              background-color: $pre-enrolled;
+            }
+
+            .student-enrollment-status.enrolled {
+              background-color: $teal;
+            }
+
+            .student-enrollment-status.short-absence {
+              background-color: $red;
+            }
+
+            .student-enrollment-status.long-absence {
+              background-color: $grey;
+            }
+
+            .student-enrollment-status.status-unknown {
+              background-color: $light-grey;
+            }
+
+            .student-name-kanji {
+              font-size: 0.9rem;
+            }
+
+            .student-grade {
+              font-size: 0.9rem;
+
+              justify-self: right;
+            }
+          }
+        }
+      }
+    }
+  }
 }
