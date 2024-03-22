@@ -3,7 +3,12 @@ import React from "react";
 import "./ScheduleWeekToolbar.scss";
 // COMPONENTS
 
-function ScheduleWeekToolbar({ selectedDate, setSelectedDate }) {
+function ScheduleWeekToolbar({
+  selectedDate,
+  setSelectedDate,
+  loadingData,
+  setLoadingData,
+}) {
   return (
     <div id="schedule-week-toolbar">
       <input
@@ -12,7 +17,9 @@ function ScheduleWeekToolbar({ selectedDate, setSelectedDate }) {
         value={selectedDate.toISOString().split("T")[0]}
         onChange={(e) => {
           !isNaN(new Date(e.target.value)) &&
+            !loadingData &&
             setSelectedDate(new Date(e.target.value));
+          setLoadingData(true);
         }}
       />
     </div>

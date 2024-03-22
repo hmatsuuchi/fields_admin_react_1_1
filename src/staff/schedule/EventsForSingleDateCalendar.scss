@@ -7,54 +7,61 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
+/* Disable Clicks */
+.disable-clicks {
+  pointer-events: none;
+}
+
+/* Calendar Header */
 #calendar-header {
-  z-index: 2;
+  margin-top: 3.85rem;
 
-  position: fixed;
+  width: calc(100vw - 2rem);
 
-  top: 3.5rem;
-  right: 1rem;
+  top: 4.5rem;
 
   display: grid;
   grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+  grid-column-gap: 1rem;
 
-  justify-content: left;
-
-  #day-of-week-dot,
-  #date-dot {
+  .date-control-button {
     aspect-ratio: 1 / 1;
 
-    width: 3rem;
+    width: 1.8rem;
 
-    border-radius: 50%;
+    cursor: pointer;
 
-    background-color: $grey;
+    background-image: url(./img/triangle_grey.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
 
-    color: #fff;
+  #previous-day-button {
+    transform: rotate(180deg);
+  }
+
+  #day-date-container {
+    background-color: $yellow;
+
+    padding: 0.2rem 0.6rem;
+
+    border: solid 1px $grey;
+    border-radius: 0.5rem;
+
     font-size: 1.5rem;
-    line-height: 1rem;
 
-    display: grid;
-    place-content: center;
-  }
-
-  #date-dot {
-    position: relative;
-
-    left: -25%;
-    bottom: -25%;
-  }
-
-  #day-of-week,
-  #date {
-    margin-top: -0.15rem; /* aligns text with center of dot */
+    user-select: none;
   }
 }
 
+/* Calendar Container */
 #calendar-container {
   position: relative;
 
-  margin: 8rem 0 15rem 0;
+  margin: 1rem 0 15rem 0;
 
   z-index: 1;
 
@@ -63,6 +70,7 @@ $grey: #3a3939;
 
   #calendar-lines-container {
     width: calc(100vw - 2rem);
+    max-width: 800px;
 
     background-color: $beige;
 
@@ -78,6 +86,7 @@ $grey: #3a3939;
       display: grid;
 
       justify-content: left;
+      align-content: end;
 
       .time-block {
         position: relative;
@@ -86,11 +95,9 @@ $grey: #3a3939;
 
         padding: 0 0.25rem;
 
+        margin-bottom: 0.5rem;
+
         background-color: $beige;
-
-        line-height: 1rem;
-
-        margin-top: -1.8rem;
       }
     }
 
@@ -103,6 +110,7 @@ $grey: #3a3939;
     position: absolute;
 
     width: calc(100vw - 2rem - 1rem);
+    max-width: calc(800px - 1rem);
 
     margin: 0 1rem;
 
@@ -190,11 +198,11 @@ $grey: #3a3939;
             }
 
             .student-name-kanji {
-              font-size: 0.9rem;
+              font-size: 1rem;
             }
 
             .student-grade {
-              font-size: 0.9rem;
+              font-size: 1rem;
 
               justify-self: right;
             }
