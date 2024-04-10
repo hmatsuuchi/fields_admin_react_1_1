@@ -67,7 +67,7 @@ function StaffNavigation() {
           </NavLink>
           <NavLink
             id="link-item-03"
-            to="/staff/schedule/events/calendar/day-view"
+            to="/staff/schedule/events/calendar/week-view"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
             }

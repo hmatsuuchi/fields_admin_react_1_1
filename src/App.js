@@ -14,7 +14,7 @@ import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
 // COMPONENTS - SCHEDULE
-import EventsForSingleDateCalendar from "./staff/schedule/EventsForSingleDateCalendar";
+import Calendar from "./staff/schedule/Calendar";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -171,10 +171,10 @@ function App() {
           }></Route>
         {/* STAFF ROUTES - SINGLE DAY CALENDAR */}
         <Route
-          path="/staff/schedule/events/calendar/day-view"
+          path="/staff/schedule/events/calendar/week-view"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <EventsForSingleDateCalendar />
+              <Calendar />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES */}
