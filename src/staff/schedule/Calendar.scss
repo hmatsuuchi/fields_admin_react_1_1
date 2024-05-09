@@ -2,130 +2,58 @@ $teal: #00b8a9;
 $beige: #f8f3d4;
 $red: #f6416c;
 $yellow: #ffde7d;
+$deep-yellow: #ffcb31;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
 #calendar-container {
-  margin: 3.5rem 1rem 15rem 1rem;
+  scroll-snap-type: x mandatory;
 
-  display: inline-grid;
+  width: 100%;
+  overflow: scroll;
+
+  margin-top: 3.5rem;
+  padding-bottom: 15rem;
+
+  display: grid;
   grid-auto-flow: column;
-  grid-column-gap: 1rem;
 
-  .irregular-events-container {
-    display: grid;
-    grid-row-gap: 1rem;
-    align-content: start;
+  scrollbar-width: none;
 
-    .event {
-      min-width: 20rem;
-
-      background-color: #fff;
-
-      white-space: nowrap;
-
-      box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
-
-      outline: solid 1px $light-grey;
-      border-radius: 0.5rem;
-
-      display: grid;
-
-      .event-header {
-        background-color: $teal;
-
-        padding: 0.25rem 0.5rem;
-
-        color: rgb(30, 30, 30);
-
-        .event-name {
-          font-weight: 500;
-        }
-
-        .event-start-time {
-          font-size: 0.9rem;
-        }
-      }
-
-      .event-body {
-        padding: 0.25rem 0.5rem;
-      }
-    }
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   .day-of-week-container {
-    position: relative;
+    scroll-snap-align: start;
+
+    width: 100vw;
+
+    padding-bottom: 1rem;
 
     display: grid;
 
-    .header-container {
-      position: sticky;
-
-      z-index: 3;
-
-      width: 100%;
-
-      top: 4rem;
-
-      display: grid;
-      grid-row-gap: 0.75rem;
-
-      .day-of-week-label {
-        justify-self: center;
-
-        padding: 0.3rem 0.8rem;
-
-        border-radius: 0.5rem;
-
-        background-color: rgba(255, 222, 125, 0.9);
-
-        font-size: 1.7rem;
-      }
-
-      .instructor-name-container {
-        margin: 0 0.5rem;
-
-        display: grid;
-        grid-auto-columns: 1fr;
-        grid-column-gap: 0.5rem;
-        grid-auto-flow: column;
-
-        .instructor-name-text {
-          margin: 0 1rem;
-
-          border-radius: 0.4rem;
-
-          padding: 0.25rem 0;
-
-          background-color: rgba(255, 222, 125, 0.9);
-
-          text-align: center;
-          font-size: 1rem;
-        }
-      }
-    }
-
     .background-and-events-container {
-      position: relative;
+      width: calc(100% - 1rem);
 
-      top: -6rem;
+      margin: 0 0.5rem;
+
+      position: relative;
 
       display: grid;
 
       .background-container {
         box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
 
-        overflow: hidden;
-
-        outline: solid 1px $light-grey;
+        border: solid 1px $light-grey;
         border-radius: 0.5rem;
 
         .hour-increment {
           border-bottom: solid 1px $grey;
 
-          height: 20rem; /* match CSS and JS values (1 of 3) */
+          height: 11rem; /* match CSS and JS values */
 
           background-color: $beige;
 
@@ -140,12 +68,22 @@ $grey: #3a3939;
           }
         }
 
+        .hour-increment:first-child {
+          border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .hour-increment:last-child {
+          border-radius: 0 0 0.5rem 0.5rem;
+        }
+
         .hour-increment:last-child {
           border-bottom: none;
         }
       }
 
       .events-container {
+        width: calc(100vw - 2rem);
+
         position: absolute;
         top: 0;
 
@@ -163,12 +101,50 @@ $grey: #3a3939;
 
           display: grid;
 
+          .instructor-header-container {
+            width: calc(100% - 0.4rem - 2px);
+
+            opacity: 0.9;
+
+            padding: 0.2rem;
+
+            border-radius: 0.2rem;
+            border: solid 1px #fff;
+
+            position: absolute;
+
+            background-color: $yellow;
+
+            top: 3.2rem;
+
+            display: grid;
+            grid-auto-flow: column;
+            align-items: center;
+            grid-column-gap: 0.2rem;
+            grid-template-columns: 21px auto;
+
+            .instructor-text {
+              font-size: 0.6rem;
+            }
+
+            .instructor-icon {
+              aspect-ratio: 1 / 1;
+
+              border-radius: 50%;
+              border: solid 1px #fff;
+
+              background: $teal;
+
+              background-repeat: no-repeat;
+              background-position: 50% calc(100% + 1px);
+              background-size: auto 90%;
+            }
+          }
+
           .event {
             position: absolute;
 
             cursor: pointer;
-
-            overflow: hidden;
 
             background-color: #fff;
 
@@ -179,15 +155,52 @@ $grey: #3a3939;
             outline: solid 1px $light-grey;
             border-radius: 0.5rem;
 
+            display: grid;
+            grid-template-rows: auto 1fr;
+
             .event-header {
               color: rgb(30, 30, 30);
 
               background-color: $teal;
 
-              padding: 0.25rem 0.5rem;
+              font-size: 0.6rem;
+
+              padding: 0.25rem 0.3rem;
+
+              border-radius: 0.5rem 0.5rem 0 0;
+
+              display: grid;
+              grid-row-gap: 0.1rem;
+
+              .event-name {
+                grid-column: 1 / 3;
+              }
 
               .event-start-time {
-                font-size: 0.9rem;
+                font-size: 0.6rem;
+
+                align-self: center;
+              }
+
+              .student-count-container {
+                grid-column: 2;
+                grid-row: 2;
+                justify-self: end;
+
+                padding: 0 0.2rem;
+
+                font-size: 0.55rem;
+
+                border-radius: 0.2rem;
+
+                background-color: $yellow;
+
+                display: grid;
+                grid-auto-flow: column;
+              }
+
+              .event-full {
+                background-color: #f87292;
               }
             }
 
@@ -197,25 +210,26 @@ $grey: #3a3939;
               overflow: scroll;
 
               display: grid;
-              grid-template-columns: repeat(2, 1fr);
-              grid-row-gap: 0.4rem;
+              align-items: start;
+              align-content: start;
+              grid-row-gap: 0.2rem;
 
               .student-container {
                 display: grid;
                 justify-content: left;
                 align-items: center;
-                grid-column-gap: 0.5rem;
+                grid-column-gap: 0.2rem;
 
                 .student-status {
                   grid-row: 1 / 3;
 
-                  width: 1rem;
-                  height: 1rem;
+                  width: 9px;
+                  height: 9px;
 
                   border-radius: 50%;
-                  border: solid 2px #fff;
+                  border: solid 1px #fff;
 
-                  box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
+                  box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
                 }
 
                 .pre-enrolled {
@@ -235,13 +249,20 @@ $grey: #3a3939;
                 }
 
                 .student-name-kanji {
+                  font-size: 0.5rem;
+
                   grid-column: 2;
                 }
 
                 .student-name-katakana {
                   grid-column: 2;
 
-                  font-size: 0.8rem;
+                  font-size: 0.4rem;
+
+                  display: grid;
+                  justify-content: left;
+                  grid-column-gap: 0.2rem;
+                  grid-auto-flow: column;
                 }
               }
             }
@@ -250,8 +271,7 @@ $grey: #3a3939;
           .duplicate {
             z-index: 2;
 
-            transform: translate(0, 2rem);
-            transition-duration: 250ms;
+            transform: translate(0, 1.65rem);
 
             .event-header {
               background-color: $pre-enrolled;
@@ -267,6 +287,556 @@ $grey: #3a3939;
   .day-of-week-container:last-child {
     .background-and-events-container {
       border-right: none;
+    }
+  }
+}
+
+#indicator-container {
+  z-index: 3;
+
+  position: fixed;
+  top: 4.25rem;
+
+  width: 100%;
+
+  opacity: 0.9;
+
+  display: grid;
+  justify-items: center;
+
+  #indicator-box {
+    display: grid;
+    grid-column-gap: 0.375rem;
+    grid-auto-flow: column;
+
+    .indicator {
+      width: 1.5rem;
+      aspect-ratio: 1 / 1;
+
+      border-radius: 50%;
+
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1rem;
+
+      border: solid 2px #fff;
+
+      box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+
+      background-color: $yellow;
+
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-columns: 5fr 95fr;
+      place-items: center;
+    }
+
+    .indicator::before {
+      content: "";
+    }
+
+    .active {
+      background-color: $teal;
+
+      color: #fff;
+    }
+  }
+}
+
+#next-previous-navigation-container {
+  z-index: 3;
+
+  pointer-events: none;
+
+  position: fixed;
+  top: calc(50% - (5rem / 2));
+
+  margin: 0 1.5rem;
+
+  width: calc(100% - 3rem);
+
+  display: none;
+  grid-auto-flow: column;
+  justify-content: space-between;
+
+  button {
+    width: 3rem;
+    aspect-ratio: 1 / 1;
+
+    border-radius: 50%;
+    border: solid 0.15rem #fff;
+
+    pointer-events: auto;
+
+    box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+
+    background-color: $light-grey;
+
+    opacity: 0.9;
+
+    background-image: url(./img/prev_next_arrow_white.svg);
+    background-size: 40% auto;
+    background-position: 55% 50%;
+    background-repeat: no-repeat;
+
+    transition-duration: 200ms;
+  }
+
+  .disabled {
+    pointer-events: none;
+
+    opacity: 0;
+  }
+
+  #previous-day-button {
+    transform: rotate(180deg);
+  }
+}
+
+/* disables previous next day navigation buttons on touch screen devices */
+@media (hover: hover) {
+  #next-previous-navigation-container {
+    display: grid;
+  }
+}
+
+@media screen and (min-width: 350px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              width: calc(100% - 0.6rem - 2px);
+
+              padding: 0.3rem;
+
+              border-radius: 0.3rem;
+
+              grid-template-columns: 27px auto;
+
+              .instructor-text {
+                font-size: 0.7rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 400px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              top: 3.7rem;
+
+              grid-template-columns: 33px auto;
+
+              .instructor-text {
+                font-size: 0.8rem;
+              }
+            }
+            .event {
+              .event-header {
+                .event-name {
+                  font-size: 0.7rem;
+                }
+
+                .event-start-time {
+                  font-size: 0.7rem;
+                }
+
+                .student-count-container {
+                  .student-count-text-element {
+                    font-size: 0.7rem;
+                  }
+                }
+              }
+              .event-body {
+                .student-container {
+                  .student-status {
+                    width: 12px;
+                    height: 12px;
+                  }
+
+                  .student-name-kanji {
+                    font-size: 0.6rem;
+                  }
+
+                  .student-name-katakana {
+                    font-size: 0.55rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #indicator-container {
+    #indicator-box {
+      grid-column-gap: 0.5rem;
+
+      .indicator {
+        width: 2rem;
+
+        font-size: 1rem;
+
+        grid-template-columns: 2fr 98fr;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .background-container {
+          .hour-increment {
+            height: 15.35rem;
+          }
+        }
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              width: calc(100% - 0.8rem - 4px);
+
+              grid-template-columns: 35px auto;
+
+              border: solid 2px #fff;
+              border-radius: 0.4rem;
+
+              .instructor-icon {
+                border: solid 2px #fff;
+              }
+
+              .instructor-text {
+                font-size: 0.95rem;
+              }
+            }
+
+            .event {
+              .event-header {
+                .event-name {
+                  font-size: 0.85rem;
+                }
+
+                .event-start-time {
+                  font-size: 0.85rem;
+                }
+
+                .student-count-container {
+                  .student-count-text-element {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 500px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              width: calc(100% - 1rem - 4px);
+
+              padding: 0.5rem;
+
+              grid-template-columns: 39px auto;
+
+              .instructor-text {
+                font-size: 1rem;
+              }
+            }
+
+            .event {
+              .event-header {
+                .event-name {
+                  font-size: 0.9rem;
+                }
+
+                .event-start-time {
+                  font-size: 0.85rem;
+                }
+
+                .student-count-container {
+                  .student-count-text-element {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+
+              .event-body {
+                .student-container {
+                  grid-column-gap: 0.5rem;
+                  grid-row-gap: 0;
+
+                  .student-status {
+                    width: 15px;
+                    height: 15px;
+                  }
+
+                  .student-name-kanji {
+                    font-size: 0.8rem;
+                  }
+
+                  .student-name-katakana {
+                    font-size: 0.7rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              grid-template-columns: 43px auto;
+
+              .instructor-text {
+                font-size: 1.1rem;
+              }
+            }
+
+            .event {
+              .event-header {
+                .event-name {
+                  font-size: 1rem;
+                }
+
+                .event-start-time {
+                  font-size: 1rem;
+                }
+
+                .student-count-container {
+                  .student-count-text-element {
+                    font-size: 1.05rem;
+                  }
+                }
+              }
+
+              .event-body {
+                .student-container {
+                  .student-name-kanji {
+                    font-size: 0.9rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 700px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .instructor-header-container {
+              width: calc(100% - 1.2rem - 4px);
+
+              padding: 0.6rem;
+
+              grid-template-columns: 47px auto;
+              grid-column-gap: 0.5rem;
+
+              .instructor-icon {
+              }
+
+              .instructor-text {
+                font-size: 1.2rem;
+              }
+            }
+
+            .event {
+              .event-header {
+                .event-name {
+                  font-size: 1.1rem;
+                }
+              }
+              .event-body {
+                .student-container {
+                  .student-status {
+                    width: 18px;
+                    height: 18px;
+                  }
+
+                  .student-name-kanji {
+                    font-size: 1rem;
+                  }
+
+                  .student-name-katakana {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 800px) {
+  #calendar-container {
+    .day-of-week-container {
+      .background-and-events-container {
+        .events-container {
+          .instructor-container {
+            .event {
+              .event-body {
+                .student-container {
+                  .student-status {
+                    width: 20px;
+                    height: 20px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 2);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 2) - 2rem);
+
+          .instructor-container {
+            .instructor-header-container {
+              .instructor-text {
+                font-size: 1.1rem;
+              }
+            }
+
+            .event {
+              .event-body {
+                .student-container {
+                  .student-status {
+                    width: 18px;
+                    height: 18px;
+                  }
+
+                  .student-name-kanji {
+                    font-size: 0.9rem;
+                  }
+
+                  .student-name-katakana {
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1650px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 3);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 3) - 2rem);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 2200px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 4);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 4) - 2rem);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 2750px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 5);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 5) - 2rem);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 3300px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 6);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 6) - 2rem);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 3850px) {
+  #calendar-container {
+    .day-of-week-container {
+      width: calc(100vw / 7);
+
+      .background-and-events-container {
+        .events-container {
+          width: calc(calc(100vw / 7) - 2rem);
+        }
+      }
     }
   }
 }
