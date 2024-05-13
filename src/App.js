@@ -102,7 +102,6 @@ function App() {
     };
 
     // drives code if not on login page
-    console.log(window.location.pathname);
     if (window.location.pathname !== "/login") {
       refreshCsrfToken();
     }
