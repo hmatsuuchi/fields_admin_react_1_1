@@ -17,6 +17,7 @@ function Login({
   setIsStaff,
   isCustomer,
   setIsCustomer,
+  setCsrfToken,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -59,16 +60,7 @@ function Login({
         localStorage.clear();
 
         // set csrf token as meta element in DOM head
-        const csrfToken = data["csrftoken"];
-        let csrfTokenElement = document.querySelector("[name=csrftoken]");
-        if (csrfTokenElement) {
-          csrfTokenElement.content = csrfToken;
-        } else {
-          csrfTokenElement = document.createElement("meta");
-          csrfTokenElement.name = "csrftoken";
-          csrfTokenElement.content = csrfToken;
-          document.head.appendChild(csrfTokenElement);
-        }
+        setCsrfToken(data["csrftoken"]);
 
         // get logged in user data and redirect
         const getLoggedInUserData = async () => {
@@ -76,6 +68,9 @@ function Login({
             await instance_authenticated
               .get("api/logged_in_user_data/")
               .then((response) => {
+                // set is_auth bool in local storage
+                localStorage.setItem("is_auth", true);
+
                 const loggedInUserGroups =
                   response.data["logged_in_user_groups"];
                 const staffRedirectParameters = [
@@ -88,14 +83,14 @@ function Login({
                     loggedInUserGroups.includes(i)
                   )
                 ) {
-                  // set staff bool
+                  // set staff prop
                   setIsStaff(true);
-                  // set staff bool in local storage
+                  // set is_staff bool in local storage
                   localStorage.setItem("is_staff", true);
                 } else {
-                  // set customer bool
+                  // set customer prop
                   setIsCustomer(true);
-                  // set customer bool in local storage
+                  // set is_customer bool in local storage
                   localStorage.setItem("is_customer", true);
                 }
               });

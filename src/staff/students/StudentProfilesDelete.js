@@ -12,7 +12,7 @@ import "./StudentProfilesDelete.scss";
 // React Router DOM
 import { useParams, Link, useNavigate } from "react-router-dom";
 
-function StudentProfilesDelete() {
+function StudentProfilesDelete({ csrfToken }) {
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState("");
@@ -52,9 +52,7 @@ function StudentProfilesDelete() {
       await instance
         .delete("api/students/profiles/details", {
           headers: {
-            "X-CSRFToken": document
-              .querySelector("[name=csrftoken]")
-              .getAttribute("content"),
+            "X-CSRFToken": csrfToken,
           },
           params: { profile_id: profileId },
         })

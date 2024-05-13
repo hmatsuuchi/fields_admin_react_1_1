@@ -1,28 +1,21 @@
 import { useEffect } from "react";
 import instance from "../staff/axios/axios_authenticated";
 
-function Logout({ setIsAuth, setIsStaff, setIsCustomer }) {
+function Logout({ setIsAuth, setIsStaff, setIsCustomer, csrfToken }) {
   useEffect(() => {
     const logoutUser = async () => {
-      // get csrf token from DOM head
-      const csrfToken = document
-        .querySelector("[name=csrftoken]")
-        .getAttribute("content");
-
       try {
-        await instance.post(
-          "/api/logout/",
-          {},
-          { headers: { "X-CSRFToken": csrfToken } }
-        );
+        await instance
+          .post("/api/logout/", {}, { headers: { "X-CSRFToken": csrfToken } })
+          .then((response) => {
+            // clear local storage
+            localStorage.clear();
 
-        // clear local storage
-        localStorage.clear();
-
-        // sets auth and staff bool to false
-        setIsAuth(false);
-        setIsStaff(null);
-        setIsCustomer(null);
+            // sets auth and staff bool to false
+            setIsAuth(false);
+            setIsStaff(null);
+            setIsCustomer(null);
+          });
       } catch (error) {
         console.error("logout error: ", error);
       }
@@ -30,7 +23,7 @@ function Logout({ setIsAuth, setIsStaff, setIsCustomer }) {
 
     // calls logout function
     logoutUser();
-  }, [setIsAuth, setIsStaff, setIsCustomer]);
+  }, [setIsAuth, setIsStaff, setIsCustomer, csrfToken]);
 
   return <h1>you have been logged out</h1>;
 }

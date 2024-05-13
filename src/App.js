@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+// Axios
+import instance_authenticated from "./staff/axios/axios_authenticated";
 // COMPONENTS
 import Login from "./authentication/Login";
 import Logout from "./authentication/Logout";
@@ -25,9 +27,12 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
-  const [isStaff, setIsStaff] = useState(null);
-  const [isCustomer, setIsCustomer] = useState(null);
+  const [isAuth, setIsAuth] = useState(localStorage.getItem("is_auth"));
+  const [isStaff, setIsStaff] = useState(localStorage.getItem("is_staff"));
+  const [isCustomer, setIsCustomer] = useState(
+    localStorage.getItem("is_customer")
+  );
+  const [csrfToken, setCsrfToken] = useState("");
 
   // month filters for student profiles
   const [monthFilters, setMonthFilters] = useState({
@@ -58,9 +63,10 @@ function App() {
     birth_month_day: 0,
   });
 
+  // synchonizes is_auth, is_staff and is_customer local storage variables with state
   useEffect(() => {
     // gets authentication bool from local storage
-    if (localStorage.getItem("refresh_token")) {
+    if (localStorage.getItem("is_auth")) {
       setIsAuth(true);
     } else {
       setIsAuth(false);
@@ -68,10 +74,37 @@ function App() {
     // gets isStaff bool from local storage
     if (localStorage.getItem("is_staff")) {
       setIsStaff(true);
+    } else {
+      setIsStaff(null);
     }
     // gets isStaff bool from local storage
     if (localStorage.getItem("is_customer")) {
       setIsCustomer(true);
+    } else {
+      setIsCustomer(null);
+    }
+  }, []);
+
+  // refresh csrf token on component mount
+  // this allows csrf token to be kept in state even when page is manually refreshed
+  useEffect(() => {
+    // refresh csrf token function
+    const refreshCsrfToken = async () => {
+      try {
+        await instance_authenticated
+          .get("api/csrf/refresh/")
+          .then((response) => {
+            setCsrfToken(response.data["csrftoken"]);
+          });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    // drives code if not on login page
+    console.log(window.location.pathname);
+    if (window.location.pathname !== "/login") {
+      refreshCsrfToken();
     }
   }, []);
 
@@ -101,6 +134,7 @@ function App() {
               setIsStaff={setIsStaff}
               isCustomer={isCustomer}
               setIsCustomer={setIsCustomer}
+              setCsrfToken={setCsrfToken}
             />
           }
         />
@@ -111,6 +145,7 @@ function App() {
               setIsAuth={setIsAuth}
               setIsStaff={setIsStaff}
               setIsCustomer={setIsCustomer}
+              csrfToken={csrfToken}
             />
           }
         />
@@ -150,7 +185,7 @@ function App() {
           path="/staff/students/profiles/create"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesCreate />
+              <StudentProfilesCreate csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - UPDATE PROFILE */}
@@ -158,7 +193,7 @@ function App() {
           path="/staff/students/profiles/update/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesUpdate />
+              <StudentProfilesUpdate csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - DELETE PROFILE */}
@@ -166,7 +201,7 @@ function App() {
           path="/staff/students/profiles/delete/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesDelete />
+              <StudentProfilesDelete csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - SINGLE DAY CALENDAR */}

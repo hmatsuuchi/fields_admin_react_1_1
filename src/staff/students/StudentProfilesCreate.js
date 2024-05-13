@@ -13,7 +13,7 @@ import "./StudentProfilesCards";
 // React Router
 import { Link, useNavigate } from "react-router-dom";
 
-function StudentProfilesCreate() {
+function StudentProfilesCreate({ csrfToken }) {
   // choice values
   const [prefectureChoices, setPrefectureChoices] = useState([]);
   const [phoneChoices, setPhoneChoices] = useState([]);
@@ -208,9 +208,7 @@ function StudentProfilesCreate() {
       await instance
         .post("api/students/profiles/details", data, {
           headers: {
-            "X-CSRFToken": document
-              .querySelector("[name=csrftoken]")
-              .getAttribute("content"),
+            "X-CSRFToken": csrfToken,
           },
         })
         .then((response) => {

@@ -12,7 +12,7 @@ import "./StudentProfilesCards";
 // React Router
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-function StudentProfilesUpdate() {
+function StudentProfilesUpdate({ csrfToken }) {
   // get profile id from URL params
   const { profileId } = useParams();
 
@@ -195,9 +195,7 @@ function StudentProfilesUpdate() {
       await instance
         .put("api/students/profiles/details", data, {
           headers: {
-            "X-CSRFToken": document
-              .querySelector("[name=csrftoken]")
-              .getAttribute("content"),
+            "X-CSRFToken": csrfToken,
           },
         })
         .then((response) => {
