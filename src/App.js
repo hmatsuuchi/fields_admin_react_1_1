@@ -24,7 +24,7 @@ import CustomerDashboard from "./customer/Dashboard";
 // CSS
 import "./App.css";
 // Browser Router
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("is_auth"));
@@ -115,14 +115,8 @@ function App() {
         isAuth && isCustomer && <CustomerNavigation />
       )}
       <Routes>
-        <Route
-          path="/"
-          element={
-            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StaffDashboard />
-            </StaffProtectedRoute>
-          }
-        />
+        <Route path="/" element={<Navigate replace to="/staff/dashboard/" />} />
+
         <Route
           path="/login"
           element={
@@ -156,6 +150,7 @@ function App() {
               <StaffDashboard />
             </StaffProtectedRoute>
           }></Route>
+
         {/* STAFF ROUTES - ALL STUDENT PROFILES */}
         <Route
           path="/staff/students/profiles/cards"
@@ -203,7 +198,7 @@ function App() {
               <StudentProfilesDelete csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - SINGLE DAY CALENDAR */}
+        {/* STAFF ROUTES - CALENDAR - WEEK VIEW */}
         <Route
           path="/staff/schedule/events/calendar/week-view"
           element={

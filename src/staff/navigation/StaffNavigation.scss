@@ -8,6 +8,8 @@ $light-grey: #adadad;
 $grey: #3a3939;
 
 nav.staff-navigation {
+  pointer-events: none;
+
   z-index: 99;
   position: fixed;
   bottom: 2rem;
@@ -18,6 +20,8 @@ nav.staff-navigation {
   justify-items: right;
 
   #hamburger-button {
+    pointer-events: auto;
+
     background-color: $teal;
     width: 4.5rem;
     height: 4.5rem;
@@ -259,8 +263,6 @@ nav.staff-navigation.nav-inactive {
 
     opacity: 1;
 
-    z-index: -1;
-
     #link-item-01 {
       animation: nav-list-out 300ms 150ms ease-out both;
     }
@@ -300,7 +302,6 @@ nav.staff-navigation.nav-disabled {
 
 #close-navigation {
   display: none;
-  z-index: 98;
   position: fixed;
   top: 0;
   width: 100vw;
