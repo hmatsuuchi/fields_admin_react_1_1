@@ -7,16 +7,18 @@ import Login from "./authentication/Login";
 import Logout from "./authentication/Logout";
 import StaffProtectedRoute from "./authentication/StaffProtectedRoute";
 import CustomerProtectedRoute from "./authentication/CustomerProtectedRoute";
-// COMPONENTS - STAFF
+// COMPONENTS - STAFF - GENERAL
 import StaffNavigation from "./staff/navigation/StaffNavigation";
 import StaffDashboard from "./staff/Dashboard";
+// COMPONENTS - STAFF - STUDENTS
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
 import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
-// COMPONENTS - SCHEDULE
+// COMPONENTS - STAFF - SCHEDULE
 import Calendar from "./staff/schedule/Calendar";
+import CalendarEventCreate from "./staff/schedule/CalendarEventCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -33,6 +35,9 @@ function App() {
     localStorage.getItem("is_customer")
   );
   const [csrfToken, setCsrfToken] = useState("");
+
+  /* SCHEDULE */
+  const [highlightedEventId, setHighlightedEventId] = useState("");
 
   // month filters for student profiles
   const [monthFilters, setMonthFilters] = useState({
@@ -142,7 +147,7 @@ function App() {
             />
           }
         />
-        {/* STAFF ROUTES */}
+        {/* STAFF ROUTES - DASHBOARD */}
         <Route
           path="/staff/dashboard"
           element={
@@ -151,7 +156,7 @@ function App() {
             </StaffProtectedRoute>
           }></Route>
 
-        {/* STAFF ROUTES - ALL STUDENT PROFILES */}
+        {/* STAFF ROUTES - STUDENTS - ALL STUDENT PROFILES */}
         <Route
           path="/staff/students/profiles/cards"
           element={
@@ -166,7 +171,7 @@ function App() {
               />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - STUDENT PROFILE DETAILS */}
+        {/* STAFF ROUTES - STUDENTS - STUDENT PROFILE DETAILS */}
         <Route
           path="/staff/students/profiles/details/:profileId"
           element={
@@ -174,7 +179,7 @@ function App() {
               <StudentProfilesDetails />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - CREATE PROFILE */}
+        {/* STAFF ROUTES - STUDENTS - CREATE PROFILE */}
         <Route
           path="/staff/students/profiles/create"
           element={
@@ -182,7 +187,7 @@ function App() {
               <StudentProfilesCreate csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - UPDATE PROFILE */}
+        {/* STAFF ROUTES - STUDENTS - UPDATE PROFILE */}
         <Route
           path="/staff/students/profiles/update/:profileId"
           element={
@@ -190,7 +195,7 @@ function App() {
               <StudentProfilesUpdate csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
-        {/* STAFF ROUTES - DELETE PROFILE */}
+        {/* STAFF ROUTES - STUDENTS - DELETE PROFILE */}
         <Route
           path="/staff/students/profiles/delete/:profileId"
           element={
@@ -203,10 +208,24 @@ function App() {
           path="/staff/schedule/events/calendar/week-view"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <Calendar />
+              <Calendar
+                csrfToken={csrfToken}
+                highlightedEventId={highlightedEventId}
+              />
             </StaffProtectedRoute>
           }></Route>
-        {/* CUSTOMER ROUTES */}
+        {/* STAFF ROUTES - CALENDAR - CREATE EVENT */}
+        <Route
+          path="/staff/schedule/events/calendar/create"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <CalendarEventCreate
+                csrfToken={csrfToken}
+                setHighlightedEventId={setHighlightedEventId}
+              />
+            </StaffProtectedRoute>
+          }></Route>
+        {/* CUSTOMER ROUTES - DASHBOARD */}
         <Route
           path="/customer/dashboard"
           element={

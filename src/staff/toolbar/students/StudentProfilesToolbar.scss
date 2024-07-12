@@ -60,7 +60,7 @@ $grey: #3a3939;
   }
 }
 
-/* prevents clicks to the toolbar before API call is complete */
+/* prevents clicks to the toolbar */
 #student-profile-list-toolbar.disable-toolbar-buttons {
   pointer-events: none;
 }

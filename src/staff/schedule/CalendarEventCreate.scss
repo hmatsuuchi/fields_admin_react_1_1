@@ -1,0 +1,116 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$grey: #3a3939;
+
+#calendar-event-create {
+  .card-container-full-width {
+    .card-full-width {
+      .event-header-container {
+        background: $teal;
+
+        margin-bottom: 0.4rem;
+        padding: 0.5rem;
+
+        .event-name-text {
+          color: #fff;
+          font-size: 1.3rem;
+          font-weight: 500;
+        }
+
+        .event-name-text::after {
+          content: "\200B";
+        }
+      }
+
+      .event-body-container {
+        padding: 0 1.5rem;
+
+        form {
+          display: grid;
+          grid-auto-flow: row;
+
+          label {
+            margin-top: 0.7rem;
+          }
+
+          input,
+          select {
+            border: solid 1px #000;
+            border-radius: 0.3rem;
+
+            background-color: #fff;
+
+            font-size: 1.2rem;
+
+            padding: 0.3rem;
+
+            -webkit-text-fill-color: #000;
+          }
+
+          input:focus {
+            outline: $grey solid 2px;
+          }
+
+          input.invalid-input,
+          select.invalid-input {
+            outline: solid 2px $red;
+          }
+
+          select:focus {
+            outline: $grey solid 2px;
+          }
+
+          .time-input {
+            max-width: 5.5rem;
+
+            -webkit-text-fill-color: initial;
+          }
+
+          .input-width-7 {
+            max-width: 7rem;
+          }
+
+          .input-width-15 {
+            max-width: 15rem;
+          }
+
+          .input-width-20 {
+            max-width: 20rem;
+          }
+
+          .bottom-buttons-container {
+            margin: 3rem 0 2rem 0;
+
+            display: grid;
+            justify-content: space-between;
+            grid-auto-flow: column;
+
+            .button[type="submit"] {
+              background-color: $teal;
+              color: #fff;
+            }
+
+            .button {
+              padding: 0.5rem 1rem;
+              border-radius: 0.5rem;
+              font-size: 1.2rem;
+              cursor: pointer;
+              background-color: $grey;
+              color: #fff;
+            }
+
+            .button.delete {
+              background-color: $red;
+            }
+          }
+        }
+      }
+    }
+  }
+}

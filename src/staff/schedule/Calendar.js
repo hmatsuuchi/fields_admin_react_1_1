@@ -4,11 +4,12 @@ import instance from "../axios/axios_authenticated";
 /* Components  */
 import CalendarToolbar from "../toolbar/schedule/CalendarToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
+import DataLoadError from "../micro/DataLoadError";
 /* CSS */
 import "./Calendar.scss";
 import { Fragment } from "react";
 
-/* EVENT DETAILS */
+/* COMPONENTS - EVENT DETAILS */
 function EventDetails({
   events,
   setEvents,
@@ -20,23 +21,32 @@ function EventDetails({
   setStudentsFiltered,
   studentSearch,
   setStudentSearch,
+  csrfToken,
 }) {
-  /* EVENT DETAILS - STATE */
+  /* ----------- EVENT DETAILS - STATE ----------- */
+
   const [studentsSelectedIdArray, setStudentsSelectedIdArray] = useState([]);
   const [eventDetails, setEventDetails] = useState(null);
   const [eventInstructor, setEventInstructor] = useState({});
-  const [displayConfirmationDialog, setDisplayConfirmationDialog] =
-    useState(false);
+  /* EVENT DETAILS - STATE - REMOVE STUDENT FROM EVENT */
+  const [
+    displayRemoveStudentFromEventConfirmationDialog,
+    setDisplayConfirmationDialog,
+  ] = useState(false);
   const [eventFromWhichStudentIsRemoved, setEventFromWhichStudentIsRemoved] =
     useState({});
   const [studentToRemove, setStudentToRemove] = useState({});
+  /* EVENT DETAILS - STATE - ARCHIVE EVENT */
+  const [
+    displayArchiveEventConfirmationDialog,
+    setDisplayArchiveEventConfirmationDialog,
+  ] = useState(false);
+  const [eventToArchive, setEventToArchive] = useState({});
 
-  /* EVENT DETAILS - COMPONENTS - CONFIRMATION MODAL */
-  function ConfirmationModal({
-    modalText,
-    cancelButtonText,
-    confirmButtonText,
-  }) {
+  /* ----------- EVENT DETAILS - COMPONENTS ----------- */
+
+  /* EVENT DETAILS - COMPONENTS - REMOVE STUDENT CONFIRMATION MODAL */
+  function RemoveStudentConfirmationModal() {
     /* EVENT DETAILS - COMPONENTS - CONFIRMATION MODAL - FUNCTIONS - HANDLE CANCEL BUTTON CLICKS */
     function handleClicksToCancelButton() {
       setDisplayConfirmationDialog(false);
@@ -61,32 +71,126 @@ function EventDetails({
           )
         );
       };
-
       /* drives code */
       removeStudentFromEvent(
         parseInt(eventFromWhichStudentIsRemoved.id),
         parseInt(studentToRemove.id)
       );
+
+      /* removes student from event in backend */
+      const removeStudentFromEventBackend = async () => {
+        try {
+          await instance
+            .put(
+              "api/schedule/events/remove_student_from_event/",
+              {
+                event_id: eventDetails.id,
+                student_id: studentToRemove.id,
+              },
+              {
+                headers: {
+                  "X-CSRFToken": csrfToken,
+                },
+              }
+            )
+            .then((response) => {
+              if (response) {
+              }
+            });
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      /* drives code */
+      removeStudentFromEventBackend();
     }
 
     return (
       <div id="confirmation-modal-container">
         <div className="confirmation-modal-dialog-container">
-          <div className="confirmation-modal-dialog">{modalText}</div>
+          <div className="confirmation-modal-dialog">{`「${studentToRemove.last_name_kanji} ${studentToRemove.first_name_kanji}」を授業から削除しますか？`}</div>
           <button
             className="cancel-button"
             onClick={handleClicksToCancelButton}>
-            {cancelButtonText}
+            戻る
           </button>
           <button
             className="confirm-button"
             onClick={handleClicksToConfirmButton}>
-            {confirmButtonText}
+            削除する
           </button>
         </div>
       </div>
     );
   }
+
+  /* EVENT DETAILS - COMPONENTS - ARCHIVE EVENT CONFIRMATION MODAL */
+  function ArchiveEventConfirmationModal() {
+    /* EVENT DETAILS - COMPONENTS - CONFIRMATION MODAL - FUNCTIONS - HANDLE CANCEL BUTTON CLICKS */
+    function handleClicksToCancelButton() {
+      setDisplayArchiveEventConfirmationDialog(false);
+    }
+
+    function handleClicksToConfirmButton() {
+      setDisplayArchiveEventConfirmationDialog(false);
+      setEventDetailsVisible(false);
+
+      /* removes event from events array */
+      const archiveEvent = (eventId) => {
+        setEvents((prevArray) =>
+          prevArray.filter((event) => event.id !== eventId)
+        );
+      };
+      /* drives code */
+      archiveEvent(parseInt(eventToArchive.id));
+
+      /* removes student from event in backend */
+      const removeStudentFromEventBackend = async () => {
+        try {
+          await instance
+            .put(
+              "api/schedule/events/archive_event/",
+              {
+                event_id: eventDetails.id,
+              },
+              {
+                headers: {
+                  "X-CSRFToken": csrfToken,
+                },
+              }
+            )
+            .then((response) => {
+              if (response) {
+              }
+            });
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      /* drives code */
+      removeStudentFromEventBackend();
+    }
+
+    return (
+      <div id="confirmation-modal-container">
+        <div className="confirmation-modal-dialog-container">
+          <div className="confirmation-modal-dialog">{`「${eventToArchive.eventName}」をアーカイブしますか？`}</div>
+          <button
+            className="cancel-button"
+            onClick={handleClicksToCancelButton}>
+            戻る
+          </button>
+          <button
+            className="confirm-button"
+            onClick={handleClicksToConfirmButton}>
+            アーカイブする
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* ----------- EVENT DETAILS - FUNCTIONS ----------- */
 
   /* EVENT DETAILS - FUNCTIONS - GET EVENT DETAILS */
   useEffect(() => {
@@ -149,7 +253,6 @@ function EventDetails({
         )
       );
     };
-
     /* drives code */
     appendStudentToEvent(eventDetails.id, {
       id: parseInt(e.target.dataset.id),
@@ -162,6 +265,33 @@ function EventDetails({
       grade_verbose: e.target.dataset.grade_verbose,
       status: parseInt(e.target.dataset.status),
     });
+
+    /* add student to event in backend */
+    const addStudentToEventInBackend = async () => {
+      try {
+        await instance
+          .put(
+            "api/schedule/events/add_student_to_event/",
+            {
+              event_id: eventDetails.id,
+              student_id: parseInt(e.target.dataset.id),
+            },
+            {
+              headers: {
+                "X-CSRFToken": csrfToken,
+              },
+            }
+          )
+          .then((response) => {
+            if (response) {
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    /* drives code */
+    addStudentToEventInBackend();
   };
 
   /* EVENT DETAILS - FUNCTIONS - HANDLE REMOVE STUDENT FROM EVENT*/
@@ -176,6 +306,15 @@ function EventDetails({
       id: parseInt(e.target.dataset.id),
       last_name_kanji: e.target.dataset.last_name_kanji,
       first_name_kanji: e.target.dataset.first_name_kanji,
+    });
+  };
+
+  /* EVENT DETAILS - FUNCTIONS - HANDLE ARCHIVE EVENT */
+  const handleClicksToArchiveEvent = (e) => {
+    setDisplayArchiveEventConfirmationDialog(true);
+    setEventToArchive({
+      id: e.target.dataset.event_id,
+      eventName: e.target.dataset.event_name,
     });
   };
 
@@ -207,11 +346,14 @@ function EventDetails({
     );
   }, [studentSearch, studentsRaw, setStudentsFiltered]);
 
-  /* EVENT DETAILS - JSX */
+  /* ----------- EVENT DETAILS - JSX ----------- */
   return (
     <Fragment>
+      <div
+        id="close-event-details-background-overlay"
+        onClick={handleClicksToCloseEventDetails}></div>
       <div id="event-details-container">
-        {eventDetails ? (
+        {eventDetails && (
           <div className="event-details-card">
             <div className="event-details-card-header">
               <div className="event-details-card-header-text">
@@ -292,6 +434,7 @@ function EventDetails({
                             {student.first_name_katakana &&
                               ` ${student.first_name_katakana}`}
                           </div>
+                          <div className="add-student-icon"></div>
                         </div>
                       );
                     })}
@@ -331,6 +474,7 @@ function EventDetails({
                             {student.first_name_katakana &&
                               ` ${student.first_name_katakana}`}
                           </div>
+                          <div className="remove-student-icon"></div>
                         </div>
                       );
                     })}
@@ -338,40 +482,66 @@ function EventDetails({
                 </div>
               </div>
             </div>
+            <div className="event-details-card-footer">
+              <button
+                className="archive-button"
+                onClick={handleClicksToArchiveEvent}
+                data-event_id={eventDetails.id}
+                data-event_name={eventDetails.event_name}></button>
+            </div>
           </div>
-        ) : (
-          <LoadingSpinner />
         )}
       </div>
-      {displayConfirmationDialog && (
-        <ConfirmationModal
-          modalText={`「${studentToRemove.last_name_kanji} ${studentToRemove.first_name_kanji}」を授業から削除しますか？`}
-          cancelButtonText={"戻る"}
-          confirmButtonText={"削除"}
-        />
+
+      {displayRemoveStudentFromEventConfirmationDialog && (
+        <RemoveStudentConfirmationModal />
+      )}
+
+      {displayArchiveEventConfirmationDialog && (
+        <ArchiveEventConfirmationModal />
       )}
     </Fragment>
   );
 }
 
-/* CALENDAR */
-function Calendar() {
-  /* CALENDAR - STATE */
+/* COMPONENTS - CALENDAR */
+function Calendar({ csrfToken, highlightedEventId }) {
+  /* ----------- CALENDAR - STATE ----------- */
+
   const [events, setEvents] = useState([]);
   const [instructors, setInstructors] = useState([]);
+  const [initialJumpToNow, setInitialJumpToNow] = useState(false);
+  const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
+  const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
-  /* raw list of students used for student select menu */
+  /* CALENDAR - STATE - STUDENTS FOR SELECT MENU */
   const [studentsRaw, setStudentsRaw] = useState([]);
-  /* filtered list of students used for search */
+  /* CALENDAR - STATE - FILTERED STUDENTS FROM SEARCH */
   const [studentsFiltered, setStudentsFiltered] = useState([]);
-
+  /* CALENDAR - STATE - BACKGROUND CALENDAR */
   const [timeIncrements, setTimeIncrements] = useState([]);
   const [visibleDaysOfWeek, setVisibleDaysOfWeek] = useState([]);
   const [hourSegmentHeight, setHourSegmentHeight] = useState(0);
-
+  /* CALENDAR - STATE - EVENT DETAILS */
   const [eventDetailsVisible, setEventDetailsVisible] = useState(false);
   const [currentlySelectedEventId, setCurrentlySelectedEventId] = useState(0);
   const [studentSearch, setStudentSearch] = useState("");
+
+  /* ----------- CALENDAR - FUNCTIONS ----------- */
+
+  useEffect(() => {
+    if (highlightedEventId !== "") {
+      const eventElement = document.querySelector(
+        `[data-event_id="${highlightedEventId}"]`
+      );
+
+      if (eventElement) {
+        setTimeout(() => {
+          eventElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 500);
+      }
+    }
+  }, [highlightedEventId, timeIncrements]);
 
   /* CALENDAR - FUNCTIONS - DAY OF WEEK CONVERSTION (FULL DAY) */
   const dayOfWeekArray = [
@@ -395,19 +565,76 @@ function Calendar() {
     5: "土",
   };
 
+  /* CALENDAR - FUNCTIONS - JUMP TO CURRENT DAY OF WEEK ON CONTENT LOAD */
+  useEffect(() => {
+    const jumpToCurrentDayOfWeek = () => {
+      /* gets current day of week */
+      const currentDayOfWeek = new Date().getDay();
+
+      /* adjusts current day of week for python day of week integer */
+      let currentDayOfWeekAdjusted;
+      if (currentDayOfWeek !== 0) {
+        currentDayOfWeekAdjusted = currentDayOfWeek - 1;
+      } else {
+        currentDayOfWeekAdjusted = 6;
+      }
+
+      /* get day of week container */
+      const dayOfWeekContainer = document.querySelector(
+        `#day-of-week-container-${currentDayOfWeekAdjusted}`
+      );
+
+      dayOfWeekContainer.scrollIntoView();
+
+      /* scrolls vertically to current time */
+      const firstHourIncrement = timeIncrements[0];
+      /* adds two additional increments not included in the timeIncrements array */
+      const numberOfIncrements = timeIncrements.length + 2;
+      /* dayOfWeekContainer has 56px padding-top */
+      const dayOfWeekContainerHeight = dayOfWeekContainer.offsetHeight - 56;
+      const incrementInPixels = dayOfWeekContainerHeight / numberOfIncrements;
+      const currentHour = new Date().getHours();
+      /* multiplies increment pixel height by number of hours elapsed since first increment time; */
+      /* subtracts increment border heights; */
+      /* adds additional vertical offset to place current hour closer to top of viewport */
+      const verticalOffset =
+        incrementInPixels * (currentHour - firstHourIncrement) -
+        (currentHour - firstHourIncrement) +
+        100;
+
+      /* script runs only if current hour is after the first hour in the schedule calendar */
+      if (currentHour > firstHourIncrement) {
+        window.scrollBy(0, verticalOffset);
+      }
+    };
+
+    /* drives code if event data loaded and only once on initial load */
+    if (
+      initialJumpToNow === false &&
+      events.length > 0 &&
+      highlightedEventId === ""
+    ) {
+      jumpToCurrentDayOfWeek();
+      setInitialJumpToNow(true);
+    }
+  }, [initialJumpToNow, events.length, timeIncrements, highlightedEventId]);
+
   /* CALENDAR - FUNCTIONS - FETCH INITIAL DATA */
   useEffect(() => {
     // fetches event data from API
     const performInitialFetch = async () => {
       // fetches events for date range
       try {
-        await instance.get("api/schedule/events/all").then((response) => {
+        await instance.get("api/schedule/events").then((response) => {
           if (response) {
+            setDisableToolbarButtons(false);
             setEvents(response.data.events);
             setInstructors(response.data.instructors);
+            setDisplayErrorMessage(false);
           }
         });
       } catch (e) {
+        setDisplayErrorMessage(true);
         console.log(e);
       }
     };
@@ -415,6 +642,24 @@ function Calendar() {
     /* drive code */
     performInitialFetch();
   }, []);
+
+  /* CALENDAR - FUNCTIONS - RETRY FETCH INITIAL DATA */
+  const retryPerformInitialFetch = async () => {
+    setDisplayErrorMessage(false);
+    // fetches events for date range
+    try {
+      await instance.get("api/schedule/events").then((response) => {
+        if (response) {
+          setDisableToolbarButtons(false);
+          setEvents(response.data.events);
+          setInstructors(response.data.instructors);
+        }
+      });
+    } catch (e) {
+      setDisplayErrorMessage(true);
+      console.log(e);
+    }
+  };
 
   /* CALENDAR - FUNCTIONS - FETCH STUDENT LIST (SIMPLE) */
   useEffect(() => {
@@ -538,7 +783,7 @@ function Calendar() {
     }
   }, [visibleDaysOfWeek]);
 
-  /* CALENDAR - FUNCTIONS - GENERATE CALENDAR BACKGROUND */
+  /* CALENDAR - FUNCTIONS - GENERATE CALENDAR BACKGROUND & CHECK FOR OVERLAPPING EVENTS */
   useEffect(() => {
     function caculateCalendarBackgroundTimeIncrements(events) {
       if (events.length > 0) {
@@ -575,12 +820,17 @@ function Calendar() {
     function checkForOverlappingEvents(events) {
       if (events.length > 0) {
         events.forEach((event) => {
+          /* set default duplicate value */
+          event.duplicate = false;
+
+          /* calculate integer values for start and end times */
           if (event.start_time && event.event_type.duration) {
             event.start_integer = parseInt(event.start_time.slice(0, 2)) * 60;
             event.end_integer = event.start_integer + event.event_type.duration;
           }
         });
 
+        /* check for overlapping events */
         events.forEach((eventToCheck) => {
           let duplicateEvents = events.filter((event) => {
             return (
@@ -591,6 +841,7 @@ function Calendar() {
             );
           });
 
+          /* set duplicate flag on last event in array */
           if (duplicateEvents.length > 1) {
             duplicateEvents[duplicateEvents.length - 1].duplicate = true;
           }
@@ -645,12 +896,18 @@ function Calendar() {
     setEventDetailsVisible(true);
   }
 
-  /* CALENDAR - FUNCTIONS - HANDLE EVENT DETAILS CLOSE */
-  function handleClicksToCloseEventDetails() {
-    setEventDetailsVisible(false);
+  /* CALENDAR - FUNCTIONS - HANDLE CLICKS TO DAY OF WEEK INDICATOR */
+  function handleClicksToDayOfWeekIndicator(e) {
+    const dayOfWeekInteger = e.target.id.split("-")[1];
+
+    const dayOfWeekContainer = document.querySelector(
+      `#day-of-week-container-${dayOfWeekInteger}`
+    );
+
+    dayOfWeekContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  /* CALENDAR - JSX */
+  /* ----------- CALENDAR - JSX ----------- */
   return (
     <Fragment>
       {events.length > 0 ? (
@@ -725,6 +982,10 @@ function Calendar() {
                                   <div
                                     className={`event${
                                       event.duplicate ? " duplicate" : ""
+                                    }${
+                                      highlightedEventId === event.id
+                                        ? " highlighted-event"
+                                        : ""
                                     }`}
                                     key={`event-${event.id}`}
                                     style={{
@@ -746,7 +1007,8 @@ function Calendar() {
                                       }rem)`,
                                     }}
                                     onClick={handleClicksToEvent}
-                                    data-event_id={event.id}>
+                                    data-event_id={event.id}
+                                    data-event_start_time={event.start_time}>
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Header*/}
                                     <div className="event-header">
                                       <div className="event-name">
@@ -830,49 +1092,56 @@ function Calendar() {
                 id="indicator-6"
                 className={`indicator${
                   visibleDaysOfWeek.includes(6) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 日
               </div>
               <div
                 id="indicator-0"
                 className={`indicator${
                   visibleDaysOfWeek.includes(0) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 月
               </div>
               <div
                 id="indicator-1"
                 className={`indicator${
                   visibleDaysOfWeek.includes(1) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 火
               </div>
               <div
                 id="indicator-2"
                 className={`indicator${
                   visibleDaysOfWeek.includes(2) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 水
               </div>
               <div
                 id="indicator-3"
                 className={`indicator${
                   visibleDaysOfWeek.includes(3) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 木
               </div>
               <div
                 id="indicator-4"
                 className={`indicator${
                   visibleDaysOfWeek.includes(4) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 金
               </div>
               <div
                 id="indicator-5"
                 className={`indicator${
                   visibleDaysOfWeek.includes(5) ? " active" : ""
-                }`}>
+                }`}
+                onClick={handleClicksToDayOfWeekIndicator}>
                 土
               </div>
             </div>
@@ -886,15 +1155,17 @@ function Calendar() {
               onClick={handleNextDayButtonClick}></button>
           </div>
         </Fragment>
+      ) : displayErrorMessage ? (
+        <DataLoadError
+          errorMessage={"エラーが発生されました"}
+          retryFunction={retryPerformInitialFetch}
+        />
       ) : (
         <LoadingSpinner />
       )}
-      <CalendarToolbar />
+      <CalendarToolbar disableToolbarButtons={disableToolbarButtons} />
       {eventDetailsVisible && (
         <Fragment>
-          <div
-            id="close-event-details-background-overlay"
-            onClick={handleClicksToCloseEventDetails}></div>
           <EventDetails
             events={events}
             setEvents={setEvents}
@@ -906,6 +1177,7 @@ function Calendar() {
             setStudentsFiltered={setStudentsFiltered}
             studentSearch={studentSearch}
             setStudentSearch={setStudentSearch}
+            csrfToken={csrfToken}
           />
         </Fragment>
       )}

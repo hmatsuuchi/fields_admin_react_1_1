@@ -1,0 +1,15 @@
+.toolbar-back-button {
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.5rem 0.2rem 1.5rem;
+
+  border-right: solid 0.3rem #fff;
+  overflow-x: hidden;
+  white-space: nowrap;
+
+  color: #3a3939;
+
+  background-image: url("./img/back_arrow.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 50%;
+}

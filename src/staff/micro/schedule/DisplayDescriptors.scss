@@ -1,0 +1,32 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+
+$grey: #3a3939;
+$light-grey: #adadad;
+$lighter-grey: #f1f1f1;
+
+#display-descriptors-container {
+  margin: 3.3rem 1rem 0 1rem;
+
+  font-size: 1rem;
+  color: $grey;
+  text-align: center;
+
+  display: grid;
+  justify-content: center;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #display-descriptors-container {
+    font-size: 1.2rem;
+  }
+}

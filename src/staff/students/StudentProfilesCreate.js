@@ -178,7 +178,7 @@ function StudentProfilesCreate({ csrfToken }) {
     setArchived(!archived);
   }
 
-  // handles the submit button
+  // handles clicks to the submit button
   const handleSubmit = async (event) => {
     setSubmitted(true);
 

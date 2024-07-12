@@ -7,7 +7,7 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
-#calendar-toolbar {
+#calendar-create-toolbar {
   z-index: 3;
   position: fixed;
   top: 0;
@@ -20,11 +20,11 @@ $grey: #3a3939;
   box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.2);
 
   display: grid;
-  align-items: center;
-  justify-content: right;
+  align-content: center;
+  justify-content: left;
 }
 
 /* prevents clicks to the toolbar before API call is complete */
-#calendar-toolbar.disable-toolbar-buttons {
+#calendar-create-toolbar.disable-toolbar-buttons {
   pointer-events: none;
 }

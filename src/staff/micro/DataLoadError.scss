@@ -1,0 +1,29 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+
+$grey: #3a3939;
+$light-grey: #adadad;
+$lighter-grey: #f1f1f1;
+
+#data-load-error-container {
+  margin-top: 3.5rem;
+  color: $grey;
+  font-size: 1.1rem;
+
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+
+  button {
+    color: $grey;
+    font-size: 1rem;
+
+    padding: 0.75rem 1.5rem;
+    border: solid 1px $grey;
+    border-radius: 0.3rem;
+  }
+}
