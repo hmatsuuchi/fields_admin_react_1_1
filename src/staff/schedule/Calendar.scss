@@ -210,6 +210,8 @@ body {
             .event-body {
               padding: 0.25rem 0.5rem;
 
+              margin: 0.2rem 0;
+
               overflow: scroll;
 
               display: grid;
@@ -575,6 +577,20 @@ body {
           background-color: #f87292;
         }
 
+        .student-status-indicator {
+          grid-column: 1;
+          grid-row: 1 / 3;
+
+          width: 1.1rem;
+          aspect-ratio: 1 / 1;
+
+          place-self: center;
+
+          border-radius: 50%;
+          border: solid 2px #fff;
+          box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+        }
+
         .student-name-container {
           padding: 0.2rem 0.3rem;
 
@@ -583,9 +599,11 @@ body {
           cursor: pointer;
 
           display: grid;
-          grid-template-columns: auto 2rem;
+          grid-template-columns: 2rem auto 2rem;
 
           .student-name-kanji {
+            grid-column: 2;
+
             font-size: 0.9rem;
 
             pointer-events: none;
@@ -600,7 +618,7 @@ body {
           .add-student-icon {
             place-self: center;
 
-            grid-column: 2;
+            grid-column: 3;
             grid-row: 1 / 3;
 
             width: 1.5rem;
@@ -717,12 +735,12 @@ body {
 
             .student-name-container {
               display: grid;
-              grid-template-columns: auto 2rem;
+              grid-template-columns: 2rem auto 2rem;
 
               .remove-student-icon {
                 place-self: center;
 
-                grid-column: 2;
+                grid-column: 3;
                 grid-row: 1 / 3;
 
                 width: 1.5rem;

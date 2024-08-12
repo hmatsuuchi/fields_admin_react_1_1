@@ -35,6 +35,8 @@ $grey: #3a3939;
           display: grid;
           grid-auto-flow: row;
 
+          max-width: 100%;
+
           label {
             margin-top: 0.7rem;
           }
@@ -73,14 +75,17 @@ $grey: #3a3939;
           }
 
           .input-width-7 {
+            width: calc(100% - 1rem + 4px);
             max-width: 7rem;
           }
 
           .input-width-15 {
+            width: calc(100% - 1rem + 4px);
             max-width: 15rem;
           }
 
           .input-width-20 {
+            width: calc(100% - 1rem + 4px);
             max-width: 20rem;
           }
 

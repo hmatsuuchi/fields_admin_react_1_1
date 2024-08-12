@@ -49,6 +49,9 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
 
   /* CALENDAR EVENT CREATE - FUNCTIONS - FETCH CHOICE LIST VALUES */
   useEffect(() => {
+    /* scrolls to top of input form */
+    window.scrollTo({ top: 0, behavior: "instant" });
+
     const fetchChoices = async () => {
       try {
         await instance.get("api/schedule/events/choices/").then((response) => {

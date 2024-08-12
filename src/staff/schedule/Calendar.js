@@ -194,6 +194,9 @@ function EventDetails({
 
   /* EVENT DETAILS - FUNCTIONS - GET EVENT DETAILS */
   useEffect(() => {
+    /* resets student search field */
+    setStudentSearch("");
+
     /* get event object from array of all events */
     const event = events.find(
       (event) => event.id === parseInt(currentlySelectedEventId)
@@ -421,6 +424,18 @@ function EventDetails({
                           data-first_name_katakana={student.first_name_katakana}
                           data-grade_verbose={student.grade_verbose}
                           data-status={student.status}>
+                          <div
+                            className={`student-status-indicator${
+                              student.status === 1
+                                ? " pre-enrolled"
+                                : student.status === 2
+                                ? " enrolled"
+                                : student.status === 3
+                                ? " short-absence"
+                                : student.status === 4
+                                ? " long-absence"
+                                : " unknown"
+                            }`}></div>
                           <div className="student-name-kanji">
                             {student.last_name_kanji && student.last_name_kanji}
                             {student.first_name_kanji &&
@@ -461,6 +476,18 @@ function EventDetails({
                           data-id={student.id}
                           data-last_name_kanji={student.last_name_kanji}
                           data-first_name_kanji={student.first_name_kanji}>
+                          <div
+                            className={`student-status-indicator${
+                              student.status === 1
+                                ? " pre-enrolled"
+                                : student.status === 2
+                                ? " enrolled"
+                                : student.status === 3
+                                ? " short-absence"
+                                : student.status === 4
+                                ? " long-absence"
+                                : " unknown"
+                            }`}></div>
                           <div className="student-name-kanji">
                             {student.last_name_kanji && student.last_name_kanji}
                             {student.first_name_kanji &&

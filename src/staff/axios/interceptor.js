@@ -1,5 +1,4 @@
 import instance from "./axios_authenticated";
-import { Navigate } from "react-router-dom";
 
 // response interceptor
 instance.interceptors.response.use(
@@ -34,9 +33,11 @@ instance.interceptors.response.use(
         console.error(
           "request retry error, removing access and refresh tokens from local storage"
         );
-
         // if error refreshing access token, redirect to login page
-        return <Navigate replace to="/login" />;
+        window.location.href = "/login";
+        // return <Navigate replace to="/login" />;
+
+        return Promise.reject(error);
       }
     }
 
