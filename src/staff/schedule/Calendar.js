@@ -218,6 +218,7 @@ function EventDetails({
     currentlySelectedEventId,
     setEventDetails,
     setEventInstructor,
+    setStudentSearch,
   ]);
 
   /* EVENT DETAILS - FUNCTIONS - DAY OF WEEK CONVERSION */
