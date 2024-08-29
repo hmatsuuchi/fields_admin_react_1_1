@@ -8,6 +8,8 @@ import DataLoadError from "../micro/DataLoadError";
 /* CSS */
 import "./Calendar.scss";
 import { Fragment } from "react";
+/* React Router DOM */
+import { useNavigate } from "react-router-dom";
 
 /* COMPONENTS - EVENT DETAILS */
 function EventDetails({
@@ -535,7 +537,6 @@ function EventDetails({
 /* COMPONENTS - CALENDAR */
 function Calendar({ csrfToken, highlightedEventId }) {
   /* ----------- CALENDAR - STATE ----------- */
-
   const [events, setEvents] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [initialJumpToNow, setInitialJumpToNow] = useState(false);
@@ -924,6 +925,13 @@ function Calendar({ csrfToken, highlightedEventId }) {
     setEventDetailsVisible(true);
   }
 
+  /* CALENDAR - FUNCTIONS - HANDLE STUDENT DETAILS OPEN */
+  const navigate = useNavigate();
+  const handleClicksToStudentContainer = (e) => {
+    const studentId = e.currentTarget.dataset.student_id;
+    navigate(`/staff/students/profiles/details/${studentId}`);
+  };
+
   /* CALENDAR - FUNCTIONS - HANDLE CLICKS TO DAY OF WEEK INDICATOR */
   function handleClicksToDayOfWeekIndicator(e) {
     const dayOfWeekInteger = e.target.id.split("-")[1];
@@ -1034,13 +1042,20 @@ function Calendar({ csrfToken, highlightedEventId }) {
                                         (hourSegmentHeight / 60)
                                       }rem)`,
                                     }}
-                                    onClick={handleClicksToEvent}
                                     data-event_id={event.id}
                                     data-event_start_time={event.start_time}>
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Header*/}
-                                    <div className="event-header">
+                                    <div
+                                      className="event-header"
+                                      data-event_id={event.id}
+                                      onClick={handleClicksToEvent}>
                                       <div className="event-name">
                                         {event.event_name}
+                                      </div>
+                                      <div className="more-icon-container">
+                                        <div className="more-icon-dot"></div>
+                                        <div className="more-icon-dot"></div>
+                                        <div className="more-icon-dot"></div>
                                       </div>
                                       <div className="event-start-time">
                                         {event.start_time.slice(0, 5)}
@@ -1069,7 +1084,11 @@ function Calendar({ csrfToken, highlightedEventId }) {
                                         return (
                                           <div
                                             className="student-container"
-                                            key={`student-${student.id}`}>
+                                            key={`student-${student.id}`}
+                                            data-student_id={student.id}
+                                            onClick={
+                                              handleClicksToStudentContainer
+                                            }>
                                             <div
                                               className={`student-status${
                                                 student.status === 1
