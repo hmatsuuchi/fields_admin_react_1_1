@@ -27,7 +27,7 @@ function StudentProfilesDelete({ csrfToken }) {
     (async () => {
       try {
         await instance
-          .get("api/students/profiles/details", {
+          .get("api/students/profiles/details/", {
             params: { profile_id: profileId },
           })
           .then((response) => {
@@ -50,7 +50,7 @@ function StudentProfilesDelete({ csrfToken }) {
 
     try {
       await instance
-        .delete("api/students/profiles/details", {
+        .delete("api/students/profiles/details/", {
           headers: {
             "X-CSRFToken": csrfToken,
           },

@@ -52,22 +52,24 @@ function StudentProfilesCreate({ csrfToken }) {
   useEffect(() => {
     (async () => {
       try {
-        await instance.get("api/students/profiles/choices").then((response) => {
-          if (response) {
-            setPrefectureChoices(response.data.prefecture_choices);
-            setPhoneChoices(response.data.phone_choices);
-            setGradeChoices(response.data.grade_choices);
-            setStatusChoices(response.data.status_choices);
-            setPaymentChoices(response.data.payment_choices);
+        await instance
+          .get("api/students/profiles/choices/")
+          .then((response) => {
+            if (response) {
+              setPrefectureChoices(response.data.prefecture_choices);
+              setPhoneChoices(response.data.phone_choices);
+              setGradeChoices(response.data.grade_choices);
+              setStatusChoices(response.data.status_choices);
+              setPaymentChoices(response.data.payment_choices);
 
-            setProfileStatus(response.data.status_choices[0].id);
-            setProfileStatusName(response.data.status_choices[0].name);
-            setPaymentMethod(response.data.payment_choices[0].id);
+              setProfileStatus(response.data.status_choices[0].id);
+              setProfileStatusName(response.data.status_choices[0].name);
+              setPaymentMethod(response.data.payment_choices[0].id);
 
-            // display content
-            setDisplayContent(true);
-          }
-        });
+              // display content
+              setDisplayContent(true);
+            }
+          });
       } catch (e) {
         console.log(e);
       }
@@ -206,7 +208,7 @@ function StudentProfilesCreate({ csrfToken }) {
 
     try {
       await instance
-        .post("api/students/profiles/details", data, {
+        .post("api/students/profiles/details/", data, {
           headers: {
             "X-CSRFToken": csrfToken,
           },

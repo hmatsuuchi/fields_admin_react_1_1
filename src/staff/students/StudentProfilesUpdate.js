@@ -54,26 +54,28 @@ function StudentProfilesUpdate({ csrfToken }) {
   useEffect(() => {
     (async () => {
       try {
-        await instance.get("api/students/profiles/choices").then((response) => {
-          if (response) {
-            setPrefectureChoices(response.data.prefecture_choices);
-            setPhoneChoices(response.data.phone_choices);
-            setGradeChoices(response.data.grade_choices);
-            setStatusChoices(response.data.status_choices);
-            setPaymentChoices(response.data.payment_choices);
+        await instance
+          .get("api/students/profiles/choices/")
+          .then((response) => {
+            if (response) {
+              setPrefectureChoices(response.data.prefecture_choices);
+              setPhoneChoices(response.data.phone_choices);
+              setGradeChoices(response.data.grade_choices);
+              setStatusChoices(response.data.status_choices);
+              setPaymentChoices(response.data.payment_choices);
 
-            setProfileStatus(response.data.status_choices[0].id);
-            setProfileStatusName(response.data.status_choices[0].name);
-            setPaymentMethod(response.data.payment_choices[0].id);
-          }
-        });
+              setProfileStatus(response.data.status_choices[0].id);
+              setProfileStatusName(response.data.status_choices[0].name);
+              setPaymentMethod(response.data.payment_choices[0].id);
+            }
+          });
       } catch (e) {
         console.log(e);
       }
 
       try {
         await instance
-          .get("api/students/profiles/details", {
+          .get("api/students/profiles/details/", {
             params: { profile_id: profileId },
           })
           .then((response) => {
@@ -193,7 +195,7 @@ function StudentProfilesUpdate({ csrfToken }) {
 
     try {
       await instance
-        .put("api/students/profiles/details", data, {
+        .put("api/students/profiles/details/", data, {
           headers: {
             "X-CSRFToken": csrfToken,
           },

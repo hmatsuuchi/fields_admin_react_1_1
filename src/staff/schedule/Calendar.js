@@ -854,7 +854,9 @@ function Calendar({ csrfToken, highlightedEventId }) {
 
           /* calculate integer values for start and end times */
           if (event.start_time && event.event_type.duration) {
-            event.start_integer = parseInt(event.start_time.slice(0, 2)) * 60;
+            const startHour = parseInt(event.start_time.slice(0, 2)) * 60;
+            const startMinute = parseInt(event.start_time.slice(3, 5));
+            event.start_integer = startHour + startMinute;
             event.end_integer = event.start_integer + event.event_type.duration;
           }
         });
@@ -870,8 +872,13 @@ function Calendar({ csrfToken, highlightedEventId }) {
             );
           });
 
-          /* set duplicate flag on last event in array */
+          /* sorts duplicate events array and sets duplicate flag on last event in array */
           if (duplicateEvents.length > 1) {
+            /* sorts array of duplicate events by start time */
+            /* this ensures that the event that starts later is not obscured by the duplicate event */
+            duplicateEvents.sort((a, b) => a.start_integer - b.start_integer);
+
+            /* sets  flag */
             duplicateEvents[duplicateEvents.length - 1].duplicate = true;
           }
         });
@@ -1079,7 +1086,10 @@ function Calendar({ csrfToken, highlightedEventId }) {
                                       </div>
                                     </div>
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Body */}
-                                    <div className="event-body">
+                                    <div
+                                      className="event-body"
+                                      data-event_id={event.id}
+                                      onClick={handleClicksToEvent}>
                                       {event.students.map((student) => {
                                         return (
                                           <div

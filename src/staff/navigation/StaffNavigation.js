@@ -58,6 +58,15 @@ function StaffNavigation() {
           </NavLink>
           <NavLink
             id="link-item-02"
+            to="/staff/attendance/day-view/"
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "active" : ""
+            }
+            onClick={clicksToNavHousekeeping}>
+            出欠・日程
+          </NavLink>
+          <NavLink
+            id="link-item-03"
             to="/staff/students/profiles/cards/"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
@@ -66,7 +75,7 @@ function StaffNavigation() {
             生徒情報
           </NavLink>
           <NavLink
-            id="link-item-03"
+            id="link-item-04"
             to="/staff/schedule/events/calendar/week-view"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
@@ -75,7 +84,7 @@ function StaffNavigation() {
             カレンダー
           </NavLink>
           <NavLink
-            id="link-item-04"
+            id="link-item-05"
             to="/logout/"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""

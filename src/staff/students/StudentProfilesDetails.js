@@ -23,7 +23,7 @@ function StudentProfilesDetails() {
     (async () => {
       try {
         await instance
-          .get("api/students/profiles/details", {
+          .get("api/students/profiles/details/", {
             params: { profile_id: profileId },
           })
           .then((response) => {

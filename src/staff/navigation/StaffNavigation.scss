@@ -175,6 +175,10 @@ nav.staff-navigation.nav-active {
       animation: nav-list-in 300ms 200ms ease-out both;
     }
 
+    #link-item-05 {
+      animation: nav-list-in 300ms 250ms ease-out both;
+    }
+
     @keyframes nav-list-in {
       0% {
         transform: scale(0, 0) translateX(5rem);
@@ -264,18 +268,22 @@ nav.staff-navigation.nav-inactive {
     opacity: 1;
 
     #link-item-01 {
-      animation: nav-list-out 300ms 150ms ease-out both;
+      animation: nav-list-out 300ms 200ms ease-out both;
     }
 
     #link-item-02 {
-      animation: nav-list-out 300ms 100ms ease-out both;
+      animation: nav-list-out 300ms 150ms ease-out both;
     }
 
     #link-item-03 {
-      animation: nav-list-out 300ms 50ms ease-out both;
+      animation: nav-list-out 300ms 100ms ease-out both;
     }
 
     #link-item-04 {
+      animation: nav-list-out 300ms 50ms ease-out both;
+    }
+
+    #link-item-05 {
       animation: nav-list-out 300ms 0ms ease-out both;
     }
 

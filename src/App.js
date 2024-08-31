@@ -19,6 +19,8 @@ import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
 // COMPONENTS - STAFF - SCHEDULE
 import Calendar from "./staff/schedule/Calendar";
 import CalendarEventCreate from "./staff/schedule/CalendarEventCreate";
+// COMPONENTS - STAFF - ATTENDANCE
+import Attendance from "./staff/attendance/Attendance";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -223,6 +225,14 @@ function App() {
                 csrfToken={csrfToken}
                 setHighlightedEventId={setHighlightedEventId}
               />
+            </StaffProtectedRoute>
+          }></Route>
+        {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
+        <Route
+          path="/staff/attendance/day-view"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <Attendance csrfToken={csrfToken} />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES - DASHBOARD */}
