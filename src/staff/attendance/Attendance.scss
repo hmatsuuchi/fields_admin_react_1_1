@@ -13,5 +13,77 @@ $grey: #3a3939;
 
   width: 100%;
   height: 50vh;
-  background-color: pink;
+
+  #date-select-container {
+    background-color: pink;
+
+    padding: 1rem 0;
+
+    display: grid;
+    place-content: center;
+
+    input {
+      user-select: none;
+    }
+
+    input.searching {
+      pointer-events: none;
+    }
+  }
+
+  #attendance-container {
+    background-color: lightblue;
+
+    padding: 1rem 0;
+
+    display: grid;
+    grid-row-gap: 0.5rem;
+    justify-items: center;
+
+    .attendance {
+      background-color: lightgreen;
+      padding: 0.5rem;
+
+      width: calc(100% - 2rem);
+
+      .attendance-records-container {
+        border-top: solid 1px #000;
+
+        padding-top: 0.5rem;
+
+        display: grid;
+        grid-row-gap: 0.5rem;
+
+        .attendance-record {
+          display: grid;
+
+          .student-name-kanji {
+            grid-row: 1;
+            grid-column: 1;
+          }
+
+          .student-name-katakana {
+            font-size: 0.8rem;
+          }
+
+          .student-attendance-status {
+            grid-row: 1 / 3;
+
+            justify-self: right;
+            align-self: center;
+          }
+        }
+      }
+    }
+
+    .schedule-break-container {
+      background-color: lightcoral;
+      padding: 0.5rem;
+
+      width: calc(100% - 2rem);
+
+      display: grid;
+      place-content: center;
+    }
+  }
 }
