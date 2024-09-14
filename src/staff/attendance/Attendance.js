@@ -5,6 +5,8 @@ import instance from "../axios/axios_authenticated";
 import "./Attendance.scss";
 /* Components  */
 import AttendanceToolbar from "../toolbar/attendance/AttendanceToolbar";
+import LoadingSpinner from "../micro/LoadingSpinner";
+import DataLoadError from "../micro/DataLoadError";
 
 /* COMPONENTS - ATTENDANCE */
 function Attendance({ csrfToken }) {
@@ -21,20 +23,45 @@ function Attendance({ csrfToken }) {
     return `${year}-${month}-${day}`;
   };
 
+  const getDayOfWeekText = (date) => {
+    const dayOfWeek = new Date(date).getDay();
+    const daysOfWeek = {
+      0: "日曜日",
+      1: "月曜日",
+      2: "火曜日",
+      3: "水曜日",
+      4: "木曜日",
+      5: "金曜日",
+      6: "土曜日",
+    };
+    return daysOfWeek[dayOfWeek] || "";
+  };
+
   /* ------------------------------------------ */
   /* ----------- ATTENDANCE - STATE ----------- */
   /* ------------------------------------------ */
 
   /* ATTENDANCE - STATE - PAGE/DATA LOAD UI */
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
-  const [searching, setSearching] = useState(false);
+  const [disableDateNavigationButtons, setDisableDateNavigationButtons] =
+    useState(true);
+  const [disableAttendance, setDisableAttendance] = useState(false);
+  const [showAttendanceContainer, setShowAttendanceContainer] = useState(true);
+  const [showDateSearchButton, setShowDateSearchButton] = useState(false);
+  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+  const [showDataLoadError, setShowDataLoadError] = useState(false);
+  /* ATTENDANCE - STATE - INSTRUCTOR */
+  const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
+  const [activePrimaryInstructorId, setActivePrimaryInstructorId] =
+    useState(null);
   /* ATTENDANCE - STATE - DATE */
   const [attendanceDate, setAttendanceDate] = useState(getDateToday());
-  const [attendanceDateBuffer, setAttendanceDateBuffer] = useState(
+  const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(
     getDateToday()
   );
-  const [dateInputTimeoutFunction, setDateInputTimeoutFunction] =
-    useState(null);
+  const [dayOfWeekText, setDayOfWeekText] = useState(
+    getDayOfWeekText(getDateToday())
+  );
   /* ATTENDANCE - STATE - ATTENDANCE DATA */
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [
@@ -46,14 +73,74 @@ function Attendance({ csrfToken }) {
   /* ----------- ATTENDANCE - FUNCTIONS ----------- */
   /* ---------------------------------------------- */
 
-  /* ATTENDANCE - FUNCTIONS - FETCH ATTENDANCE DATA FOR SPECIFIED DATE */
+  /* ATTENDANCE - FUNCTIONS - FETCH USER PREFERENCES */
   useEffect(() => {
+    const fetchUserPreferences = async () => {
+      try {
+        await instance
+          .get("api/attendance/attendance/user_preferences/")
+          .then((response) => {
+            if (response) {
+              setActivePrimaryInstructorId(
+                response.data.user_preferences
+                  .pref_attendance_selected_instructor
+              );
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    /* drives code */
+    fetchUserPreferences();
+  }, []);
+
+  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR CHOICES */
+  useEffect(() => {
+    const fetchPrimaryInstructorChoices = async () => {
+      try {
+        await instance
+          .get("api/attendance/attendance/attendance_choices/")
+          .then((response) => {
+            if (response) {
+              setPrimaryInstructorChoices(
+                response.data.primary_instructor_choices
+              );
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    /* drives code */
+    fetchPrimaryInstructorChoices();
+  }, []);
+
+  /* ATTENDANCE - FUNCTIONS - MANUAL FETCH ATTENDANCE DATA FOR DATE */
+  const fetchAttendanceDataForDate = () => {
+    /* clears existing attendance records */
+    setAttendanceRecords([]);
+
+    /* hides data load error */
+    setShowDataLoadError(false);
+
+    /* disable toolbar buttons */
+    setDisableToolbarButtons(true);
+
+    /* disable date navigation buttons */
+    setDisableDateNavigationButtons(true);
+
+    /* show loading spinner */
+    setShowLoadingSpinner(true);
+
     /* Fetch attendance data for date */
-    const fetchAttendanceDataForDate = async () => {
+    const fetchData = async () => {
       /* parameters to include in the request */
       const params = {
         date: attendanceDate,
-        instructor_id: 4 /* temporary instructor ID set to hmatsuuchi */,
+        instructor_id: activePrimaryInstructorId,
       };
 
       try {
@@ -64,25 +151,115 @@ function Attendance({ csrfToken }) {
               /* set attendance records */
               setAttendanceRecords(response.data.attendance);
 
-              /* disables searching boolean when server responds with data */
-              setSearching(false);
+              /* hide loading spinner */
+              setShowLoadingSpinner(false);
 
-              console.log("=============================");
-              console.log(attendanceDate);
-              console.log(response.data.attendance);
-              console.log("-----------------------------");
+              /* enable date navigation buttons */
+              setDisableDateNavigationButtons(false);
+
+              /* enable toolbar buttons */
+              setDisableToolbarButtons(false);
+
+              /* show attendance container */
+              setShowAttendanceContainer(true);
             }
           });
       } catch (e) {
         console.log(e);
+        /* hides attendance container */
+        setShowAttendanceContainer(false);
+
+        /* show data load error message */
+        setShowDataLoadError(true);
+
+        /* hide loading spinner */
+        setShowLoadingSpinner(false);
+
+        /* enable date navigation buttons */
+        setDisableDateNavigationButtons(false);
+
+        /* enable toolbar buttons */
+        setDisableToolbarButtons(false);
       }
     };
     /* drives code */
-    fetchAttendanceDataForDate();
+    fetchData();
+  };
 
-    /* enable toolbar buttons */
-    setDisableToolbarButtons(false);
-  }, [attendanceDate]);
+  /* ATTENDANCE - FUNCTIONS - FETCH DATA ON DATE OR ACTIVE INSTRUCTOR CHANGE */
+  useEffect(() => {
+    /* clears existing attendance records */
+    setAttendanceRecords([]);
+
+    /* hides attendance container */
+    setShowAttendanceContainer(false);
+
+    /* hides data load error */
+    setShowDataLoadError(false);
+
+    /* disable toolbar buttons */
+    setDisableToolbarButtons(true);
+
+    /* disable date navigation buttons */
+    setDisableDateNavigationButtons(true);
+
+    /* show loading spinner */
+    setShowLoadingSpinner(true);
+
+    /* Fetch attendance data for date */
+    const fetchData = async () => {
+      /* parameters to include in the request */
+      const params = {
+        date: attendanceDate,
+        instructor_id: activePrimaryInstructorId,
+      };
+
+      try {
+        await instance
+          .get("api/attendance/attendance/single_date/", { params })
+          .then((response) => {
+            if (response) {
+              /* set attendance records */
+              setAttendanceRecords(response.data.attendance);
+
+              /* hide loading spinner */
+              setShowLoadingSpinner(false);
+
+              /* enable date navigation buttons */
+              setDisableDateNavigationButtons(false);
+
+              /* enable toolbar buttons */
+              setDisableToolbarButtons(false);
+
+              /* show attendance container */
+              setShowAttendanceContainer(true);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+        /* hides attendance container */
+        setShowAttendanceContainer(false);
+
+        /* show data load error message */
+        setShowDataLoadError(true);
+
+        /* hide loading spinner */
+        setShowLoadingSpinner(false);
+
+        /* enable date navigation buttons */
+        setDisableDateNavigationButtons(false);
+
+        /* enable toolbar buttons */
+        setDisableToolbarButtons(false);
+      }
+    };
+
+    /* only drives code if active instructor ID exists */
+    if (activePrimaryInstructorId) {
+      /* drives code */
+      fetchData();
+    }
+  }, [attendanceDate, activePrimaryInstructorId]);
 
   /* ATTENDANCE - FUNCTIONS - SET START AND END TIME INTEGERS */
   const setStartEndTimeIntegers = (attendanceAll) => {
@@ -170,34 +347,161 @@ function Attendance({ csrfToken }) {
 
   /* ATTENDANCE - FUNCTIONS - HANDLE DATE INPUT CHANGE */
   const handleDateInputChange = (event) => {
-    /* clear existing records */
-    if (attendanceRecords.length > 0) {
-      setAttendanceRecords([]);
-    }
+    /* hides attendance container */
+    setShowAttendanceContainer(false);
 
-    /* set buffer */
-    setAttendanceDateBuffer(event.target.value);
+    /* hides data load error */
+    showDataLoadError && setShowDataLoadError(false);
 
-    /* clear existing timeout functions */
-    if (dateInputTimeoutFunction) {
-      clearTimeout(dateInputTimeoutFunction);
-    }
+    /* sets date display */
+    setAttendanceDateDisplay(event.target.value);
 
-    /* sets timeout function to run search of records for a particular date */
-    const newDateInputTimeoutFunction = setTimeout(() => {
-      /* set searching boolean */
-      setSearching(true);
+    /* clears existing attendance records */
+    setAttendanceRecords([]);
 
-      /* blur date input */
-      event.target.blur();
+    /* changes day of week text */
+    setDayOfWeekText(getDayOfWeekText(event.target.value));
 
-      /* set input date after specified time has elapsed; this allows user to arrow through or manually type the date withou making requests to the server on every keystroke */
-      setAttendanceDate(event.target.value);
-    }, 1000);
-
-    /* set new timeout function */
-    setDateInputTimeoutFunction(newDateInputTimeoutFunction);
+    /* shows date search button */
+    setShowDateSearchButton(true);
   };
+
+  /* ATTENDANCE - FUNCTIONS - HANDLE DATE SEARCH BUTTON CLICK */
+  const handleDateSearchButtonClick = () => {
+    /* sets attendance date to display date if not already equal */
+    if (attendanceDate !== attendanceDateDisplay) {
+      setAttendanceDate(attendanceDateDisplay);
+    } else {
+      fetchAttendanceDataForDate();
+    }
+
+    /* hides date search button */
+    setShowDateSearchButton(false);
+  };
+
+  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO DATE ARROW PREVIOUS */
+  const handleClicksToDateArrowPrevious = () => {
+    const updateDateValues = (date) => {
+      setAttendanceDate(date.toISOString().split("T")[0]);
+      setAttendanceDateDisplay(date.toISOString().split("T")[0]);
+      setDayOfWeekText(getDayOfWeekText(date));
+      setShowDateSearchButton(false);
+    };
+
+    try {
+      const date = new Date(attendanceDateDisplay);
+      date.setDate(date.getDate() - 1);
+
+      updateDateValues(date);
+    } catch (e) {
+      console.error(e);
+      const date = new Date();
+
+      updateDateValues(date);
+    }
+  };
+
+  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO DATE ARROW NEXT */
+  const handleClicksToDateArrowNext = () => {
+    const updateDateValues = (date) => {
+      setAttendanceDate(date.toISOString().split("T")[0]);
+      setAttendanceDateDisplay(date.toISOString().split("T")[0]);
+      setDayOfWeekText(getDayOfWeekText(date));
+      setShowDateSearchButton(false);
+    };
+
+    try {
+      const date = new Date(attendanceDateDisplay);
+      date.setDate(date.getDate() + 1);
+
+      updateDateValues(date);
+    } catch (e) {
+      console.error(e);
+      const date = new Date();
+
+      updateDateValues(date);
+    }
+  };
+
+  /* ATTENDANCE - FUNCTIONS - ATTENDANCE STATUS INTEGER TO CSS CLASS */
+  const attendanceStatusIntegerToCssClass = (status) => {
+    switch (status) {
+      case 2:
+        return "pending";
+      case 3:
+        return "present";
+      case 4:
+        return "absent";
+      default:
+        return "no-data";
+    }
+  };
+
+  /* ATTENDANCE - FUNCTIONS - TOGGLE ATTENDANCE STATUS */
+  const toggleAttendanceStatus = (e) => {
+    /* disables all clicks to attendance records */
+    setDisableAttendance(true);
+
+    /* gets attendance record ID */
+    const attendanceRecordId = parseInt(e.target.dataset.attendance_record_id);
+
+    /* gets attendance status integer */
+    const attendanceStatus = parseInt(
+      e.target.dataset.attendance_status_integer
+    );
+
+    /* sets new attendance status integer and CSS class */
+    if (attendanceStatus === 2) {
+      e.target.classList.remove("pending");
+      e.target.classList.add("present");
+      e.target.dataset.attendance_status_integer = 3;
+    } else if (attendanceStatus === 3) {
+      e.target.classList.remove("present");
+      e.target.classList.add("absent");
+      e.target.dataset.attendance_status_integer = 4;
+    } else if (attendanceStatus === 4) {
+      e.target.classList.remove("absent");
+      e.target.classList.add("pending");
+      e.target.dataset.attendance_status_integer = 2;
+    }
+
+    /* updates attendance record status on backend */
+    const data = {
+      attendance_record_id: attendanceRecordId,
+      attendance_record_status_id: e.target.dataset.attendance_status_integer,
+    };
+
+    const updateAttendanceRecordStatus = async () => {
+      try {
+        await instance
+          .put(
+            "api/attendance/attendance/update_attendance_record_status/",
+            data,
+            {
+              headers: {
+                "X-CSRFToken": csrfToken,
+              },
+            }
+          )
+          .then((response) => {
+            if (response) {
+              /* enables clicks to attendance records */
+              setDisableAttendance(false);
+            }
+          });
+      } catch (e) {
+        /* enables clicks to attendance records */
+        setDisableAttendance(false);
+
+        console.log(e);
+        window.alert("An error occurred.");
+      }
+    };
+
+    /* drives code */
+    updateAttendanceRecordStatus();
+  };
+
   /* ---------------------------------------- */
   /* ----------- ATTENDANCE - JSX ----------- */
   /* ---------------------------------------- */
@@ -205,53 +509,101 @@ function Attendance({ csrfToken }) {
   return (
     <Fragment>
       <section id="attendance">
-        <div id="date-select-container">
+        <div
+          id="date-select-container"
+          className={disableDateNavigationButtons ? "disable-clicks" : ""}>
+          <div
+            className="date-arrow previous"
+            onClick={handleClicksToDateArrowPrevious}></div>
           <input
-            className={searching ? "searching" : ""}
             type="date"
-            value={attendanceDateBuffer}
+            value={attendanceDateDisplay}
             onChange={handleDateInputChange}></input>
+          <div
+            className="date-arrow next"
+            onClick={handleClicksToDateArrowNext}></div>
+          <div className="day-of-week-text">{dayOfWeekText}</div>
+          {showDateSearchButton ? (
+            <button onClick={handleDateSearchButtonClick}>
+              データを読み込み
+            </button>
+          ) : null}
         </div>
-        <div id="attendance-container">
-          {attendanceRecordsWithScheduleBreaks.map((record) =>
-            !record.isScheduleBreak ? (
-              <div className="attendance" key={`attedance-${record.id}`}>
-                <div>{record.linked_class.event_name}</div>
-                <div>{record.start_time.slice(0, 5)}</div>
-                <div>
-                  {`${record.instructor.userprofilesinstructors.last_name_romaji}, ${record.instructor.userprofilesinstructors.first_name_romaji}`}
-                </div>
-                <div className="attendance-records-container">
-                  {record.attendance_records.map((attendanceRecord) => (
-                    <div
-                      className="attendance-record"
-                      key={`attendance-record-${attendanceRecord.id}`}>
-                      <div className="student-name-kanji">
-                        {`${attendanceRecord.student.last_name_kanji}, ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
-                      </div>
-                      <div className="student-name-katakana">{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
-                      <div className="student-attendance-status">
-                        {`[${attendanceRecord.status}]`}
-                      </div>
+
+        {showAttendanceContainer ? (
+          <div
+            id="attendance-container"
+            className={disableAttendance ? "disable-clicks" : null}>
+            {attendanceRecordsWithScheduleBreaks.map((record) =>
+              !record.isScheduleBreak ? (
+                <div
+                  className="attendance attendance-card"
+                  key={`attedance-${record.id}`}>
+                  <div
+                    className="primary-instructor-icon"
+                    style={{
+                      backgroundImage: `url(/img/instructors/${record.instructor.userprofilesinstructors.icon_stub})`,
+                    }}></div>
+                  <div className="section-title-container">
+                    <div className="class-name">
+                      {record.linked_class.event_name}
                     </div>
-                  ))}
+                    <div className="class-start-time">
+                      {record.start_time.slice(0, 5)}
+                    </div>
+                  </div>
+                  <div className="attendance-records-container">
+                    {record.attendance_records.map((attendanceRecord) => (
+                      <div
+                        className="attendance-record"
+                        key={`attendance-record-${attendanceRecord.id}`}>
+                        <div className="student-name-kanji">
+                          {`${attendanceRecord.student.last_name_kanji}, ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
+                        </div>
+                        <div className="student-name-katakana">{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
+                        <div
+                          className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
+                            attendanceRecord.status
+                          )}`}
+                          data-attendance_record_id={attendanceRecord.id}
+                          data-attendance_status_integer={
+                            attendanceRecord.status
+                          }
+                          onClick={toggleAttendanceStatus}></div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div
-                className="schedule-break-container"
-                key={`schedule-break-${record.id}`}
-                style={{ minHeight: `${record.breakDuration / 8}rem` }}>
-                <div>
-                  {Math.floor(record.breakDuration / 60)}:
-                  {record.breakDuration % 60}
+              ) : (
+                <div
+                  className="schedule-break-container attendance-card"
+                  key={`schedule-break-${record.id}`}
+                  style={{ minHeight: `${record.breakDuration / 8}rem` }}>
+                  <div>
+                    {Math.floor(record.breakDuration / 60)}:
+                    {record.breakDuration % 60}
+                  </div>
                 </div>
-              </div>
-            )
-          )}
-        </div>
+              )
+            )}
+          </div>
+        ) : null}
+
+        {showLoadingSpinner ? <LoadingSpinner /> : null}
+
+        {showDataLoadError ? (
+          <DataLoadError
+            errorMessage={"エラーが発生されました"}
+            retryFunction={fetchAttendanceDataForDate}
+          />
+        ) : null}
       </section>
-      <AttendanceToolbar disableToolbarButtons={disableToolbarButtons} />
+      <AttendanceToolbar
+        disableToolbarButtons={disableToolbarButtons}
+        activePrimaryInstructorId={activePrimaryInstructorId}
+        setActivePrimaryInstructorId={setActivePrimaryInstructorId}
+        primaryInstructorChoices={primaryInstructorChoices}
+      />
     </Fragment>
   );
 }

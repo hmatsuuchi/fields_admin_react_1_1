@@ -26,6 +26,29 @@ h3 {
   display: grid;
   align-items: center;
   justify-content: right;
+
+  .instructor-select-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
+
+    .instructor-button {
+      width: 2rem;
+      height: 2rem;
+
+      border-radius: 0.2rem;
+
+      cursor: pointer;
+
+      background-repeat: no-repeat;
+      background-position: 50% calc(100% + 1px);
+      background-size: auto 95%;
+    }
+
+    .instructor-button.active {
+      background-color: #ffffff;
+    }
+  }
 }
 
 /* prevents clicks to the toolbar before API call is complete */
