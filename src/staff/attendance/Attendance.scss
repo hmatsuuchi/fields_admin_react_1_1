@@ -15,6 +15,9 @@ $grey: #3a3939;
 
   width: 100%;
 
+  display: grid;
+  justify-items: center;
+
   #date-select-container {
     display: grid;
     justify-content: center;
@@ -103,13 +106,16 @@ $grey: #3a3939;
   }
 
   #attendance-container {
+    max-width: 800px;
+    width: 100%;
+
     padding: 1rem 0;
 
     display: grid;
     grid-row-gap: 1rem;
     justify-items: center;
 
-    .attendance-card {
+    .card {
       background-color: #ffffff;
       border: solid 1px $medium-grey;
       border-radius: 0.2rem;
@@ -143,6 +149,8 @@ $grey: #3a3939;
       }
 
       .section-title-container {
+        cursor: pointer;
+
         grid-column: 2;
 
         width: 100%;
@@ -155,6 +163,31 @@ $grey: #3a3939;
         grid-auto-flow: column;
         justify-content: space-between;
         align-items: center;
+
+        .class-name {
+          grid-row: 1 / 3;
+        }
+
+        .three-dots-container {
+          justify-self: right;
+
+          padding-right: 0.2rem;
+
+          width: 23px;
+
+          display: grid;
+          grid-auto-flow: column;
+          justify-content: space-between;
+
+          .dot {
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background-color: $medium-grey;
+          }
+        }
       }
 
       .attendance-records-container {
@@ -169,13 +202,18 @@ $grey: #3a3939;
 
         .attendance-record {
           display: grid;
+          grid-template-columns: auto 3rem;
 
           .student-name-kanji {
+            cursor: pointer;
+
             grid-row: 1;
             grid-column: 1;
           }
 
           .student-name-katakana {
+            cursor: pointer;
+
             font-size: 0.8rem;
           }
 

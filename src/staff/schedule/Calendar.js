@@ -223,6 +223,22 @@ function EventDetails({
     setStudentSearch,
   ]);
 
+  /* EVENT DETAILS - FUNCTIONS - SCROLL INTO VIEW FIRST STUDENT ENROLLED IN EVENT */
+  useEffect(() => {
+    /* scroll first selected student into view */
+    if (studentsSelectedIdArray.length > 0) {
+      const selectContainer = document.getElementById("select-container");
+      const studentElement = document.getElementById(
+        `student-id-${studentsSelectedIdArray[0]}`
+      );
+
+      if (selectContainer && studentElement) {
+        studentElement.scrollIntoView();
+        selectContainer.scrollTop -= 100;
+      }
+    }
+  }, [studentsSelectedIdArray]);
+
   /* EVENT DETAILS - FUNCTIONS - DAY OF WEEK CONVERSION */
   const dayOfWeekArray = [
     [6, "日曜日"],
@@ -408,54 +424,62 @@ function EventDetails({
                     value={studentSearch}
                     onChange={handleStudentSearchChange}></input>
                   <div id="select-container">
-                    {studentsFiltered.map((student) => {
-                      return (
-                        <div
-                          key={student.id}
-                          className={`student-name-container${
-                            studentsSelectedIdArray.includes(student.id)
-                              ? " student-selected"
-                              : ""
-                          }`}
-                          onClick={handleClicksToAddStudentToEvent}
-                          data-id={student.id}
-                          data-last_name_romaji={student.last_name_romaji}
-                          data-first_name_romaji={student.first_name_romaji}
-                          data-last_name_kanji={student.last_name_kanji}
-                          data-first_name_kanji={student.first_name_kanji}
-                          data-last_name_katakan={student.last_name_katakana}
-                          data-first_name_katakana={student.first_name_katakana}
-                          data-grade_verbose={student.grade_verbose}
-                          data-status={student.status}>
+                    {studentsFiltered.length !== 0 ? (
+                      studentsFiltered.map((student) => {
+                        return (
                           <div
-                            className={`student-status-indicator${
-                              student.status === 1
-                                ? " pre-enrolled"
-                                : student.status === 2
-                                ? " enrolled"
-                                : student.status === 3
-                                ? " short-absence"
-                                : student.status === 4
-                                ? " long-absence"
-                                : " unknown"
-                            }`}></div>
-                          <div className="student-name-kanji">
-                            {student.last_name_kanji && student.last_name_kanji}
-                            {student.first_name_kanji &&
-                              ` ${student.first_name_kanji}`}
-                            {student.grade_verbose &&
-                              ` (${student.grade_verbose})`}
+                            key={student.id}
+                            id={`student-id-${student.id}`}
+                            className={`student-name-container${
+                              studentsSelectedIdArray.includes(student.id)
+                                ? " student-selected"
+                                : ""
+                            }`}
+                            onClick={handleClicksToAddStudentToEvent}
+                            data-id={student.id}
+                            data-last_name_romaji={student.last_name_romaji}
+                            data-first_name_romaji={student.first_name_romaji}
+                            data-last_name_kanji={student.last_name_kanji}
+                            data-first_name_kanji={student.first_name_kanji}
+                            data-last_name_katakan={student.last_name_katakana}
+                            data-first_name_katakana={
+                              student.first_name_katakana
+                            }
+                            data-grade_verbose={student.grade_verbose}
+                            data-status={student.status}>
+                            <div
+                              className={`student-status-indicator${
+                                student.status === 1
+                                  ? " pre-enrolled"
+                                  : student.status === 2
+                                  ? " enrolled"
+                                  : student.status === 3
+                                  ? " short-absence"
+                                  : student.status === 4
+                                  ? " long-absence"
+                                  : " unknown"
+                              }`}></div>
+                            <div className="student-name-kanji">
+                              {student.last_name_kanji &&
+                                student.last_name_kanji}
+                              {student.first_name_kanji &&
+                                ` ${student.first_name_kanji}`}
+                              {student.grade_verbose &&
+                                ` (${student.grade_verbose})`}
+                            </div>
+                            <div className="student-name-katakana">
+                              {student.last_name_katakana &&
+                                student.last_name_katakana}
+                              {student.first_name_katakana &&
+                                ` ${student.first_name_katakana}`}
+                            </div>
+                            <div className="add-student-icon"></div>
                           </div>
-                          <div className="student-name-katakana">
-                            {student.last_name_katakana &&
-                              student.last_name_katakana}
-                            {student.first_name_katakana &&
-                              ` ${student.first_name_katakana}`}
-                          </div>
-                          <div className="add-student-icon"></div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })
+                    ) : (
+                      <LoadingSpinner />
+                    )}
                   </div>
                 </div>
                 <div className="student-enrolled-container">
@@ -535,7 +559,12 @@ function EventDetails({
 }
 
 /* COMPONENTS - CALENDAR */
-function Calendar({ csrfToken, highlightedEventId }) {
+function Calendar({
+  csrfToken,
+  highlightedEventId,
+  setBackButtonText,
+  setBackButtonLink,
+}) {
   /* ----------- CALENDAR - STATE ----------- */
   const [events, setEvents] = useState([]);
   const [instructors, setInstructors] = useState([]);
@@ -557,6 +586,12 @@ function Calendar({ csrfToken, highlightedEventId }) {
   const [studentSearch, setStudentSearch] = useState("");
 
   /* ----------- CALENDAR - FUNCTIONS ----------- */
+
+  // sets back button text and link
+  useEffect(() => {
+    setBackButtonText("カレンダー");
+    setBackButtonLink("/staff/schedule/events/calendar/week-view/");
+  }, [setBackButtonText, setBackButtonLink]);
 
   useEffect(() => {
     if (highlightedEventId !== "") {

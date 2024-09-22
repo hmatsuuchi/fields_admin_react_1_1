@@ -7,9 +7,12 @@ import "./Attendance.scss";
 import AttendanceToolbar from "../toolbar/attendance/AttendanceToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
+import AttendanceUpdate from "./AttendanceUpdate";
+/* React Router DOM */
+import { useNavigate } from "react-router-dom";
 
 /* COMPONENTS - ATTENDANCE */
-function Attendance({ csrfToken }) {
+function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* ---------------------------------------------------- */
   /* ----------- ATTENDANCE - STATE FUNCTIONS ----------- */
   /* ---------------------------------------------------- */
@@ -50,8 +53,14 @@ function Attendance({ csrfToken }) {
   const [showDateSearchButton, setShowDateSearchButton] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const [showDataLoadError, setShowDataLoadError] = useState(false);
-  /* ATTENDANCE - STATE - INSTRUCTOR */
+  const [
+    showAttendanceCreateUpdateContainer,
+    setShowAttendanceCreateUpdateContainer,
+  ] = useState(false);
+  /* ATTENDANCE - STATE - CHOICE LISTS */
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
+  const [eventChoices, setEventChoices] = useState([]);
+  /* ATTENDANCE - STATE - INSTRUCTOR */
   const [activePrimaryInstructorId, setActivePrimaryInstructorId] =
     useState(null);
   /* ATTENDANCE - STATE - DATE */
@@ -72,6 +81,12 @@ function Attendance({ csrfToken }) {
   /* ---------------------------------------------- */
   /* ----------- ATTENDANCE - FUNCTIONS ----------- */
   /* ---------------------------------------------- */
+
+  // sets back button text and link
+  useEffect(() => {
+    setBackButtonText("出欠・日程");
+    setBackButtonLink("/staff/attendance/day-view/");
+  }, [setBackButtonText, setBackButtonLink]);
 
   /* ATTENDANCE - FUNCTIONS - FETCH USER PREFERENCES */
   useEffect(() => {
@@ -96,7 +111,7 @@ function Attendance({ csrfToken }) {
     fetchUserPreferences();
   }, []);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR CHOICES */
+  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR, EVENT CHOICES */
   useEffect(() => {
     const fetchPrimaryInstructorChoices = async () => {
       try {
@@ -107,6 +122,8 @@ function Attendance({ csrfToken }) {
               setPrimaryInstructorChoices(
                 response.data.primary_instructor_choices
               );
+              setEventChoices(response.data.event_choices);
+              console.log(response.data.event_choices);
             }
           });
       } catch (e) {
@@ -190,6 +207,9 @@ function Attendance({ csrfToken }) {
   useEffect(() => {
     /* clears existing attendance records */
     setAttendanceRecords([]);
+
+    /* hides date search button */
+    setShowDateSearchButton(false);
 
     /* hides attendance container */
     setShowAttendanceContainer(false);
@@ -502,6 +522,19 @@ function Attendance({ csrfToken }) {
     updateAttendanceRecordStatus();
   };
 
+  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO STUDENT NAME */
+  const navigate = useNavigate();
+  const handleClicksToStudentName = (e) => {
+    const studentId = e.target.dataset.student_id;
+    navigate(`/staff/students/profiles/details/${studentId}`);
+  };
+
+  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO ATTENDANCE */
+  const handleClicksToAttendance = (e) => {
+    /* toggles attendance update container */
+    setShowAttendanceCreateUpdateContainer(true);
+  };
+
   /* ---------------------------------------- */
   /* ----------- ATTENDANCE - JSX ----------- */
   /* ---------------------------------------- */
@@ -509,6 +542,7 @@ function Attendance({ csrfToken }) {
   return (
     <Fragment>
       <section id="attendance">
+        {/* Date Select Container */}
         <div
           id="date-select-container"
           className={disableDateNavigationButtons ? "disable-clicks" : ""}>
@@ -529,24 +563,30 @@ function Attendance({ csrfToken }) {
             </button>
           ) : null}
         </div>
-
+        {/* Attendance Container */}
         {showAttendanceContainer ? (
           <div
             id="attendance-container"
             className={disableAttendance ? "disable-clicks" : null}>
             {attendanceRecordsWithScheduleBreaks.map((record) =>
               !record.isScheduleBreak ? (
-                <div
-                  className="attendance attendance-card"
-                  key={`attedance-${record.id}`}>
+                <div className="attendance card" key={`attedance-${record.id}`}>
                   <div
                     className="primary-instructor-icon"
                     style={{
                       backgroundImage: `url(/img/instructors/${record.instructor.userprofilesinstructors.icon_stub})`,
                     }}></div>
-                  <div className="section-title-container">
+                  <div
+                    className="section-title-container"
+                    data-attendance_id={record.id}
+                    onClick={handleClicksToAttendance}>
                     <div className="class-name">
                       {record.linked_class.event_name}
+                    </div>
+                    <div className="three-dots-container">
+                      <div className="dot"></div>
+                      <div className="dot"></div>
+                      <div className="dot"></div>
                     </div>
                     <div className="class-start-time">
                       {record.start_time.slice(0, 5)}
@@ -557,10 +597,18 @@ function Attendance({ csrfToken }) {
                       <div
                         className="attendance-record"
                         key={`attendance-record-${attendanceRecord.id}`}>
-                        <div className="student-name-kanji">
-                          {`${attendanceRecord.student.last_name_kanji}, ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
+                        <div
+                          className="student-name-kanji"
+                          data-student_id={attendanceRecord.student.id}
+                          onClick={handleClicksToStudentName}>
+                          {`${attendanceRecord.student.last_name_kanji} ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
                         </div>
-                        <div className="student-name-katakana">{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
+                        <div
+                          className="student-name-katakana"
+                          data-student_id={attendanceRecord.student.id}
+                          onClick={
+                            handleClicksToStudentName
+                          }>{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
                         <div
                           className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
                             attendanceRecord.status
@@ -576,7 +624,7 @@ function Attendance({ csrfToken }) {
                 </div>
               ) : (
                 <div
-                  className="schedule-break-container attendance-card"
+                  className="schedule-break-container card"
                   key={`schedule-break-${record.id}`}
                   style={{ minHeight: `${record.breakDuration / 8}rem` }}>
                   <div>
@@ -589,8 +637,10 @@ function Attendance({ csrfToken }) {
           </div>
         ) : null}
 
+        {/* Loading Spinner */}
         {showLoadingSpinner ? <LoadingSpinner /> : null}
 
+        {/* Data Load Error */}
         {showDataLoadError ? (
           <DataLoadError
             errorMessage={"エラーが発生されました"}
@@ -598,11 +648,28 @@ function Attendance({ csrfToken }) {
           />
         ) : null}
       </section>
+
+      {/* Attendance Update Container */}
+      {showAttendanceCreateUpdateContainer ? (
+        <AttendanceUpdate
+          csrfToken={csrfToken}
+          setShowAttendanceCreateUpdateContainer={
+            setShowAttendanceCreateUpdateContainer
+          }
+        />
+      ) : null}
+
+      {/* Attendance Toolbar */}
       <AttendanceToolbar
         disableToolbarButtons={disableToolbarButtons}
         activePrimaryInstructorId={activePrimaryInstructorId}
         setActivePrimaryInstructorId={setActivePrimaryInstructorId}
         primaryInstructorChoices={primaryInstructorChoices}
+        attendanceDateDisplay={attendanceDateDisplay}
+        setAttendanceDate={setAttendanceDate}
+        setShowAttendanceCreateUpdateContainer={
+          setShowAttendanceCreateUpdateContainer
+        }
       />
     </Fragment>
   );

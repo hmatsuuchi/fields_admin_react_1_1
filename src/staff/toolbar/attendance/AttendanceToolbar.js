@@ -1,12 +1,18 @@
 import React from "react";
 // CSS
 import "./AttendanceToolbar.scss";
+// COMPONENTS
+import AddNewAttendanceButton from "../../micro/attendance/AddNewAttendanceButton";
+import VerticalDividerThin from "../../micro/attendance/VerticalDividerThin";
 
 function AttendanceToolbar({
   disableToolbarButtons,
   activePrimaryInstructorId,
   setActivePrimaryInstructorId,
   primaryInstructorChoices,
+  attendanceDateDisplay,
+  setAttendanceDate,
+  setShowAttendanceCreateUpdateContainer,
 }) {
   /* ---------------------------------------------- */
   /* ------- ATTENDANCE TOOLBAR - FUNCTIONS ------- */
@@ -15,6 +21,8 @@ function AttendanceToolbar({
   const handleClicksToInstructorButtons = (e) => {
     const instructorId = parseInt(e.target.dataset.instructor_id);
     setActivePrimaryInstructorId(instructorId);
+
+    setAttendanceDate(attendanceDateDisplay);
   };
 
   /* ---------------------------------------- */
@@ -41,6 +49,12 @@ function AttendanceToolbar({
           );
         })}
       </div>
+      <VerticalDividerThin />
+      <AddNewAttendanceButton
+        setShowAttendanceCreateUpdateContainer={
+          setShowAttendanceCreateUpdateContainer
+        }
+      />
     </div>
   );
 }

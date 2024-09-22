@@ -75,6 +75,16 @@ $grey: #3a3939;
       margin-left: 0.3rem;
     }
   }
+
+  .student-info-container > div:not(:first-child) {
+    border-top: solid 1px $light-grey;
+
+    padding-top: 0.15rem;
+  }
+
+  .student-info-container > div:not(:last-child) {
+    padding-bottom: 0.15rem;
+  }
 }
 
 /* Footer */

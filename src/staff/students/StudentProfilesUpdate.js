@@ -12,7 +12,11 @@ import "./StudentProfilesCards";
 // React Router
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-function StudentProfilesUpdate({ csrfToken }) {
+function StudentProfilesUpdate({
+  csrfToken,
+  setBackButtonText,
+  setBackButtonLink,
+}) {
   // get profile id from URL params
   const { profileId } = useParams();
 
@@ -49,6 +53,12 @@ function StudentProfilesUpdate({ csrfToken }) {
 
   // React Router DOM Navigate
   const navigate = useNavigate();
+
+  // sets back button text and link
+  useEffect(() => {
+    setBackButtonText("生徒情報");
+    setBackButtonLink("/staff/students/profiles/cards/");
+  }, [setBackButtonText, setBackButtonLink]);
 
   // makes API call and fetches choice values for the form
   useEffect(() => {

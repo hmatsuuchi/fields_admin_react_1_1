@@ -4,7 +4,6 @@ import instance from "../../staff/axios/axios_authenticated";
 // Components
 import DataLoadError from "../micro/DataLoadError";
 import DisplayDescriptors from "../micro/students/DisplayDescriptors";
-import HorizontalDividerThin from "../micro/students/HorizontalDividerThin";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import StudentProfilesToolbar from "../toolbar/students/StudentProfilesToolbar";
 // CSS
@@ -19,6 +18,8 @@ function StudentProfiles({
   setArchiveFilters,
   sorts,
   setSorts,
+  setBackButtonText,
+  setBackButtonLink,
 }) {
   // source of truth for student profiles
   const [studentProfilesTruth, setstudentProfilesTruth] = useState([]);
@@ -41,6 +42,12 @@ function StudentProfiles({
   const [filtersActive, setFiltersActive] = useState(false);
   // boolean used to display error message and retry button if API call fails
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
+
+  // sets back button text and link
+  useEffect(() => {
+    setBackButtonText("生徒情報");
+    setBackButtonLink("/staff/students/profiles/cards/");
+  }, [setBackButtonText, setBackButtonLink]);
 
   // fetches profile data from API
   const fetchProfiles = async () => {
@@ -328,61 +335,67 @@ function StudentProfiles({
                           profile.first_name_romaji}
                       </div>
                     </div>
-                    <div className="contact-container">
-                      {profile.phone.map((phone) => {
-                        return (
-                          <div className="phone" key={`phone-${phone.id}`}>
-                            {phone.number}
-                            {phone.number_type_verbose !== ""
-                              ? ` (${phone.number_type_verbose})`
-                              : ""}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    {profile.phone.length !== 0 &&
-                      (profile.post_code !== "" ||
-                        profile.address_1 !== "" ||
-                        profile.address_2 !== "") && <HorizontalDividerThin />}
-                    <div className="address-container">
-                      <div className="post-code">
-                        {profile.post_code !== ""
-                          ? `〒${profile.post_code}`
-                          : ""}
-                      </div>
-                      <div className="address-line-1">
-                        {profile.prefecture_verbose !== ""
-                          ? profile.prefecture_verbose
-                          : ""}
-                        {profile.city !== "" ? profile.city : ""}
-                        {profile.address_1 !== "" ? profile.address_1 : ""}
-                      </div>
-                      <div className="address-line-2">
-                        {profile.address_2 !== "" ? profile.address_2 : ""}
-                      </div>
-                    </div>
-                    {(profile.post_code !== "" ||
+                    {/* Student Info Container */}
+                    <div className="student-info-container">
+                      {/* Contact Container */}
+                      {profile.phone.length !== 0 ? (
+                        <div className="contact-container">
+                          {profile.phone.map((phone) => {
+                            return (
+                              <div className="phone" key={`phone-${phone.id}`}>
+                                {phone.number}
+                                {phone.number_type_verbose !== ""
+                                  ? ` (${phone.number_type_verbose})`
+                                  : ""}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+                      {/* Address Container */}
+                      {profile.post_code !== "" ||
+                      profile.prefecture_verbose !== "" ||
                       profile.city !== "" ||
                       profile.address_1 !== "" ||
-                      profile.address_2 !== "") &&
-                      profile.birthday && <HorizontalDividerThin />}
-                    <div className="birthday-container">
-                      <div className="birthday">
-                        {profile.birthday !== null
-                          ? `${profile.birthday} (${profile.age}才)`
-                          : ""}
-                      </div>
-                    </div>
-                    {profile.birthday !== null &&
-                      profile.payment_method !== null && (
-                        <HorizontalDividerThin />
-                      )}
-                    <div className="payment-container">
-                      {profile.payment_method && (
-                        <div className="payment-method">
-                          {profile.payment_method_verbose}
+                      profile.address_2 !== "" ? (
+                        <div className="address-container">
+                          <div className="post-code">
+                            {profile.post_code !== ""
+                              ? `〒${profile.post_code}`
+                              : ""}
+                          </div>
+                          <div className="address-line-1">
+                            {profile.prefecture_verbose !== ""
+                              ? profile.prefecture_verbose
+                              : ""}
+                            {profile.city !== "" ? profile.city : ""}
+                            {profile.address_1 !== "" ? profile.address_1 : ""}
+                          </div>
+                          <div className="address-line-2">
+                            {profile.address_2 !== "" ? profile.address_2 : ""}
+                          </div>
                         </div>
-                      )}
+                      ) : null}
+                      {/* Birthday Container */}
+                      {profile.birthday !== null ? (
+                        <div className="birthday-container">
+                          <div className="birthday">
+                            {profile.birthday !== null
+                              ? `${profile.birthday} (${profile.age}才)`
+                              : ""}
+                          </div>
+                        </div>
+                      ) : null}
+                      {/* Payment Container */}
+                      {profile.payment_method !== null ? (
+                        <div className="payment-container">
+                          {profile.payment_method && (
+                            <div className="payment-method">
+                              {profile.payment_method_verbose}
+                            </div>
+                          )}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </Link>

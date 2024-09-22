@@ -2,7 +2,6 @@ import React, { useEffect, useState, Fragment } from "react";
 // Axios
 import instance from "../axios/axios_authenticated";
 // Components
-import HorizontalDividerThin from "../micro/students/HorizontalDividerThin";
 import StudentDetailsToolbar from "../toolbar/students/StudentDetailsToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DisplayDescriptors from "../micro/students/DisplayDescriptors";
@@ -12,7 +11,7 @@ import "./StudentProfilesDetails.scss";
 // React Router DOM
 import { useParams, Link } from "react-router-dom";
 
-function StudentProfilesDetails() {
+function StudentProfilesDetails({ backButtonText, backButtonLink }) {
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState("");
@@ -42,8 +41,8 @@ function StudentProfilesDetails() {
   return (
     <Fragment>
       <StudentDetailsToolbar
-        backButtonLink={"/staff/students/profiles/cards/"}
-        backButtonText={"生徒情報"}
+        backButtonLink={backButtonLink}
+        backButtonText={backButtonText}
         displayContent={displayContent}
       />
       <DisplayDescriptors
@@ -120,59 +119,50 @@ function StudentProfilesDetails() {
                         profile.first_name_romaji}
                     </div>
                   </div>
-                  <div className="contact-container">
-                    {profile.phone.map((phone) => {
-                      return (
-                        <div className="phone" key={`phone-${phone.id}`}>
-                          {phone.number}
-                          {phone.number_type_verbose !== ""
-                            ? ` (${phone.number_type_verbose})`
-                            : ""}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  {profile.phone.length !== 0 &&
-                    (profile.post_code !== "" ||
-                      profile.address_1 !== "" ||
-                      profile.address_2 !== "") && <HorizontalDividerThin />}
-                  <div className="address-container">
-                    <div className="post-code">
-                      {profile.post_code !== "" ? `〒${profile.post_code}` : ""}
+                  <div className="student-info-container">
+                    <div className="contact-container">
+                      {profile.phone.map((phone) => {
+                        return (
+                          <div className="phone" key={`phone-${phone.id}`}>
+                            {phone.number}
+                            {phone.number_type_verbose !== ""
+                              ? ` (${phone.number_type_verbose})`
+                              : ""}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className="address-line-1">
-                      {profile.prefecture_verbose !== ""
-                        ? profile.prefecture_verbose
-                        : ""}
-                      {profile.city !== "" ? profile.city : ""}
-                      {profile.address_1 !== "" ? profile.address_1 : ""}
-                    </div>
-                    <div className="address-line-2">
-                      {profile.address_2 !== "" ? profile.address_2 : ""}
-                    </div>
-                  </div>
-                  {(profile.post_code !== "" ||
-                    profile.city !== "" ||
-                    profile.address_1 !== "" ||
-                    profile.address_2 !== "") &&
-                    profile.birthday && <HorizontalDividerThin />}
-                  <div className="birthday-container">
-                    <div className="birthday">
-                      {profile.birthday !== null
-                        ? `${profile.birthday} (${profile.age}才)`
-                        : ""}
-                    </div>
-                  </div>
-                  {profile.birthday !== null &&
-                    profile.payment_method !== null && (
-                      <HorizontalDividerThin />
-                    )}
-                  <div className="payment-container">
-                    {profile.payment_method && (
-                      <div className="payment-method">
-                        {profile.payment_method_verbose}
+                    <div className="address-container">
+                      <div className="post-code">
+                        {profile.post_code !== ""
+                          ? `〒${profile.post_code}`
+                          : ""}
                       </div>
-                    )}
+                      <div className="address-line-1">
+                        {profile.prefecture_verbose !== ""
+                          ? profile.prefecture_verbose
+                          : ""}
+                        {profile.city !== "" ? profile.city : ""}
+                        {profile.address_1 !== "" ? profile.address_1 : ""}
+                      </div>
+                      <div className="address-line-2">
+                        {profile.address_2 !== "" ? profile.address_2 : ""}
+                      </div>
+                    </div>
+                    <div className="birthday-container">
+                      <div className="birthday">
+                        {profile.birthday !== null
+                          ? `${profile.birthday} (${profile.age}才)`
+                          : ""}
+                      </div>
+                    </div>
+                    <div className="payment-container">
+                      {profile.payment_method && (
+                        <div className="payment-method">
+                          {profile.payment_method_verbose}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="student-profile-footer-container">

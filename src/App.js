@@ -38,6 +38,11 @@ function App() {
   );
   const [csrfToken, setCsrfToken] = useState("");
 
+  /* BACK BUTTON */
+  const [backButtonText, setBackButtonText] = useState("生徒情報");
+  const [backButtonLink, setBackButtonLink] = useState(
+    "/staff/students/profiles/cards/"
+  );
   /* SCHEDULE */
   const [highlightedEventId, setHighlightedEventId] = useState("");
 
@@ -170,6 +175,8 @@ function App() {
                 setArchiveFilters={setArchiveFilters}
                 sorts={sorts}
                 setSorts={setSorts}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
           }></Route>
@@ -178,7 +185,10 @@ function App() {
           path="/staff/students/profiles/details/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesDetails />
+              <StudentProfilesDetails
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+              />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - STUDENTS - CREATE PROFILE */}
@@ -194,7 +204,11 @@ function App() {
           path="/staff/students/profiles/update/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesUpdate csrfToken={csrfToken} />
+              <StudentProfilesUpdate
+                csrfToken={csrfToken}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
+              />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - STUDENTS - DELETE PROFILE */}
@@ -202,7 +216,11 @@ function App() {
           path="/staff/students/profiles/delete/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StudentProfilesDelete csrfToken={csrfToken} />
+              <StudentProfilesDelete
+                csrfToken={csrfToken}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
+              />
             </StaffProtectedRoute>
           }></Route>
         {/* STAFF ROUTES - CALENDAR - WEEK VIEW */}
@@ -213,6 +231,8 @@ function App() {
               <Calendar
                 csrfToken={csrfToken}
                 highlightedEventId={highlightedEventId}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
           }></Route>
@@ -232,7 +252,11 @@ function App() {
           path="/staff/attendance/day-view"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <Attendance csrfToken={csrfToken} />
+              <Attendance
+                csrfToken={csrfToken}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
+              />
             </StaffProtectedRoute>
           }></Route>
         {/* CUSTOMER ROUTES - DASHBOARD */}

@@ -16,6 +16,7 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
   const [submitted, setSubmitted] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(false);
 
+  /* CHOICE LISTS */
   const [eventTypeChoices, setEventTypeChoices] = useState([]);
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
 

@@ -1,0 +1,14 @@
+.add-new-attendance-button {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 0.3rem;
+
+  background-image: url("img/plus_icon_white.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80% auto;
+}
+
+.add-new-attendance-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
