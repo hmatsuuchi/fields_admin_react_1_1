@@ -21,6 +21,7 @@ import Calendar from "./staff/schedule/Calendar";
 import CalendarEventCreate from "./staff/schedule/CalendarEventCreate";
 // COMPONENTS - STAFF - ATTENDANCE
 import Attendance from "./staff/attendance/Attendance";
+import AttendanceCreate from "./staff/attendance/AttendanceCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -253,6 +254,18 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <Attendance
+                csrfToken={csrfToken}
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
+              />
+            </StaffProtectedRoute>
+          }></Route>
+        {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
+        <Route
+          path="/staff/attendance/create"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <AttendanceCreate
                 csrfToken={csrfToken}
                 setBackButtonText={setBackButtonText}
                 setBackButtonLink={setBackButtonLink}

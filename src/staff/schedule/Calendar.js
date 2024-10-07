@@ -44,6 +44,11 @@ function EventDetails({
     setDisplayArchiveEventConfirmationDialog,
   ] = useState(false);
   const [eventToArchive, setEventToArchive] = useState({});
+  /* EVENT DETAILS - STATE - PREVENT JUMP TO FIRST SELECTED STUDENT FUNCTIONALITY */
+  const [
+    preventJumpToFirstSelectedStudent,
+    setPreventJumpToFirstSelectedStudent,
+  ] = useState(false);
 
   /* ----------- EVENT DETAILS - COMPONENTS ----------- */
 
@@ -137,14 +142,11 @@ function EventDetails({
       setDisplayArchiveEventConfirmationDialog(false);
       setEventDetailsVisible(false);
 
-      /* removes event from events array */
-      const archiveEvent = (eventId) => {
-        setEvents((prevArray) =>
-          prevArray.filter((event) => event.id !== eventId)
-        );
-      };
-      /* drives code */
-      archiveEvent(parseInt(eventToArchive.id));
+      /* temporarily hides event */
+      const eventToArchive = document.querySelector(
+        `#event-id-${eventDetails.id}`
+      );
+      eventToArchive.style.display = "none";
 
       /* removes student from event in backend */
       const removeStudentFromEventBackend = async () => {
@@ -163,10 +165,23 @@ function EventDetails({
             )
             .then((response) => {
               if (response) {
+                /* removes event from events array */
+                const archiveEvent = (eventId) => {
+                  setEvents((prevArray) =>
+                    prevArray.filter((event) => event.id !== eventId)
+                  );
+                };
+                /* drives code */
+                archiveEvent(parseInt(eventToArchive.id));
               }
             });
         } catch (e) {
           console.log(e);
+
+          eventToArchive.style.display = "grid";
+
+          /* popup system error message */
+          window.alert("エラーが発生されました");
         }
       };
       /* drives code */
@@ -225,8 +240,14 @@ function EventDetails({
 
   /* EVENT DETAILS - FUNCTIONS - SCROLL INTO VIEW FIRST STUDENT ENROLLED IN EVENT */
   useEffect(() => {
-    /* scroll first selected student into view */
-    if (studentsSelectedIdArray.length > 0) {
+    if (
+      studentsSelectedIdArray.length !== 0 &&
+      !preventJumpToFirstSelectedStudent
+    ) {
+      /* sorts studentsSelectedIdArray */
+      studentsSelectedIdArray.sort((a, b) => b - a);
+
+      /* scroll first selected student into view */
       const selectContainer = document.getElementById("select-container");
       const studentElement = document.getElementById(
         `student-id-${studentsSelectedIdArray[0]}`
@@ -236,8 +257,11 @@ function EventDetails({
         studentElement.scrollIntoView();
         selectContainer.scrollTop -= 100;
       }
+
+      /* disables jump to first selected student */
+      setPreventJumpToFirstSelectedStudent(true);
     }
-  }, [studentsSelectedIdArray]);
+  }, [studentsSelectedIdArray, preventJumpToFirstSelectedStudent]);
 
   /* EVENT DETAILS - FUNCTIONS - DAY OF WEEK CONVERSION */
   const dayOfWeekArray = [
@@ -414,10 +438,13 @@ function EventDetails({
                 </div>
               </div>
               <div className="student-container">
-                <div className="student-select-container">
+                <div
+                  className={`student-select-container${
+                    studentsFiltered.length === 0 ? " disable-clicks" : ""
+                  }`}>
                   <div className="label">生徒検索</div>
                   <div className="student-number-indicator">
-                    {studentsFiltered.length}
+                    {`${studentsFiltered.length}件`}
                   </div>
                   <input
                     className="student-search"
@@ -434,6 +461,16 @@ function EventDetails({
                               studentsSelectedIdArray.includes(student.id)
                                 ? " student-selected"
                                 : ""
+                            }${
+                              student.last_name_katakana === "" &&
+                              student.first_name_katakana === ""
+                                ? " no-katakana"
+                                : ""
+                            }${
+                              student.last_name_kanji === "" &&
+                              student.first_name_kanji === ""
+                                ? " no-kanji"
+                                : ""
                             }`}
                             onClick={handleClicksToAddStudentToEvent}
                             data-id={student.id}
@@ -441,7 +478,7 @@ function EventDetails({
                             data-first_name_romaji={student.first_name_romaji}
                             data-last_name_kanji={student.last_name_kanji}
                             data-first_name_kanji={student.first_name_kanji}
-                            data-last_name_katakan={student.last_name_katakana}
+                            data-last_name_katakana={student.last_name_katakana}
                             data-first_name_katakana={
                               student.first_name_katakana
                             }
@@ -482,7 +519,10 @@ function EventDetails({
                     )}
                   </div>
                 </div>
-                <div className="student-enrolled-container">
+                <div
+                  className={`student-enrolled-container${
+                    studentsFiltered.length === 0 ? " disable-clicks" : ""
+                  }`}>
                   <div className="label">在籍生徒</div>
                   <div
                     className={`student-number-indicator${
@@ -494,44 +534,47 @@ function EventDetails({
                     {`${eventDetails.students.length}/${eventDetails.event_type.capacity}`}
                   </div>
                   <div className="enrolled-container">
-                    {eventDetails.students.map((student) => {
-                      return (
-                        <div
-                          className="student-name-container"
-                          key={student.id}
-                          onClick={handleClicksToRemoveStudentFromEvent}
-                          data-id={student.id}
-                          data-last_name_kanji={student.last_name_kanji}
-                          data-first_name_kanji={student.first_name_kanji}>
+                    {eventDetails.students
+                      .sort((a, b) => b.id - a.id)
+                      .map((student) => {
+                        return (
                           <div
-                            className={`student-status-indicator${
-                              student.status === 1
-                                ? " pre-enrolled"
-                                : student.status === 2
-                                ? " enrolled"
-                                : student.status === 3
-                                ? " short-absence"
-                                : student.status === 4
-                                ? " long-absence"
-                                : " unknown"
-                            }`}></div>
-                          <div className="student-name-kanji">
-                            {student.last_name_kanji && student.last_name_kanji}
-                            {student.first_name_kanji &&
-                              ` ${student.first_name_kanji}`}
-                            {student.grade_verbose &&
-                              ` (${student.grade_verbose})`}
+                            className="student-name-container"
+                            key={student.id}
+                            onClick={handleClicksToRemoveStudentFromEvent}
+                            data-id={student.id}
+                            data-last_name_kanji={student.last_name_kanji}
+                            data-first_name_kanji={student.first_name_kanji}>
+                            <div
+                              className={`student-status-indicator${
+                                student.status === 1
+                                  ? " pre-enrolled"
+                                  : student.status === 2
+                                  ? " enrolled"
+                                  : student.status === 3
+                                  ? " short-absence"
+                                  : student.status === 4
+                                  ? " long-absence"
+                                  : " unknown"
+                              }`}></div>
+                            <div className="student-name-kanji">
+                              {student.last_name_kanji &&
+                                student.last_name_kanji}
+                              {student.first_name_kanji &&
+                                ` ${student.first_name_kanji}`}
+                              {student.grade_verbose &&
+                                ` (${student.grade_verbose})`}
+                            </div>
+                            <div className="student-name-katakana">
+                              {student.last_name_katakana &&
+                                student.last_name_katakana}
+                              {student.first_name_katakana &&
+                                ` ${student.first_name_katakana}`}
+                            </div>
+                            <div className="remove-student-icon"></div>
                           </div>
-                          <div className="student-name-katakana">
-                            {student.last_name_katakana &&
-                              student.last_name_katakana}
-                            {student.first_name_katakana &&
-                              ` ${student.first_name_katakana}`}
-                          </div>
-                          <div className="remove-student-icon"></div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                   </div>
                 </div>
               </div>
@@ -1058,6 +1101,7 @@ function Calendar({
                               .map((event) => {
                                 return (
                                   <div
+                                    id={`event-id-${event.id}`}
                                     className={`event${
                                       event.duplicate ? " duplicate" : ""
                                     }${

@@ -7,7 +7,7 @@ import "./Attendance.scss";
 import AttendanceToolbar from "../toolbar/attendance/AttendanceToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
-import AttendanceUpdate from "./AttendanceUpdate";
+import AttendanceCreateUpdate from "./AttendanceCreateUpdate";
 /* React Router DOM */
 import { useNavigate } from "react-router-dom";
 
@@ -57,12 +57,16 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     showAttendanceCreateUpdateContainer,
     setShowAttendanceCreateUpdateContainer,
   ] = useState(false);
+
   /* ATTENDANCE - STATE - CHOICE LISTS */
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
   const [eventChoices, setEventChoices] = useState([]);
+  const [studentChoices, setStudentChoices] = useState([]);
+
   /* ATTENDANCE - STATE - INSTRUCTOR */
   const [activePrimaryInstructorId, setActivePrimaryInstructorId] =
     useState(null);
+
   /* ATTENDANCE - STATE - DATE */
   const [attendanceDate, setAttendanceDate] = useState(getDateToday());
   const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(
@@ -71,6 +75,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   const [dayOfWeekText, setDayOfWeekText] = useState(
     getDayOfWeekText(getDateToday())
   );
+
   /* ATTENDANCE - STATE - ATTENDANCE DATA */
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [
@@ -78,11 +83,25 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     setAttendanceRecordsWithScheduleBreaks,
   ] = useState([]);
 
+  /* ATTENDANCE - STATE - ATTENDANCE CREATE/UPDATE */
+  const [eventIdSelected, setEventIdSelected] = useState(null);
+  const [eventNameSelected, setEventNameSelected] = useState("");
+  const [eventCapacitySelected, setEventCapacitySelected] = useState(0);
+  const [eventDateSelected] = useState(attendanceDate);
+  const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
+    useState("");
+  // const [attendancePrimaryInstructorSelected] = useState(
+  //   activePrimaryInstructorId
+  // );
+  const [attendanceStudentsSelected, setAttendanceStudentsSelected] = useState(
+    []
+  );
+
   /* ---------------------------------------------- */
   /* ----------- ATTENDANCE - FUNCTIONS ----------- */
   /* ---------------------------------------------- */
 
-  // sets back button text and link
+  /* ATTENDANCE - FUNCTIONS - SET BACK BUTTON TEXT AND LINK */
   useEffect(() => {
     setBackButtonText("出欠・日程");
     setBackButtonLink("/staff/attendance/day-view/");
@@ -111,19 +130,18 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     fetchUserPreferences();
   }, []);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR, EVENT CHOICES */
+  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR CHOICES */
   useEffect(() => {
     const fetchPrimaryInstructorChoices = async () => {
       try {
         await instance
-          .get("api/attendance/attendance/attendance_choices/")
+          .get("api/attendance/attendance/instructor_choices/")
           .then((response) => {
             if (response) {
+              /* primary instructor choices */
               setPrimaryInstructorChoices(
                 response.data.primary_instructor_choices
               );
-              setEventChoices(response.data.event_choices);
-              console.log(response.data.event_choices);
             }
           });
       } catch (e) {
@@ -133,6 +151,73 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
     /* drives code */
     fetchPrimaryInstructorChoices();
+  }, []);
+
+  /* ATTENDANCE - FUNCTIONS - FETCH EVENT CHOICES */
+  useEffect(() => {
+    /* sorts event choices by day of week, start time, and primary instructor */
+    const sortEventChoices = (eventChoices) => {
+      eventChoices.sort((a, b) => {
+        /* puts sunday at the start of the sort */
+        if (a.day_of_week === 6) return -1;
+        if (b.day_of_week === 6) return 1;
+        /* compares day of week integer */
+        if (a.day_of_week < b.day_of_week) return -1;
+        if (a.day_of_week > b.day_of_week) return 1;
+        /* compares start time string */
+        if (a.start_time < b.start_time) return -1;
+        if (a.start_time > b.start_time) return 1;
+        /* compares primary instructor integer */
+        if (a.primary_instructor.id < b.primary_instructor.id) return 1;
+        if (a.primary_instructor.id > b.primary_instructor.id) return -1;
+        return 0;
+      });
+
+      return eventChoices;
+    };
+
+    /* makes API call to fetch event choices */
+    const fetchEventChoices = async () => {
+      try {
+        await instance
+          .get("api/attendance/attendance/event_choices/")
+          .then((response) => {
+            if (response) {
+              /* sorts event choices */
+              const eventChoices = sortEventChoices(
+                response.data.event_choices
+              );
+              setEventChoices(eventChoices);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    /* drives code */
+    fetchEventChoices();
+  }, []);
+
+  /* ATTENDANCE - FUNCTIONS - FETCH STUDENT CHOICES */
+  useEffect(() => {
+    const fetchStudentChoices = async () => {
+      try {
+        await instance
+          .get("api/attendance/attendance/student_choices/")
+          .then((response) => {
+            if (response) {
+              /* primary instructor choices */
+              setStudentChoices(response.data.student_choices);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    /* drives code */
+    fetchStudentChoices();
   }, []);
 
   /* ATTENDANCE - FUNCTIONS - MANUAL FETCH ATTENDANCE DATA FOR DATE */
@@ -531,8 +616,22 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
   /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO ATTENDANCE */
   const handleClicksToAttendance = (e) => {
-    /* toggles attendance update container */
+    /* gets attendance record */
+    const attendanceId = e.target.dataset.attendance_id;
+    const attendanceRecord = attendanceRecords.find((record) => {
+      return record.id === parseInt(attendanceId);
+    });
+
+    /* sets attendance record values */
+    setEventIdSelected(attendanceRecord.linked_class.id);
+
+    /* toggles attendance update container visibility */
     setShowAttendanceCreateUpdateContainer(true);
+  };
+
+  /* ATTENDANCE - FUNCTIONS - REMOVE LEADING ZEROS FROM STRINGS */
+  const removeLeadingZeroFromString = (str) => {
+    return str.replace(/^0+/, "");
   };
 
   /* ---------------------------------------- */
@@ -589,7 +688,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
                       <div className="dot"></div>
                     </div>
                     <div className="class-start-time">
-                      {record.start_time.slice(0, 5)}
+                      {removeLeadingZeroFromString(
+                        record.start_time.slice(0, 5)
+                      )}
                     </div>
                   </div>
                   <div className="attendance-records-container">
@@ -649,13 +750,32 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
         ) : null}
       </section>
 
-      {/* Attendance Update Container */}
+      {/* Attendance Create/Update Container */}
       {showAttendanceCreateUpdateContainer ? (
-        <AttendanceUpdate
+        <AttendanceCreateUpdate
           csrfToken={csrfToken}
           setShowAttendanceCreateUpdateContainer={
             setShowAttendanceCreateUpdateContainer
           }
+          eventChoices={eventChoices}
+          activePrimaryInstructorLastNameKanji={
+            primaryInstructorChoices.find(
+              (instructor) => instructor.id === activePrimaryInstructorId
+            )?.userprofilesinstructors.last_name_kanji
+          }
+          studentChoices={studentChoices}
+          eventIdSelected={eventIdSelected}
+          setEventIdSelected={setEventIdSelected}
+          eventNameSelected={eventNameSelected}
+          setEventNameSelected={setEventNameSelected}
+          eventCapacitySelected={eventCapacitySelected}
+          setEventCapacitySelected={setEventCapacitySelected}
+          eventDateSelected={eventDateSelected}
+          attendanceStartTimeSelected={attendanceStartTimeSelected}
+          setAttendanceStartTimeSelected={setAttendanceStartTimeSelected}
+          activePrimaryInstructorId={activePrimaryInstructorId}
+          attendanceStudentsSelected={attendanceStudentsSelected}
+          setAttendanceStudentsSelected={setAttendanceStudentsSelected}
         />
       ) : null}
 

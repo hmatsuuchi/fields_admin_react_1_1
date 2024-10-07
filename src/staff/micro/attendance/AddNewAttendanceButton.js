@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 // CSS
 import "./AddNewAttendanceButton.scss";
 
@@ -7,8 +8,10 @@ function AddNewAttendanceButton({ setShowAttendanceCreateUpdateContainer }) {
   /* ---- ADD NEW ATTENDANCE BUTTON - FUNCTIONS ---- */
   /* ----------------------------------------------- */
 
+  const navigate = useNavigate();
+
   const handleClicksToAddNewAttendanceButton = () => {
-    setShowAttendanceCreateUpdateContainer(true);
+    navigate("/staff/attendance/create/");
   };
 
   /* ----------------------------------------------- */

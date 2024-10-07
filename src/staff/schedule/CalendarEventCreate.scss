@@ -49,10 +49,15 @@ $grey: #3a3939;
             background-color: #fff;
 
             font-size: 1.2rem;
+            font-weight: 500;
 
             padding: 0.3rem;
 
             -webkit-text-fill-color: #000;
+          }
+
+          input[name="event_name"] {
+            font-weight: 400;
           }
 
           input:focus {
@@ -70,6 +75,8 @@ $grey: #3a3939;
 
           .time-input {
             max-width: 5.5rem;
+
+            font-weight: 400;
 
             -webkit-text-fill-color: initial;
           }
