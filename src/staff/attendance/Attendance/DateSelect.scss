@@ -1,0 +1,97 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#date-select-container {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-column-gap: 0.75rem;
+
+  .date-arrow {
+    height: 1.7rem;
+    width: 1.7rem;
+
+    background: $medium-grey;
+
+    cursor: pointer;
+
+    clip-path: polygon(50% 10%, 10% 100%, 90% 100%);
+  }
+
+  .date-arrow.previous {
+    transform: rotate(-90deg);
+  }
+
+  .date-arrow.next {
+    grid-row: 1;
+
+    transform: rotate(90deg);
+  }
+
+  input {
+    grid-row: 1;
+
+    font-family: "Noto Sans JP", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: $medium-grey;
+
+    border: solid 1px $medium-grey;
+    border-radius: 0.2rem;
+
+    background-color: #ffffff;
+
+    padding: 0 0.4rem;
+
+    width: 9rem;
+
+    cursor: text;
+  }
+
+  input::-webkit-calendar-picker-indicator {
+    filter: invert(0.4);
+  }
+
+  .day-of-week-text {
+    grid-row: 2;
+    grid-column: 1 / 4;
+
+    margin-top: 0.25rem;
+
+    color: $medium-grey;
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+
+  button {
+    grid-row: 3;
+    grid-column: 1 / 4;
+
+    background-color: $teal;
+
+    margin-top: 2rem;
+    padding: 0.5rem 1rem;
+
+    border-radius: 0.5rem;
+
+    font-size: 1.2rem;
+    color: #ffffff;
+
+    cursor: pointer;
+  }
+}
+
+#date-select-container.disable-clicks {
+  pointer-events: none;
+  user-select: none;
+}

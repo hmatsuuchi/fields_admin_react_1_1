@@ -32,6 +32,10 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
   const [isAuth, setIsAuth] = useState(localStorage.getItem("is_auth"));
   const [isStaff, setIsStaff] = useState(localStorage.getItem("is_staff"));
   const [isCustomer, setIsCustomer] = useState(
@@ -44,10 +48,11 @@ function App() {
   const [backButtonLink, setBackButtonLink] = useState(
     "/staff/students/profiles/cards/"
   );
+
   /* SCHEDULE */
   const [highlightedEventId, setHighlightedEventId] = useState("");
 
-  // month filters for student profiles
+  /* STUDENT PROFILES */
   const [monthFilters, setMonthFilters] = useState({
     month0: true,
     month1: true,
@@ -63,18 +68,18 @@ function App() {
     month11: true,
     month12: true,
   });
-
-  // archive filters for student profiles
   const [archiveFilters, setArchiveFilters] = useState({
     unarchived: true,
     archived: true,
   });
-
-  // sorts for student profiles
   const [sorts, setSorts] = useState({
     id: 1,
     birth_month_day: 0,
   });
+
+  /* ------------------------------------------- */
+  /* ---------------- FUNCTIONS ---------------- */
+  /* ------------------------------------------- */
 
   // synchonizes is_auth, is_staff and is_customer local storage variables with state
   useEffect(() => {
@@ -262,7 +267,7 @@ function App() {
           }></Route>
         {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
         <Route
-          path="/staff/attendance/create"
+          path="/staff/attendance/create/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <AttendanceCreate

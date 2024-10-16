@@ -8,14 +8,13 @@ import AttendanceToolbar from "../toolbar/attendance/AttendanceToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
 import AttendanceCreateUpdate from "./AttendanceCreateUpdate";
-/* React Router DOM */
-import { useNavigate } from "react-router-dom";
+import DateSelect from "./Attendance/DateSelect";
+import AttendanceContainer from "./Attendance/AttendanceContainer";
 
-/* COMPONENTS - ATTENDANCE */
 function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
-  /* ---------------------------------------------------- */
-  /* ----------- ATTENDANCE - STATE FUNCTIONS ----------- */
-  /* ---------------------------------------------------- */
+  /* ----------------------------------------------------- */
+  /* ------------------ STATE FUNCTIONS ------------------ */
+  /* ----------------------------------------------------- */
 
   const getDateToday = () => {
     const today = new Date();
@@ -26,29 +25,14 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     return `${year}-${month}-${day}`;
   };
 
-  const getDayOfWeekText = (date) => {
-    const dayOfWeek = new Date(date).getDay();
-    const daysOfWeek = {
-      0: "日曜日",
-      1: "月曜日",
-      2: "火曜日",
-      3: "水曜日",
-      4: "木曜日",
-      5: "金曜日",
-      6: "土曜日",
-    };
-    return daysOfWeek[dayOfWeek] || "";
-  };
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
 
-  /* ------------------------------------------ */
-  /* ----------- ATTENDANCE - STATE ----------- */
-  /* ------------------------------------------ */
-
-  /* ATTENDANCE - STATE - PAGE/DATA LOAD UI */
+  /* PAGE/DATA LOAD UI */
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
   const [disableDateNavigationButtons, setDisableDateNavigationButtons] =
     useState(true);
-  const [disableAttendance, setDisableAttendance] = useState(false);
   const [showAttendanceContainer, setShowAttendanceContainer] = useState(true);
   const [showDateSearchButton, setShowDateSearchButton] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
@@ -58,56 +42,47 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     setShowAttendanceCreateUpdateContainer,
   ] = useState(false);
 
-  /* ATTENDANCE - STATE - CHOICE LISTS */
+  /* CHOICE LISTS */
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
   const [eventChoices, setEventChoices] = useState([]);
   const [studentChoices, setStudentChoices] = useState([]);
 
-  /* ATTENDANCE - STATE - INSTRUCTOR */
-  const [activePrimaryInstructorId, setActivePrimaryInstructorId] =
-    useState(null);
+  /* INSTRUCTOR */
+  const [activePrimaryInstructor, setActivePrimaryInstructor] = useState(null);
 
-  /* ATTENDANCE - STATE - DATE */
-  const [attendanceDate, setAttendanceDate] = useState(getDateToday());
-  const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(
-    getDateToday()
-  );
-  const [dayOfWeekText, setDayOfWeekText] = useState(
-    getDayOfWeekText(getDateToday())
-  );
+  /* DATE */
+  const [attendanceDate, setAttendanceDate] = useState(null);
+  const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(null);
 
-  /* ATTENDANCE - STATE - ATTENDANCE DATA */
+  /* ATTENDANCE DATA */
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [
     attendanceRecordsWithScheduleBreaks,
     setAttendanceRecordsWithScheduleBreaks,
   ] = useState([]);
 
-  /* ATTENDANCE - STATE - ATTENDANCE CREATE/UPDATE */
+  /* ATTENDANCE CREATE/UPDATE */
   const [eventIdSelected, setEventIdSelected] = useState(null);
   const [eventNameSelected, setEventNameSelected] = useState("");
   const [eventCapacitySelected, setEventCapacitySelected] = useState(0);
   const [eventDateSelected] = useState(attendanceDate);
   const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
     useState("");
-  // const [attendancePrimaryInstructorSelected] = useState(
-  //   activePrimaryInstructorId
-  // );
   const [attendanceStudentsSelected, setAttendanceStudentsSelected] = useState(
     []
   );
 
-  /* ---------------------------------------------- */
-  /* ----------- ATTENDANCE - FUNCTIONS ----------- */
-  /* ---------------------------------------------- */
+  /* ----------------------------------------------- */
+  /* ------------------ FUNCTIONS ------------------ */
+  /* ----------------------------------------------- */
 
-  /* ATTENDANCE - FUNCTIONS - SET BACK BUTTON TEXT AND LINK */
+  /* SET BACK BUTTON TEXT AND LINK */
   useEffect(() => {
     setBackButtonText("出欠・日程");
     setBackButtonLink("/staff/attendance/day-view/");
   }, [setBackButtonText, setBackButtonLink]);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH USER PREFERENCES */
+  /* FETCH USER PREFERENCES */
   useEffect(() => {
     const fetchUserPreferences = async () => {
       try {
@@ -115,10 +90,30 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           .get("api/attendance/attendance/user_preferences/")
           .then((response) => {
             if (response) {
-              setActivePrimaryInstructorId(
-                response.data.user_preferences
-                  .pref_attendance_selected_instructor
+              /* all user preferences */
+              const userPreferences = response.data.user_preferences;
+
+              /* selected primary instructor */
+              const instructorId =
+                userPreferences.pref_attendance_selected_instructor;
+              const instructor = primaryInstructorChoices.find(
+                (item) => item.id === instructorId
               );
+              setActivePrimaryInstructor(instructor);
+
+              /* selected date */
+              const selectedDate =
+                userPreferences.pref_attendance_selected_date;
+
+              if (selectedDate) {
+                setAttendanceDate(selectedDate);
+                setAttendanceDateDisplay(selectedDate);
+              } else {
+                setAttendanceDate(getDateToday());
+                setAttendanceDateDisplay(getDateToday());
+              }
+
+              console.log(selectedDate);
             }
           });
       } catch (e) {
@@ -127,10 +122,34 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     };
 
     /* drives code */
-    fetchUserPreferences();
-  }, []);
+    if (primaryInstructorChoices.length > 0) {
+      fetchUserPreferences();
+    }
+  }, [primaryInstructorChoices]);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH INSTRUCTOR CHOICES */
+  /* UPDATE USER PREFERENCES */
+  const updateUserPreferences = async (userPreferencesArray) => {
+    try {
+      await instance
+        .put(
+          "api/attendance/attendance/user_preferences/",
+          userPreferencesArray,
+          {
+            headers: {
+              "X-CSRFToken": csrfToken,
+            },
+          }
+        )
+        .then((response) => {
+          if (response) {
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  /* FETCH PRIMARY INSTRUCTOR CHOICES */
   useEffect(() => {
     const fetchPrimaryInstructorChoices = async () => {
       try {
@@ -153,7 +172,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     fetchPrimaryInstructorChoices();
   }, []);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH EVENT CHOICES */
+  /* FETCH EVENT CHOICES */
   useEffect(() => {
     /* sorts event choices by day of week, start time, and primary instructor */
     const sortEventChoices = (eventChoices) => {
@@ -199,7 +218,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     fetchEventChoices();
   }, []);
 
-  /* ATTENDANCE - FUNCTIONS - FETCH STUDENT CHOICES */
+  /* FETCH STUDENT CHOICES */
   useEffect(() => {
     const fetchStudentChoices = async () => {
       try {
@@ -220,7 +239,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     fetchStudentChoices();
   }, []);
 
-  /* ATTENDANCE - FUNCTIONS - MANUAL FETCH ATTENDANCE DATA FOR DATE */
+  /* MANUAL FETCH ATTENDANCE DATA FOR DATE */
   const fetchAttendanceDataForDate = () => {
     /* clears existing attendance records */
     setAttendanceRecords([]);
@@ -237,12 +256,15 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     /* show loading spinner */
     setShowLoadingSpinner(true);
 
+    /* updates user preferences */
+    updateUserPreferences({ pref_attendance_selected_date: attendanceDate });
+
     /* Fetch attendance data for date */
     const fetchData = async () => {
       /* parameters to include in the request */
       const params = {
         date: attendanceDate,
-        instructor_id: activePrimaryInstructorId,
+        instructor_id: activePrimaryInstructor.id,
       };
 
       try {
@@ -288,7 +310,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     fetchData();
   };
 
-  /* ATTENDANCE - FUNCTIONS - FETCH DATA ON DATE OR ACTIVE INSTRUCTOR CHANGE */
+  /* FETCH DATA ON DATE OR ACTIVE INSTRUCTOR CHANGE */
   useEffect(() => {
     /* clears existing attendance records */
     setAttendanceRecords([]);
@@ -316,7 +338,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
       /* parameters to include in the request */
       const params = {
         date: attendanceDate,
-        instructor_id: activePrimaryInstructorId,
+        instructor_id: activePrimaryInstructor.id,
       };
 
       try {
@@ -360,13 +382,13 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     };
 
     /* only drives code if active instructor ID exists */
-    if (activePrimaryInstructorId) {
+    if (activePrimaryInstructor) {
       /* drives code */
       fetchData();
     }
-  }, [attendanceDate, activePrimaryInstructorId]);
+  }, [attendanceDate, activePrimaryInstructor]);
 
-  /* ATTENDANCE - FUNCTIONS - SET START AND END TIME INTEGERS */
+  /* SET START AND END TIME INTEGERS */
   const setStartEndTimeIntegers = (attendanceAll) => {
     /* uses start time and class length to calculate starting and ending hour/minute integers */
     attendanceAll.forEach((attendance) => {
@@ -383,7 +405,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     });
   };
 
-  /* ATTENDANCE - FUNCTIONS - DETECT AND GROUP OVERLAPPING ATTENDANCE */
+  /* DETECT AND GROUP OVERLAPPING ATTENDANCE */
   const detectAndGroupOverlappingAttendance = (attendanceAll) => {
     attendanceAll.forEach((attendance) => {
       attendanceAll.forEach((attendanceToCheck) => {
@@ -398,7 +420,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     });
   };
 
-  /* ATTENDANCE - FUNCTIONS - INSERTS SCHEDULE BREAK ELEMENTS BETWEEN LESSONS */
+  /* INSERTS SCHEDULE BREAK ELEMENTS BETWEEN LESSONS */
   const insertScheduleBreakElements = (attendanceAll) => {
     /* new array to hold new elements */
     let newArray = [];
@@ -436,7 +458,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     return newArray;
   };
 
-  /* ATTENDANCE - FUNCTIONS - PROCESSES ATTENDANCE DATA */
+  /* PROCESSES ATTENDANCE DATA */
   useEffect(() => {
     /* adds start and end time integers */
     setStartEndTimeIntegers(attendanceRecords);
@@ -450,293 +472,44 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     );
   }, [attendanceRecords, setAttendanceRecordsWithScheduleBreaks]);
 
-  /* ATTENDANCE - FUNCTIONS - HANDLE DATE INPUT CHANGE */
-  const handleDateInputChange = (event) => {
-    /* hides attendance container */
-    setShowAttendanceContainer(false);
-
-    /* hides data load error */
-    showDataLoadError && setShowDataLoadError(false);
-
-    /* sets date display */
-    setAttendanceDateDisplay(event.target.value);
-
-    /* clears existing attendance records */
-    setAttendanceRecords([]);
-
-    /* changes day of week text */
-    setDayOfWeekText(getDayOfWeekText(event.target.value));
-
-    /* shows date search button */
-    setShowDateSearchButton(true);
-  };
-
-  /* ATTENDANCE - FUNCTIONS - HANDLE DATE SEARCH BUTTON CLICK */
-  const handleDateSearchButtonClick = () => {
-    /* sets attendance date to display date if not already equal */
-    if (attendanceDate !== attendanceDateDisplay) {
-      setAttendanceDate(attendanceDateDisplay);
-    } else {
-      fetchAttendanceDataForDate();
-    }
-
-    /* hides date search button */
-    setShowDateSearchButton(false);
-  };
-
-  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO DATE ARROW PREVIOUS */
-  const handleClicksToDateArrowPrevious = () => {
-    const updateDateValues = (date) => {
-      setAttendanceDate(date.toISOString().split("T")[0]);
-      setAttendanceDateDisplay(date.toISOString().split("T")[0]);
-      setDayOfWeekText(getDayOfWeekText(date));
-      setShowDateSearchButton(false);
-    };
-
-    try {
-      const date = new Date(attendanceDateDisplay);
-      date.setDate(date.getDate() - 1);
-
-      updateDateValues(date);
-    } catch (e) {
-      console.error(e);
-      const date = new Date();
-
-      updateDateValues(date);
-    }
-  };
-
-  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO DATE ARROW NEXT */
-  const handleClicksToDateArrowNext = () => {
-    const updateDateValues = (date) => {
-      setAttendanceDate(date.toISOString().split("T")[0]);
-      setAttendanceDateDisplay(date.toISOString().split("T")[0]);
-      setDayOfWeekText(getDayOfWeekText(date));
-      setShowDateSearchButton(false);
-    };
-
-    try {
-      const date = new Date(attendanceDateDisplay);
-      date.setDate(date.getDate() + 1);
-
-      updateDateValues(date);
-    } catch (e) {
-      console.error(e);
-      const date = new Date();
-
-      updateDateValues(date);
-    }
-  };
-
-  /* ATTENDANCE - FUNCTIONS - ATTENDANCE STATUS INTEGER TO CSS CLASS */
-  const attendanceStatusIntegerToCssClass = (status) => {
-    switch (status) {
-      case 2:
-        return "pending";
-      case 3:
-        return "present";
-      case 4:
-        return "absent";
-      default:
-        return "no-data";
-    }
-  };
-
-  /* ATTENDANCE - FUNCTIONS - TOGGLE ATTENDANCE STATUS */
-  const toggleAttendanceStatus = (e) => {
-    /* disables all clicks to attendance records */
-    setDisableAttendance(true);
-
-    /* gets attendance record ID */
-    const attendanceRecordId = parseInt(e.target.dataset.attendance_record_id);
-
-    /* gets attendance status integer */
-    const attendanceStatus = parseInt(
-      e.target.dataset.attendance_status_integer
-    );
-
-    /* sets new attendance status integer and CSS class */
-    if (attendanceStatus === 2) {
-      e.target.classList.remove("pending");
-      e.target.classList.add("present");
-      e.target.dataset.attendance_status_integer = 3;
-    } else if (attendanceStatus === 3) {
-      e.target.classList.remove("present");
-      e.target.classList.add("absent");
-      e.target.dataset.attendance_status_integer = 4;
-    } else if (attendanceStatus === 4) {
-      e.target.classList.remove("absent");
-      e.target.classList.add("pending");
-      e.target.dataset.attendance_status_integer = 2;
-    }
-
-    /* updates attendance record status on backend */
-    const data = {
-      attendance_record_id: attendanceRecordId,
-      attendance_record_status_id: e.target.dataset.attendance_status_integer,
-    };
-
-    const updateAttendanceRecordStatus = async () => {
-      try {
-        await instance
-          .put(
-            "api/attendance/attendance/update_attendance_record_status/",
-            data,
-            {
-              headers: {
-                "X-CSRFToken": csrfToken,
-              },
-            }
-          )
-          .then((response) => {
-            if (response) {
-              /* enables clicks to attendance records */
-              setDisableAttendance(false);
-            }
-          });
-      } catch (e) {
-        /* enables clicks to attendance records */
-        setDisableAttendance(false);
-
-        console.log(e);
-        window.alert("An error occurred.");
-      }
-    };
-
-    /* drives code */
-    updateAttendanceRecordStatus();
-  };
-
-  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO STUDENT NAME */
-  const navigate = useNavigate();
-  const handleClicksToStudentName = (e) => {
-    const studentId = e.target.dataset.student_id;
-    navigate(`/staff/students/profiles/details/${studentId}`);
-  };
-
-  /* ATTENDANCE - FUNCTIONS - HANDLE CLICKS TO ATTENDANCE */
-  const handleClicksToAttendance = (e) => {
-    /* gets attendance record */
-    const attendanceId = e.target.dataset.attendance_id;
-    const attendanceRecord = attendanceRecords.find((record) => {
-      return record.id === parseInt(attendanceId);
-    });
-
-    /* sets attendance record values */
-    setEventIdSelected(attendanceRecord.linked_class.id);
-
-    /* toggles attendance update container visibility */
-    setShowAttendanceCreateUpdateContainer(true);
-  };
-
-  /* ATTENDANCE - FUNCTIONS - REMOVE LEADING ZEROS FROM STRINGS */
-  const removeLeadingZeroFromString = (str) => {
-    return str.replace(/^0+/, "");
-  };
-
   /* ---------------------------------------- */
-  /* ----------- ATTENDANCE - JSX ----------- */
+  /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
 
   return (
     <Fragment>
       <section id="attendance">
-        {/* Date Select Container */}
-        <div
-          id="date-select-container"
-          className={disableDateNavigationButtons ? "disable-clicks" : ""}>
-          <div
-            className="date-arrow previous"
-            onClick={handleClicksToDateArrowPrevious}></div>
-          <input
-            type="date"
-            value={attendanceDateDisplay}
-            onChange={handleDateInputChange}></input>
-          <div
-            className="date-arrow next"
-            onClick={handleClicksToDateArrowNext}></div>
-          <div className="day-of-week-text">{dayOfWeekText}</div>
-          {showDateSearchButton ? (
-            <button onClick={handleDateSearchButtonClick}>
-              データを読み込み
-            </button>
-          ) : null}
-        </div>
+        {/* Date Select */}
+        <DateSelect
+          csrfToken={csrfToken}
+          attendanceDate={attendanceDate}
+          setAttendanceDate={setAttendanceDate}
+          showDateSearchButton={showDateSearchButton}
+          setShowDateSearchButton={setShowDateSearchButton}
+          attendanceDateDisplay={attendanceDateDisplay}
+          setAttendanceDateDisplay={setAttendanceDateDisplay}
+          showDataLoadError={showDataLoadError}
+          setShowDataLoadError={setShowDataLoadError}
+          disableDateNavigationButtons={disableDateNavigationButtons}
+          setShowAttendanceContainer={setShowAttendanceContainer}
+          setAttendanceRecords={setAttendanceRecords}
+          getDateToday={getDateToday}
+          fetchAttendanceDataForDate={fetchAttendanceDataForDate}
+        />
+
         {/* Attendance Container */}
-        {showAttendanceContainer ? (
-          <div
-            id="attendance-container"
-            className={disableAttendance ? "disable-clicks" : null}>
-            {attendanceRecordsWithScheduleBreaks.map((record) =>
-              !record.isScheduleBreak ? (
-                <div className="attendance card" key={`attedance-${record.id}`}>
-                  <div
-                    className="primary-instructor-icon"
-                    style={{
-                      backgroundImage: `url(/img/instructors/${record.instructor.userprofilesinstructors.icon_stub})`,
-                    }}></div>
-                  <div
-                    className="section-title-container"
-                    data-attendance_id={record.id}
-                    onClick={handleClicksToAttendance}>
-                    <div className="class-name">
-                      {record.linked_class.event_name}
-                    </div>
-                    <div className="three-dots-container">
-                      <div className="dot"></div>
-                      <div className="dot"></div>
-                      <div className="dot"></div>
-                    </div>
-                    <div className="class-start-time">
-                      {removeLeadingZeroFromString(
-                        record.start_time.slice(0, 5)
-                      )}
-                    </div>
-                  </div>
-                  <div className="attendance-records-container">
-                    {record.attendance_records.map((attendanceRecord) => (
-                      <div
-                        className="attendance-record"
-                        key={`attendance-record-${attendanceRecord.id}`}>
-                        <div
-                          className="student-name-kanji"
-                          data-student_id={attendanceRecord.student.id}
-                          onClick={handleClicksToStudentName}>
-                          {`${attendanceRecord.student.last_name_kanji} ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
-                        </div>
-                        <div
-                          className="student-name-katakana"
-                          data-student_id={attendanceRecord.student.id}
-                          onClick={
-                            handleClicksToStudentName
-                          }>{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
-                        <div
-                          className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
-                            attendanceRecord.status
-                          )}`}
-                          data-attendance_record_id={attendanceRecord.id}
-                          data-attendance_status_integer={
-                            attendanceRecord.status
-                          }
-                          onClick={toggleAttendanceStatus}></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className="schedule-break-container card"
-                  key={`schedule-break-${record.id}`}
-                  style={{ minHeight: `${record.breakDuration / 8}rem` }}>
-                  <div>
-                    {Math.floor(record.breakDuration / 60)}:
-                    {record.breakDuration % 60}
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        ) : null}
+        <AttendanceContainer
+          csrfToken={csrfToken}
+          showAttendanceContainer={showAttendanceContainer}
+          setShowAttendanceCreateUpdateContainer={
+            setShowAttendanceCreateUpdateContainer
+          }
+          setEventIdSelected={setEventIdSelected}
+          attendanceRecords={attendanceRecords}
+          attendanceRecordsWithScheduleBreaks={
+            attendanceRecordsWithScheduleBreaks
+          }
+        />
 
         {/* Loading Spinner */}
         {showLoadingSpinner ? <LoadingSpinner /> : null}
@@ -760,7 +533,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           eventChoices={eventChoices}
           activePrimaryInstructorLastNameKanji={
             primaryInstructorChoices.find(
-              (instructor) => instructor.id === activePrimaryInstructorId
+              (instructor) => instructor.id === activePrimaryInstructor.id
             )?.userprofilesinstructors.last_name_kanji
           }
           studentChoices={studentChoices}
@@ -773,7 +546,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           eventDateSelected={eventDateSelected}
           attendanceStartTimeSelected={attendanceStartTimeSelected}
           setAttendanceStartTimeSelected={setAttendanceStartTimeSelected}
-          activePrimaryInstructorId={activePrimaryInstructorId}
+          activePrimaryInstructor={activePrimaryInstructor}
           attendanceStudentsSelected={attendanceStudentsSelected}
           setAttendanceStudentsSelected={setAttendanceStudentsSelected}
         />
@@ -781,10 +554,12 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
       {/* Attendance Toolbar */}
       <AttendanceToolbar
+        csrfToken={csrfToken}
         disableToolbarButtons={disableToolbarButtons}
-        activePrimaryInstructorId={activePrimaryInstructorId}
-        setActivePrimaryInstructorId={setActivePrimaryInstructorId}
+        activePrimaryInstructor={activePrimaryInstructor}
+        setActivePrimaryInstructor={setActivePrimaryInstructor}
         primaryInstructorChoices={primaryInstructorChoices}
+        attendanceDate={attendanceDate}
         attendanceDateDisplay={attendanceDateDisplay}
         setAttendanceDate={setAttendanceDate}
         setShowAttendanceCreateUpdateContainer={

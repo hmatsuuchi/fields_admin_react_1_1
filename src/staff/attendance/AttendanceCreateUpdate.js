@@ -20,7 +20,7 @@ function AttendanceCreateUpdate({
   eventDateSelected,
   attendanceStartTimeSelected,
   setAttendanceStartTimeSelected,
-  activePrimaryInstructorId,
+  activePrimaryInstructor,
   attendanceStudentsSelected,
   setAttendanceStudentsSelected,
 }) {
@@ -43,7 +43,7 @@ function AttendanceCreateUpdate({
     console.log("eventDateSelected: ", eventDateSelected);
     console.log("eventCapacitySelected: ", eventCapacitySelected);
     console.log("AttendanceStartTimeSelected: ", attendanceStartTimeSelected);
-    console.log("activePrimaryInstructorId: ", activePrimaryInstructorId);
+    console.log("activePrimaryInstructor: ", activePrimaryInstructor);
     console.log("attendanceStudentsSelected: ", attendanceStudentsSelected);
     console.log("--------------------");
   }, [
@@ -51,7 +51,7 @@ function AttendanceCreateUpdate({
     eventNameSelected,
     eventDateSelected,
     attendanceStartTimeSelected,
-    activePrimaryInstructorId,
+    activePrimaryInstructor,
     attendanceStudentsSelected,
     eventCapacitySelected,
   ]);

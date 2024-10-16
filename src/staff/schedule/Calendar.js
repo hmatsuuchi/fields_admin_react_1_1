@@ -1130,6 +1130,7 @@ function Calendar({
                                     }}
                                     data-event_id={event.id}
                                     data-event_start_time={event.start_time}>
+                                    <div className="more-icon-container"></div>
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Header*/}
                                     <div
                                       className="event-header"
@@ -1137,11 +1138,6 @@ function Calendar({
                                       onClick={handleClicksToEvent}>
                                       <div className="event-name">
                                         {event.event_name}
-                                      </div>
-                                      <div className="more-icon-container">
-                                        <div className="more-icon-dot"></div>
-                                        <div className="more-icon-dot"></div>
-                                        <div className="more-icon-dot"></div>
                                       </div>
                                       <div className="event-start-time">
                                         {event.start_time.slice(0, 5)}
