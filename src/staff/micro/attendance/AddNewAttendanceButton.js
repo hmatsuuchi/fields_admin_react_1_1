@@ -1,6 +1,7 @@
 import React from "react";
+/* REACT ROUTER DOM */
 import { useNavigate } from "react-router-dom";
-// CSS
+/* CSS */
 import "./AddNewAttendanceButton.scss";
 
 function AddNewAttendanceButton() {

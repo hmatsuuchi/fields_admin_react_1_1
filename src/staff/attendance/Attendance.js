@@ -104,16 +104,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
               /* selected date */
               const selectedDate =
                 userPreferences.pref_attendance_selected_date;
-
-              if (selectedDate) {
-                setAttendanceDate(selectedDate);
-                setAttendanceDateDisplay(selectedDate);
-              } else {
-                setAttendanceDate(getDateToday());
-                setAttendanceDateDisplay(getDateToday());
-              }
-
-              console.log(selectedDate);
+              setAttendanceDate(selectedDate);
+              setAttendanceDateDisplay(selectedDate);
             }
           });
       } catch (e) {

@@ -142,6 +142,10 @@ function AttendanceContainer({
         !record.isScheduleBreak ? (
           <div className="attendance card" key={`attedance-${record.id}`}>
             <div
+              className="more-info-container"
+              data-attendance_id={record.id}
+              onClick={handleClicksToAttendance}></div>
+            <div
               className="primary-instructor-icon"
               style={{
                 backgroundImage: `url(/img/instructors/${record.instructor.userprofilesinstructors.icon_stub})`,
@@ -151,11 +155,6 @@ function AttendanceContainer({
               data-attendance_id={record.id}
               onClick={handleClicksToAttendance}>
               <div className="class-name">{record.linked_class.event_name}</div>
-              <div className="three-dots-container">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-              </div>
               <div className="class-start-time">
                 {removeLeadingZeroFromString(record.start_time.slice(0, 5))}
               </div>

@@ -7,6 +7,8 @@ import "./ClassSelectContainer.scss";
 import LoadingSpinner from "../../../micro/LoadingSpinner";
 
 function ClassSelectContainer({
+  eventIdSelected,
+  setEventIdSelected,
   setEventNameSelected,
   setAttendanceStartTimeSelected,
   setAttendanceStudentsSelected,
@@ -17,7 +19,6 @@ function ClassSelectContainer({
 
   const [eventChoices, setEventChoices] = useState([]);
   const [eventChoicesFiltered, setEventChoicesFiltered] = useState([]);
-  const [eventIdSelected, setEventIdSelected] = useState(null);
 
   /* ----------------------------------------------------- */
   /* --------------------- FUNCTIONS --------------------- */

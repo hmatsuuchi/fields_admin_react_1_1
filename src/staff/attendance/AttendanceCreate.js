@@ -7,6 +7,7 @@ import "./AttendanceCreate.scss";
 import AttendanceCreateToolbar from "../toolbar/attendance/AttendanceCreateToolbar";
 import ClassSelectContainer from "./Attendance/AttendanceCreate/ClassSelectContainer";
 import LoadingSpinner from "../micro/LoadingSpinner";
+import BottomButtons from "./Attendance/AttendanceCreate/BottomButtons";
 
 function AttendanceCreate({ csrfToken }) {
   /* ----------------------------------------------------- */
@@ -14,6 +15,7 @@ function AttendanceCreate({ csrfToken }) {
   /* ----------------------------------------------------- */
 
   const [disableToolbarButtons] = useState(false);
+  const [eventIdSelected, setEventIdSelected] = useState(null);
   const [eventNameSelected, setEventNameSelected] = useState("");
   const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
     useState("");
@@ -30,6 +32,7 @@ function AttendanceCreate({ csrfToken }) {
 
   /* DEBUGGING */
   useEffect(() => {
+    console.log(`eventIdSelected: ${eventIdSelected}`);
     console.log(`eventNameSelected: ${eventNameSelected}`);
     console.log(`attendanceDate: ${attendanceDate}`);
     console.log(`attendanceStartTimeSelected: ${attendanceStartTimeSelected}`);
@@ -39,6 +42,7 @@ function AttendanceCreate({ csrfToken }) {
     console.log(attendanceStudentsSelected);
     console.log("-------------------------------------------------");
   }, [
+    eventIdSelected,
     eventNameSelected,
     attendanceStartTimeSelected,
     attendanceStudentsSelected,
@@ -136,6 +140,8 @@ function AttendanceCreate({ csrfToken }) {
               <div className="attendance-body-container">
                 <div className="section-header">授業選択</div>
                 <ClassSelectContainer
+                  eventIdSelected={eventIdSelected}
+                  setEventIdSelected={setEventIdSelected}
                   setEventNameSelected={setEventNameSelected}
                   setAttendanceStartTimeSelected={
                     setAttendanceStartTimeSelected
@@ -161,6 +167,15 @@ function AttendanceCreate({ csrfToken }) {
                     </option>
                   ))}
                 </select>
+                {/* BOTTOM BUTTONS */}
+                <BottomButtons
+                  csrfToken={csrfToken}
+                  eventIdSelected={eventIdSelected}
+                  activePrimaryInstructor={activePrimaryInstructor}
+                  attendanceDate={attendanceDate}
+                  attendanceStartTimeSelected={attendanceStartTimeSelected}
+                  attendanceStudentsSelected={attendanceStudentsSelected}
+                />
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ import { Fragment } from "react";
 /* React Router DOM */
 import { useNavigate } from "react-router-dom";
 
-/* COMPONENTS - EVENT DETAILS */
+/* EVENT DETAILS */
 function EventDetails({
   events,
   setEvents,
@@ -601,14 +601,14 @@ function EventDetails({
   );
 }
 
-/* COMPONENTS - CALENDAR */
+/* CALENDAR */
 function Calendar({
   csrfToken,
   highlightedEventId,
   setBackButtonText,
   setBackButtonLink,
 }) {
-  /* ----------- CALENDAR - STATE ----------- */
+  /* ----------- STATE ----------- */
   const [events, setEvents] = useState([]);
   const [instructors, setInstructors] = useState([]);
   const [initialJumpToNow, setInitialJumpToNow] = useState(false);
@@ -1130,12 +1130,12 @@ function Calendar({
                                     }}
                                     data-event_id={event.id}
                                     data-event_start_time={event.start_time}>
-                                    <div className="more-icon-container"></div>
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Header*/}
                                     <div
                                       className="event-header"
                                       data-event_id={event.id}
                                       onClick={handleClicksToEvent}>
+                                      <div className="more-info-container"></div>
                                       <div className="event-name">
                                         {event.event_name}
                                       </div>
