@@ -141,7 +141,7 @@ function ClassSelectContainer({
   /* ----------------------------------------------------- */
 
   return (
-    <div className="class-select-container">
+    <div id="class-input" className="class-select-container">
       <div className="event-search-label label">授業検索</div>
       <div className="event-number-indicator label">{`${eventChoicesFiltered.length}件`}</div>
       <input

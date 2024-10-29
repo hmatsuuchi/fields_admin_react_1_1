@@ -63,11 +63,15 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
                 response.data.primary_instructor_choices
               );
             } else {
-              window.alert("An error occurred.");
+              /* popup system error message */
+              window.alert("エラーが発生されました");
             }
           }
         });
       } catch (e) {
+        /* popup system error message */
+        window.alert("エラーが発生されました");
+
         console.log(e);
       }
     };
@@ -117,7 +121,9 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
               } else {
                 setDisableToolbarButtons(false);
                 setSubmitted(false);
-                window.alert("An error occurred.");
+
+                /* popup system error message */
+                window.alert("エラーが発生されました");
               }
             }
           });
@@ -125,7 +131,9 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
         console.log(e);
         setDisableToolbarButtons(false);
         setSubmitted(false);
-        window.alert("An error occurred.");
+
+        /* popup system error message */
+        window.alert("エラーが発生されました");
       }
     };
 

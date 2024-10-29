@@ -263,6 +263,10 @@ $grey: #3a3939;
   }
 }
 
+.class-select-container.missing-input {
+  outline: solid 2px $red;
+}
+
 @media screen and (min-width: 400px) {
   .attendance-update-container {
     .attendance-update-card {

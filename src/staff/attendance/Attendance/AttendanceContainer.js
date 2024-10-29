@@ -8,11 +8,18 @@ import { useNavigate } from "react-router-dom";
 
 function AttendanceContainer({
   csrfToken,
-  attendanceRecords,
-  attendanceRecordsWithScheduleBreaks,
+  attendances,
+  attendancesWithScheduleBreaks,
   showAttendanceContainer,
-  setShowAttendanceCreateUpdateContainer,
+  setShowAttendanceUpdateContainer,
+  attendanceDate,
+  setAttendanceSelectedId,
   setEventIdSelected,
+  setEventDateSelected,
+  setEventNameSelected,
+  setEventCapacitySelected,
+  setEventStartTimeSelected,
+  setAttendanceStudentsSelected,
 }) {
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
@@ -28,15 +35,38 @@ function AttendanceContainer({
   const handleClicksToAttendance = (e) => {
     /* gets attendance record */
     const attendanceId = e.target.dataset.attendance_id;
-    const attendanceRecord = attendanceRecords.find((record) => {
+    const attendanceRecord = attendances.find((record) => {
       return record.id === parseInt(attendanceId);
     });
 
-    /* sets attendance record values */
+    /* sets attendance record */
+    setAttendanceSelectedId(attendanceRecord.id);
+
+    /* sets attendance id */
     setEventIdSelected(attendanceRecord.linked_class.id);
 
+    /* sets attendance start time */
+    setEventStartTimeSelected(attendanceRecord.start_time);
+
+    /* sets event name */
+    setEventNameSelected(attendanceRecord.linked_class.event_name);
+
+    /* sets attendance date */
+    setEventDateSelected(attendanceDate);
+
+    /* sets event capacity */
+    setEventCapacitySelected(attendanceRecord.linked_class.event_type.capacity);
+
+    /* sets attendance students */
+    setAttendanceStudentsSelected(
+      attendanceRecord.attendance_records.map((record) => ({
+        ...record.student,
+        status: record.status,
+      }))
+    );
+
     /* toggles attendance update container visibility */
-    setShowAttendanceCreateUpdateContainer(true);
+    setShowAttendanceUpdateContainer(true);
   };
 
   /* REMOVE LEADING ZEROS FROM STRINGS */
@@ -138,7 +168,7 @@ function AttendanceContainer({
     <div
       id="attendance-container"
       className={disableAttendance ? "disable-clicks" : null}>
-      {attendanceRecordsWithScheduleBreaks.map((record) =>
+      {attendancesWithScheduleBreaks.map((record) =>
         !record.isScheduleBreak ? (
           <div className="attendance card" key={`attedance-${record.id}`}>
             <div
@@ -194,7 +224,7 @@ function AttendanceContainer({
             style={{ minHeight: `${record.breakDuration / 8}rem` }}>
             <div>
               {Math.floor(record.breakDuration / 60)}:
-              {record.breakDuration % 60}
+              {`0${record.breakDuration % 60}`.slice(-2)}
             </div>
           </div>
         )

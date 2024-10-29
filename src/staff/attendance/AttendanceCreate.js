@@ -154,6 +154,7 @@ function AttendanceCreate({ csrfToken }) {
                 <input type="date" readOnly value={attendanceDate}></input>
                 <label>時間</label>
                 <input
+                  id="start-time-input"
                   type="time"
                   value={attendanceStartTimeSelected}
                   onChange={handleChangesToAttendanceStartTime}></input>

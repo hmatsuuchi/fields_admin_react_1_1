@@ -35,7 +35,6 @@ instance.interceptors.response.use(
         );
         // if error refreshing access token, redirect to login page
         window.location.href = "/login";
-        // return <Navigate replace to="/login" />;
 
         return Promise.reject(error);
       }

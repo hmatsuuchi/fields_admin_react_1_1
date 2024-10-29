@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-/* Axios */
+/* AXIOS */
 import instance from "../axios/axios_authenticated";
 /* CSS */
 import "./Attendance.scss";
-/* Components  */
+/* COMPONENTS  */
 import AttendanceToolbar from "../toolbar/attendance/AttendanceToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
-import AttendanceCreateUpdate from "./AttendanceCreateUpdate";
+import AttendanceUpdate from "./AttendanceUpdate";
 import DateSelect from "./Attendance/DateSelect";
 import AttendanceContainer from "./Attendance/AttendanceContainer";
 
@@ -37,10 +37,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   const [showDateSearchButton, setShowDateSearchButton] = useState(false);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
   const [showDataLoadError, setShowDataLoadError] = useState(false);
-  const [
-    showAttendanceCreateUpdateContainer,
-    setShowAttendanceCreateUpdateContainer,
-  ] = useState(false);
+  const [showAttendanceUpdateContainer, setShowAttendanceUpdateContainer] =
+    useState(false);
 
   /* CHOICE LISTS */
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
@@ -55,17 +53,16 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(null);
 
   /* ATTENDANCE DATA */
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const [
-    attendanceRecordsWithScheduleBreaks,
-    setAttendanceRecordsWithScheduleBreaks,
-  ] = useState([]);
+  const [attendances, setAttendances] = useState([]);
+  const [attendancesWithScheduleBreaks, setAttendancesWithScheduleBreaks] =
+    useState([]);
 
   /* ATTENDANCE CREATE/UPDATE */
+  const [attendanceSelectedId, setAttendanceSelectedId] = useState(null);
   const [eventIdSelected, setEventIdSelected] = useState(null);
   const [eventNameSelected, setEventNameSelected] = useState("");
   const [eventCapacitySelected, setEventCapacitySelected] = useState(0);
-  const [eventDateSelected] = useState(attendanceDate);
+  const [eventDateSelected, setEventDateSelected] = useState(attendanceDate);
   const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
     useState("");
   const [attendanceStudentsSelected, setAttendanceStudentsSelected] = useState(
@@ -233,8 +230,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
   /* MANUAL FETCH ATTENDANCE DATA FOR DATE */
   const fetchAttendanceDataForDate = () => {
-    /* clears existing attendance records */
-    setAttendanceRecords([]);
+    /* clears existing attendances */
+    setAttendances([]);
 
     /* hides data load error */
     setShowDataLoadError(false);
@@ -264,8 +261,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           .get("api/attendance/attendance/single_date/", { params })
           .then((response) => {
             if (response) {
-              /* set attendance records */
-              setAttendanceRecords(response.data.attendance);
+              /* set attendances */
+              setAttendances(response.data.attendance);
 
               /* hide loading spinner */
               setShowLoadingSpinner(false);
@@ -304,8 +301,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
   /* FETCH DATA ON DATE OR ACTIVE INSTRUCTOR CHANGE */
   useEffect(() => {
-    /* clears existing attendance records */
-    setAttendanceRecords([]);
+    /* clears existing attendances */
+    setAttendances([]);
 
     /* hides date search button */
     setShowDateSearchButton(false);
@@ -339,7 +336,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           .then((response) => {
             if (response) {
               /* set attendance records */
-              setAttendanceRecords(response.data.attendance);
+              setAttendances(response.data.attendance);
 
               /* hide loading spinner */
               setShowLoadingSpinner(false);
@@ -413,7 +410,14 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   };
 
   /* INSERTS SCHEDULE BREAK ELEMENTS BETWEEN LESSONS */
-  const insertScheduleBreakElements = (attendanceAll) => {
+  const insertScheduleBreakElementsAndSort = (attendanceAll) => {
+    /* attendance array by start time integer */
+    attendanceAll.sort((a, b) => {
+      if (a.startTimeInteger < b.startTimeInteger) return -1;
+      if (a.startTimeInteger > b.startTimeInteger) return 1;
+      return 0;
+    });
+
     /* new array to hold new elements */
     let newArray = [];
 
@@ -431,6 +435,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           id: i,
           isScheduleBreak: true,
           breakDuration: nextEventStartTimeInteger - currentEventEndTimeInteger,
+          startTimeInteger: currentEventEndTimeInteger,
         };
 
         /* pushes current event and schedule break element to new array */
@@ -447,22 +452,29 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
       newArray.push(attendanceAll[attendanceAll.length - 1]);
     }
 
+    /* sorts new array by start time integer */
+    newArray.sort((a, b) => {
+      if (a.startTimeInteger < b.startTimeInteger) return -1;
+      if (a.startTimeInteger > b.startTimeInteger) return 1;
+      return 0;
+    });
+
     return newArray;
   };
 
   /* PROCESSES ATTENDANCE DATA */
   useEffect(() => {
     /* adds start and end time integers */
-    setStartEndTimeIntegers(attendanceRecords);
+    setStartEndTimeIntegers(attendances);
 
     /* detects and groups overlapping attendance */
-    detectAndGroupOverlappingAttendance(attendanceRecords);
+    detectAndGroupOverlappingAttendance(attendances);
 
     /* looks for gaps between lessons and inserts schedule break elements */
-    setAttendanceRecordsWithScheduleBreaks(
-      insertScheduleBreakElements(attendanceRecords)
+    setAttendancesWithScheduleBreaks(
+      insertScheduleBreakElementsAndSort(attendances)
     );
-  }, [attendanceRecords, setAttendanceRecordsWithScheduleBreaks]);
+  }, [attendances, setAttendancesWithScheduleBreaks]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -484,7 +496,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           setShowDataLoadError={setShowDataLoadError}
           disableDateNavigationButtons={disableDateNavigationButtons}
           setShowAttendanceContainer={setShowAttendanceContainer}
-          setAttendanceRecords={setAttendanceRecords}
+          setAttendances={setAttendances}
           getDateToday={getDateToday}
           fetchAttendanceDataForDate={fetchAttendanceDataForDate}
         />
@@ -493,14 +505,17 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
         <AttendanceContainer
           csrfToken={csrfToken}
           showAttendanceContainer={showAttendanceContainer}
-          setShowAttendanceCreateUpdateContainer={
-            setShowAttendanceCreateUpdateContainer
-          }
+          setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
+          attendances={attendances}
+          attendancesWithScheduleBreaks={attendancesWithScheduleBreaks}
+          attendanceDate={attendanceDate}
           setEventIdSelected={setEventIdSelected}
-          attendanceRecords={attendanceRecords}
-          attendanceRecordsWithScheduleBreaks={
-            attendanceRecordsWithScheduleBreaks
-          }
+          setEventDateSelected={setEventDateSelected}
+          setEventNameSelected={setEventNameSelected}
+          setEventCapacitySelected={setEventCapacitySelected}
+          setEventStartTimeSelected={setAttendanceStartTimeSelected}
+          setAttendanceStudentsSelected={setAttendanceStudentsSelected}
+          setAttendanceSelectedId={setAttendanceSelectedId}
         />
 
         {/* Loading Spinner */}
@@ -516,12 +531,10 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
       </section>
 
       {/* Attendance Create/Update Container */}
-      {showAttendanceCreateUpdateContainer ? (
-        <AttendanceCreateUpdate
+      {showAttendanceUpdateContainer ? (
+        <AttendanceUpdate
           csrfToken={csrfToken}
-          setShowAttendanceCreateUpdateContainer={
-            setShowAttendanceCreateUpdateContainer
-          }
+          setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
           eventChoices={eventChoices}
           activePrimaryInstructorLastNameKanji={
             primaryInstructorChoices.find(
@@ -541,6 +554,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           activePrimaryInstructor={activePrimaryInstructor}
           attendanceStudentsSelected={attendanceStudentsSelected}
           setAttendanceStudentsSelected={setAttendanceStudentsSelected}
+          attendances={attendances}
+          setAttendances={setAttendances}
+          attendanceSelectedId={attendanceSelectedId}
         />
       ) : null}
 
@@ -554,9 +570,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
         attendanceDate={attendanceDate}
         attendanceDateDisplay={attendanceDateDisplay}
         setAttendanceDate={setAttendanceDate}
-        setShowAttendanceCreateUpdateContainer={
-          setShowAttendanceCreateUpdateContainer
-        }
+        setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
       />
     </Fragment>
   );

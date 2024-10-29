@@ -15,7 +15,7 @@ function DateSelect({
   showDataLoadError,
   setShowDataLoadError,
   setShowAttendanceContainer,
-  setAttendanceRecords,
+  setAttendances,
   getDateToday,
   attendanceDate,
   fetchAttendanceDataForDate,
@@ -49,7 +49,6 @@ function DateSelect({
 
   /* UPDATE USER PREFERENCES */
   const updateUserPreferences = async (userPreferencesArray) => {
-    console.log(userPreferencesArray);
     try {
       await instance
         .put(
@@ -63,7 +62,6 @@ function DateSelect({
         )
         .then((response) => {
           if (response) {
-            console.log(`Response Status: ${response.status}`);
           }
         });
     } catch (e) {
@@ -110,7 +108,7 @@ function DateSelect({
     setAttendanceDateDisplay(event.target.value);
 
     /* clears existing attendance records */
-    setAttendanceRecords([]);
+    setAttendances([]);
 
     /* changes day of week text */
     setDayOfWeekText(getDayOfWeekText(event.target.value));

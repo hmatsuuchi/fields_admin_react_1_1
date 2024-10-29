@@ -36,9 +36,10 @@ function BottomButtons({
       const attendanceRecords = attendanceStudentsSelected.map((student) => {
         return {
           student: student.id,
-          status: 2,
+          status: 2 /* defaults to pending status */,
         };
       });
+
       const attendanceData = {
         linked_class: eventIdSelected,
         instructor: activePrimaryInstructor.id,
@@ -65,12 +66,45 @@ function BottomButtons({
             }
           });
       } catch (e) {
+        /* popup system error message */
+        window.alert("エラーが発生されました");
+
+        /* fade in and enable contents of page */
+        const attendanceCreateSection = document.querySelector(
+          "#attendance-create-section"
+        );
+        attendanceCreateSection.classList.remove("content-submitted");
+
         console.log(e);
       }
     };
 
-    /* drive code */
-    submitFormData();
+    /* checks if eventIdSelected is null */
+    const classInput = document.querySelector("#class-input");
+    if (eventIdSelected === null) {
+      classInput.classList.add("missing-input");
+    } else {
+      classInput.classList.remove("missing-input");
+    }
+
+    /* checks if attendanceStartTimeSelected is blank */
+    const startTimeInput = document.querySelector("#start-time-input");
+    if (attendanceStartTimeSelected === "") {
+      startTimeInput.classList.add("missing-input");
+    } else {
+      startTimeInput.classList.remove("missing-input");
+    }
+
+    /* submits form data after validation */
+    if (eventIdSelected !== null && attendanceStartTimeSelected !== "") {
+      /* fade out and disable contents of page */
+      const attendanceCreateSection = document.querySelector(
+        "#attendance-create-section"
+      );
+      attendanceCreateSection.classList.add("content-submitted");
+
+      submitFormData();
+    }
   };
 
   /* ----------------------------------------------------- */

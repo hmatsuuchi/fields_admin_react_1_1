@@ -83,6 +83,10 @@ $grey: #3a3939;
           pointer-events: none;
         }
 
+        #start-time-input.missing-input {
+          outline: solid 2px $red;
+        }
+
         .section-header {
           width: 100%;
 
