@@ -536,11 +536,6 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           csrfToken={csrfToken}
           setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
           eventChoices={eventChoices}
-          activePrimaryInstructorLastNameKanji={
-            primaryInstructorChoices.find(
-              (instructor) => instructor.id === activePrimaryInstructor.id
-            )?.userprofilesinstructors.last_name_kanji
-          }
           studentChoices={studentChoices}
           eventIdSelected={eventIdSelected}
           setEventIdSelected={setEventIdSelected}
@@ -557,6 +552,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           attendances={attendances}
           setAttendances={setAttendances}
           attendanceSelectedId={attendanceSelectedId}
+          primaryInstructorChoices={primaryInstructorChoices}
         />
       ) : null}
 

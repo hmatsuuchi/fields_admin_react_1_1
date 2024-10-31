@@ -223,7 +223,7 @@ function ClassSelectContainer({
                                 : " unknown"
                             }`}></div>
                           <div className="event-student-name-kanji-grade">
-                            {`${student.last_name_kanji} ${student.first_name_kanji} (${student.grade_verbose}${student.id})`}
+                            {`${student.last_name_kanji} ${student.first_name_kanji} (${student.grade_verbose})`}
                           </div>
                         </div>
                       );

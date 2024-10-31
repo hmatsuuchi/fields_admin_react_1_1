@@ -23,7 +23,7 @@ $grey: #3a3939;
   }
 
   .attendance-create-card-container {
-    margin: 0.5rem auto 1rem auto;
+    margin: 0.5rem auto 15rem auto;
 
     width: calc(100% - 2rem);
     max-width: 800px;
@@ -62,7 +62,7 @@ $grey: #3a3939;
       }
 
       .attendance-body-container {
-        padding: 0 1.5rem;
+        padding: 0 1rem;
 
         display: grid;
 
@@ -96,6 +96,102 @@ $grey: #3a3939;
           text-align: right;
 
           margin-top: 2rem;
+        }
+
+        .label-and-data {
+          display: grid;
+          justify-content: left;
+          align-items: end;
+          grid-row-gap: 0.1rem;
+
+          input,
+          select {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: $grey;
+
+            border: solid 1px $grey;
+            border-radius: 0.2rem;
+
+            background-color: #ffffff;
+          }
+
+          select {
+            padding-top: 3.5px;
+            padding-bottom: 3.5px;
+          }
+
+          input:focus {
+            outline: solid 2px $grey;
+          }
+
+          input[type="date"] {
+            width: 9rem;
+
+            background-color: rgb(210, 210, 210);
+
+            pointer-events: none;
+          }
+
+          input::-webkit-calendar-picker-indicator {
+            filter: invert(0.4);
+          }
+        }
+
+        .label-and-data.instructor {
+          grid-row: 4;
+
+          select {
+            background-color: rgb(210, 210, 210);
+          }
+        }
+
+        .label-and-data.date {
+          grid-row: 5;
+
+          input {
+            width: 12ch;
+          }
+        }
+
+        .label-and-data.time {
+          grid-row: 6;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #attendance-create-section {
+    .attendance-create-card-container {
+      .attendance-create-card {
+        .attendance-body-container {
+          grid-template-columns: repeat(2, 1fr);
+
+          .section-header {
+            grid-column: 1 / 3;
+          }
+
+          #class-input {
+            grid-column: 1 / 3;
+          }
+
+          .label-and-data.instructor {
+            grid-row: 4;
+          }
+
+          .label-and-data.date {
+            grid-row: 4;
+          }
+
+          .label-and-data.time {
+            grid-row: 5;
+          }
+
+          .bottom-buttons-container {
+            grid-column: 1 / 3;
+          }
         }
       }
     }

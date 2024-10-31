@@ -30,27 +30,6 @@ function AttendanceCreate({ csrfToken }) {
   /* --------------------- FUNCTIONS --------------------- */
   /* ----------------------------------------------------- */
 
-  /* DEBUGGING */
-  useEffect(() => {
-    console.log(`eventIdSelected: ${eventIdSelected}`);
-    console.log(`eventNameSelected: ${eventNameSelected}`);
-    console.log(`attendanceDate: ${attendanceDate}`);
-    console.log(`attendanceStartTimeSelected: ${attendanceStartTimeSelected}`);
-    console.log(`activePrimaryInstructor: `);
-    console.log(activePrimaryInstructor);
-    console.log(`attendanceStudentsSelected: `);
-    console.log(attendanceStudentsSelected);
-    console.log("-------------------------------------------------");
-  }, [
-    eventIdSelected,
-    eventNameSelected,
-    attendanceStartTimeSelected,
-    attendanceStudentsSelected,
-    primaryInstructorChoices,
-    activePrimaryInstructor,
-    attendanceDate,
-  ]);
-
   /* FETCH PRIMARY INSTRUCTOR CHOICES */
   useEffect(() => {
     const fetchPrimaryInstructorChoices = async () => {
@@ -149,25 +128,30 @@ function AttendanceCreate({ csrfToken }) {
                   setAttendanceStudentsSelected={setAttendanceStudentsSelected}
                 />
                 <div className="section-header">出欠表情報</div>
-
-                <label>日付</label>
-                <input type="date" readOnly value={attendanceDate}></input>
-                <label>時間</label>
-                <input
-                  id="start-time-input"
-                  type="time"
-                  value={attendanceStartTimeSelected}
-                  onChange={handleChangesToAttendanceStartTime}></input>
-                <label>講師</label>
-                <select readOnly value={activePrimaryInstructor.id}>
-                  {primaryInstructorChoices.map((instructor) => (
-                    <option
-                      key={`instructor-id-${instructor.id}`}
-                      value={instructor.id}>
-                      {`${instructor.userprofilesinstructors.last_name_kanji}先生`}
-                    </option>
-                  ))}
-                </select>
+                <div className="label-and-data date">
+                  <label>日付</label>
+                  <input type="date" readOnly value={attendanceDate}></input>
+                </div>
+                <div className="label-and-data time">
+                  <label>時間</label>
+                  <input
+                    id="start-time-input"
+                    type="time"
+                    value={attendanceStartTimeSelected.slice(0, 5)}
+                    onChange={handleChangesToAttendanceStartTime}></input>
+                </div>
+                <div className="label-and-data instructor">
+                  <label>講師</label>
+                  <select readOnly value={activePrimaryInstructor.id}>
+                    {primaryInstructorChoices.map((instructor) => (
+                      <option
+                        key={`instructor-id-${instructor.id}`}
+                        value={instructor.id}>
+                        {`${instructor.userprofilesinstructors.last_name_kanji}先生`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 {/* BOTTOM BUTTONS */}
                 <BottomButtons
                   csrfToken={csrfToken}

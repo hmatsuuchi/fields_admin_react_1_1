@@ -1,0 +1,124 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+.student-enrolled-container {
+  grid-column: 1 / 3;
+
+  background-color: $teal;
+
+  padding: 0.5rem;
+
+  border-radius: 0.3rem;
+
+  display: grid;
+  grid-row-gap: 0.5rem;
+
+  .student-number-indicator {
+    grid-column: 2;
+
+    background-color: $yellow;
+
+    padding: 0 0.2rem;
+
+    border-radius: 0.2rem;
+
+    font-size: 0.85rem;
+
+    justify-self: right;
+  }
+
+  .class-over-capacity {
+    background-color: #f87292;
+  }
+
+  .enrolled-container {
+    grid-column: 1 / 3;
+
+    max-height: 20rem;
+    min-height: 5rem;
+
+    border-radius: 0.3rem;
+
+    background-color: #fff;
+
+    user-select: none;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    display: grid;
+    align-content: start;
+
+    .student-name-container {
+      padding: 0.2rem 0.3rem;
+
+      border-bottom: solid 1px $light-grey;
+
+      cursor: pointer;
+
+      display: grid;
+      grid-template-columns: 2rem auto 2rem;
+
+      .student-status-indicator {
+        grid-column: 1;
+        grid-row: 1 / 3;
+
+        width: 1.1rem;
+        aspect-ratio: 1 / 1;
+
+        place-self: center;
+
+        border-radius: 50%;
+        border: solid 2px #fff;
+        box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+      }
+
+      .student-name-kanji {
+        grid-column: 2;
+
+        align-self: center;
+
+        font-size: 0.9rem;
+
+        pointer-events: none;
+      }
+
+      .student-name-katakana {
+        align-self: center;
+
+        pointer-events: none;
+
+        font-size: 0.7rem;
+      }
+
+      .remove-student-icon {
+        place-self: center;
+
+        grid-column: 3;
+        grid-row: 1 / 3;
+
+        width: 1.5rem;
+        aspect-ratio: 1 / 1;
+
+        pointer-events: none;
+
+        border-radius: 50%;
+
+        background-color: $red;
+
+        background-image: url("../../../../../public/img/gui/minus_white.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 60% auto;
+      }
+    }
+  }
+}
