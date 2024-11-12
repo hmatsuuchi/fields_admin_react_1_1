@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 /* Axios */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
@@ -16,32 +16,15 @@ function DateSelect({
   setShowDataLoadError,
   setShowAttendanceContainer,
   setAttendances,
-  getDateToday,
   attendanceDate,
   fetchAttendanceDataForDate,
+  dayOfWeekText,
+  setDayOfWeekText,
+  getDayOfWeekText,
 }) {
   /* ----------------------------------------------- */
   /* -------------------- STATE -------------------- */
   /* ----------------------------------------------- */
-
-  /* GET DAY OF WEEK TEXT */
-  const getDayOfWeekText = (date) => {
-    const dayOfWeek = new Date(date).getDay();
-    const daysOfWeek = {
-      0: "日曜日",
-      1: "月曜日",
-      2: "火曜日",
-      3: "水曜日",
-      4: "木曜日",
-      5: "金曜日",
-      6: "土曜日",
-    };
-    return daysOfWeek[dayOfWeek] || "";
-  };
-
-  const [dayOfWeekText, setDayOfWeekText] = useState(
-    getDayOfWeekText(getDateToday())
-  );
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
@@ -74,7 +57,7 @@ function DateSelect({
     const updateDateValues = (date) => {
       setAttendanceDate(date.toISOString().split("T")[0]);
       setAttendanceDateDisplay(date.toISOString().split("T")[0]);
-      setDayOfWeekText(getDayOfWeekText(date));
+      setDayOfWeekText(`${getDayOfWeekText(date)}曜日`);
       setShowDateSearchButton(false);
     };
 
@@ -111,7 +94,7 @@ function DateSelect({
     setAttendances([]);
 
     /* changes day of week text */
-    setDayOfWeekText(getDayOfWeekText(event.target.value));
+    setDayOfWeekText(`${getDayOfWeekText(event.target.value)}曜日`);
 
     /* shows date search button */
     setShowDateSearchButton(true);
@@ -122,7 +105,7 @@ function DateSelect({
     const updateDateValues = (date) => {
       setAttendanceDate(date.toISOString().split("T")[0]);
       setAttendanceDateDisplay(date.toISOString().split("T")[0]);
-      setDayOfWeekText(getDayOfWeekText(date));
+      setDayOfWeekText(`${getDayOfWeekText(date)}曜日`);
       setShowDateSearchButton(false);
     };
 

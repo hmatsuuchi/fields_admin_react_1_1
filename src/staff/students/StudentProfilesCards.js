@@ -88,6 +88,7 @@ function StudentProfiles({
         const searchFields =
           profile.last_name_romaji +
           profile.first_name_romaji +
+          profile.last_name_romaji /* allows searches to be run with first and last name in swapped order */ +
           profile.last_name_kanji +
           profile.first_name_kanji +
           profile.last_name_katakana +
@@ -110,9 +111,18 @@ function StudentProfiles({
           : 0;
 
         return (
-          searchFields
-            .toUpperCase()
-            .includes(searchInput.trim().toLocaleUpperCase()) &&
+          (searchFields
+            .toLowerCase()
+            .includes(searchInput.trim().toLowerCase()) ||
+            searchFields
+              .toLowerCase()
+              .includes(
+                searchInput
+                  .trim()
+                  .toLowerCase()
+                  .replace(" ", "")
+                  .replace(",", "")
+              )) &&
           monthsToDisplay.includes(profileBirthdayMonth) &&
           (profile.archived === archiveFilters.archived ||
             profile.archived === !archiveFilters.unarchived) &&

@@ -21,16 +21,56 @@ function StudentContainer({
 
   const [studentsFiltered, setStudentsFiltered] = useState(studentChoices);
   const [studentSearch, setStudentSearch] = useState("");
+  const [
+    preventJumpToFirstSelectedStudent,
+    setPreventJumpToFirstSelectedStudent,
+  ] = useState(false);
 
   /* ------------------------------------------------------- */
   /* ---------------------- FUNCTIONS ---------------------- */
   /* ------------------------------------------------------- */
+
+  /* JUMP TO FIRST SELECTED STUDENT IN LIST */
+  useEffect(() => {
+    if (
+      studentChoices.length !== 0 &&
+      attendanceStudentsSelected.length !== 0 &&
+      !preventJumpToFirstSelectedStudent
+    ) {
+      const firstSelectedStudent = document.getElementById(
+        `student-id-${attendanceStudentsSelected[0].id}`
+      );
+      const selectContainer = document.getElementById("select-container");
+
+      if (firstSelectedStudent && selectContainer) {
+        firstSelectedStudent.scrollIntoView();
+        selectContainer.scrollTop -= 100;
+
+        setPreventJumpToFirstSelectedStudent(true);
+      }
+    }
+  }, [
+    studentChoices,
+    attendanceStudentsSelected,
+    preventJumpToFirstSelectedStudent,
+    setPreventJumpToFirstSelectedStudent,
+  ]);
 
   /* FILTERS STUDENT LIST */
   useEffect(() => {
     setStudentsFiltered(
       studentChoices.filter((student) => {
         return (
+          (student.last_name_romaji + student.first_name_romaji)
+            .toLowerCase()
+            .includes(
+              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+            ) ||
+          (student.first_name_romaji + student.last_name_romaji)
+            .toLowerCase()
+            .includes(
+              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+            ) ||
           student.last_name_romaji
             .toLowerCase()
             .includes(studentSearch.toLowerCase()) ||
@@ -171,7 +211,7 @@ function StudentContainer({
   /* ------------------------------------------------------ */
 
   return (
-    <div className="student-container">
+    <div id="attendance-student-container" className="student-container">
       <div className="student-select-container">
         <div className="label">生徒検索</div>
         <div className="student-number-indicator">

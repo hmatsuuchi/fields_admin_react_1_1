@@ -19,6 +19,7 @@ function ClassSelectContainer({
 
   const [eventChoices, setEventChoices] = useState([]);
   const [eventChoicesFiltered, setEventChoicesFiltered] = useState([]);
+  const [eventSearchInputValue, setEventSearchInputValue] = useState("");
 
   /* ----------------------------------------------------- */
   /* --------------------- FUNCTIONS --------------------- */
@@ -75,20 +76,29 @@ function ClassSelectContainer({
     setEventChoicesFiltered(eventChoices);
   }, [eventChoices]);
 
-  /* HANDLE EVENT SEARCH ON CHANGE */
+  /* HANDLE EVENT SEARCH INPUT CHANGE */
   const handleEventSearchOnChange = (event) => {
     const searchInputValue = event.target.value;
 
+    setEventSearchInputValue(searchInputValue);
+  };
+
+  /* FILTERS EVENT CHOICES BASED ON SEARCH INPUT */
+  useEffect(() => {
     /* sets the search input value to lowercase and removes spaces */
-    const searchInputValueLowerCase = searchInputValue
+    const searchInputValueLowerCase = eventSearchInputValue
       .toLowerCase()
-      .replace(/\s+/g, "");
+      .replace(" ", "")
+      .replace(",", "");
 
     /* filters the event choices by the search input value */
     const eventChoicesFiltered = eventChoices.filter((event) => {
       return (
         /* filters by event name */
-        event.event_name.toLowerCase().includes(searchInputValueLowerCase) ||
+        event.event_name
+          .toLowerCase()
+          .replace(" ", "")
+          .includes(searchInputValueLowerCase) ||
         /* filters by enrolled student names */
         event.students.some((student) => {
           const studentNameSearchString = `${student.last_name_romaji}${student.first_name_romaji}${student.last_name_romaji},${student.first_name_romaji}`;
@@ -100,7 +110,7 @@ function ClassSelectContainer({
     });
 
     setEventChoicesFiltered(eventChoicesFiltered);
-  };
+  }, [eventChoices, eventSearchInputValue]);
 
   /* HANDLE CLICKS TO EVENT CHOICES */
   const handleClicksToEventChoices = (event) => {
@@ -232,9 +242,9 @@ function ClassSelectContainer({
               </div>
             );
           })
-        ) : (
+        ) : eventSearchInputValue === "" ? (
           <LoadingSpinner />
-        )}
+        ) : null}
       </div>
     </div>
   );

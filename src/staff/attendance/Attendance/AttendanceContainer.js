@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 /* Axios */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
@@ -24,8 +24,6 @@ function AttendanceContainer({
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
   /* ---------------------------------------------- */
-
-  const [disableAttendance, setDisableAttendance] = useState(false);
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
@@ -97,9 +95,6 @@ function AttendanceContainer({
 
   /* TOGGLE ATTENDANCE STATUS */
   const toggleAttendanceStatus = (e) => {
-    /* disables all clicks to attendance records */
-    setDisableAttendance(true);
-
     /* gets attendance record ID */
     const attendanceRecordId = parseInt(e.target.dataset.attendance_record_id);
 
@@ -143,14 +138,9 @@ function AttendanceContainer({
           )
           .then((response) => {
             if (response) {
-              /* enables clicks to attendance records */
-              setDisableAttendance(false);
             }
           });
       } catch (e) {
-        /* enables clicks to attendance records */
-        setDisableAttendance(false);
-
         console.log(e);
         window.alert("An error occurred.");
       }
@@ -165,9 +155,7 @@ function AttendanceContainer({
   /* ---------------------------------------- */
 
   return showAttendanceContainer ? (
-    <div
-      id="attendance-container"
-      className={disableAttendance ? "disable-clicks" : null}>
+    <div id="attendance-container">
       {attendancesWithScheduleBreaks.map((record) =>
         !record.isScheduleBreak ? (
           <div className="attendance card" key={`attedance-${record.id}`}>

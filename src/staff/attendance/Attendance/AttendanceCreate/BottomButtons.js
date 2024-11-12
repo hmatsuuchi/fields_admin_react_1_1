@@ -37,6 +37,7 @@ function BottomButtons({
         return {
           student: student.id,
           status: 2 /* defaults to pending status */,
+          grade: student.grade,
         };
       });
 
@@ -61,7 +62,6 @@ function BottomButtons({
           )
           .then((response) => {
             if (response) {
-              console.log(response);
               navigate(`/staff/attendance/day-view/`);
             }
           });

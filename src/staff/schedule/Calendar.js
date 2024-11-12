@@ -211,9 +211,6 @@ function EventDetails({
 
   /* EVENT DETAILS - FUNCTIONS - GET EVENT DETAILS */
   useEffect(() => {
-    /* resets student search field */
-    setStudentSearch("");
-
     /* get event object from array of all events */
     const event = events.find(
       (event) => event.id === parseInt(currentlySelectedEventId)
@@ -235,7 +232,6 @@ function EventDetails({
     currentlySelectedEventId,
     setEventDetails,
     setEventInstructor,
-    setStudentSearch,
   ]);
 
   /* EVENT DETAILS - FUNCTIONS - SCROLL INTO VIEW FIRST STUDENT ENROLLED IN EVENT */
@@ -277,6 +273,9 @@ function EventDetails({
   /* EVENT DETAILS - FUNCTIONS - HANDLE CLOSE EVENT DETAILS */
   function handleClicksToCloseEventDetails() {
     setEventDetailsVisible(false);
+
+    /* resets student search field */
+    setStudentSearch("");
   }
 
   /* EVENT DETAILS - FUNCTIONS - HANDLE SEARCH INPUT CHANGES */
@@ -299,6 +298,7 @@ function EventDetails({
         )
       );
     };
+
     /* drives code */
     appendStudentToEvent(eventDetails.id, {
       id: parseInt(e.target.dataset.id),
@@ -386,7 +386,17 @@ function EventDetails({
             .includes(studentSearch.toLowerCase()) ||
           student.first_name_katakana
             .toLowerCase()
-            .includes(studentSearch.toLowerCase())
+            .includes(studentSearch.toLowerCase()) ||
+          `${student.last_name_romaji}${student.first_name_romaji}`
+            .toLowerCase()
+            .includes(
+              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+            ) ||
+          `${student.first_name_romaji}${student.last_name_romaji}`
+            .toLowerCase()
+            .includes(
+              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+            )
         );
       })
     );
@@ -514,9 +524,9 @@ function EventDetails({
                           </div>
                         );
                       })
-                    ) : (
+                    ) : studentSearch === "" ? (
                       <LoadingSpinner />
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 <div

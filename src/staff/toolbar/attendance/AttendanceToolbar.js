@@ -6,17 +6,28 @@ import "./AttendanceToolbar.scss";
 // COMPONENTS
 import AddNewAttendanceButton from "../../micro/attendance/AddNewAttendanceButton";
 import VerticalDividerThin from "../../micro/attendance/VerticalDividerThin";
+import JumpToTodayButton from "./AttendanceToolbar/JumpToTodayButton";
+import AutoGenerateAttendanceRecords from "./AttendanceToolbar/AutoGenerateAttendanceRecords";
 
 function AttendanceToolbar({
   csrfToken,
   disableToolbarButtons,
+  setDisableToolbarButtons,
+  setDisableDateNavigationButtons,
   activePrimaryInstructor,
   setActivePrimaryInstructor,
   primaryInstructorChoices,
-  attendanceDateDisplay,
   attendanceDate,
   setAttendanceDate,
+  attendanceDateDisplay,
+  setAttendanceDateDisplay,
   setShowAttendanceCreateUpdateContainer,
+  setDayOfWeekText,
+  getDayOfWeekText,
+  fetchAttendanceDataForDate,
+  setShowLoadingSpinner,
+  setAttendances,
+  adjustDateForTimezone,
 }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -68,6 +79,26 @@ function AttendanceToolbar({
     <div
       id="attendance-toolbar"
       className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}>
+      <AutoGenerateAttendanceRecords
+        csrfToken={csrfToken}
+        attendanceDate={attendanceDate}
+        activePrimaryInstructor={activePrimaryInstructor}
+        fetchAttendanceDataForDate={fetchAttendanceDataForDate}
+        setDisableToolbarButtons={setDisableToolbarButtons}
+        setDisableDateNavigationButtons={setDisableDateNavigationButtons}
+        setShowLoadingSpinner={setShowLoadingSpinner}
+        setAttendances={setAttendances}
+      />
+      <JumpToTodayButton
+        attendanceDate={attendanceDate}
+        setAttendanceDate={setAttendanceDate}
+        setAttendanceDateDisplay={setAttendanceDateDisplay}
+        setDayOfWeekText={setDayOfWeekText}
+        getDayOfWeekText={getDayOfWeekText}
+        updateUserPreferences={updateUserPreferences}
+        adjustDateForTimezone={adjustDateForTimezone}
+      />
+      <VerticalDividerThin />
       {activePrimaryInstructor ? (
         <div className="instructor-select-container">
           {primaryInstructorChoices.map((instructor) => {

@@ -83,7 +83,7 @@ function ConfirmationModal({
         <button
           className="confirm-button"
           onClick={handleClicksToConfirmButton}>
-          アーカイブする
+          削除する
         </button>
       </div>
     </div>

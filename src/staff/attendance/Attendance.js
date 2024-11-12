@@ -16,13 +16,22 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* ------------------ STATE FUNCTIONS ------------------ */
   /* ----------------------------------------------------- */
 
+  /* GET DATE TODAY */
   const getDateToday = () => {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
+    const offset = today.getTimezoneOffset() * 60000;
+    const todayAdjusted = new Date(today.getTime() - offset);
+    const todayString = todayAdjusted.toISOString().split("T")[0];
 
-    return `${year}-${month}-${day}`;
+    return todayString;
+  };
+
+  /* GET DAY OF WEEK TEXT */
+  const getDayOfWeekText = (date) => {
+    const dayOfWeek = new Date(date).getDay();
+    const daysOfWeek = ["日", "月", "火", "水", "木", "金", "土"];
+
+    return daysOfWeek[dayOfWeek] || "";
   };
 
   /* ------------------------------------------- */
@@ -51,6 +60,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* DATE */
   const [attendanceDate, setAttendanceDate] = useState(null);
   const [attendanceDateDisplay, setAttendanceDateDisplay] = useState(null);
+  const [dayOfWeekText, setDayOfWeekText] = useState(null);
 
   /* ATTENDANCE DATA */
   const [attendances, setAttendances] = useState([]);
@@ -72,6 +82,14 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
+  /* ADJUST DATE FOR TIMEZONE */
+  const adjustDateForTimezone = (date) => {
+    const newDate = new Date(date);
+    const offset = newDate.getTimezoneOffset() * 60000;
+    const dateAdjusted = new Date(newDate.getTime() - offset);
+
+    return dateAdjusted;
+  };
 
   /* SET BACK BUTTON TEXT AND LINK */
   useEffect(() => {
@@ -103,6 +121,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
                 userPreferences.pref_attendance_selected_date;
               setAttendanceDate(selectedDate);
               setAttendanceDateDisplay(selectedDate);
+
+              /* selected day of week */
+              setDayOfWeekText(`${getDayOfWeekText(selectedDate)}曜日`);
             }
           });
       } catch (e) {
@@ -246,7 +267,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
     setShowLoadingSpinner(true);
 
     /* updates user preferences */
-    updateUserPreferences({ pref_attendance_selected_date: attendanceDate });
+    updateUserPreferences({
+      pref_attendance_selected_date: attendanceDate,
+    });
 
     /* Fetch attendance data for date */
     const fetchData = async () => {
@@ -499,6 +522,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           setAttendances={setAttendances}
           getDateToday={getDateToday}
           fetchAttendanceDataForDate={fetchAttendanceDataForDate}
+          dayOfWeekText={dayOfWeekText}
+          setDayOfWeekText={setDayOfWeekText}
+          getDayOfWeekText={getDayOfWeekText}
         />
 
         {/* Attendance Container */}
@@ -560,13 +586,22 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
       <AttendanceToolbar
         csrfToken={csrfToken}
         disableToolbarButtons={disableToolbarButtons}
+        setDisableToolbarButtons={setDisableToolbarButtons}
+        setDisableDateNavigationButtons={setDisableDateNavigationButtons}
         activePrimaryInstructor={activePrimaryInstructor}
         setActivePrimaryInstructor={setActivePrimaryInstructor}
         primaryInstructorChoices={primaryInstructorChoices}
         attendanceDate={attendanceDate}
-        attendanceDateDisplay={attendanceDateDisplay}
         setAttendanceDate={setAttendanceDate}
+        attendanceDateDisplay={attendanceDateDisplay}
+        setAttendanceDateDisplay={setAttendanceDateDisplay}
         setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
+        setDayOfWeekText={setDayOfWeekText}
+        getDayOfWeekText={getDayOfWeekText}
+        fetchAttendanceDataForDate={fetchAttendanceDataForDate}
+        setShowLoadingSpinner={setShowLoadingSpinner}
+        setAttendances={setAttendances}
+        adjustDateForTimezone={adjustDateForTimezone}
       />
     </Fragment>
   );

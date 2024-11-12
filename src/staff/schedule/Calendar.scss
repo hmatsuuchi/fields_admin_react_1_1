@@ -694,6 +694,8 @@ body {
         }
 
         .student-select-container {
+          grid-column: 1 /3;
+
           padding: 0.5rem;
 
           border-radius: 0.3rem;
