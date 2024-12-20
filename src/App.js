@@ -50,7 +50,7 @@ function App() {
   );
 
   /* SCHEDULE */
-  const [highlightedEventId, setHighlightedEventId] = useState("");
+  const [highlightedEventId, setHighlightedEventId] = useState(null);
 
   /* STUDENT PROFILES */
   const [monthFilters, setMonthFilters] = useState({
@@ -81,7 +81,7 @@ function App() {
   /* ---------------- FUNCTIONS ---------------- */
   /* ------------------------------------------- */
 
-  // synchonizes is_auth, is_staff and is_customer local storage variables with state
+  /* SYNCHONIZES IS_AUTH, IS_STAFF AND IS_CUSTOMER LOCAL STORAGE VARIABLES WITH STATE */
   useEffect(() => {
     // gets authentication bool from local storage
     if (localStorage.getItem("is_auth")) {
@@ -103,8 +103,8 @@ function App() {
     }
   }, []);
 
-  // refresh csrf token on component mount
-  // this allows csrf token to be kept in state even when page is manually refreshed
+  /* REFRESH CSRF TOKEN ON COMPONENT MOUNT */
+  /* this allows csrf token to be kept in state even when page is manually refreshed */
   useEffect(() => {
     // refresh csrf token function
     const refreshCsrfToken = async () => {
@@ -124,6 +124,10 @@ function App() {
       refreshCsrfToken();
     }
   }, []);
+
+  /* ---------------------------------------- */
+  /* -----------------  JSX ----------------- */
+  /* ---------------------------------------- */
 
   return (
     <BrowserRouter>
@@ -237,6 +241,7 @@ function App() {
               <Calendar
                 csrfToken={csrfToken}
                 highlightedEventId={highlightedEventId}
+                setHighlightedEventId={setHighlightedEventId}
                 setBackButtonText={setBackButtonText}
                 setBackButtonLink={setBackButtonLink}
               />

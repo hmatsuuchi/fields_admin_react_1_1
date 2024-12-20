@@ -1,0 +1,280 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#enrolled-classes {
+  .card-full-width {
+    display: grid;
+
+    .enrolled-class-header-container {
+      background-color: $light-grey;
+
+      padding: 0.5rem;
+
+      display: grid;
+      grid-auto-flow: column;
+      align-content: center;
+      justify-content: space-between;
+
+      .enrolled-class-title,
+      .enrolled-class-number {
+        color: #ffffff;
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+
+      &.pre-enrolled {
+        background-color: $pre-enrolled;
+      }
+
+      &.enrolled {
+        background-color: $teal;
+      }
+
+      &.short-absence {
+        background-color: $red;
+      }
+
+      &.long-absence {
+        background-color: $grey;
+      }
+    }
+
+    .enrolled-class-body-container {
+      padding: 1rem;
+
+      display: grid;
+      grid-row-gap: 1rem;
+
+      .enrolled-class-container {
+        padding: 0.5rem;
+
+        border: solid 1px $light-grey;
+        border-radius: 0.5rem;
+
+        box-shadow: 0.1rem 0.2rem 0.2rem rgba(0, 0, 0, 0.2);
+
+        display: grid;
+
+        .event-info-container {
+          border-bottom: solid 1px $light-grey;
+
+          margin-bottom: 0.3rem;
+
+          display: grid;
+          grid-auto-flow: column;
+          justify-content: space-between;
+          align-items: end;
+
+          .event-data {
+            font-size: 0.9rem;
+
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: start;
+            grid-column-gap: 0.5rem;
+            align-items: end;
+
+            .event-title {
+              font-size: 0.8rem;
+              font-weight: 400;
+            }
+
+            .event-day-of-week,
+            .event-start-time {
+              font-size: 0.7rem;
+              font-weight: 400;
+
+              color: $grey;
+            }
+          }
+
+          .event-instructor-icon {
+            margin-bottom: 0.5rem;
+
+            width: 2.25rem;
+            height: 2.25rem;
+
+            border: solid 2px #ffffff;
+            border-radius: 50%;
+
+            box-shadow: 0.1rem 0.2rem 0.2rem rgba(0, 0, 0, 0.4);
+
+            background-color: $teal;
+
+            background-repeat: no-repeat;
+            background-size: auto 90%;
+            background-position: 50% calc(100% + 0.1rem);
+          }
+        }
+
+        .enrolled-students-container {
+          margin-top: 1rem;
+
+          display: grid;
+
+          .enrolled-student-container {
+            padding: 0.5rem;
+
+            border-radius: 0.5rem;
+
+            cursor: pointer;
+
+            display: grid;
+            justify-content: left;
+            grid-column-gap: 0.5rem;
+
+            .student-status-indicator {
+              pointer-events: none;
+
+              align-self: center;
+
+              grid-column: 1;
+              grid-row: 1 / 3;
+
+              width: 1rem;
+              height: 1rem;
+
+              border-radius: 50%;
+              border: solid 2px #ffffff;
+
+              box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+
+              &.pre-enrolled {
+                background-color: $pre-enrolled;
+              }
+
+              &.enrolled {
+                background-color: $teal;
+              }
+
+              &.short-absence {
+                background-color: $red;
+              }
+
+              &.long-absence {
+                background-color: $grey;
+              }
+            }
+
+            .student-name-kanji,
+            .student-name-katakana {
+              pointer-events: none;
+
+              grid-column: 2;
+            }
+
+            .student-name-kanji {
+              font-size: 0.9rem;
+            }
+
+            .student-name-katakana {
+              color: $grey;
+
+              font-size: 0.8rem;
+
+              margin-left: 0.1rem;
+            }
+
+            &.this-student {
+              background-color: $beige;
+
+              pointer-events: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 350px) {
+  #enrolled-classes {
+    .card-full-width {
+      .enrolled-class-body-container {
+        .enrolled-class-container {
+          .event-info-container {
+            .event-data {
+              grid-column-gap: 0.9rem;
+
+              .event-title {
+                font-size: 1rem;
+              }
+
+              .event-day-of-week,
+              .event-start-time {
+                font-size: 0.8rem;
+              }
+            }
+
+            .event-instructor-icon {
+              width: 2.25rem;
+              height: 2.25rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 400px) {
+  #enrolled-classes {
+    .card-full-width {
+      .enrolled-class-body-container {
+        .enrolled-class-container {
+          .event-info-container {
+            .event-data {
+              grid-column-gap: 1.1rem;
+
+              .event-title {
+                font-size: 1.1rem;
+              }
+
+              .event-day-of-week,
+              .event-start-time {
+                font-size: 0.9rem;
+              }
+            }
+
+            .event-instructor-icon {
+              width: 2.5rem;
+              height: 2.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #enrolled-classes {
+    .card-full-width {
+      .enrolled-class-body-container {
+        .enrolled-class-container {
+          .event-info-container {
+            .event-data {
+              grid-column-gap: 1.3rem;
+
+              .event-title {
+                font-size: 1.1rem;
+              }
+
+              .event-day-of-week,
+              .event-start-time {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -33,34 +33,39 @@ function AttendanceContainer({
   const handleClicksToAttendance = (e) => {
     /* gets attendance record */
     const attendanceId = e.target.dataset.attendance_id;
-    const attendanceRecord = attendances.find((record) => {
+    const attendance = attendances.find((record) => {
       return record.id === parseInt(attendanceId);
     });
 
     /* sets attendance record */
-    setAttendanceSelectedId(attendanceRecord.id);
+    setAttendanceSelectedId(attendance.id);
 
     /* sets attendance id */
-    setEventIdSelected(attendanceRecord.linked_class.id);
+    setEventIdSelected(attendance.linked_class.id);
 
     /* sets attendance start time */
-    setEventStartTimeSelected(attendanceRecord.start_time);
+    setEventStartTimeSelected(attendance.start_time);
 
     /* sets event name */
-    setEventNameSelected(attendanceRecord.linked_class.event_name);
+    setEventNameSelected(attendance.linked_class.event_name);
 
     /* sets attendance date */
     setEventDateSelected(attendanceDate);
 
     /* sets event capacity */
-    setEventCapacitySelected(attendanceRecord.linked_class.event_type.capacity);
+    setEventCapacitySelected(attendance.linked_class.event_type.capacity);
 
     /* sets attendance students */
     setAttendanceStudentsSelected(
-      attendanceRecord.attendance_records.map((record) => ({
-        ...record.student,
-        status: record.status,
-      }))
+      attendance.attendance_records
+        .sort((a, b) => {
+          if (a.student.id > b.student.id) return -1;
+          if (a.student.id < b.student.id) return 1;
+          return 0;
+        })
+        .map((record) => ({
+          ...record.student,
+        }))
     );
 
     /* toggles attendance update container visibility */

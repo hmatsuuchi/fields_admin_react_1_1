@@ -312,6 +312,7 @@ function StudentProfiles({
                     <div className="status">
                       {profile.status_verbose !== "" && profile.status_verbose}
                     </div>
+                    <div className="more-info-container"></div>
                   </div>
                   <div className="student-profile-body-container">
                     <div className="name-container">

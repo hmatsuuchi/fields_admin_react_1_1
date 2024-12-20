@@ -59,38 +59,44 @@ function StudentContainer({
   /* FILTERS STUDENT LIST */
   useEffect(() => {
     setStudentsFiltered(
-      studentChoices.filter((student) => {
-        return (
-          (student.last_name_romaji + student.first_name_romaji)
-            .toLowerCase()
-            .includes(
-              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
-            ) ||
-          (student.first_name_romaji + student.last_name_romaji)
-            .toLowerCase()
-            .includes(
-              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
-            ) ||
-          student.last_name_romaji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_romaji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.last_name_kanji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_kanji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.last_name_katakana
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_katakana
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase())
-        );
-      })
+      studentChoices
+        .sort((a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id < b.id) return 1;
+          return 0;
+        })
+        .filter((student) => {
+          return (
+            (student.last_name_romaji + student.first_name_romaji)
+              .toLowerCase()
+              .includes(
+                studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+              ) ||
+            (student.first_name_romaji + student.last_name_romaji)
+              .toLowerCase()
+              .includes(
+                studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+              ) ||
+            student.last_name_romaji
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase()) ||
+            student.first_name_romaji
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase()) ||
+            student.last_name_kanji
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase()) ||
+            student.first_name_kanji
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase()) ||
+            student.last_name_katakana
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase()) ||
+            student.first_name_katakana
+              .toLowerCase()
+              .includes(studentSearch.toLowerCase())
+          );
+        })
     );
   }, [studentSearch, studentChoices, setStudentsFiltered]);
 
@@ -135,6 +141,7 @@ function StudentContainer({
             last_name_romaji: studentToAdd.last_name_romaji,
             first_name_romaji: studentToAdd.first_name_romaji,
             grade_verbose: studentToAdd.grade_verbose,
+            status: studentToAdd.status,
           },
           status: 2,
         };

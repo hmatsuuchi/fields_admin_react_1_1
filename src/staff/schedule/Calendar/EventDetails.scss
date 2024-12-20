@@ -1,0 +1,408 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#close-event-details-background-overlay {
+  cursor: pointer;
+
+  z-index: 100;
+
+  position: fixed;
+
+  width: 100vw;
+  height: 100vh;
+
+  top: 0;
+  right: 0;
+
+  background-color: #000;
+
+  opacity: 0;
+
+  animation: fade-in 300ms ease-in-out 100ms forwards;
+}
+
+#event-details-container {
+  cursor: pointer;
+
+  z-index: 101;
+
+  position: fixed;
+
+  top: 0;
+  right: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  pointer-events: none;
+
+  display: grid;
+  align-content: center;
+  justify-content: center;
+
+  .event-details-card {
+    pointer-events: auto;
+
+    cursor: default;
+
+    background-color: #fff;
+
+    border-radius: 0.5rem;
+
+    overflow: hidden;
+
+    box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
+
+    outline: solid 1px $light-grey;
+
+    width: calc(100vw - 1rem);
+    max-width: calc(550px - 1rem);
+    max-height: calc(100vh - 2rem);
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    .event-details-card-header {
+      height: 3rem;
+
+      background-color: $teal;
+
+      font-size: 1.2rem;
+
+      padding: 0 1rem;
+
+      border-radius: 0.5rem 0.5rem 0 0;
+
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 0.5rem;
+      align-items: center;
+      justify-content: space-between;
+
+      .event-details-card-header-text {
+        font-size: 1.3rem;
+        font-weight: 500;
+
+        color: #fff;
+      }
+
+      .event-details-card-header-close-button {
+        cursor: pointer;
+
+        width: 1.75rem;
+        aspect-ratio: 1 / 1;
+
+        background-image: url("../../../../public/img/gui/close_cross_white.svg");
+        background-repeat: no-repeat;
+        background-size: 90% auto;
+        background-position: 50% 50%;
+      }
+    }
+
+    .event-details-card-body {
+      padding: 1rem;
+
+      overflow-y: scroll;
+
+      display: grid;
+      align-content: start;
+      grid-row-gap: 0.5rem;
+
+      .class-info-container {
+        display: grid;
+        align-content: start;
+        justify-content: left;
+        grid-row-gap: 0.3rem;
+        grid-column-gap: 0.5rem;
+
+        .label {
+          grid-column: 1;
+
+          justify-self: right;
+          align-self: end;
+
+          font-size: 0.85rem;
+        }
+
+        .data {
+          grid-column: 2;
+
+          font-size: 1rem;
+        }
+      }
+
+      .student-container {
+        display: grid;
+        grid-auto-flow: row;
+        grid-column-gap: 1rem;
+        grid-row-gap: 0.5rem;
+        align-items: start;
+        align-content: start;
+
+        .label {
+          font-size: 0.85rem;
+        }
+
+        .student-number-indicator {
+          grid-column: 2;
+
+          background-color: $yellow;
+
+          padding: 0 0.2rem;
+
+          border-radius: 0.2rem;
+
+          font-size: 0.85rem;
+
+          justify-self: right;
+        }
+
+        .class-over-capacity {
+          background-color: #f87292;
+        }
+
+        .student-status-indicator {
+          grid-column: 1;
+          grid-row: 1 / 3;
+
+          width: 1.1rem;
+          aspect-ratio: 1 / 1;
+
+          place-self: center;
+
+          border-radius: 50%;
+          border: solid 2px #fff;
+          box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+        }
+
+        .student-name-container {
+          padding: 0.2rem 0.3rem;
+
+          border-bottom: solid 1px $light-grey;
+
+          cursor: pointer;
+
+          display: grid;
+          grid-template-columns: 2rem auto 2rem;
+
+          .student-name-kanji {
+            grid-column: 2;
+
+            align-self: center;
+
+            font-size: 0.9rem;
+
+            pointer-events: none;
+          }
+
+          .student-name-katakana {
+            align-self: center;
+
+            pointer-events: none;
+
+            font-size: 0.7rem;
+          }
+
+          .add-student-icon {
+            place-self: center;
+
+            grid-column: 3;
+            grid-row: 1 / 3;
+
+            margin: 0.3rem 0;
+
+            width: 1.5rem;
+            aspect-ratio: 1 / 1;
+
+            pointer-events: none;
+
+            border-radius: 50%;
+
+            background-color: $teal;
+
+            user-select: none;
+
+            background-image: url("../../../../public/img/gui/plus_white.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60% auto;
+          }
+        }
+
+        .student-name-container.no-katakana {
+          grid-template-rows: auto 0;
+        }
+
+        .student-name-container.no-kanji {
+          grid-template-rows: 0 auto;
+        }
+
+        .student-name-container:last-child {
+          border-bottom: none;
+        }
+
+        .student-select-container {
+          grid-column: 1 /3;
+
+          padding: 0.5rem;
+
+          border-radius: 0.3rem;
+
+          background-color: $yellow;
+
+          display: grid;
+          grid-row-gap: 0.5rem;
+
+          .student-search {
+            grid-column: 1 / 3;
+
+            width: calc(100% - 0.6rem);
+
+            font-size: 1rem;
+
+            border: none;
+            border-radius: 0.3rem;
+
+            background-color: #fff;
+
+            padding: 0.3rem;
+
+            -webkit-text-fill-color: #000;
+          }
+
+          .student-search:focus {
+            outline: solid 2px $medium-grey;
+          }
+
+          #select-container {
+            grid-column: 1 / 3;
+
+            background-color: #fff;
+
+            height: 15rem;
+
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            border-radius: 0.3rem;
+
+            display: grid;
+            align-content: start;
+
+            .student-selected {
+              background-color: $teal;
+
+              border-bottom: 1px solid rgba(0, 0, 0, 0);
+
+              pointer-events: none;
+
+              .add-student-icon {
+                opacity: 0;
+              }
+            }
+
+            .student-selected:last-child {
+              border-bottom: none;
+            }
+
+            .loading-spinner-container {
+              margin-top: 0;
+            }
+          }
+        }
+
+        .student-select-container.disable-clicks {
+          pointer-events: none;
+        }
+
+        .student-enrolled-container {
+          background-color: $teal;
+
+          padding: 0.5rem;
+
+          border-radius: 0.3rem;
+
+          display: grid;
+          grid-row-gap: 0.5rem;
+
+          .enrolled-container {
+            grid-column: 1 / 3;
+
+            border-radius: 0.3rem;
+
+            background-color: #fff;
+
+            user-select: none;
+
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            display: grid;
+            align-content: start;
+
+            .student-name-container {
+              display: grid;
+              grid-template-columns: 2rem auto 2rem;
+
+              .remove-student-icon {
+                place-self: center;
+
+                grid-column: 3;
+                grid-row: 1 / 3;
+
+                width: 1.5rem;
+                aspect-ratio: 1 / 1;
+
+                pointer-events: none;
+
+                border-radius: 50%;
+
+                background-color: $red;
+
+                background-image: url("../../../../public/img/gui/minus_white.svg");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 60% auto;
+              }
+            }
+          }
+        }
+
+        .student-enrolled-container.disable-clicks {
+          pointer-events: none;
+        }
+      }
+    }
+
+    .event-details-card-footer {
+      min-height: 1.8rem;
+
+      padding: 0.8rem 1rem;
+
+      border-top: solid 1px #adadad;
+
+      background-color: #f1f1f1;
+
+      display: grid;
+      align-items: center;
+
+      .archive-button {
+        width: 1.8rem;
+        aspect-ratio: 1 / 1;
+
+        background-image: url("../../../../public/img/gui/archive_button_grey.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50% 50%;
+      }
+    }
+  }
+}

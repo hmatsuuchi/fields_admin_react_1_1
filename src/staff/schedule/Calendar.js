@@ -1,666 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 /* Axios */
 import instance from "../axios/axios_authenticated";
-/* Components  */
+/* COMPONENTS */
 import CalendarToolbar from "../toolbar/schedule/CalendarToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
+import EventDetails from "./Calendar/EventDetails";
+import FloatingInstructorIcons from "./Calendar/FloatingInstructorIcons";
 /* CSS */
 import "./Calendar.scss";
-import { Fragment } from "react";
 /* React Router DOM */
 import { useNavigate } from "react-router-dom";
 
-/* EVENT DETAILS */
-function EventDetails({
-  events,
-  setEvents,
-  currentlySelectedEventId,
-  setEventDetailsVisible,
-  instructors,
-  studentsRaw,
-  studentsFiltered,
-  setStudentsFiltered,
-  studentSearch,
-  setStudentSearch,
-  csrfToken,
-}) {
-  /* ----------- EVENT DETAILS - STATE ----------- */
-
-  const [studentsSelectedIdArray, setStudentsSelectedIdArray] = useState([]);
-  const [eventDetails, setEventDetails] = useState(null);
-  const [eventInstructor, setEventInstructor] = useState({});
-  /* EVENT DETAILS - STATE - REMOVE STUDENT FROM EVENT */
-  const [
-    displayRemoveStudentFromEventConfirmationDialog,
-    setDisplayConfirmationDialog,
-  ] = useState(false);
-  const [eventFromWhichStudentIsRemoved, setEventFromWhichStudentIsRemoved] =
-    useState({});
-  const [studentToRemove, setStudentToRemove] = useState({});
-  /* EVENT DETAILS - STATE - ARCHIVE EVENT */
-  const [
-    displayArchiveEventConfirmationDialog,
-    setDisplayArchiveEventConfirmationDialog,
-  ] = useState(false);
-  const [eventToArchive, setEventToArchive] = useState({});
-  /* EVENT DETAILS - STATE - PREVENT JUMP TO FIRST SELECTED STUDENT FUNCTIONALITY */
-  const [
-    preventJumpToFirstSelectedStudent,
-    setPreventJumpToFirstSelectedStudent,
-  ] = useState(false);
-
-  /* ----------- EVENT DETAILS - COMPONENTS ----------- */
-
-  /* EVENT DETAILS - COMPONENTS - REMOVE STUDENT CONFIRMATION MODAL */
-  function RemoveStudentConfirmationModal() {
-    /* EVENT DETAILS - COMPONENTS - CONFIRMATION MODAL - FUNCTIONS - HANDLE CANCEL BUTTON CLICKS */
-    function handleClicksToCancelButton() {
-      setDisplayConfirmationDialog(false);
-    }
-
-    function handleClicksToConfirmButton() {
-      setDisplayConfirmationDialog(false);
-
-      const removeStudentFromEvent = (eventId, studentId) => {
-        setEvents((prevArray) =>
-          prevArray.map((event) =>
-            event.id === eventId
-              ? {
-                  ...event,
-                  students: [
-                    ...event.students.filter(
-                      (student) => student.id !== studentId
-                    ),
-                  ],
-                }
-              : event
-          )
-        );
-      };
-      /* drives code */
-      removeStudentFromEvent(
-        parseInt(eventFromWhichStudentIsRemoved.id),
-        parseInt(studentToRemove.id)
-      );
-
-      /* removes student from event in backend */
-      const removeStudentFromEventBackend = async () => {
-        try {
-          await instance
-            .put(
-              "api/schedule/events/remove_student_from_event/",
-              {
-                event_id: eventDetails.id,
-                student_id: studentToRemove.id,
-              },
-              {
-                headers: {
-                  "X-CSRFToken": csrfToken,
-                },
-              }
-            )
-            .then((response) => {
-              if (response) {
-              }
-            });
-        } catch (e) {
-          console.log(e);
-        }
-      };
-      /* drives code */
-      removeStudentFromEventBackend();
-    }
-
-    return (
-      <div id="confirmation-modal-container">
-        <div className="confirmation-modal-dialog-container">
-          <div className="confirmation-modal-dialog">{`「${studentToRemove.last_name_kanji} ${studentToRemove.first_name_kanji}」を授業から削除しますか？`}</div>
-          <button
-            className="cancel-button"
-            onClick={handleClicksToCancelButton}>
-            戻る
-          </button>
-          <button
-            className="confirm-button"
-            onClick={handleClicksToConfirmButton}>
-            削除する
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  /* EVENT DETAILS - COMPONENTS - ARCHIVE EVENT CONFIRMATION MODAL */
-  function ArchiveEventConfirmationModal() {
-    /* EVENT DETAILS - COMPONENTS - CONFIRMATION MODAL - FUNCTIONS - HANDLE CANCEL BUTTON CLICKS */
-    function handleClicksToCancelButton() {
-      setDisplayArchiveEventConfirmationDialog(false);
-    }
-
-    function handleClicksToConfirmButton() {
-      setDisplayArchiveEventConfirmationDialog(false);
-      setEventDetailsVisible(false);
-
-      /* temporarily hides event */
-      const eventToArchive = document.querySelector(
-        `#event-id-${eventDetails.id}`
-      );
-      eventToArchive.style.display = "none";
-
-      /* removes student from event in backend */
-      const removeStudentFromEventBackend = async () => {
-        try {
-          await instance
-            .put(
-              "api/schedule/events/archive_event/",
-              {
-                event_id: eventDetails.id,
-              },
-              {
-                headers: {
-                  "X-CSRFToken": csrfToken,
-                },
-              }
-            )
-            .then((response) => {
-              if (response) {
-                /* removes event from events array */
-                const archiveEvent = (eventId) => {
-                  setEvents((prevArray) =>
-                    prevArray.filter((event) => event.id !== eventId)
-                  );
-                };
-                /* drives code */
-                archiveEvent(parseInt(eventToArchive.id));
-              }
-            });
-        } catch (e) {
-          console.log(e);
-
-          eventToArchive.style.display = "grid";
-
-          /* popup system error message */
-          window.alert("エラーが発生されました");
-        }
-      };
-      /* drives code */
-      removeStudentFromEventBackend();
-    }
-
-    return (
-      <div id="confirmation-modal-container">
-        <div className="confirmation-modal-dialog-container">
-          <div className="confirmation-modal-dialog">{`「${eventToArchive.eventName}」をアーカイブしますか？`}</div>
-          <button
-            className="cancel-button"
-            onClick={handleClicksToCancelButton}>
-            戻る
-          </button>
-          <button
-            className="confirm-button"
-            onClick={handleClicksToConfirmButton}>
-            アーカイブする
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  /* ----------- EVENT DETAILS - FUNCTIONS ----------- */
-
-  /* EVENT DETAILS - FUNCTIONS - GET EVENT DETAILS */
-  useEffect(() => {
-    /* get event object from array of all events */
-    const event = events.find(
-      (event) => event.id === parseInt(currentlySelectedEventId)
-    );
-    setEventDetails(event);
-
-    /* get array of student ids from event object */
-    const enrolledStudentsArray = event.students.map((student) => student.id);
-    setStudentsSelectedIdArray(enrolledStudentsArray);
-
-    /* get instructor object from array of all instructors */
-    const instructor = instructors.find(
-      (inst) => inst.id === event.primary_instructor
-    );
-    setEventInstructor(instructor);
-  }, [
-    events,
-    instructors,
-    currentlySelectedEventId,
-    setEventDetails,
-    setEventInstructor,
-  ]);
-
-  /* EVENT DETAILS - FUNCTIONS - SCROLL INTO VIEW FIRST STUDENT ENROLLED IN EVENT */
-  useEffect(() => {
-    if (
-      studentsSelectedIdArray.length !== 0 &&
-      !preventJumpToFirstSelectedStudent
-    ) {
-      /* sorts studentsSelectedIdArray */
-      studentsSelectedIdArray.sort((a, b) => b - a);
-
-      /* scroll first selected student into view */
-      const selectContainer = document.getElementById("select-container");
-      const studentElement = document.getElementById(
-        `student-id-${studentsSelectedIdArray[0]}`
-      );
-
-      if (selectContainer && studentElement) {
-        studentElement.scrollIntoView();
-        selectContainer.scrollTop -= 100;
-      }
-
-      /* disables jump to first selected student */
-      setPreventJumpToFirstSelectedStudent(true);
-    }
-  }, [studentsSelectedIdArray, preventJumpToFirstSelectedStudent]);
-
-  /* EVENT DETAILS - FUNCTIONS - DAY OF WEEK CONVERSION */
-  const dayOfWeekArray = [
-    [6, "日曜日"],
-    [0, "月曜日"],
-    [1, "火曜日"],
-    [2, "水曜日"],
-    [3, "木曜日"],
-    [4, "金曜日"],
-    [5, "土曜日"],
-  ];
-
-  /* EVENT DETAILS - FUNCTIONS - HANDLE CLOSE EVENT DETAILS */
-  function handleClicksToCloseEventDetails() {
-    setEventDetailsVisible(false);
-
-    /* resets student search field */
-    setStudentSearch("");
-  }
-
-  /* EVENT DETAILS - FUNCTIONS - HANDLE SEARCH INPUT CHANGES */
-  const handleStudentSearchChange = (e) => {
-    setStudentSearch(e.target.value);
-  };
-
-  /* EVENT DETAILS - FUNCTIONS - HANDLE ADD STUDENT TO EVENT */
-  const handleClicksToAddStudentToEvent = (e) => {
-    /* adds student to event in events array */
-    const appendStudentToEvent = (eventId, studentId) => {
-      setEvents((prevArray) =>
-        prevArray.map((event) =>
-          event.id === eventId
-            ? {
-                ...event,
-                students: [studentId, ...event.students],
-              }
-            : event
-        )
-      );
-    };
-
-    /* drives code */
-    appendStudentToEvent(eventDetails.id, {
-      id: parseInt(e.target.dataset.id),
-      last_name_romaji: e.target.dataset.last_name_romaji,
-      first_name_romaji: e.target.dataset.first_name_romaji,
-      last_name_kanji: e.target.dataset.last_name_kanji,
-      first_name_kanji: e.target.dataset.first_name_kanji,
-      last_name_katakana: e.target.dataset.last_name_katakana,
-      first_name_katakana: e.target.dataset.first_name_katakana,
-      grade_verbose: e.target.dataset.grade_verbose,
-      status: parseInt(e.target.dataset.status),
-    });
-
-    /* add student to event in backend */
-    const addStudentToEventInBackend = async () => {
-      try {
-        await instance
-          .put(
-            "api/schedule/events/add_student_to_event/",
-            {
-              event_id: eventDetails.id,
-              student_id: parseInt(e.target.dataset.id),
-            },
-            {
-              headers: {
-                "X-CSRFToken": csrfToken,
-              },
-            }
-          )
-          .then((response) => {
-            if (response) {
-            }
-          });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    /* drives code */
-    addStudentToEventInBackend();
-  };
-
-  /* EVENT DETAILS - FUNCTIONS - HANDLE REMOVE STUDENT FROM EVENT*/
-  const handleClicksToRemoveStudentFromEvent = (e) => {
-    setDisplayConfirmationDialog(true);
-
-    setEventFromWhichStudentIsRemoved({
-      id: parseInt(eventDetails.id),
-    });
-
-    setStudentToRemove({
-      id: parseInt(e.target.dataset.id),
-      last_name_kanji: e.target.dataset.last_name_kanji,
-      first_name_kanji: e.target.dataset.first_name_kanji,
-    });
-  };
-
-  /* EVENT DETAILS - FUNCTIONS - HANDLE ARCHIVE EVENT */
-  const handleClicksToArchiveEvent = (e) => {
-    setDisplayArchiveEventConfirmationDialog(true);
-    setEventToArchive({
-      id: e.target.dataset.event_id,
-      eventName: e.target.dataset.event_name,
-    });
-  };
-
-  /* EVENT DETAILS - FUNCTIONS - FILTERS STUDENT LIST */
-  useEffect(() => {
-    setStudentsFiltered(
-      studentsRaw.filter((student) => {
-        return (
-          student.last_name_romaji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_romaji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.last_name_kanji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_kanji
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.last_name_katakana
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          student.first_name_katakana
-            .toLowerCase()
-            .includes(studentSearch.toLowerCase()) ||
-          `${student.last_name_romaji}${student.first_name_romaji}`
-            .toLowerCase()
-            .includes(
-              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
-            ) ||
-          `${student.first_name_romaji}${student.last_name_romaji}`
-            .toLowerCase()
-            .includes(
-              studentSearch.toLowerCase().replace(" ", "").replace(",", "")
-            )
-        );
-      })
-    );
-  }, [studentSearch, studentsRaw, setStudentsFiltered]);
-
-  /* ----------- EVENT DETAILS - JSX ----------- */
-  return (
-    <Fragment>
-      <div
-        id="close-event-details-background-overlay"
-        onClick={handleClicksToCloseEventDetails}></div>
-      <div id="event-details-container">
-        {eventDetails && (
-          <div className="event-details-card">
-            <div className="event-details-card-header">
-              <div className="event-details-card-header-text">
-                {eventDetails.event_name}
-              </div>
-              <div
-                className="event-details-card-header-close-button"
-                onClick={handleClicksToCloseEventDetails}></div>
-            </div>
-            <div className="event-details-card-body">
-              <div className="class-info-container">
-                <div className="label">曜日:</div>
-                <div className="day-of-week data">
-                  {dayOfWeekArray[eventDetails.day_of_week][1]}
-                </div>
-                <div className="label">開始時間:</div>
-                <div className="start-time data">
-                  {eventDetails.start_time.slice(0, 5)}
-                </div>
-                <div className="label">教師:</div>
-                <div className="instructor-name data">
-                  {eventInstructor.userprofilesinstructors.last_name_katakana}{" "}
-                  {eventInstructor.userprofilesinstructors.first_name_katakana}
-                </div>
-                <div className="label">授業種:</div>
-                <div className="event-type-name data">
-                  {eventDetails.event_type.name}
-                </div>
-                <div className="label">授業時間:</div>
-                <div className="event-duration data">
-                  {eventDetails.event_type.duration}分
-                </div>
-                <div className="label">人数制限:</div>
-                <div className="event-capacity data">
-                  {eventDetails.event_type.capacity}人
-                </div>
-              </div>
-              <div className="student-container">
-                <div
-                  className={`student-select-container${
-                    studentsFiltered.length === 0 ? " disable-clicks" : ""
-                  }`}>
-                  <div className="label">生徒検索</div>
-                  <div className="student-number-indicator">
-                    {`${studentsFiltered.length}件`}
-                  </div>
-                  <input
-                    className="student-search"
-                    value={studentSearch}
-                    onChange={handleStudentSearchChange}></input>
-                  <div id="select-container">
-                    {studentsFiltered.length !== 0 ? (
-                      studentsFiltered.map((student) => {
-                        return (
-                          <div
-                            key={student.id}
-                            id={`student-id-${student.id}`}
-                            className={`student-name-container${
-                              studentsSelectedIdArray.includes(student.id)
-                                ? " student-selected"
-                                : ""
-                            }${
-                              student.last_name_katakana === "" &&
-                              student.first_name_katakana === ""
-                                ? " no-katakana"
-                                : ""
-                            }${
-                              student.last_name_kanji === "" &&
-                              student.first_name_kanji === ""
-                                ? " no-kanji"
-                                : ""
-                            }`}
-                            onClick={handleClicksToAddStudentToEvent}
-                            data-id={student.id}
-                            data-last_name_romaji={student.last_name_romaji}
-                            data-first_name_romaji={student.first_name_romaji}
-                            data-last_name_kanji={student.last_name_kanji}
-                            data-first_name_kanji={student.first_name_kanji}
-                            data-last_name_katakana={student.last_name_katakana}
-                            data-first_name_katakana={
-                              student.first_name_katakana
-                            }
-                            data-grade_verbose={student.grade_verbose}
-                            data-status={student.status}>
-                            <div
-                              className={`student-status-indicator${
-                                student.status === 1
-                                  ? " pre-enrolled"
-                                  : student.status === 2
-                                  ? " enrolled"
-                                  : student.status === 3
-                                  ? " short-absence"
-                                  : student.status === 4
-                                  ? " long-absence"
-                                  : " unknown"
-                              }`}></div>
-                            <div className="student-name-kanji">
-                              {student.last_name_kanji &&
-                                student.last_name_kanji}
-                              {student.first_name_kanji &&
-                                ` ${student.first_name_kanji}`}
-                              {student.grade_verbose &&
-                                ` (${student.grade_verbose})`}
-                            </div>
-                            <div className="student-name-katakana">
-                              {student.last_name_katakana &&
-                                student.last_name_katakana}
-                              {student.first_name_katakana &&
-                                ` ${student.first_name_katakana}`}
-                            </div>
-                            <div className="add-student-icon"></div>
-                          </div>
-                        );
-                      })
-                    ) : studentSearch === "" ? (
-                      <LoadingSpinner />
-                    ) : null}
-                  </div>
-                </div>
-                <div
-                  className={`student-enrolled-container${
-                    studentsFiltered.length === 0 ? " disable-clicks" : ""
-                  }`}>
-                  <div className="label">在籍生徒</div>
-                  <div
-                    className={`student-number-indicator${
-                      eventDetails.students.length >=
-                      eventDetails.event_type.capacity
-                        ? " class-over-capacity"
-                        : ""
-                    }`}>
-                    {`${eventDetails.students.length}/${eventDetails.event_type.capacity}`}
-                  </div>
-                  <div className="enrolled-container">
-                    {eventDetails.students
-                      .sort((a, b) => b.id - a.id)
-                      .map((student) => {
-                        return (
-                          <div
-                            className="student-name-container"
-                            key={student.id}
-                            onClick={handleClicksToRemoveStudentFromEvent}
-                            data-id={student.id}
-                            data-last_name_kanji={student.last_name_kanji}
-                            data-first_name_kanji={student.first_name_kanji}>
-                            <div
-                              className={`student-status-indicator${
-                                student.status === 1
-                                  ? " pre-enrolled"
-                                  : student.status === 2
-                                  ? " enrolled"
-                                  : student.status === 3
-                                  ? " short-absence"
-                                  : student.status === 4
-                                  ? " long-absence"
-                                  : " unknown"
-                              }`}></div>
-                            <div className="student-name-kanji">
-                              {student.last_name_kanji &&
-                                student.last_name_kanji}
-                              {student.first_name_kanji &&
-                                ` ${student.first_name_kanji}`}
-                              {student.grade_verbose &&
-                                ` (${student.grade_verbose})`}
-                            </div>
-                            <div className="student-name-katakana">
-                              {student.last_name_katakana &&
-                                student.last_name_katakana}
-                              {student.first_name_katakana &&
-                                ` ${student.first_name_katakana}`}
-                            </div>
-                            <div className="remove-student-icon"></div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="event-details-card-footer">
-              <button
-                className="archive-button"
-                onClick={handleClicksToArchiveEvent}
-                data-event_id={eventDetails.id}
-                data-event_name={eventDetails.event_name}></button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {displayRemoveStudentFromEventConfirmationDialog && (
-        <RemoveStudentConfirmationModal />
-      )}
-
-      {displayArchiveEventConfirmationDialog && (
-        <ArchiveEventConfirmationModal />
-      )}
-    </Fragment>
-  );
-}
-
-/* CALENDAR */
 function Calendar({
   csrfToken,
   highlightedEventId,
+  setHighlightedEventId,
   setBackButtonText,
   setBackButtonLink,
 }) {
-  /* ----------- STATE ----------- */
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
   const [events, setEvents] = useState([]);
   const [instructors, setInstructors] = useState([]);
-  const [initialJumpToNow, setInitialJumpToNow] = useState(false);
+  const [allowJumpToNow, setAllowJumpToNow] = useState(true);
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
-  /* CALENDAR - STATE - STUDENTS FOR SELECT MENU */
+  /* STUDENTS FOR SELECT MENU */
   const [studentsRaw, setStudentsRaw] = useState([]);
-  /* CALENDAR - STATE - FILTERED STUDENTS FROM SEARCH */
+  /* FILTERED STUDENTS FROM SEARCH */
   const [studentsFiltered, setStudentsFiltered] = useState([]);
-  /* CALENDAR - STATE - BACKGROUND CALENDAR */
+  /* BACKGROUND CALENDAR */
   const [timeIncrements, setTimeIncrements] = useState([]);
   const [visibleDaysOfWeek, setVisibleDaysOfWeek] = useState([]);
   const [hourSegmentHeight, setHourSegmentHeight] = useState(0);
-  /* CALENDAR - STATE - EVENT DETAILS */
+  /* EVENT DETAILS */
   const [eventDetailsVisible, setEventDetailsVisible] = useState(false);
   const [currentlySelectedEventId, setCurrentlySelectedEventId] = useState(0);
   const [studentSearch, setStudentSearch] = useState("");
 
-  /* ----------- CALENDAR - FUNCTIONS ----------- */
+  /* ----------------------------------------------- */
+  /* ------------------ FUNCTIONS ------------------ */
+  /* ----------------------------------------------- */
 
-  // sets back button text and link
+  /* SETS BACK BUTTON TEXT AND LINK */
   useEffect(() => {
     setBackButtonText("カレンダー");
     setBackButtonLink("/staff/schedule/events/calendar/week-view/");
   }, [setBackButtonText, setBackButtonLink]);
 
-  useEffect(() => {
-    if (highlightedEventId !== "") {
-      const eventElement = document.querySelector(
-        `[data-event_id="${highlightedEventId}"]`
-      );
-
-      if (eventElement) {
-        setTimeout(() => {
-          eventElement.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 500);
-      }
-    }
-  }, [highlightedEventId, timeIncrements]);
-
-  /* CALENDAR - FUNCTIONS - DAY OF WEEK CONVERSTION (FULL DAY) */
+  /* DAY OF WEEK CONVERSTION (FULL DAY) */
   const dayOfWeekArray = [
     [6, "日曜日"],
     [0, "月曜日"],
@@ -671,7 +63,7 @@ function Calendar({
     [5, "土曜日"],
   ];
 
-  /* CALENDAR - FUNCTIONS - DAY OF WEEK CONVERSTION (STARTING CHARACTER) */
+  /* DAY OF WEEK CONVERSTION (STARTING CHARACTER) */
   const dayOfWeekSingleKanji = {
     6: "日",
     0: "月",
@@ -682,7 +74,7 @@ function Calendar({
     5: "土",
   };
 
-  /* CALENDAR - FUNCTIONS - JUMP TO CURRENT DAY OF WEEK ON CONTENT LOAD */
+  /* JUMP TO CURRENT DAY OF WEEK ON CONTENT LOAD */
   useEffect(() => {
     const jumpToCurrentDayOfWeek = () => {
       /* gets current day of week */
@@ -722,21 +114,48 @@ function Calendar({
       /* script runs only if current hour is after the first hour in the schedule calendar */
       if (currentHour > firstHourIncrement) {
         window.scrollBy(0, verticalOffset);
+        console.log(verticalOffset);
+      }
+    };
+
+    const jumpToHighlightedEvent = () => {
+      if (highlightedEventId !== null) {
+        const eventElement = document.querySelector(
+          `[data-event_id="${highlightedEventId}"]`
+        );
+
+        if (eventElement) {
+          setTimeout(() => {
+            eventElement.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }, 500);
+        }
       }
     };
 
     /* drives code if event data loaded and only once on initial load */
     if (
-      initialJumpToNow === false &&
-      events.length > 0 &&
-      highlightedEventId === ""
+      allowJumpToNow === true &&
+      highlightedEventId === null &&
+      events.length > 0
     ) {
       jumpToCurrentDayOfWeek();
-      setInitialJumpToNow(true);
+      setAllowJumpToNow(false);
+    } else if (
+      allowJumpToNow === false &&
+      highlightedEventId !== null &&
+      events.length > 0
+    ) {
+      jumpToHighlightedEvent();
+      setAllowJumpToNow(false);
+    } else if (events.length > 0) {
+      setAllowJumpToNow(false);
     }
-  }, [initialJumpToNow, events.length, timeIncrements, highlightedEventId]);
+  }, [allowJumpToNow, events, timeIncrements, highlightedEventId]);
 
-  /* CALENDAR - FUNCTIONS - FETCH INITIAL DATA */
+  /* FETCH INITIAL DATA */
   useEffect(() => {
     // fetches event data from API
     const performInitialFetch = async () => {
@@ -760,7 +179,7 @@ function Calendar({
     performInitialFetch();
   }, []);
 
-  /* CALENDAR - FUNCTIONS - RETRY FETCH INITIAL DATA */
+  /* RETRY FETCH INITIAL DATA */
   const retryPerformInitialFetch = async () => {
     setDisplayErrorMessage(false);
     // fetches events for date range
@@ -778,7 +197,7 @@ function Calendar({
     }
   };
 
-  /* CALENDAR - FUNCTIONS - FETCH STUDENT LIST (SIMPLE) */
+  /* FETCH STUDENT LIST (SIMPLE) */
   useEffect(() => {
     // fetches event data from API
     const performSimplifiedStudentListFetch = async () => {
@@ -801,7 +220,7 @@ function Calendar({
     performSimplifiedStudentListFetch();
   }, []);
 
-  /* CALENDAR - FUNCTIONS - ADJUST HOUR SEGMENTS FOR VIEWPORT */
+  /* ADJUST HOUR SEGMENTS FOR VIEWPORT */
   useEffect(() => {
     /* calculates hour segment height based on viewport width */
     function calculateHourSegmentHeight() {
@@ -829,7 +248,7 @@ function Calendar({
     };
   }, []);
 
-  /* CALENDAR - FUNCTIONS - ATTACH INTERSECTIONAL OBSERVERS */
+  /* ATTACH INTERSECTIONAL OBSERVERS */
   useEffect(() => {
     /* gets all day of week elements to observer */
     const elementsToObserve = document.querySelectorAll(
@@ -880,7 +299,7 @@ function Calendar({
     }
   }, [events]);
 
-  /* CALENDAR - FUNCTIONS - ENABLE/DISABLE PREV/NEXT BUTTONS */
+  /* ENABLE/DISABLE PREV/NEXT BUTTONS */
   useEffect(() => {
     if (visibleDaysOfWeek.length !== 0) {
       const prevDayButton = document.getElementById("previous-day-button");
@@ -900,7 +319,7 @@ function Calendar({
     }
   }, [visibleDaysOfWeek]);
 
-  /* CALENDAR - FUNCTIONS - GENERATE CALENDAR BACKGROUND & CHECK FOR OVERLAPPING EVENTS */
+  /* GENERATE CALENDAR BACKGROUND & CHECK FOR OVERLAPPING EVENTS */
   useEffect(() => {
     function caculateCalendarBackgroundTimeIncrements(events) {
       if (events.length > 0) {
@@ -978,7 +397,7 @@ function Calendar({
     caculateCalendarBackgroundTimeIncrements(events);
   }, [events]);
 
-  /* CALENDAR - FUNCTIONS - HANDLE NEXT DAY BUTTON */
+  /* HANDLE NEXT DAY BUTTON */
   function handleNextDayButtonClick() {
     const calendarContainer = document.getElementById("calendar-container");
     const dayOfWeekContainer = calendarContainer.getElementsByClassName(
@@ -992,7 +411,7 @@ function Calendar({
     });
   }
 
-  /* CALENDAR - FUNCTIONS - HANDLE PREVIOUS DAY BUTTON */
+  /* HANDLE PREVIOUS DAY BUTTON */
   function handlePreviousDayButtonClick() {
     const calendarContainer = document.getElementById("calendar-container");
     const dayOfWeekContainer = calendarContainer.getElementsByClassName(
@@ -1006,7 +425,7 @@ function Calendar({
     });
   }
 
-  /* CALENDAR - FUNCTIONS - HANDLE EVENT DETAILS OPEN */
+  /* HANDLE EVENT DETAILS OPEN */
   function handleClicksToEvent(e) {
     /* get element which was clicked */
     const element = e.currentTarget;
@@ -1018,16 +437,19 @@ function Calendar({
 
     /* toggle details visible state */
     setEventDetailsVisible(true);
+
+    /* removes highlight from previously selected event */
+    setHighlightedEventId(null);
   }
 
-  /* CALENDAR - FUNCTIONS - HANDLE STUDENT DETAILS OPEN */
+  /* HANDLE STUDENT DETAILS OPEN */
   const navigate = useNavigate();
   const handleClicksToStudentContainer = (e) => {
     const studentId = e.currentTarget.dataset.student_id;
     navigate(`/staff/students/profiles/details/${studentId}`);
   };
 
-  /* CALENDAR - FUNCTIONS - HANDLE CLICKS TO DAY OF WEEK INDICATOR */
+  /* HANDLE CLICKS TO DAY OF WEEK INDICATOR */
   function handleClicksToDayOfWeekIndicator(e) {
     const dayOfWeekInteger = e.target.id.split("-")[1];
 
@@ -1038,7 +460,10 @@ function Calendar({
     dayOfWeekContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  /* ----------- CALENDAR - JSX ----------- */
+  /* ---------------------------------------- */
+  /* -----------------  JSX ----------------- */
+  /* ---------------------------------------- */
+
   return (
     <Fragment>
       {events.length > 0 ? (
@@ -1082,7 +507,7 @@ function Calendar({
                             className="instructor-container"
                             key={`instructor-${instructor.id}`}>
                             {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Instructor Header */}
-                            <div className="instructor-header-container">
+                            {/* <div className="instructor-header-container">
                               <div
                                 className="instructor-icon"
                                 style={{
@@ -1098,7 +523,7 @@ function Calendar({
                                     .last_name_katakana
                                 }
                               </div>
-                            </div>
+                            </div> */}
                             {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event */}
                             {events
                               .filter((event) => {
@@ -1228,6 +653,7 @@ function Calendar({
               );
             })}
           </div>
+
           <div id="indicator-container">
             <div id="indicator-box">
               <div
@@ -1323,6 +749,10 @@ function Calendar({
           />
         </Fragment>
       )}
+      <FloatingInstructorIcons
+        dayOfWeekArray={dayOfWeekArray}
+        instructors={instructors}
+      />
     </Fragment>
   );
 }

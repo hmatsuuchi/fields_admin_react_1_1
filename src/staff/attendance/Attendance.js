@@ -82,6 +82,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
+
   /* ADJUST DATE FOR TIMEZONE */
   const adjustDateForTimezone = (date) => {
     const newDate = new Date(date);

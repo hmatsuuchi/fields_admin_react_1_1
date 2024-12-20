@@ -1,0 +1,53 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$grey: #3a3939;
+
+.card-section-full-width {
+  .card-container-full-width {
+    .card-full-width {
+      .student-profile-header-container {
+        justify-content: space-between;
+        grid-template-columns: repeat(2, auto);
+
+        .section-title {
+          color: #ffffff;
+          font-size: 1.3rem;
+          font-weight: 500;
+        }
+
+        .header-right-container {
+          display: grid;
+          grid-column-gap: 1rem;
+
+          .status {
+            justify-self: right;
+          }
+
+          .archived-button {
+            display: none;
+
+            width: 1.5rem;
+
+            background-image: url("../img/archived.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+          }
+        }
+
+        .archived-profile {
+          grid-template-columns: auto 1.5rem;
+
+          .archived-button {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
