@@ -114,7 +114,6 @@ function Calendar({
       /* script runs only if current hour is after the first hour in the schedule calendar */
       if (currentHour > firstHourIncrement) {
         window.scrollBy(0, verticalOffset);
-        console.log(verticalOffset);
       }
     };
 

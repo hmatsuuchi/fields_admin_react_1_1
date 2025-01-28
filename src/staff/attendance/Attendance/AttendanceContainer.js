@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 /* Axios */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 function AttendanceContainer({
   csrfToken,
   attendances,
+  setAttendances,
   attendancesWithScheduleBreaks,
   showAttendanceContainer,
   setShowAttendanceUpdateContainer,
@@ -24,6 +25,11 @@ function AttendanceContainer({
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
   /* ---------------------------------------------- */
+
+  const [
+    disableClicksToAttendanceStatusButtons,
+    setDisableClicksToAttendanceStatusButtons,
+  ] = useState(false);
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
@@ -100,33 +106,39 @@ function AttendanceContainer({
 
   /* TOGGLE ATTENDANCE STATUS */
   const toggleAttendanceStatus = (e) => {
+    /* disables clicks to attendance status buttons */
+    setDisableClicksToAttendanceStatusButtons(true);
+
     /* gets attendance record ID */
     const attendanceRecordId = parseInt(e.target.dataset.attendance_record_id);
 
-    /* gets attendance status integer */
-    const attendanceStatus = parseInt(
-      e.target.dataset.attendance_status_integer
-    );
+    /* duplicates attendance records and updates status value */
+    let updatedRecordStatusValue = 0;
+    const updatedAttendanceRecords = attendances.map((attendance) => {
+      return {
+        ...attendance,
+        attendance_records: attendance.attendance_records.map((record) => {
+          if (record.id === attendanceRecordId) {
+            updatedRecordStatusValue =
+              record.status === 2 ? 3 : record.status === 3 ? 4 : 2;
+            return {
+              ...record,
+              status: (record.status = updatedRecordStatusValue),
+            };
+          } else {
+            return record;
+          }
+        }),
+      };
+    });
 
-    /* sets new attendance status integer and CSS class */
-    if (attendanceStatus === 2) {
-      e.target.classList.remove("pending");
-      e.target.classList.add("present");
-      e.target.dataset.attendance_status_integer = 3;
-    } else if (attendanceStatus === 3) {
-      e.target.classList.remove("present");
-      e.target.classList.add("absent");
-      e.target.dataset.attendance_status_integer = 4;
-    } else if (attendanceStatus === 4) {
-      e.target.classList.remove("absent");
-      e.target.classList.add("pending");
-      e.target.dataset.attendance_status_integer = 2;
-    }
+    /* sets updated attendance records */
+    setAttendances(updatedAttendanceRecords);
 
     /* updates attendance record status on backend */
     const data = {
       attendance_record_id: attendanceRecordId,
-      attendance_record_status_id: e.target.dataset.attendance_status_integer,
+      attendance_record_status_id: updatedRecordStatusValue,
     };
 
     const updateAttendanceRecordStatus = async () => {
@@ -142,7 +154,8 @@ function AttendanceContainer({
             }
           )
           .then((response) => {
-            if (response) {
+            if (response.status === 200) {
+              setDisableClicksToAttendanceStatusButtons(false);
             }
           });
       } catch (e) {
@@ -167,16 +180,19 @@ function AttendanceContainer({
             <div
               className="more-info-container"
               data-attendance_id={record.id}
-              onClick={handleClicksToAttendance}></div>
+              onClick={handleClicksToAttendance}
+            ></div>
             <div
               className="primary-instructor-icon"
               style={{
                 backgroundImage: `url(/img/instructors/${record.instructor.userprofilesinstructors.icon_stub})`,
-              }}></div>
+              }}
+            ></div>
             <div
               className="section-title-container"
               data-attendance_id={record.id}
-              onClick={handleClicksToAttendance}>
+              onClick={handleClicksToAttendance}
+            >
               <div className="class-name">{record.linked_class.event_name}</div>
               <div className="class-start-time">
                 {removeLeadingZeroFromString(record.start_time.slice(0, 5))}
@@ -186,26 +202,32 @@ function AttendanceContainer({
               {record.attendance_records.map((attendanceRecord) => (
                 <div
                   className="attendance-record"
-                  key={`attendance-record-${attendanceRecord.id}`}>
+                  key={`attendance-record-${attendanceRecord.id}`}
+                >
                   <div
                     className="student-name-kanji"
                     data-student_id={attendanceRecord.student.id}
-                    onClick={handleClicksToStudentName}>
+                    onClick={handleClicksToStudentName}
+                  >
                     {`${attendanceRecord.student.last_name_kanji} ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
                   </div>
                   <div
                     className="student-name-katakana"
                     data-student_id={attendanceRecord.student.id}
-                    onClick={
-                      handleClicksToStudentName
-                    }>{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
+                    onClick={handleClicksToStudentName}
+                  >{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
                   <div
                     className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
                       attendanceRecord.status
-                    )}`}
+                    )} ${
+                      disableClicksToAttendanceStatusButtons
+                        ? " disable-clicks-to-attendance-status-buttons"
+                        : ""
+                    }`}
                     data-attendance_record_id={attendanceRecord.id}
                     data-attendance_status_integer={attendanceRecord.status}
-                    onClick={toggleAttendanceStatus}></div>
+                    onClick={toggleAttendanceStatus}
+                  ></div>
                 </div>
               ))}
             </div>
@@ -214,7 +236,8 @@ function AttendanceContainer({
           <div
             className="schedule-break-container card"
             key={`schedule-break-${record.id}`}
-            style={{ minHeight: `${record.breakDuration / 8}rem` }}>
+            style={{ minHeight: `${record.breakDuration / 8}rem` }}
+          >
             <div>
               {Math.floor(record.breakDuration / 60)}:
               {`0${record.breakDuration % 60}`.slice(-2)}

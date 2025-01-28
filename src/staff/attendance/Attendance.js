@@ -10,6 +10,7 @@ import DataLoadError from "../micro/DataLoadError";
 import AttendanceUpdate from "./AttendanceUpdate";
 import DateSelect from "./Attendance/DateSelect";
 import AttendanceContainer from "./Attendance/AttendanceContainer";
+import AttendanceCompletedIndicator from "./Attendance/AttendanceCompletedIndicator";
 
 function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
   /* ----------------------------------------------------- */
@@ -534,6 +535,7 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           showAttendanceContainer={showAttendanceContainer}
           setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
           attendances={attendances}
+          setAttendances={setAttendances}
           attendancesWithScheduleBreaks={attendancesWithScheduleBreaks}
           attendanceDate={attendanceDate}
           setEventIdSelected={setEventIdSelected}
@@ -544,6 +546,9 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           setAttendanceStudentsSelected={setAttendanceStudentsSelected}
           setAttendanceSelectedId={setAttendanceSelectedId}
         />
+
+        {/* Attendance Completed Indicator */}
+        <AttendanceCompletedIndicator attendances={attendances} />
 
         {/* Loading Spinner */}
         {showLoadingSpinner ? <LoadingSpinner /> : null}

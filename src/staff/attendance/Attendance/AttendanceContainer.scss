@@ -141,8 +141,8 @@ $grey: #3a3939;
 
           box-shadow: 0.2rem 0.2rem 0.4rem rgb(0 0 0 / 15%);
 
-          width: 2rem;
-          height: 2rem;
+          width: calc(2rem + 1px);
+          height: calc(2rem + 1px);
         }
 
         .student-attendance-status.pending {
@@ -158,6 +158,10 @@ $grey: #3a3939;
         .student-attendance-status.absent {
           background-color: $red;
           background-image: url("../../../../public/img/attendance/absent_white.svg");
+        }
+
+        .disable-clicks-to-attendance-status-buttons {
+          pointer-events: none;
         }
       }
     }
