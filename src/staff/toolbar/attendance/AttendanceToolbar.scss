@@ -15,9 +15,9 @@ h3 {
   z-index: 3;
   position: fixed;
   top: 0;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem;
 
-  width: calc(100% - 1.5rem);
+  width: calc(100% - 1rem);
   height: calc(2.75rem - 0.5rem);
 
   background-color: $teal;
@@ -26,32 +26,41 @@ h3 {
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
 
-  .instructor-select-container {
+  .toolbar-back-button {
+    height: 1.5rem;
+  }
+
+  .button-set-container {
     display: grid;
     grid-auto-flow: column;
-    grid-column-gap: 0.5rem;
 
-    .instructor-button {
-      width: 2rem;
-      height: 2rem;
+    .instructor-select-container {
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 0.5rem;
 
-      border-radius: 0.2rem;
+      .instructor-button {
+        width: 2rem;
+        height: 2rem;
 
-      cursor: pointer;
+        border-radius: 0.2rem;
 
-      background-repeat: no-repeat;
-      background-position: 50% calc(100% + 1px);
-      background-size: auto 95%;
-    }
+        cursor: pointer;
 
-    .instructor-button:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
+        background-repeat: no-repeat;
+        background-position: 50% calc(100% + 1px);
+        background-size: auto 95%;
+      }
 
-    .instructor-button.active {
-      background-color: #ffffff;
+      .instructor-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .instructor-button.active {
+        background-color: #ffffff;
+      }
     }
   }
 }

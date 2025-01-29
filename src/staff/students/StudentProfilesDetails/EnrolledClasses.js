@@ -7,7 +7,15 @@ import "./EnrolledClasses.scss";
 // React Router DOM
 import { useNavigate } from "react-router-dom";
 
-function EnrolledClasses({ profileId, profileStatus, setDisplayProfile }) {
+function EnrolledClasses({
+  profileId,
+  profileStatus,
+  setDisplayProfile,
+  profileLastNameKanji,
+  profileFirstNameKanji,
+  setBackButtonText,
+  setBackButtonLink,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -45,6 +53,13 @@ function EnrolledClasses({ profileId, profileStatus, setDisplayProfile }) {
     /* resets profile details contents */
     setDisplayProfile(false);
 
+    /* sets back button text and link */
+    setBackButtonText(
+      `生徒情報 (${profileLastNameKanji} ${profileFirstNameKanji})`
+    );
+    setBackButtonLink(`/staff/students/profiles/details/${profileId}`);
+
+    /* navigates to clicked student profile */
     const studentId = event.target.dataset.student_id;
     navigate(`/staff/students/profiles/details/${studentId}`);
   };
@@ -76,7 +91,8 @@ function EnrolledClasses({ profileId, profileStatus, setDisplayProfile }) {
     <div id="enrolled-classes" className="card-container-full-width">
       <div className="card-full-width">
         <div
-          className={`enrolled-class-header-container${` ${studentStatusClass[profileStatus]}`}`}>
+          className={`enrolled-class-header-container${` ${studentStatusClass[profileStatus]}`}`}
+        >
           <div className="enrolled-class-title">現在授業</div>
           <div className="enrolled-class-number">{`${enrolledClasses.length}件`}</div>
         </div>
@@ -84,7 +100,8 @@ function EnrolledClasses({ profileId, profileStatus, setDisplayProfile }) {
           {enrolledClasses.map((enrolledClass) => (
             <div
               className="enrolled-class-container"
-              key={`event-id-${enrolledClass.id}`}>
+              key={`event-id-${enrolledClass.id}`}
+            >
               <div className="event-info-container">
                 <div className="event-data">
                   <div className="event-title">{enrolledClass.event_name}</div>
@@ -114,7 +131,8 @@ function EnrolledClasses({ profileId, profileStatus, setDisplayProfile }) {
                           ? " this-student"
                           : ""
                       }`}
-                      key={`event-id-${enrolledClass.id}-student-id-${student.id}`}>
+                      key={`event-id-${enrolledClass.id}-student-id-${student.id}`}
+                    >
                       <div
                         className={`student-status-indicator ${
                           studentStatusClass[student.status]

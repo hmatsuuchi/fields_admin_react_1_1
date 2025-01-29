@@ -74,6 +74,9 @@ $grey: #3a3939;
         grid-template-columns: auto 1.5rem;
 
         .record-data-container {
+          pointer-events: none;
+          user-select: none;
+
           justify-content: left;
 
           font-size: 0.8rem;
@@ -122,6 +125,9 @@ $grey: #3a3939;
         }
 
         .attendance-record-status-icon {
+          pointer-events: none;
+          user-select: none;
+
           justify-self: right;
           align-self: center;
 

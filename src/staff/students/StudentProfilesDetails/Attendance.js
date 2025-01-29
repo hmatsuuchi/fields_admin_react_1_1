@@ -3,13 +3,26 @@ import React, { useEffect, useState } from "react";
 import instance from "../../axios/axios_authenticated";
 // CSS
 import "./Attendance.scss";
+// React Router DOM
+import { useNavigate } from "react-router-dom";
 
-function Attendance({ profileId, profileStatus }) {
+function Attendance({
+  csrfToken,
+  profileId,
+  profileStatus,
+  profileLastNameKanji,
+  profileFirstNameKanji,
+  setBackButtonText,
+  setBackButtonLink,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
   const [attendances, setAttendances] = useState([]);
+
+  /* useNavigate */
+  const navigate = useNavigate();
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -88,6 +101,50 @@ function Attendance({ profileId, profileStatus }) {
     })();
   }, [profileId]);
 
+  /* JUMP TO ATTENDANCE DAY AND INSTRUCTOR */
+  const jumpToAttendanceDateAndInstructor = (event) => {
+    const attendanceDate = event.target.getAttribute("date");
+    const attendanceInstructorId = event.target.getAttribute("instructor_id");
+
+    /* updates user preferences for attendance date and instructor */
+    const updateUserPreferences = async (userPreferencesArray) => {
+      try {
+        await instance
+          .put(
+            "api/attendance/attendance/user_preferences/",
+            userPreferencesArray,
+            {
+              headers: {
+                "X-CSRFToken": csrfToken,
+              },
+            }
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              /* set back button text and link */
+              setBackButtonText(
+                `生徒情報 (${profileLastNameKanji} ${profileFirstNameKanji})`
+              );
+              setBackButtonLink(
+                `/staff/students/profiles/details/${profileId}`
+              );
+
+              /* navigate to attendance page */
+              navigate(`/staff/attendance/day-view/`);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    /* drives code */
+    updateUserPreferences({
+      pref_attendance_selected_date: attendanceDate,
+      pref_attendance_selected_instructor: attendanceInstructorId,
+    });
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -96,13 +153,20 @@ function Attendance({ profileId, profileStatus }) {
     <div id="attendance-records" className="card-container-full-width">
       <div className="attendance-records-container card-full-width">
         <div
-          className={`attendance-records-header-container${` ${profileStatusClass[profileStatus]}`}`}>
+          className={`attendance-records-header-container${` ${profileStatusClass[profileStatus]}`}`}
+        >
           <div className="attendance-records-title">出欠履歴</div>
           <div className="attendance-records-number">{`${attendances.length}件`}</div>
         </div>
         <div className="attendance-records-body-container">
           {attendances.map((attendance) => (
-            <div className="record-container" key={attendance.id}>
+            <div
+              className="record-container"
+              key={attendance.id}
+              date={attendance.date}
+              instructor_id={attendance.instructor.id}
+              onClick={jumpToAttendanceDateAndInstructor}
+            >
               <div className="record-data-container">
                 <div
                   className="instructor-icon"

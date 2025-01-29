@@ -8,6 +8,7 @@ import AddNewAttendanceButton from "../../micro/attendance/AddNewAttendanceButto
 import VerticalDividerThin from "../../micro/attendance/VerticalDividerThin";
 import JumpToTodayButton from "./AttendanceToolbar/JumpToTodayButton";
 import AutoGenerateAttendanceRecords from "./AttendanceToolbar/AutoGenerateAttendanceRecords";
+import ToolbarBackButton from "../../micro/attendance/ToolbarBackButton";
 
 function AttendanceToolbar({
   csrfToken,
@@ -28,6 +29,10 @@ function AttendanceToolbar({
   setShowLoadingSpinner,
   setAttendances,
   adjustDateForTimezone,
+  backButtonText,
+  setBackButtonText,
+  backButtonLink,
+  setBackButtonLink,
 }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -78,53 +83,65 @@ function AttendanceToolbar({
   return (
     <div
       id="attendance-toolbar"
-      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}>
-      <AutoGenerateAttendanceRecords
-        csrfToken={csrfToken}
-        attendanceDate={attendanceDate}
-        activePrimaryInstructor={activePrimaryInstructor}
-        fetchAttendanceDataForDate={fetchAttendanceDataForDate}
-        setDisableToolbarButtons={setDisableToolbarButtons}
-        setDisableDateNavigationButtons={setDisableDateNavigationButtons}
-        setShowLoadingSpinner={setShowLoadingSpinner}
-        setAttendances={setAttendances}
+      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}
+    >
+      <ToolbarBackButton
+        backButtonLink={backButtonLink}
+        setBackButtonLink={setBackButtonLink}
+        backButtonText={backButtonText}
+        setBackButtonText={setBackButtonText}
       />
-      <JumpToTodayButton
-        attendanceDate={attendanceDate}
-        setAttendanceDate={setAttendanceDate}
-        setAttendanceDateDisplay={setAttendanceDateDisplay}
-        setDayOfWeekText={setDayOfWeekText}
-        getDayOfWeekText={getDayOfWeekText}
-        updateUserPreferences={updateUserPreferences}
-        adjustDateForTimezone={adjustDateForTimezone}
-      />
-      <VerticalDividerThin />
-      {activePrimaryInstructor ? (
-        <div className="instructor-select-container">
-          {primaryInstructorChoices.map((instructor) => {
-            return (
-              <div
-                key={instructor.id}
-                className={`instructor-button${
-                  activePrimaryInstructor.id === instructor.id ? " active" : ""
-                }`}
-                data-instructor_id={instructor.id}
-                style={{
-                  backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
-                }}
-                onClick={handleClicksToInstructorButtons}></div>
-            );
-          })}
-        </div>
-      ) : null}
-      <VerticalDividerThin />
-      <AddNewAttendanceButton
-        setShowAttendanceCreateUpdateContainer={
-          setShowAttendanceCreateUpdateContainer
-        }
-        activePrimaryInstructor={activePrimaryInstructor}
-        attendanceDate={attendanceDate}
-      />
+      <div className="button-set-container">
+        <AutoGenerateAttendanceRecords
+          csrfToken={csrfToken}
+          attendanceDate={attendanceDate}
+          activePrimaryInstructor={activePrimaryInstructor}
+          fetchAttendanceDataForDate={fetchAttendanceDataForDate}
+          setDisableToolbarButtons={setDisableToolbarButtons}
+          setDisableDateNavigationButtons={setDisableDateNavigationButtons}
+          setShowLoadingSpinner={setShowLoadingSpinner}
+          setAttendances={setAttendances}
+        />
+        <JumpToTodayButton
+          attendanceDate={attendanceDate}
+          setAttendanceDate={setAttendanceDate}
+          setAttendanceDateDisplay={setAttendanceDateDisplay}
+          setDayOfWeekText={setDayOfWeekText}
+          getDayOfWeekText={getDayOfWeekText}
+          updateUserPreferences={updateUserPreferences}
+          adjustDateForTimezone={adjustDateForTimezone}
+        />
+        <VerticalDividerThin />
+        {activePrimaryInstructor ? (
+          <div className="instructor-select-container">
+            {primaryInstructorChoices.map((instructor) => {
+              return (
+                <div
+                  key={instructor.id}
+                  className={`instructor-button${
+                    activePrimaryInstructor.id === instructor.id
+                      ? " active"
+                      : ""
+                  }`}
+                  data-instructor_id={instructor.id}
+                  style={{
+                    backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
+                  }}
+                  onClick={handleClicksToInstructorButtons}
+                ></div>
+              );
+            })}
+          </div>
+        ) : null}
+        <VerticalDividerThin />
+        <AddNewAttendanceButton
+          setShowAttendanceCreateUpdateContainer={
+            setShowAttendanceCreateUpdateContainer
+          }
+          activePrimaryInstructor={activePrimaryInstructor}
+          attendanceDate={attendanceDate}
+        />
+      </div>
     </div>
   );
 }

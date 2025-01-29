@@ -14,7 +14,13 @@ import "./StudentProfilesDetails.scss";
 // React Router DOM
 import { useParams } from "react-router-dom";
 
-function StudentProfilesDetails({ backButtonText, backButtonLink }) {
+function StudentProfilesDetails({
+  csrfToken,
+  backButtonText,
+  setBackButtonText,
+  backButtonLink,
+  setBackButtonLink,
+}) {
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState("");
@@ -46,7 +52,13 @@ function StudentProfilesDetails({ backButtonText, backButtonLink }) {
       {/* Toolbar */}
       <StudentDetailsToolbar
         backButtonLink={backButtonLink}
+        setBackButtonLink={setBackButtonLink}
         backButtonText={backButtonText}
+        setBackButtonText={setBackButtonText}
+        profileLastNameKanji={profile.last_name_kanji}
+        profileFirstNameKanji={profile.first_name_kanji}
+        profileId={profileId}
+        setDisplayProfile={setDisplayProfile}
       />
 
       {/* Text Descriptors */}
@@ -81,12 +93,24 @@ function StudentProfilesDetails({ backButtonText, backButtonLink }) {
             profileId={profileId}
             profileStatus={profile.status}
             setDisplayProfile={setDisplayProfile}
+            profileLastNameKanji={profile.last_name_kanji}
+            profileFirstNameKanji={profile.first_name_kanji}
+            setBackButtonText={setBackButtonText}
+            setBackButtonLink={setBackButtonLink}
           />
         ) : null}
 
         {/* Attendance */}
         {displayProfile ? (
-          <Attendance profileId={profileId} profileStatus={profile.status} />
+          <Attendance
+            csrfToken={csrfToken}
+            profileId={profileId}
+            profileStatus={profile.status}
+            profileLastNameKanji={profile.last_name_kanji}
+            profileFirstNameKanji={profile.first_name_kanji}
+            setBackButtonText={setBackButtonText}
+            setBackButtonLink={setBackButtonLink}
+          />
         ) : null}
       </div>
     </Fragment>

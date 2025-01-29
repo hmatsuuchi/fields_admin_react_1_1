@@ -21,6 +21,8 @@ function AttendanceContainer({
   setEventCapacitySelected,
   setEventStartTimeSelected,
   setAttendanceStudentsSelected,
+  setBackButtonText,
+  setBackButtonLink,
 }) {
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
@@ -86,6 +88,9 @@ function AttendanceContainer({
   /* HANDLE CLICKS TO STUDENT NAME */
   const navigate = useNavigate();
   const handleClicksToStudentName = (e) => {
+    /* set back button text and link */
+    setBackButtonText("出欠・日程");
+    setBackButtonLink("/staff/attendance/day-view/");
     const studentId = e.target.dataset.student_id;
     navigate(`/staff/students/profiles/details/${studentId}`);
   };

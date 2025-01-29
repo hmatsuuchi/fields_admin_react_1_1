@@ -12,7 +12,13 @@ import DateSelect from "./Attendance/DateSelect";
 import AttendanceContainer from "./Attendance/AttendanceContainer";
 import AttendanceCompletedIndicator from "./Attendance/AttendanceCompletedIndicator";
 
-function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
+function Attendance({
+  csrfToken,
+  backButtonText,
+  setBackButtonText,
+  backButtonLink,
+  setBackButtonLink,
+}) {
   /* ----------------------------------------------------- */
   /* ------------------ STATE FUNCTIONS ------------------ */
   /* ----------------------------------------------------- */
@@ -92,12 +98,6 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
 
     return dateAdjusted;
   };
-
-  /* SET BACK BUTTON TEXT AND LINK */
-  useEffect(() => {
-    setBackButtonText("出欠・日程");
-    setBackButtonLink("/staff/attendance/day-view/");
-  }, [setBackButtonText, setBackButtonLink]);
 
   /* FETCH USER PREFERENCES */
   useEffect(() => {
@@ -545,6 +545,8 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
           setEventStartTimeSelected={setAttendanceStartTimeSelected}
           setAttendanceStudentsSelected={setAttendanceStudentsSelected}
           setAttendanceSelectedId={setAttendanceSelectedId}
+          setBackButtonText={setBackButtonText}
+          setBackButtonLink={setBackButtonLink}
         />
 
         {/* Attendance Completed Indicator */}
@@ -608,6 +610,10 @@ function Attendance({ csrfToken, setBackButtonText, setBackButtonLink }) {
         setShowLoadingSpinner={setShowLoadingSpinner}
         setAttendances={setAttendances}
         adjustDateForTimezone={adjustDateForTimezone}
+        backButtonText={backButtonText}
+        setBackButtonText={setBackButtonText}
+        backButtonLink={backButtonLink}
+        setBackButtonLink={setBackButtonLink}
       />
     </Fragment>
   );

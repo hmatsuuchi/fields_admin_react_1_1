@@ -171,7 +171,8 @@ function App() {
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StaffDashboard />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
 
         {/* STAFF ROUTES - STUDENTS - ALL STUDENT PROFILES */}
         <Route
@@ -189,18 +190,23 @@ function App() {
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - STUDENTS - STUDENT PROFILE DETAILS */}
         <Route
           path="/staff/students/profiles/details/:profileId"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesDetails
+                csrfToken={csrfToken}
                 backButtonText={backButtonText}
+                setBackButtonText={setBackButtonText}
                 backButtonLink={backButtonLink}
+                setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - STUDENTS - CREATE PROFILE */}
         <Route
           path="/staff/students/profiles/create"
@@ -208,7 +214,8 @@ function App() {
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesCreate csrfToken={csrfToken} />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - STUDENTS - UPDATE PROFILE */}
         <Route
           path="/staff/students/profiles/update/:profileId"
@@ -220,7 +227,8 @@ function App() {
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - STUDENTS - DELETE PROFILE */}
         <Route
           path="/staff/students/profiles/delete/:profileId"
@@ -232,7 +240,8 @@ function App() {
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - CALENDAR - WEEK VIEW */}
         <Route
           path="/staff/schedule/events/calendar/week-view"
@@ -246,7 +255,8 @@ function App() {
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - CALENDAR - CREATE EVENT */}
         <Route
           path="/staff/schedule/events/calendar/create"
@@ -257,7 +267,8 @@ function App() {
                 setHighlightedEventId={setHighlightedEventId}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
         <Route
           path="/staff/attendance/day-view"
@@ -265,11 +276,14 @@ function App() {
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <Attendance
                 csrfToken={csrfToken}
+                backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
         <Route
           path="/staff/attendance/create/"
@@ -281,7 +295,8 @@ function App() {
                 setBackButtonLink={setBackButtonLink}
               />
             </StaffProtectedRoute>
-          }></Route>
+          }
+        ></Route>
         {/* CUSTOMER ROUTES - DASHBOARD */}
         <Route
           path="/customer/dashboard"
@@ -289,7 +304,8 @@ function App() {
             <CustomerProtectedRoute isAuth={isAuth} isCustomer={isCustomer}>
               <CustomerDashboard />
             </CustomerProtectedRoute>
-          }></Route>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );
