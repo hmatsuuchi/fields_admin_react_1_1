@@ -6,7 +6,6 @@ import CalendarToolbar from "../toolbar/schedule/CalendarToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
 import DataLoadError from "../micro/DataLoadError";
 import EventDetails from "./Calendar/EventDetails";
-import FloatingInstructorIcons from "./Calendar/FloatingInstructorIcons";
 /* CSS */
 import "./Calendar.scss";
 /* React Router DOM */
@@ -459,6 +458,46 @@ function Calendar({
     dayOfWeekContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
+  /* CALCULATES DAY OF WEEK CONTAINER WIDTHS */
+  const dayOfWeekContainerStyles = () => {
+    const instructorCount = instructors.length;
+    const viewportWidth = window.innerWidth;
+    const eventWidthThreshold = 200;
+
+    let calculatedWidth = "100vw";
+    let calculatedScrollSnapAlign = "start";
+
+    // Calculate width and scroll snap dynamically based on instructor count and viewport width
+    const calculateWidthScrollSnap = () => {
+      if (viewportWidth >= 5600) {
+        calculatedWidth = "calc(100vw / 7)";
+      } else if (viewportWidth >= 4800) {
+        calculatedWidth = "calc(100vw / 6)";
+      } else if (viewportWidth >= 4000) {
+        calculatedWidth = "calc(100vw / 5";
+      } else if (viewportWidth >= 3200) {
+        calculatedWidth = "calc(100vw / 4";
+      } else if (viewportWidth >= 2400) {
+        calculatedWidth = "calc(100vw / 3";
+      } else if (viewportWidth >= 1600) {
+        calculatedWidth = "calc(100vw / 2";
+      } else if (viewportWidth / instructorCount < eventWidthThreshold) {
+        calculatedWidth = `${instructorCount * eventWidthThreshold}px`;
+        calculatedScrollSnapAlign = "none";
+      }
+    };
+
+    // drives code
+    calculateWidthScrollSnap();
+
+    const finalStyles = {
+      width: calculatedWidth,
+      scrollSnapAlign: calculatedScrollSnapAlign,
+    };
+
+    return finalStyles;
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -474,7 +513,9 @@ function Calendar({
                 <div
                   id={`day-of-week-container-${day[0]}`}
                   className="day-of-week-container"
-                  key={`day-of-week-${day[0]}`}>
+                  key={`day-of-week-${day[0]}`}
+                  style={dayOfWeekContainerStyles()}
+                >
                   {/* Calendar Container - Day of Week - Events Container */}
                   <div className="background-and-events-container">
                     {/* Calendar Container - Day of Week - Events Container - Background */}
@@ -483,7 +524,8 @@ function Calendar({
                         return (
                           <div
                             className="hour-increment"
-                            key={`day-${day[0]}-hour-${hour}`}>
+                            key={`day-${day[0]}-hour-${hour}`}
+                          >
                             <div className="hour-text">{`${hour}:00 (${
                               dayOfWeekSingleKanji[day[0]]
                             })`}</div>
@@ -504,25 +546,8 @@ function Calendar({
                         return (
                           <div
                             className="instructor-container"
-                            key={`instructor-${instructor.id}`}>
-                            {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Instructor Header */}
-                            {/* <div className="instructor-header-container">
-                              <div
-                                className="instructor-icon"
-                                style={{
-                                  backgroundImage: `url(${
-                                    process.env.PUBLIC_URL +
-                                    "/img/instructors/" +
-                                    instructor.userprofilesinstructors.icon_stub
-                                  })`,
-                                }}></div>
-                              <div className="instructor-text">
-                                {
-                                  instructor.userprofilesinstructors
-                                    .last_name_katakana
-                                }
-                              </div>
-                            </div> */}
+                            key={`instructor-${instructor.id}`}
+                          >
                             {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event */}
                             {events
                               .filter((event) => {
@@ -563,12 +588,14 @@ function Calendar({
                                       }rem)`,
                                     }}
                                     data-event_id={event.id}
-                                    data-event_start_time={event.start_time}>
+                                    data-event_start_time={event.start_time}
+                                  >
                                     {/* Calendar Container - Day of Week - Events Container - Events - Instructor Container - Event - Event Header*/}
                                     <div
                                       className="event-header"
                                       data-event_id={event.id}
-                                      onClick={handleClicksToEvent}>
+                                      onClick={handleClicksToEvent}
+                                    >
                                       <div className="more-info-container"></div>
                                       <div className="event-name">
                                         {event.event_name}
@@ -582,7 +609,8 @@ function Calendar({
                                           event.event_type.capacity
                                             ? " event-full"
                                             : ""
-                                        }`}>
+                                        }`}
+                                      >
                                         <div className="student-count-text-element">
                                           {event.students.length}
                                         </div>
@@ -598,7 +626,8 @@ function Calendar({
                                     <div
                                       className="event-body"
                                       data-event_id={event.id}
-                                      onClick={handleClicksToEvent}>
+                                      onClick={handleClicksToEvent}
+                                    >
                                       {event.students.map((student) => {
                                         return (
                                           <div
@@ -607,7 +636,8 @@ function Calendar({
                                             data-student_id={student.id}
                                             onClick={
                                               handleClicksToStudentContainer
-                                            }>
+                                            }
+                                          >
                                             <div
                                               className={`student-status${
                                                 student.status === 1
@@ -619,7 +649,8 @@ function Calendar({
                                                   : student.status === 4
                                                   ? " long-absence"
                                                   : " unknown"
-                                              }`}></div>
+                                              }`}
+                                            ></div>
                                             <div className="student-name-kanji">
                                               {`${student.last_name_kanji} ${
                                                 student.first_name_kanji
@@ -640,6 +671,7 @@ function Calendar({
                                         );
                                       })}
                                     </div>
+                                    <div className="event-instructor-icon"></div>
                                   </div>
                                 );
                               })}
@@ -660,7 +692,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(6) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 日
               </div>
               <div
@@ -668,7 +701,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(0) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 月
               </div>
               <div
@@ -676,7 +710,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(1) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 火
               </div>
               <div
@@ -684,7 +719,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(2) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 水
               </div>
               <div
@@ -692,7 +728,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(3) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 木
               </div>
               <div
@@ -700,7 +737,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(4) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 金
               </div>
               <div
@@ -708,7 +746,8 @@ function Calendar({
                 className={`indicator${
                   visibleDaysOfWeek.includes(5) ? " active" : ""
                 }`}
-                onClick={handleClicksToDayOfWeekIndicator}>
+                onClick={handleClicksToDayOfWeekIndicator}
+              >
                 土
               </div>
             </div>
@@ -716,10 +755,12 @@ function Calendar({
           <div id="next-previous-navigation-container">
             <button
               id="previous-day-button"
-              onClick={handlePreviousDayButtonClick}></button>
+              onClick={handlePreviousDayButtonClick}
+            ></button>
             <button
               id="next-day-button"
-              onClick={handleNextDayButtonClick}></button>
+              onClick={handleNextDayButtonClick}
+            ></button>
           </div>
         </Fragment>
       ) : displayErrorMessage ? (
@@ -748,10 +789,6 @@ function Calendar({
           />
         </Fragment>
       )}
-      <FloatingInstructorIcons
-        dayOfWeekArray={dayOfWeekArray}
-        instructors={instructors}
-      />
     </Fragment>
   );
 }
