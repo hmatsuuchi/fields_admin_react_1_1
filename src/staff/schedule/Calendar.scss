@@ -273,15 +273,17 @@ body {
               width: 2rem;
               height: 2rem;
 
-              border-radius: 50%;
-              border: solid 0.1rem #fff;
+              // border: solid 0.1rem #fff;
+              // border-radius: 50%;
 
-              box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
+              // box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.2);
 
-              right: 7%;
-              bottom: -1rem;
+              right: 0.15rem;
+              bottom: 0rem;
 
-              background-color: pink;
+              background-repeat: no-repeat;
+              background-position: 50% calc(100% + 0.1rem);
+              background-size: contain;
             }
           }
 

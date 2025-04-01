@@ -671,7 +671,12 @@ function Calendar({
                                         );
                                       })}
                                     </div>
-                                    <div className="event-instructor-icon"></div>
+                                    <div
+                                      className="event-instructor-icon"
+                                      style={{
+                                        backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
+                                      }}
+                                    ></div>
                                   </div>
                                 );
                               })}
