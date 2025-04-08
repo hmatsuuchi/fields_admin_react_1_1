@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 /* Axios */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./AttendanceContainer.scss";
 /* React Router DOM */
 import { useNavigate } from "react-router-dom";
+/* timeout id for updateAttendanceRecordStatus*/
+let timeoutId;
 
 function AttendanceContainer({
   csrfToken,
@@ -27,11 +29,6 @@ function AttendanceContainer({
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
   /* ---------------------------------------------- */
-
-  const [
-    disableClicksToAttendanceStatusButtons,
-    setDisableClicksToAttendanceStatusButtons,
-  ] = useState(false);
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
@@ -111,9 +108,6 @@ function AttendanceContainer({
 
   /* TOGGLE ATTENDANCE STATUS */
   const toggleAttendanceStatus = (e) => {
-    /* disables clicks to attendance status buttons */
-    setDisableClicksToAttendanceStatusButtons(true);
-
     /* gets attendance record ID */
     const attendanceRecordId = parseInt(e.target.dataset.attendance_record_id);
 
@@ -160,7 +154,7 @@ function AttendanceContainer({
           )
           .then((response) => {
             if (response.status === 200) {
-              setDisableClicksToAttendanceStatusButtons(false);
+              /* DO SOMETHING */
             }
           });
       } catch (e) {
@@ -169,8 +163,14 @@ function AttendanceContainer({
       }
     };
 
-    /* drives code */
-    updateAttendanceRecordStatus();
+    // Debounce logic: Clear the previous timeout and set a new one
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      updateAttendanceRecordStatus(); // Execute the function after 1000ms
+    }, 1000);
   };
 
   /* ---------------------------------------- */
@@ -224,11 +224,7 @@ function AttendanceContainer({
                   <div
                     className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
                       attendanceRecord.status
-                    )} ${
-                      disableClicksToAttendanceStatusButtons
-                        ? " disable-clicks-to-attendance-status-buttons"
-                        : ""
-                    }`}
+                    )}`}
                     data-attendance_record_id={attendanceRecord.id}
                     data-attendance_status_integer={attendanceRecord.status}
                     onClick={toggleAttendanceStatus}
