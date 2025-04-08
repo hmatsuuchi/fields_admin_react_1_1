@@ -112,6 +112,7 @@ function AttendanceToolbar({
           adjustDateForTimezone={adjustDateForTimezone}
         />
         <VerticalDividerThin />
+        <div className="instructor-select-container-arrow"></div>
         {activePrimaryInstructor ? (
           <div className="instructor-select-container">
             {primaryInstructorChoices.map((instructor) => {
@@ -133,6 +134,7 @@ function AttendanceToolbar({
             })}
           </div>
         ) : null}
+        <div className="instructor-select-container-arrow right-arrow"></div>
         <VerticalDividerThin />
         <AddNewAttendanceButton
           setShowAttendanceCreateUpdateContainer={
