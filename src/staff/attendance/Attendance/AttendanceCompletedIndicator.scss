@@ -28,6 +28,13 @@ $grey: #3a3939;
   place-items: center;
   grid-row-gap: 0.5rem;
 
+  .completion-percentage {
+    font-size: 0.9rem;
+    color: #000000;
+
+    margin-left: 0.2rem;
+  }
+
   .completion-counter-text {
     width: calc(2.2rem + 1px);
     height: calc(2.2rem + 1px);
@@ -59,4 +66,8 @@ $grey: #3a3939;
 
 #attendance-completed-indicator.completed {
   background-color: rgba(0, 184, 169, 0.9);
+
+  .completion-percentage {
+    color: #ffffff;
+  }
 }

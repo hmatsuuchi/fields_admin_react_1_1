@@ -10,6 +10,7 @@ function AttendanceCompletedIndicator({ attendances }) {
   const [recordCountIncomplete, setRecordCountIncomplete] = useState(0);
   const [recordCountPresent, setRecordCountPresent] = useState(0);
   const [recordCountAbsent, setRecordCountAbsent] = useState(0);
+  const [recordCompletePercent, setRecordCompletePercent] = useState(0);
 
   /* CALCULATES STATUS BREAKDOWN OF ATTENDANCE RECORDS */
   useEffect(() => {
@@ -32,6 +33,13 @@ function AttendanceCompletedIndicator({ attendances }) {
     setRecordCountIncomplete(recordCountIncomplete);
     setRecordCountPresent(recordCountPresent);
     setRecordCountAbsent(recordCountAbsent);
+    setRecordCompletePercent(
+      Math.round(
+        ((recordCountPresent + recordCountAbsent) /
+          (recordCountPresent + recordCountAbsent + recordCountIncomplete)) *
+          100
+      )
+    );
   }, [attendances]);
 
   /* ---------------------------------------- */
@@ -45,6 +53,7 @@ function AttendanceCompletedIndicator({ attendances }) {
       id={"attendance-completed-indicator"}
       className={recordCountIncomplete === 0 ? " completed" : ""}
     >
+      <div className="completion-percentage">{`${recordCompletePercent}%`}</div>
       <div className="completion-counter-text record-count-incomplete">
         {recordCountIncomplete}
       </div>
