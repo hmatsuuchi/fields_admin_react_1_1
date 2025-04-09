@@ -6,7 +6,7 @@ import "./AttendanceContainer.scss";
 /* React Router DOM */
 import { useNavigate } from "react-router-dom";
 /* timeout id for updateAttendanceRecordStatus*/
-let timeoutId;
+let timeoutMap = new Map();
 
 function AttendanceContainer({
   csrfToken,
@@ -159,18 +159,23 @@ function AttendanceContainer({
           });
       } catch (e) {
         console.log(e);
-        window.alert("An error occurred.");
+        window.alert("エラーが発生しました。");
       }
     };
 
-    // Debounce logic: Clear the previous timeout and set a new one
-    if (timeoutId) {
-      clearTimeout(timeoutId);
+    // clear the previous timeout
+    if (timeoutMap.has(attendanceRecordId)) {
+      clearTimeout(timeoutMap.get(attendanceRecordId));
     }
 
-    timeoutId = setTimeout(() => {
-      updateAttendanceRecordStatus(); // Execute the function after 1000ms
+    // set a new timeout
+    const newTimeoutId = setTimeout(() => {
+      updateAttendanceRecordStatus();
+      timeoutMap.delete(attendanceRecordId);
     }, 1000);
+
+    // store the new timeout ID in the map
+    timeoutMap.set(attendanceRecordId, newTimeoutId);
   };
 
   /* ---------------------------------------- */

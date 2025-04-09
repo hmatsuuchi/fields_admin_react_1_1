@@ -9,7 +9,7 @@ import StaffProtectedRoute from "./authentication/StaffProtectedRoute";
 import CustomerProtectedRoute from "./authentication/CustomerProtectedRoute";
 // COMPONENTS - STAFF - GENERAL
 import StaffNavigation from "./staff/navigation/StaffNavigation";
-import StaffDashboard from "./staff/Dashboard";
+import StaffDashboard from "./staff/dashboard/Dashboard";
 // COMPONENTS - STAFF - STUDENTS
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
 import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
