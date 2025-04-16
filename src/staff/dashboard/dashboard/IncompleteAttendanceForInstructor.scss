@@ -1,0 +1,172 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#incomplete-attendance-for-instructor {
+  overflow-y: scroll;
+
+  .dates-container {
+    direction: rtl;
+
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto repeat(4, 1fr);
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+
+    .day-of-week-title {
+      font-size: max(0.7rem, 2.8vw);
+      justify-self: center;
+
+      margin-bottom: 0.3rem;
+    }
+
+    .date-record-container {
+      background-color: #ffffff;
+
+      outline: solid 1px #000000;
+
+      padding: 0.3vw 0 0.8vw 0;
+
+      text-align: center;
+
+      direction: ltr;
+
+      display: grid;
+      justify-content: center;
+
+      &.is-workday {
+        background-color: $teal;
+      }
+
+      &.incomplete.is-workday {
+        background-color: hsl(346, 91%, 67%); /* light-red */
+      }
+
+      &.no-records.is-workday {
+        background-color: $yellow;
+      }
+
+      .attendance-date {
+        font-size: max(0.6rem, 2.8vw);
+      }
+
+      .complete-fraction {
+        font-size: max(0.7rem, 3.2vw);
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #incomplete-attendance-for-instructor {
+    .dates-container {
+      .day-of-week-title {
+        font-size: max(0.6rem, 1.6vw);
+      }
+
+      .date-record-container {
+        padding: 0.15vw 0 0.4vw 0;
+
+        .attendance-date {
+          font-size: max(0.6rem, 1.6vw);
+        }
+
+        .complete-fraction {
+          font-size: max(0.7rem, 1.8vw);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 900px) {
+  #incomplete-attendance-for-instructor {
+    .dates-container {
+      .day-of-week-title {
+        font-size: max(0.6rem, 1.1vw);
+      }
+
+      .date-record-container {
+        padding: 0.07vw 0 0.2vw 0;
+
+        .attendance-date {
+          font-size: max(0.6rem, 1.1vw);
+        }
+
+        .complete-fraction {
+          font-size: max(0.7rem, 1.2vw);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #incomplete-attendance-for-instructor {
+    .dates-container {
+      .day-of-week-title {
+        font-size: max(0.6rem, 0.8vw);
+      }
+
+      .date-record-container {
+        padding: 0 0 0.1rem 0;
+
+        .attendance-date {
+          font-size: max(0.6rem, 0.8vw);
+        }
+
+        .complete-fraction {
+          font-size: max(0.7rem, 0.9vw);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  #incomplete-attendance-for-instructor {
+    .dates-container {
+      .day-of-week-title {
+        font-size: max(0.6rem, 0.6vw);
+      }
+
+      .date-record-container {
+        .attendance-date {
+          font-size: max(0.6rem, 0.6vw);
+        }
+
+        .complete-fraction {
+          font-size: max(0.7rem, 0.7vw);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  #incomplete-attendance-for-instructor {
+    .dates-container {
+      .day-of-week-title {
+        font-size: 0.6rem;
+      }
+
+      .date-record-container {
+        .attendance-date {
+          font-size: 0.6rem;
+        }
+
+        .complete-fraction {
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+}

@@ -1,10 +1,15 @@
 import React from "react";
-
 // CSS
 import "./Dashboard.scss";
+// COMPONENTS
+import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceForInstructor";
 
 function Dashboard() {
-  return <h1>Staff Dashboard</h1>;
+  return (
+    <div id="dashboard-primary-container">
+      <IncompleteAttendanceForInstructor />
+    </div>
+  );
 }
 
 export default Dashboard;
