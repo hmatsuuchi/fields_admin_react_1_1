@@ -2,6 +2,9 @@ import React, { useEffect, Fragment } from "react";
 
 /* AXIOS */
 import instance from "../../axios/axios_authenticated";
+/* COMPONENTS */
+import LoadingSpinner from "../../micro/LoadingSpinner";
+
 /* CSS */
 import "./IncompleteAttendanceForInstructor.scss";
 
@@ -69,6 +72,10 @@ function IncompleteAttendanceForInstructor() {
 
       const dateArray = [];
       let currentDateBeingIterated = new Date(firstDate);
+      /* adds 9 hour JST timezone offset to compensate for conversion to ISO String */
+      currentDateBeingIterated.setHours(
+        currentDateBeingIterated.getHours() + 9
+      );
 
       while (currentDateBeingIterated >= lastDate) {
         /* searches for date in the array that matches current date being iterated */
@@ -83,7 +90,7 @@ function IncompleteAttendanceForInstructor() {
           currentDateBeingIterated.getDay()
         );
 
-        /* if the date is not found, add it to the array */
+        /* add existing dates to the array or create new objects for non-existing dates */
         if (matchingDate) {
           dateArray.push({
             attendanceDate: currentDateBeingIterated
@@ -127,51 +134,55 @@ function IncompleteAttendanceForInstructor() {
       className="component-primary-container"
     >
       <div className="component-title">出欠状況</div>
-      <div className="dates-container">
-        <div className="day-of-week-title">土</div>
-        <div className="day-of-week-title">金</div>
-        <div className="day-of-week-title">木</div>
-        <div className="day-of-week-title">水</div>
-        <div className="day-of-week-title">火</div>
-        <div className="day-of-week-title">月</div>
-        <div className="day-of-week-title">日</div>
+      {recordsDateStatusCount.length > 0 ? (
+        <div className="dates-container">
+          <div className="day-of-week-title">土</div>
+          <div className="day-of-week-title">金</div>
+          <div className="day-of-week-title">木</div>
+          <div className="day-of-week-title">水</div>
+          <div className="day-of-week-title">火</div>
+          <div className="day-of-week-title">月</div>
+          <div className="day-of-week-title">日</div>
 
-        {Array.from({ length: dayOfWeekOffset }, (_, index) => {
-          return (
-            <div
-              className="offset-container"
-              key={`offset-container-${index}`}
-            ></div>
-          );
-        })}
+          {Array.from({ length: dayOfWeekOffset }, (_, index) => {
+            return (
+              <div
+                className="offset-container"
+                key={`offset-container-${index}`}
+              ></div>
+            );
+          })}
 
-        {recordsDateStatusCount.map((dateRecord) => {
-          const all = dateRecord.attendanceAllCount;
-          const incomplete = dateRecord.attendanceIncompleteCount;
+          {recordsDateStatusCount.map((dateRecord) => {
+            const all = dateRecord.attendanceAllCount;
+            const incomplete = dateRecord.attendanceIncompleteCount;
 
-          const isWorkday = dateRecord.isWorkday;
+            const isWorkday = dateRecord.isWorkday;
 
-          const currentDate = new Date(dateRecord.attendanceDate);
+            const currentDate = new Date(dateRecord.attendanceDate);
 
-          return (
-            <div
-              key={`date-id-${dateRecord.attendanceDate}`}
-              className={`date-record-container${
-                incomplete ? " incomplete" : ""
-              }${!all ? " no-records" : ""}${isWorkday ? " is-workday" : ""}`}
-            >
-              <div className="attendance-date">{`${currentDate.getDate()}日`}</div>
-              {all ? (
-                <Fragment>
-                  <div className="complete-fraction">{`${
-                    all - incomplete
-                  }/${all}`}</div>
-                </Fragment>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div
+                key={`date-id-${dateRecord.attendanceDate}`}
+                className={`date-record-container${
+                  incomplete ? " incomplete" : ""
+                }${!all ? " no-records" : ""}${isWorkday ? " is-workday" : ""}`}
+              >
+                <div className="attendance-date">{`${currentDate.getDate()}日`}</div>
+                {all ? (
+                  <Fragment>
+                    <div className="complete-fraction">{`${
+                      all - incomplete
+                    }/${all}`}</div>
+                  </Fragment>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 }
