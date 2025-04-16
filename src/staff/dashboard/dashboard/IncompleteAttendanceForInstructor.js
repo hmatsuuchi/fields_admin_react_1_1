@@ -72,17 +72,19 @@ function IncompleteAttendanceForInstructor() {
 
       const dateArray = [];
       let currentDateBeingIterated = new Date(firstDate);
-      /* adds 9 hour JST timezone offset to compensate for conversion to ISO String */
-      currentDateBeingIterated.setHours(
-        currentDateBeingIterated.getHours() + 9
-      );
 
       while (currentDateBeingIterated >= lastDate) {
+        /* converts the date being iterated to JST for use in ISO String conversions */
+        const currentDateBeingIteratedJST = new Date(
+          currentDateBeingIterated.getTime() + 9 * 60 * 60 * 1000
+        );
+
         /* searches for date in the array that matches current date being iterated */
         const matchingDate = record_count_data.find((dateRecord) => {
+          /* compares the date being iterated with the date in the record */
           return (
             dateRecord.attendance__date ===
-            currentDateBeingIterated.toISOString().split("T")[0]
+            currentDateBeingIteratedJST.toISOString().split("T")[0]
           );
         });
 
@@ -93,7 +95,7 @@ function IncompleteAttendanceForInstructor() {
         /* add existing dates to the array or create new objects for non-existing dates */
         if (matchingDate) {
           dateArray.push({
-            attendanceDate: currentDateBeingIterated
+            attendanceDate: currentDateBeingIteratedJST
               .toISOString()
               .split("T")[0],
             attendanceAllCount: matchingDate.record_count_all,
@@ -104,7 +106,7 @@ function IncompleteAttendanceForInstructor() {
           });
         } else {
           dateArray.push({
-            attendanceDate: currentDateBeingIterated
+            attendanceDate: currentDateBeingIteratedJST
               .toISOString()
               .split("T")[0],
             isWorkday: isWorkday,
