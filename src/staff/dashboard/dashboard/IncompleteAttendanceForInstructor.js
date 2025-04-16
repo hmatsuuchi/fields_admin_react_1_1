@@ -53,8 +53,6 @@ function IncompleteAttendanceForInstructor() {
     /* sets the day of week offset integer */
     const setDayOfWeekOffsetInteger = () => {
       const firstDate = new Date();
-      /* sets first date to JST date */
-      firstDate.setHours(firstDate.getHours() + 9);
       /* calculates the day of week offset */
       setDayOfWeekOffset(6 - firstDate.getDay());
     };
@@ -66,8 +64,6 @@ function IncompleteAttendanceForInstructor() {
     ) => {
       /* sets start and end dates which define the range of dates though which to iterate */
       const firstDate = new Date();
-      /* sets first date to JST date */
-      firstDate.setHours(firstDate.getHours() + 9);
       const lastDate = new Date();
       lastDate.setDate(lastDate.getDate() - 28);
 
@@ -86,10 +82,6 @@ function IncompleteAttendanceForInstructor() {
         const isWorkday = pref_dashboard_working_days_js.includes(
           currentDateBeingIterated.getDay()
         );
-
-        console.log(currentDateBeingIterated);
-        console.log(currentDateBeingIterated.getDay());
-        console.log(pref_dashboard_working_days_js);
 
         /* if the date is not found, add it to the array */
         if (matchingDate) {
@@ -134,7 +126,7 @@ function IncompleteAttendanceForInstructor() {
       id="incomplete-attendance-for-instructor"
       className="component-primary-container"
     >
-      <div className="component-title">出欠状況 (almost finished)</div>
+      <div className="component-title">出欠状況</div>
       <div className="dates-container">
         <div className="day-of-week-title">土</div>
         <div className="day-of-week-title">金</div>
