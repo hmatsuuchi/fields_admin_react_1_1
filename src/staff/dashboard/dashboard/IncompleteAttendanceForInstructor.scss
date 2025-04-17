@@ -18,22 +18,25 @@ $grey: #3a3939;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: auto repeat(4, 1fr);
-    grid-column-gap: 1px;
-    grid-row-gap: 1px;
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
 
     .day-of-week-title {
       font-size: max(0.7rem, 2.8vw);
+
       justify-self: center;
 
       margin-bottom: 0.3rem;
     }
 
     .date-record-container {
-      background-color: #ffffff;
+      background-color: rgba(248, 243, 212, 0.65);
 
-      outline: solid 1px #000000;
+      border: solid 2px $beige;
 
-      padding: 0.3vw 0 0.8vw 0;
+      padding: 0.3vw 0 1vw 0;
+
+      border-radius: 5px;
 
       text-align: center;
 
@@ -43,23 +46,26 @@ $grey: #3a3939;
       justify-content: center;
 
       &.is-workday {
-        background-color: $teal;
+        // background-color: $teal;
+        background-color: rgba(0, 184, 169, 0.05);
+        border: solid 2px $teal;
       }
 
       &.incomplete.is-workday {
-        background-color: hsl(346, 91%, 67%); /* light-red */
+        // background-color: hsl(346, 91%, 67%); /* light-red */
+        background-color: rgba(247, 94, 130, 0.075);
+        border: solid 2px hsl(346, 91%, 67%);
       }
 
       &.no-records.is-workday {
-        background-color: $yellow;
+        // background-color: $yellow;
+        background-color: rgba(255, 222, 125, 0.05);
+        border: solid 2px $yellow;
       }
 
-      .attendance-date {
-        font-size: max(0.6rem, 2.8vw);
-      }
-
+      .attendance-date,
       .complete-fraction {
-        font-size: max(0.7rem, 3.2vw);
+        font-size: max(0.5rem, 2.8vw);
       }
     }
   }
@@ -73,18 +79,15 @@ $grey: #3a3939;
   #incomplete-attendance-for-instructor {
     .dates-container {
       .day-of-week-title {
-        font-size: max(0.6rem, 1.6vw);
+        font-size: max(0.7rem, 1.6vw);
       }
 
       .date-record-container {
-        padding: 0.15vw 0 0.4vw 0;
+        padding: 0.15vw 0 0.5vw 0;
 
-        .attendance-date {
-          font-size: max(0.6rem, 1.6vw);
-        }
-
+        .attendance-date,
         .complete-fraction {
-          font-size: max(0.7rem, 1.8vw);
+          font-size: max(0.5rem, 1.6vw);
         }
       }
     }
@@ -95,18 +98,15 @@ $grey: #3a3939;
   #incomplete-attendance-for-instructor {
     .dates-container {
       .day-of-week-title {
-        font-size: max(0.6rem, 1.1vw);
+        font-size: max(0.7rem, 1.1vw);
       }
 
       .date-record-container {
-        padding: 0.07vw 0 0.2vw 0;
+        padding: 0.07vw 0 0.3vw 0;
 
-        .attendance-date {
-          font-size: max(0.6rem, 1.1vw);
-        }
-
+        .attendance-date,
         .complete-fraction {
-          font-size: max(0.7rem, 1.2vw);
+          font-size: max(0.6rem, 1.1vw);
         }
       }
     }
@@ -117,18 +117,15 @@ $grey: #3a3939;
   #incomplete-attendance-for-instructor {
     .dates-container {
       .day-of-week-title {
-        font-size: max(0.6rem, 0.8vw);
+        font-size: max(0.7rem, 0.8vw);
       }
 
       .date-record-container {
-        padding: 0 0 0.1rem 0;
+        padding: 0 0 0.15rem 0;
 
-        .attendance-date {
-          font-size: max(0.6rem, 0.8vw);
-        }
-
+        .attendance-date,
         .complete-fraction {
-          font-size: max(0.7rem, 0.9vw);
+          font-size: max(0.6rem, 0.8vw);
         }
       }
     }
@@ -139,16 +136,13 @@ $grey: #3a3939;
   #incomplete-attendance-for-instructor {
     .dates-container {
       .day-of-week-title {
-        font-size: max(0.6rem, 0.6vw);
+        font-size: max(0.7rem, 0.6vw);
       }
 
       .date-record-container {
-        .attendance-date {
-          font-size: max(0.6rem, 0.6vw);
-        }
-
+        .attendance-date,
         .complete-fraction {
-          font-size: max(0.7rem, 0.7vw);
+          font-size: max(0.6rem, 0.6vw);
         }
       }
     }
@@ -159,16 +153,13 @@ $grey: #3a3939;
   #incomplete-attendance-for-instructor {
     .dates-container {
       .day-of-week-title {
-        font-size: 0.6rem;
+        font-size: 0.7rem;
       }
 
       .date-record-container {
-        .attendance-date {
-          font-size: 0.6rem;
-        }
-
+        .attendance-date,
         .complete-fraction {
-          font-size: 0.7rem;
+          font-size: 0.6rem;
         }
       }
     }
