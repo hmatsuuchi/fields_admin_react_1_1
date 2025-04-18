@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // CSS
 import "./StudentProfilesToolbar.scss";
 // COMPONENTS
@@ -20,6 +20,10 @@ function StudentProfilesToolbar({
   sorts,
   setSorts,
 }) {
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
   const [displayFilterMenu, setDisplayFilterMenu] = useState(false);
   const [displaySortMenu, setDisplaySortMenu] = useState(false);
 
@@ -27,16 +31,32 @@ function StudentProfilesToolbar({
     setSearchInput(event.target.value);
   };
 
+  /* ------------------------------------------- */
+  /* ---------------- FUNCTIONS ---------------- */
+  /* ------------------------------------------- */
+
+  /* focus on search input on component mount */
+  useEffect(() => {
+    const searchField = document.getElementById("search-input");
+    searchField.focus();
+  }, []);
+
+  /* ------------------------------------------- */
+  /* ------------------- JSX ------------------- */
+  /* ------------------------------------------- */
+
   return (
     <div
       id="student-profile-list-toolbar"
-      className={`${disableToolbarButtons ? "disable-toolbar-buttons" : ""}`}>
+      className={`${disableToolbarButtons ? "disable-toolbar-buttons" : ""}`}
+    >
       <div id="search-container">
         <input
           id="search-input"
           type="text"
           tabIndex="0"
-          onChange={handleInputChange}></input>
+          onChange={handleInputChange}
+        ></input>
       </div>
       <SortButton
         DOMOrder={0}
