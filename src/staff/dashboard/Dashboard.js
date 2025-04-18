@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState, useEffect, Fragment } from "react";
 // CSS
 import "./Dashboard.scss";
 // COMPONENTS
 import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceForInstructor";
+import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 
 function Dashboard() {
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
+  const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
+
+  /* ------------------------------------------- */
+  /* ---------------- FUNCTIONS ---------------- */
+  /* ------------------------------------------- */
+
+  useEffect(() => {
+    /* enables the toolbar buttons */
+    setDisableToolbarButtons(false);
+  }, []);
+
+  /* ------------------------------------------- */
+  /* ------------------- JSX ------------------- */
+  /* ------------------------------------------- */
+
   return (
-    <div id="dashboard-primary-container">
-      <IncompleteAttendanceForInstructor />
-    </div>
+    <Fragment>
+      <div id="dashboard-primary-container">
+        <IncompleteAttendanceForInstructor />
+      </div>
+      <DashboardToolbar disableToolbarButtons={disableToolbarButtons} />
+    </Fragment>
   );
 }
 

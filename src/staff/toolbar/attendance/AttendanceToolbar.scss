@@ -27,6 +27,7 @@ h3 {
   grid-auto-flow: column;
   align-items: center;
   justify-content: space-between;
+  grid-column-gap: 0.5rem;
 
   .toolbar-back-button {
     height: 1.5rem;
@@ -45,7 +46,7 @@ h3 {
 
       display: grid;
       grid-auto-flow: column;
-      grid-column-gap: 0.5rem;
+      grid-column-gap: 0.2rem;
 
       .instructor-button {
         width: 2rem;
@@ -73,6 +74,8 @@ h3 {
       width: 0.4rem;
       height: 0.5rem;
 
+      margin-right: -0.1rem;
+
       clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 
       align-self: center;
@@ -81,6 +84,8 @@ h3 {
 
       &.right-arrow {
         transform: rotate(180deg);
+
+        margin-left: -0.1rem;
       }
     }
   }
@@ -95,11 +100,13 @@ h3 {
   #attendance-toolbar {
     .button-set-container {
       .instructor-select-container {
+        grid-column-gap: 0.5rem;
+
         max-width: none;
 
         margin: 0;
 
-        overflow-x: default;
+        overflow-x: visible;
       }
 
       .instructor-select-container-arrow {
