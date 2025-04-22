@@ -25,6 +25,8 @@ import AttendanceCreate from "./staff/attendance/AttendanceCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
+// COMPONENTS - GAME
+import DisplayOne from "./staff/game/DisplayOne";
 
 // CSS
 import "./App.css";
@@ -153,6 +155,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="/logout"
           element={
@@ -164,6 +167,7 @@ function App() {
             />
           }
         />
+
         {/* STAFF ROUTES - DASHBOARD */}
         <Route
           path="/staff/dashboard"
@@ -192,6 +196,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - STUDENTS - STUDENT PROFILE DETAILS */}
         <Route
           path="/staff/students/profiles/details/:profileId"
@@ -207,6 +212,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - STUDENTS - CREATE PROFILE */}
         <Route
           path="/staff/students/profiles/create"
@@ -216,6 +222,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - STUDENTS - UPDATE PROFILE */}
         <Route
           path="/staff/students/profiles/update/:profileId"
@@ -229,6 +236,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - STUDENTS - DELETE PROFILE */}
         <Route
           path="/staff/students/profiles/delete/:profileId"
@@ -242,6 +250,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - CALENDAR - WEEK VIEW */}
         <Route
           path="/staff/schedule/events/calendar/week-view"
@@ -257,6 +266,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - CALENDAR - CREATE EVENT */}
         <Route
           path="/staff/schedule/events/calendar/create"
@@ -269,6 +279,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
         <Route
           path="/staff/attendance/day-view"
@@ -284,6 +295,7 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
         {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
         <Route
           path="/staff/attendance/create/"
@@ -297,6 +309,17 @@ function App() {
             </StaffProtectedRoute>
           }
         ></Route>
+
+        {/* STAFF ROUTES - GAME - DISPLAY ONE */}
+        <Route
+          path="/staff/game/display/01"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <DisplayOne csrfToken={csrfToken} />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
         {/* CUSTOMER ROUTES - DASHBOARD */}
         <Route
           path="/customer/dashboard"
