@@ -1,6 +1,6 @@
 import React from "react";
 /* AXIOS */
-import instance from "../../../axios/axios_authenticated";
+import instance from "../../../../axios/axios_authenticated";
 /* CSS */
 import "./ConfirmationModal.scss";
 
@@ -82,7 +82,8 @@ function ConfirmationModal({
         </button>
         <button
           className="confirm-button"
-          onClick={handleClicksToConfirmButton}>
+          onClick={handleClicksToConfirmButton}
+        >
           削除する
         </button>
       </div>

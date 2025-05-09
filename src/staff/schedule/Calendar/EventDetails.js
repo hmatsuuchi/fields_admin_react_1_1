@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 /* Axios */
-import instance from "../../axios/axios_authenticated";
+import instance from "../../../axios/axios_authenticated";
 /* COMPONENTS */
 import LoadingSpinner from "../../micro/LoadingSpinner";
 /* CSS */
@@ -114,12 +114,14 @@ function EventDetails({
           <div className="confirmation-modal-dialog">{`「${studentToRemove.last_name_kanji} ${studentToRemove.first_name_kanji}」を授業から削除しますか？`}</div>
           <button
             className="cancel-button"
-            onClick={handleClicksToCancelButton}>
+            onClick={handleClicksToCancelButton}
+          >
             戻る
           </button>
           <button
             className="confirm-button"
-            onClick={handleClicksToConfirmButton}>
+            onClick={handleClicksToConfirmButton}
+          >
             削除する
           </button>
         </div>
@@ -190,12 +192,14 @@ function EventDetails({
           <div className="confirmation-modal-dialog">{`「${eventToArchive.eventName}」をアーカイブしますか？`}</div>
           <button
             className="cancel-button"
-            onClick={handleClicksToCancelButton}>
+            onClick={handleClicksToCancelButton}
+          >
             戻る
           </button>
           <button
             className="confirm-button"
-            onClick={handleClicksToConfirmButton}>
+            onClick={handleClicksToConfirmButton}
+          >
             アーカイブする
           </button>
         </div>
@@ -408,7 +412,8 @@ function EventDetails({
     <Fragment>
       <div
         id="close-event-details-background-overlay"
-        onClick={handleClicksToCloseEventDetails}></div>
+        onClick={handleClicksToCloseEventDetails}
+      ></div>
       <div id="event-details-container">
         {eventDetails && (
           <div className="event-details-card">
@@ -418,7 +423,8 @@ function EventDetails({
               </div>
               <div
                 className="event-details-card-header-close-button"
-                onClick={handleClicksToCloseEventDetails}></div>
+                onClick={handleClicksToCloseEventDetails}
+              ></div>
             </div>
             <div className="event-details-card-body">
               <div className="class-info-container">
@@ -452,7 +458,8 @@ function EventDetails({
                 <div
                   className={`student-select-container${
                     studentsFiltered.length === 0 ? " disable-clicks" : ""
-                  }`}>
+                  }`}
+                >
                   <div className="label">生徒検索</div>
                   <div className="student-number-indicator">
                     {`${studentsFiltered.length}件`}
@@ -460,7 +467,8 @@ function EventDetails({
                   <input
                     className="student-search"
                     value={studentSearch}
-                    onChange={handleStudentSearchChange}></input>
+                    onChange={handleStudentSearchChange}
+                  ></input>
                   <div id="select-container">
                     {studentsFiltered.length !== 0 ? (
                       studentsFiltered.map((student) => {
@@ -494,7 +502,8 @@ function EventDetails({
                               student.first_name_katakana
                             }
                             data-grade_verbose={student.grade_verbose}
-                            data-status={student.status}>
+                            data-status={student.status}
+                          >
                             <div
                               className={`student-status-indicator${
                                 student.status === 1
@@ -506,7 +515,8 @@ function EventDetails({
                                   : student.status === 4
                                   ? " long-absence"
                                   : " unknown"
-                              }`}></div>
+                              }`}
+                            ></div>
                             <div className="student-name-kanji">
                               {student.last_name_kanji &&
                                 student.last_name_kanji}
@@ -533,7 +543,8 @@ function EventDetails({
                 <div
                   className={`student-enrolled-container${
                     studentsFiltered.length === 0 ? " disable-clicks" : ""
-                  }`}>
+                  }`}
+                >
                   <div className="label">在籍生徒</div>
                   <div
                     className={`student-number-indicator${
@@ -541,7 +552,8 @@ function EventDetails({
                       eventDetails.event_type.capacity
                         ? " class-over-capacity"
                         : ""
-                    }`}>
+                    }`}
+                  >
                     {`${eventDetails.students.length}/${eventDetails.event_type.capacity}`}
                   </div>
                   <div className="enrolled-container">
@@ -555,7 +567,8 @@ function EventDetails({
                             onClick={handleClicksToRemoveStudentFromEvent}
                             data-id={student.id}
                             data-last_name_kanji={student.last_name_kanji}
-                            data-first_name_kanji={student.first_name_kanji}>
+                            data-first_name_kanji={student.first_name_kanji}
+                          >
                             <div
                               className={`student-status-indicator${
                                 student.status === 1
@@ -567,7 +580,8 @@ function EventDetails({
                                   : student.status === 4
                                   ? " long-absence"
                                   : " unknown"
-                              }`}></div>
+                              }`}
+                            ></div>
                             <div className="student-name-kanji">
                               {student.last_name_kanji &&
                                 student.last_name_kanji}
@@ -595,7 +609,8 @@ function EventDetails({
                 className="archive-button"
                 onClick={handleClicksToArchiveEvent}
                 data-event_id={eventDetails.id}
-                data-event_name={eventDetails.event_name}></button>
+                data-event_name={eventDetails.event_name}
+              ></button>
             </div>
           </div>
         )}

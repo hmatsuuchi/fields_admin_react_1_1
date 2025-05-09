@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 // Axios
-import instance_authenticated from "./staff/axios/axios_authenticated";
+import instance_authenticated from "./axios/axios_authenticated";
 // COMPONENTS
 import Login from "./authentication/Login";
 import Logout from "./authentication/Logout";
 import StaffProtectedRoute from "./authentication/StaffProtectedRoute";
 import CustomerProtectedRoute from "./authentication/CustomerProtectedRoute";
+import DisplayProtectedRoute from "./authentication/DisplayProtectedRoute";
 // COMPONENTS - STAFF - GENERAL
 import StaffNavigation from "./staff/navigation/StaffNavigation";
 import StaffDashboard from "./staff/dashboard/Dashboard";
@@ -25,8 +26,10 @@ import AttendanceCreate from "./staff/attendance/AttendanceCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
-// COMPONENTS - GAME
-import DisplayOne from "./staff/game/DisplayOne";
+// COMPONENTS - DISPLAY - GENERAL
+import DisplayDashboard from "./display/dashboard/Dashboard";
+// COMPONENTS - DISPLAY - GAME
+import DisplayOne from "./display/display_01/DisplayOne";
 
 // CSS
 import "./App.css";
@@ -42,6 +45,9 @@ function App() {
   const [isStaff, setIsStaff] = useState(localStorage.getItem("is_staff"));
   const [isCustomer, setIsCustomer] = useState(
     localStorage.getItem("is_customer")
+  );
+  const [isDisplay, setIsDisplay] = useState(
+    localStorage.getItem("is_display")
   );
   const [csrfToken, setCsrfToken] = useState("");
 
@@ -151,6 +157,8 @@ function App() {
               setIsStaff={setIsStaff}
               isCustomer={isCustomer}
               setIsCustomer={setIsCustomer}
+              isDisplay={isDisplay}
+              setIsDisplay={setIsDisplay}
               setCsrfToken={setCsrfToken}
             />
           }
@@ -310,16 +318,6 @@ function App() {
           }
         ></Route>
 
-        {/* STAFF ROUTES - GAME - DISPLAY ONE */}
-        <Route
-          path="/staff/game/display/01"
-          element={
-            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <DisplayOne csrfToken={csrfToken} />
-            </StaffProtectedRoute>
-          }
-        ></Route>
-
         {/* CUSTOMER ROUTES - DASHBOARD */}
         <Route
           path="/customer/dashboard"
@@ -327,6 +325,26 @@ function App() {
             <CustomerProtectedRoute isAuth={isAuth} isCustomer={isCustomer}>
               <CustomerDashboard />
             </CustomerProtectedRoute>
+          }
+        ></Route>
+
+        {/* DISPLAY ROUTES - DASHBOARD */}
+        <Route
+          path="/display/dashboard"
+          element={
+            <DisplayProtectedRoute isAuth={isAuth} isDisplay={isDisplay}>
+              <DisplayDashboard />
+            </DisplayProtectedRoute>
+          }
+        ></Route>
+
+        {/* DISPLAY ROUTES - GAME - DISPLAY ONE */}
+        <Route
+          path="/display/game/display/01"
+          element={
+            <DisplayProtectedRoute isAuth={isAuth} isDisplay={isDisplay}>
+              <DisplayOne csrfToken={csrfToken} />
+            </DisplayProtectedRoute>
           }
         ></Route>
       </Routes>

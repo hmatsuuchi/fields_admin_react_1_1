@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import instance from "../staff/axios/axios_authenticated";
+import instance from "../axios/axios_authenticated";
 
 function Logout({ setIsAuth, setIsStaff, setIsCustomer, csrfToken }) {
   useEffect(() => {

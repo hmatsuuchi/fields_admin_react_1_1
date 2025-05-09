@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 // Axios
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 // Components
 import StudentProfileUpdateToolbar from "../toolbar/students/StudentProfileUpdateToolbar";
 import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
@@ -258,7 +258,8 @@ function StudentProfilesUpdate({
         <div
           className={`card-section-full-width${
             submitted ? " content-submitted" : ""
-          }`}>
+          }`}
+        >
           <div className="card-container-full-width">
             <div className="card-full-width">
               <div
@@ -272,7 +273,8 @@ function StudentProfilesUpdate({
                     : profileStatus === 4
                     ? " long-absence"
                     : ""
-                }`}>
+                }`}
+              >
                 {archived ? <div className="archived"></div> : <div></div>}
                 <div className="status">{profileStatusName}</div>
               </div>
@@ -289,9 +291,8 @@ function StudentProfilesUpdate({
                       name="last_name_romaji"
                       value={lastNameRomaji}
                       maxLength={35}
-                      onChange={(e) =>
-                        setLastNameRomaji(e.target.value)
-                      }></input>
+                      onChange={(e) => setLastNameRomaji(e.target.value)}
+                    ></input>
                     <label htmlFor="first_name_romaji">名（ローマ字）</label>
                     <input
                       type="text"
@@ -300,9 +301,8 @@ function StudentProfilesUpdate({
                       name="first_name_romaji"
                       value={firstNameRomaji}
                       maxLength={35}
-                      onChange={(e) =>
-                        setFirstNameRomaji(e.target.value)
-                      }></input>
+                      onChange={(e) => setFirstNameRomaji(e.target.value)}
+                    ></input>
                     <label htmlFor="last_name_kanji">姓（漢字）</label>
                     <input
                       type="text"
@@ -311,9 +311,8 @@ function StudentProfilesUpdate({
                       name="last_name_kanji"
                       value={lastNameKanji}
                       maxLength={35}
-                      onChange={(e) =>
-                        setLastNameKanji(e.target.value)
-                      }></input>
+                      onChange={(e) => setLastNameKanji(e.target.value)}
+                    ></input>
                     <label htmlFor="first_name_kanji">名（漢字）</label>
                     <input
                       type="text"
@@ -322,9 +321,8 @@ function StudentProfilesUpdate({
                       name="first_name_kanji"
                       value={firstNameKanji}
                       maxLength={35}
-                      onChange={(e) =>
-                        setFirstNameKanji(e.target.value)
-                      }></input>
+                      onChange={(e) => setFirstNameKanji(e.target.value)}
+                    ></input>
                     <label htmlFor="last_name_katakana">姓（カタカナ）</label>
                     <input
                       type="text"
@@ -333,9 +331,8 @@ function StudentProfilesUpdate({
                       name="last_name_katakana"
                       value={lastNameKatakana}
                       maxLength={35}
-                      onChange={(e) =>
-                        setLastNameKatakana(e.target.value)
-                      }></input>
+                      onChange={(e) => setLastNameKatakana(e.target.value)}
+                    ></input>
                     <label htmlFor="first_name_katakana">名（カタカナ）</label>
                     <input
                       type="text"
@@ -344,9 +341,8 @@ function StudentProfilesUpdate({
                       name="first_name_katakana"
                       value={firstNameKatakana}
                       maxLength={35}
-                      onChange={(e) =>
-                        setFirstNameKatakana(e.target.value)
-                      }></input>
+                      onChange={(e) => setFirstNameKatakana(e.target.value)}
+                    ></input>
                     {/* Address Section */}
                     <ProfileSectionHeader displayText="住所" />
                     <label htmlFor="post_code">郵便番号</label>
@@ -357,7 +353,8 @@ function StudentProfilesUpdate({
                       name="post_code"
                       value={postCode}
                       maxLength={10}
-                      onChange={(e) => setPostCode(e.target.value)}></input>
+                      onChange={(e) => setPostCode(e.target.value)}
+                    ></input>
                     <label htmlFor="prefecture">府県</label>
                     <select
                       type="text"
@@ -365,13 +362,15 @@ function StudentProfilesUpdate({
                       className="input-width-7"
                       name="prefecture"
                       value={prefecture ? prefecture : ""}
-                      onChange={(e) => setPrefecture(e.target.value)}>
+                      onChange={(e) => setPrefecture(e.target.value)}
+                    >
                       <option value="">-------</option>
                       {prefectureChoices.map((prefecture) => {
                         return (
                           <option
                             value={prefecture.id}
-                            key={`prefecture-choice-${prefecture.id}`}>
+                            key={`prefecture-choice-${prefecture.id}`}
+                          >
                             {prefecture.name}
                           </option>
                         );
@@ -385,7 +384,8 @@ function StudentProfilesUpdate({
                       name="city"
                       value={city}
                       maxLength={35}
-                      onChange={(e) => setCity(e.target.value)}></input>
+                      onChange={(e) => setCity(e.target.value)}
+                    ></input>
                     <label htmlFor="address_1">住所1</label>
                     <input
                       type="text"
@@ -394,7 +394,8 @@ function StudentProfilesUpdate({
                       name="address_1"
                       value={address1}
                       maxLength={35}
-                      onChange={(e) => setAddress1(e.target.value)}></input>
+                      onChange={(e) => setAddress1(e.target.value)}
+                    ></input>
                     <label htmlFor="address_2">住所2</label>
                     <input
                       type="text"
@@ -403,7 +404,8 @@ function StudentProfilesUpdate({
                       name="address_2"
                       value={address2}
                       maxLength={35}
-                      onChange={(e) => setAddress2(e.target.value)}></input>
+                      onChange={(e) => setAddress2(e.target.value)}
+                    ></input>
                     {/* Contact Section */}
                     <ProfileSectionHeader displayText="連絡先" />
                     <div id="phone-number-container">
@@ -413,7 +415,8 @@ function StudentProfilesUpdate({
                           <div
                             key={`phone-number-data-${index}`}
                             id={`phone-number-data-${index}`}
-                            className="phone-number-data">
+                            className="phone-number-data"
+                          >
                             <label htmlFor="number" className="number-label">
                               電話
                             </label>
@@ -424,12 +427,12 @@ function StudentProfilesUpdate({
                               name="number"
                               maxLength={24}
                               value={phone.number}
-                              onChange={(e) =>
-                                updatePhoneNumber(e, index)
-                              }></input>
+                              onChange={(e) => updatePhoneNumber(e, index)}
+                            ></input>
                             <label
                               htmlFor="number_type"
-                              className="number-type-label">
+                              className="number-type-label"
+                            >
                               代表
                             </label>
                             <select
@@ -438,13 +441,15 @@ function StudentProfilesUpdate({
                               id="phone-type"
                               name="number_type"
                               value={phone.number_type ? phone.number_type : ""}
-                              onChange={(e) => updatePhoneType(e, index)}>
+                              onChange={(e) => updatePhoneType(e, index)}
+                            >
                               <option value="">-------</option>
                               {phoneChoices.map((phone) => {
                                 return (
                                   <option
                                     value={phone.id}
-                                    key={`phone-choice-${phone.id}`}>
+                                    key={`phone-choice-${phone.id}`}
+                                  >
                                     {phone.name}
                                   </option>
                                 );
@@ -461,7 +466,8 @@ function StudentProfilesUpdate({
                           id="add-phone-number-button"
                           className={`add-phone-number-button${
                             phoneNumberArray.length > 8 ? " disable-button" : ""
-                          }`}>
+                          }`}
+                        >
                           <div className="vertical-line"></div>
                           <div className="horizontal-line"></div>
                         </button>
@@ -471,7 +477,8 @@ function StudentProfilesUpdate({
                           id="remove-phone-number-button"
                           className={`remove-phone-number-button${
                             phoneNumberArray.length < 2 ? " disable-button" : ""
-                          }`}>
+                          }`}
+                        >
                           <div className="horizontal-line"></div>
                         </button>
                       </div>
@@ -485,7 +492,8 @@ function StudentProfilesUpdate({
                       className="input-width-s"
                       name="birthday"
                       value={birthday ? birthday : ""}
-                      onChange={(e) => setBirthday(e.target.value)}></input>
+                      onChange={(e) => setBirthday(e.target.value)}
+                    ></input>
                     <label htmlFor="grade">学年</label>
                     <select
                       type="text"
@@ -493,13 +501,15 @@ function StudentProfilesUpdate({
                       className="input-width-7"
                       name="grade"
                       value={grade ? grade : ""}
-                      onChange={(e) => setGrade(e.target.value)}>
+                      onChange={(e) => setGrade(e.target.value)}
+                    >
                       <option value="">-------</option>
                       {gradeChoices.map((grade) => {
                         return (
                           <option
                             value={grade.id}
-                            key={`grad-choice-${grade.id}`}>
+                            key={`grad-choice-${grade.id}`}
+                          >
                             {grade.name}
                           </option>
                         );
@@ -520,7 +530,8 @@ function StudentProfilesUpdate({
                                 : ""
                             }`}
                             key={status.id}
-                            onClick={handleProfileStatusClick}>
+                            onClick={handleProfileStatusClick}
+                          >
                             {status.name}
                           </button>
                         );
@@ -540,7 +551,8 @@ function StudentProfilesUpdate({
                                 : ""
                             }`}
                             key={payment.id}
-                            onClick={handlePaymentMethodClick}>
+                            onClick={handlePaymentMethodClick}
+                          >
                             {payment.name}
                           </button>
                         );
@@ -552,7 +564,8 @@ function StudentProfilesUpdate({
                       id="archived-button-container"
                       className={archived ? "archived-button-active" : ""}
                       name="archived"
-                      onClick={handleArchivedClick}>
+                      onClick={handleArchivedClick}
+                    >
                       <div className="archived-button-icon"></div>
                       <div className="archived-dot"></div>
                     </button>
@@ -560,13 +573,15 @@ function StudentProfilesUpdate({
                     <div className="bottom-buttons-container">
                       <Link
                         to={`/staff/students/profiles/delete/${profileId}`}
-                        className="button delete">
+                        className="button delete"
+                      >
                         削除
                       </Link>
                       <div className="button-group-container">
                         <Link
                           to={`/staff/students/profiles/details/${profileId}`}
-                          className="button cancel">
+                          className="button cancel"
+                        >
                           キャンセル
                         </Link>
                         <button type="submit" className="button submit">

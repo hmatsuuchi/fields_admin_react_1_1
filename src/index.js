@@ -4,7 +4,7 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 // Axios interceptor
-import "./staff/axios/interceptor";
+import "./axios/interceptor";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

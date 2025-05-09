@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 /* AXIOS */
-import instance from "../../../axios/axios_authenticated";
+import instance from "../../../../axios/axios_authenticated";
 /* CSS */
 import "./ClassSelectContainer.scss";
 /* COMPONENTS */
@@ -156,7 +156,8 @@ function ClassSelectContainer({
       <div className="event-number-indicator label">{`${eventChoicesFiltered.length}件`}</div>
       <input
         className="event-search"
-        onChange={handleEventSearchOnChange}></input>
+        onChange={handleEventSearchOnChange}
+      ></input>
       <div className="event-select-container">
         {eventChoicesFiltered.length !== 0 ? (
           eventChoicesFiltered.map((event) => {
@@ -171,7 +172,8 @@ function ClassSelectContainer({
                 data-event_name={event.event_name}
                 data-event_start_time={event.start_time}
                 data-event_primary_instructor={event.primary_instructor.id}
-                data-event_capacity={event.event_type.capacity}>
+                data-event_capacity={event.event_type.capacity}
+              >
                 <div className="event-day-time-container">
                   {dayOfWeekArray.map((day) => {
                     return (
@@ -189,7 +191,8 @@ function ClassSelectContainer({
                             ? " sunday"
                             : ""
                         }`}
-                        key={`day-of-week-id-${day[0]}`}>
+                        key={`day-of-week-id-${day[0]}`}
+                      >
                         {day[1]}
                       </div>
                     );
@@ -200,7 +203,8 @@ function ClassSelectContainer({
                     }`}
                     style={{
                       gridColumn: dayOfWeekIntegerConverter[event.day_of_week],
-                    }}>
+                    }}
+                  >
                     {removeLeadingZeroFromString(event.start_time.slice(0, 5))}
                   </div>
                 </div>
@@ -208,7 +212,8 @@ function ClassSelectContainer({
                   className="event-primary-instructor"
                   style={{
                     backgroundImage: `url(/img/instructors/${event.primary_instructor.userprofilesinstructors.icon_stub})`,
-                  }}></div>
+                  }}
+                ></div>
                 <div className="event-name">{event.event_name}</div>
                 <div className="event-type">{event.event_type.name}</div>
 
@@ -219,7 +224,8 @@ function ClassSelectContainer({
                       return (
                         <div
                           key={`student-id-${student.id}`}
-                          className="event-student">
+                          className="event-student"
+                        >
                           <div
                             className={`status-indicator${
                               student.status === 1
@@ -231,7 +237,8 @@ function ClassSelectContainer({
                                 : student.status === 4
                                 ? " long-absence"
                                 : " unknown"
-                            }`}></div>
+                            }`}
+                          ></div>
                           <div className="event-student-name-kanji-grade">
                             {`${student.last_name_kanji} ${student.first_name_kanji} (${student.grade_verbose})`}
                           </div>

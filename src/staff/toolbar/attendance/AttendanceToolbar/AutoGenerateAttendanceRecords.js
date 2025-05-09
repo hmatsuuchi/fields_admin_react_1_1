@@ -1,6 +1,6 @@
 import React from "react";
 /* Axios */
-import instance from "../../../axios/axios_authenticated";
+import instance from "../../../../axios/axios_authenticated";
 /* CSS */
 import "./AutoGenerateAttendanceRecords.scss";
 
@@ -76,7 +76,8 @@ function AutoGenerateAttendanceRecords({
   return (
     <button
       id="auto-generate-attendance-records-button"
-      onClick={handleClicksToAutoGenerateAttendanceRecordsButton}></button>
+      onClick={handleClicksToAutoGenerateAttendanceRecordsButton}
+    ></button>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 // Axios
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 // Components
 import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import EnrolledClasses from "./StudentProfilesDetails/EnrolledClasses";

@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 // Axios
-import instance from "../../staff/axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 // Components
 import DataLoadError from "../micro/DataLoadError";
 import DisplayDescriptors from "../micro/students/DisplayDescriptors";
@@ -290,7 +290,8 @@ function StudentProfiles({
                 <Link
                   to={`/staff/students/profiles/details/${profile.id}`}
                   className="student-profile-card card"
-                  key={`student-profile-${profile.id}`}>
+                  key={`student-profile-${profile.id}`}
+                >
                   {" "}
                   <div
                     className={`student-profile-header-container${
@@ -303,7 +304,8 @@ function StudentProfiles({
                         : profile.status === 4
                         ? " long-absence"
                         : "status-unknown"
-                    }`}>
+                    }`}
+                  >
                     {profile.archived === true ? (
                       <div className="archived"></div>
                     ) : (

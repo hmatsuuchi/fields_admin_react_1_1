@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from "react";
 
 /* AXIOS */
-import instance from "../../axios/axios_authenticated";
+import instance from "../../../axios/axios_authenticated";
 /* COMPONENTS */
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
@@ -29,6 +29,8 @@ function IncompleteAttendanceForInstructor() {
           .get("api/dashboard/dashboard/incomplete_attendance_for_instructor/")
           .then((response) => {
             if (response) {
+              console.log(response.data.past_month_by_date_annotated);
+
               const record_count_data =
                 response.data.past_month_by_date_annotated;
 
@@ -83,7 +85,7 @@ function IncompleteAttendanceForInstructor() {
         const matchingDate = record_count_data.find((dateRecord) => {
           /* compares the date being iterated with the date in the record */
           return (
-            dateRecord.attendance__date ===
+            dateRecord.attendance_reverse_relationship__date ===
             currentDateBeingIteratedJST.toISOString().split("T")[0]
           );
         });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 // Axios
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 // Components
 import StudentDeleteToolbar from "../toolbar/students/StudentDeleteToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
@@ -110,12 +110,14 @@ function StudentProfilesDelete({
                 }を削除しますか？`,
               ]
             : []
-        }></DisplayDescriptors>
+        }
+      ></DisplayDescriptors>
       {displayContent ? (
         <div
           className={`card-section-full-width${
             submitted ? " content-submitted" : ""
-          }`}>
+          }`}
+        >
           <div className="card-container-full-width">
             {profile && (
               <div className="card-full-width">
@@ -130,7 +132,8 @@ function StudentProfilesDelete({
                       : profile.status === 4
                       ? " long-absence"
                       : "status-unknown"
-                  }`}>
+                  }`}
+                >
                   {profile.archived === true ? (
                     <div className="archived"></div>
                   ) : (
@@ -228,7 +231,8 @@ function StudentProfilesDelete({
             </Link>
             <Link
               to={`/staff/students/profiles/update/${profileId}`}
-              className="button cancel">
+              className="button cancel"
+            >
               戻る
             </Link>
           </div>

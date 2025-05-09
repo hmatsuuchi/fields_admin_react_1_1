@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 // Axios
-import instance_public from "../staff/axios/axios_public";
-import instance_authenticated from "../staff/axios/axios_authenticated";
+import instance_public from "../axios/axios_public.js";
+import instance_authenticated from "../axios/axios_authenticated.js";
 // Components
 import LoadingSpinner from "../staff/micro/LoadingSpinner.js";
 // CSS
@@ -16,8 +16,10 @@ function Login({
   isStaff,
   setIsStaff,
   isCustomer,
+  isDisplay,
   setIsCustomer,
   setCsrfToken,
+  setIsDisplay,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -73,11 +75,13 @@ function Login({
 
                 const loggedInUserGroups =
                   response.data["logged_in_user_groups"];
+
                 const staffRedirectParameters = [
                   "Superusers",
                   "Staff",
                   "Administrators",
                 ];
+
                 if (
                   staffRedirectParameters.some((i) =>
                     loggedInUserGroups.includes(i)
@@ -87,11 +91,16 @@ function Login({
                   setIsStaff(true);
                   // set is_staff bool in local storage
                   localStorage.setItem("is_staff", true);
-                } else {
+                } else if (loggedInUserGroups.includes("Customers")) {
                   // set customer prop
                   setIsCustomer(true);
                   // set is_customer bool in local storage
                   localStorage.setItem("is_customer", true);
+                } else if (loggedInUserGroups.includes("Displays")) {
+                  // set display prop
+                  setIsDisplay(true);
+                  // set is_display bool in local storage
+                  localStorage.setItem("is_display", true);
                 }
               });
           } catch (e) {
@@ -122,6 +131,8 @@ function Login({
   } else if (isAuth && isCustomer) {
     // customer redirect
     return <Navigate replace to="/customer/dashboard/" />;
+  } else if (isAuth && isDisplay) {
+    return <Navigate replace to="/display/dashboard/" />;
   } else if (displayContent === true) {
     return (
       <div className="authentication-background-container">
@@ -138,14 +149,16 @@ function Login({
               value={username}
               placeholder="ユーザー名"
               onChange={(e) => setUsername(e.target.value)}
-              required></input>
+              required
+            ></input>
             <input
               name="password"
               type="password"
               value={password}
               placeholder="パスワード"
               onChange={(e) => setPassword(e.target.value)}
-              required></input>
+              required
+            ></input>
             <button type="submit" className="form-button">
               ログイン
             </button>

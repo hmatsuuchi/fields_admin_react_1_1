@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 /* AXIOS */
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./Attendance.scss";
 /* COMPONENTS  */

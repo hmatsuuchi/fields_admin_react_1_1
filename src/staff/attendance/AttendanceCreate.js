@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 /* Axios */
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./AttendanceCreate.scss";
 /* COMPONENTS */
@@ -138,7 +138,8 @@ function AttendanceCreate({ csrfToken }) {
                     id="start-time-input"
                     type="time"
                     value={attendanceStartTimeSelected.slice(0, 5)}
-                    onChange={handleChangesToAttendanceStartTime}></input>
+                    onChange={handleChangesToAttendanceStartTime}
+                  ></input>
                 </div>
                 <div className="label-and-data instructor">
                   <label>講師</label>
@@ -146,7 +147,8 @@ function AttendanceCreate({ csrfToken }) {
                     {primaryInstructorChoices.map((instructor) => (
                       <option
                         key={`instructor-id-${instructor.id}`}
-                        value={instructor.id}>
+                        value={instructor.id}
+                      >
                         {`${instructor.userprofilesinstructors.last_name_kanji}先生`}
                       </option>
                     ))}

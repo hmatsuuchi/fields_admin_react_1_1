@@ -1,6 +1,6 @@
 import React from "react";
 /* AXIOS */
-import instance from "../../../axios/axios_authenticated";
+import instance from "../../../../axios/axios_authenticated";
 /* CSS */
 import "./StudentEnrolledContainer.scss";
 
@@ -88,7 +88,8 @@ function StudentEnrolledContainer({
           attendanceStudentsSelected.length >= eventCapacitySelected
             ? " class-over-capacity"
             : ""
-        }`}>
+        }`}
+      >
         {`${attendanceStudentsSelected.length}/${eventCapacitySelected}`}
       </div>
       <div className="enrolled-container">
@@ -100,7 +101,8 @@ function StudentEnrolledContainer({
               onClick={handleClicksToRemoveStudentFromEvent}
               data-id={student.id}
               data-last_name_kanji={student.last_name_kanji}
-              data-first_name_kanji={student.first_name_kanji}>
+              data-first_name_kanji={student.first_name_kanji}
+            >
               <div
                 className={`student-status-indicator${
                   student.status === 1
@@ -112,7 +114,8 @@ function StudentEnrolledContainer({
                     : student.status === 4
                     ? " long-absence"
                     : " unknown"
-                }`}></div>
+                }`}
+              ></div>
               <div className="student-name-kanji">
                 {student.last_name_kanji && student.last_name_kanji}
                 {student.first_name_kanji && ` ${student.first_name_kanji}`}

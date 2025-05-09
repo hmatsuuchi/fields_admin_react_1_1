@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 /* Axios */
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 /* COMPONENTS */
 import CalendarToolbar from "../toolbar/schedule/CalendarToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";

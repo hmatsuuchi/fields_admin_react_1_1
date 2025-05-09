@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 /* AXIOS */
-import instance from "../../../axios/axios_authenticated";
+import instance from "../../../../axios/axios_authenticated";
 /* CSS */
 import "./StudentContainer.scss";
 /* COMPONENTS */
@@ -227,7 +227,8 @@ function StudentContainer({
         <input
           className="student-search"
           value={studentSearch}
-          onChange={handleStudentSearchChange}></input>
+          onChange={handleStudentSearchChange}
+        ></input>
         <div id="select-container">
           {studentsFiltered.length !== 0
             ? studentsFiltered.map((student) => {
@@ -261,7 +262,8 @@ function StudentContainer({
                     data-last_name_katakana={student.last_name_katakana}
                     data-first_name_katakana={student.first_name_katakana}
                     data-grade_verbose={student.grade_verbose}
-                    data-status={student.status}>
+                    data-status={student.status}
+                  >
                     <div
                       className={`student-status-indicator${
                         student.status === 1
@@ -273,7 +275,8 @@ function StudentContainer({
                           : student.status === 4
                           ? " long-absence"
                           : " unknown"
-                      }`}></div>
+                      }`}
+                    ></div>
                     <div className="student-name-kanji">
                       {student.last_name_kanji && student.last_name_kanji}
                       {student.first_name_kanji &&

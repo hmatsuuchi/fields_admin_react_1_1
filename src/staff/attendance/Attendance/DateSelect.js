@@ -1,6 +1,6 @@
 import React from "react";
 /* Axios */
-import instance from "../../axios/axios_authenticated";
+import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./DateSelect.scss";
 
@@ -152,17 +152,21 @@ function DateSelect({
   return attendanceDate && attendanceDateDisplay ? (
     <div
       id="date-select-container"
-      className={disableDateNavigationButtons ? "disable-clicks" : ""}>
+      className={disableDateNavigationButtons ? "disable-clicks" : ""}
+    >
       <div
         className="date-arrow previous"
-        onClick={handleClicksToDateArrowPrevious}></div>
+        onClick={handleClicksToDateArrowPrevious}
+      ></div>
       <input
         type="date"
         value={attendanceDateDisplay}
-        onChange={handleDateInputChange}></input>
+        onChange={handleDateInputChange}
+      ></input>
       <div
         className="date-arrow next"
-        onClick={handleClicksToDateArrowNext}></div>
+        onClick={handleClicksToDateArrowNext}
+      ></div>
       <div className="day-of-week-text">{dayOfWeekText}</div>
       {showDateSearchButton ? (
         <button onClick={handleDateSearchButtonClick}>データを読み込み</button>

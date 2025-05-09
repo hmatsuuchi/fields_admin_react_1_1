@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 /* AXIOS */
-import instance from "../axios/axios_authenticated";
+import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./AttendanceUpdate.scss";
 /* COMPONENTS */
@@ -109,7 +109,8 @@ function AttendanceUpdate({
     <Fragment>
       <div
         className="attendance-update-background"
-        onClick={handleClicksToExitButton}></div>
+        onClick={handleClicksToExitButton}
+      ></div>
       <div className="attendance-update-container">
         <div className="attendance-update-card">
           {/* HEADER */}
@@ -117,23 +118,27 @@ function AttendanceUpdate({
             <div className="attendance-event-name">{eventNameSelected}</div>
             <div
               className="exit-button"
-              onClick={handleClicksToExitButton}></div>
+              onClick={handleClicksToExitButton}
+            ></div>
           </div>
           {/* BODY */}
           <div
             className={`attendance-update-card-body${
               studentChoices.length === 0 ? " disable-clicks" : ""
-            }`}>
+            }`}
+          >
             <div className="label-and-data instructor">
               <div className="label">講師</div>
               <select
                 className="data instructor"
                 readOnly
-                value={activePrimaryInstructor.id}>
+                value={activePrimaryInstructor.id}
+              >
                 {primaryInstructorChoices.map((instructor) => (
                   <option
                     key={`instructor-id-${instructor.id}`}
-                    value={instructor.id}>
+                    value={instructor.id}
+                  >
                     {`${instructor.userprofilesinstructors.last_name_kanji}先生`}
                   </option>
                 ))}
@@ -176,7 +181,8 @@ function AttendanceUpdate({
           <div
             className={`attendance-update-card-footer${
               studentChoices.length === 0 ? " disable-clicks" : ""
-            }`}>
+            }`}
+          >
             <DeleteAttendanceButton
               csrfToken={csrfToken}
               attendances={attendances}

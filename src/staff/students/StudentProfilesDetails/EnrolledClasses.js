@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // Axios
-import instance from "../../axios/axios_authenticated";
+import instance from "../../../axios/axios_authenticated";
 // CSS
 import "../StudentProfilesCards.scss";
 import "./EnrolledClasses.scss";
