@@ -11,17 +11,23 @@ function DisplayOne() {
 
   const [UUIDInput, setUUIDInput] = useState("");
   const [studentData, setStudentData] = useState(null);
+  const [
+    allPresentAttendanceRecordsForCurrentDay,
+    setAllPresentAttendanceRecordsForCurrentDay,
+  ] = useState(null);
   const timeoutIdRef = useRef(null);
 
   /* ------------------------------------------- */
   /* ---------------- FUNCTIONS ---------------- */
   /* ------------------------------------------- */
 
+  /* resets the contents of the screen */
   const resetScreen = () => {
     setUUIDInput("");
     setStudentData(null);
   };
 
+  /* fetches student data */
   const fetchStudentData = async (event) => {
     /* prevents the page from refreshing */
     event.preventDefault();
@@ -57,10 +63,35 @@ function DisplayOne() {
     } catch (e) {
       console.log(e);
     }
+
+    fetchPresentAttendanceRecordsForCurrentDay();
   };
 
-  /* starts script to focus on input */
+  /* fetch all present attendance records for the current day */
+  const fetchPresentAttendanceRecordsForCurrentDay = async () => {
+    /* resets all present attendance records data */
+    setAllPresentAttendanceRecordsForCurrentDay(null);
+
+    try {
+      await instance
+        .get(
+          "api/game/display/01/all_present_attendance_records_for_current_day/"
+        )
+        .then((response) => {
+          if (response) {
+            console.log(response.data);
+
+            setAllPresentAttendanceRecordsForCurrentDay(response.data);
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  /* runs startup scrips on component mount */
   useEffect(() => {
+    /* focus on UUID input field */
     const focusOnInput = () => {
       console.log("Checking...");
       const inputElement = document.getElementById("uuid-input");
@@ -71,12 +102,13 @@ function DisplayOne() {
       console.log("-----------------------------------");
     };
 
-    // Run focusOnInput every 3 minutes
+    /* run focusOnInput and reset UUID input every 5 minutes */
     const intervalId = setInterval(() => {
       focusOnInput();
-    }, 3 * 60 * 1000); // 3 minutes in milliseconds
+      setUUIDInput("");
+    }, 5 * 60 * 1000);
 
-    // Cleanup interval on component unmount
+    /* cleanup interval on component unmount */
     return () => clearInterval(intervalId);
   }, []);
 
@@ -84,6 +116,7 @@ function DisplayOne() {
   /* ------------------- JSX ------------------- */
   /* ------------------------------------------- */
 
+  /* calculates modulo of student present attendance record count */
   let moduloCount;
   if (studentData) {
     moduloCount = studentData.attendance_present_count % 10;
@@ -118,7 +151,11 @@ function DisplayOne() {
             <div className="data-title-value-container">
               <div className="data-title">Until Next Level</div>
               <div className="data-value">
-                {moduloCount !== 0 ? `${10 - moduloCount} times` : "LEVEL UP!"}
+                {moduloCount === 9
+                  ? `next lesson`
+                  : moduloCount !== 0
+                  ? `${10 - moduloCount} lessons`
+                  : "LEVEL UP!"}
               </div>
             </div>
           </div>
@@ -133,6 +170,28 @@ function DisplayOne() {
           </div>
         </Fragment>
       ) : null}
+
+      {/* ALL PRESENT ATTENDANCE RECORDS FOR CURRENT DAY */}
+      <div id="all-present-attendance-records-container" className="glass">
+        {allPresentAttendanceRecordsForCurrentDay ? (
+          <Fragment>
+            {allPresentAttendanceRecordsForCurrentDay.map((record) => {
+              return (
+                <div key={`attendance-record-${record.id}`}>
+                  {record.student.first_name_romaji} {" - "}
+                  {`${(
+                    record.present_attendance_records_count * 10
+                  ).toLocaleString()}xp`}{" "}
+                  {" - "}
+                  {`level ${Math.floor(
+                    record.present_attendance_records_count / 10
+                  )}`}
+                </div>
+              );
+            })}
+          </Fragment>
+        ) : null}
+      </div>
 
       {/* UUID INPUT FORM */}
       <form id="uuid-form" onSubmit={fetchStudentData}>

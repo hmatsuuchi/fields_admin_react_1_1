@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import instance from "../axios/axios_authenticated";
 
-function Logout({ setIsAuth, setIsStaff, setIsCustomer, csrfToken }) {
+function Logout({
+  setIsAuth,
+  setIsStaff,
+  setIsCustomer,
+  setIsDisplay,
+  csrfToken,
+}) {
   useEffect(() => {
     const logoutUser = async () => {
       try {
@@ -11,10 +17,11 @@ function Logout({ setIsAuth, setIsStaff, setIsCustomer, csrfToken }) {
             // clear local storage
             localStorage.clear();
 
-            // sets auth and staff bool to false
+            // sets auth, staff, customer, and display to null
             setIsAuth(false);
             setIsStaff(null);
             setIsCustomer(null);
+            setIsDisplay(null);
           });
       } catch (error) {
         console.error("logout error: ", error);
@@ -23,7 +30,7 @@ function Logout({ setIsAuth, setIsStaff, setIsCustomer, csrfToken }) {
 
     // calls logout function
     logoutUser();
-  }, [setIsAuth, setIsStaff, setIsCustomer, csrfToken]);
+  }, [setIsAuth, setIsStaff, setIsCustomer, setIsDisplay, csrfToken]);
 
   return <h1>you have been logged out</h1>;
 }

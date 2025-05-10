@@ -34,9 +34,10 @@ function Login({
     setIsAuth(false);
     setIsStaff(null);
     setIsCustomer(null);
+    setIsDisplay(null);
 
     setDisplayContent(true);
-  }, [setIsAuth, setIsStaff, setIsCustomer]);
+  }, [setIsAuth, setIsStaff, setIsCustomer, setIsDisplay]);
 
   const submit = async (e) => {
     e.preventDefault();

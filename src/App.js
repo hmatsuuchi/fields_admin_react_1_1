@@ -171,6 +171,7 @@ function App() {
               setIsAuth={setIsAuth}
               setIsStaff={setIsStaff}
               setIsCustomer={setIsCustomer}
+              setIsDisplay={setIsDisplay}
               csrfToken={csrfToken}
             />
           }
