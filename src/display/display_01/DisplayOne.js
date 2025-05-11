@@ -11,10 +11,7 @@ function DisplayOne() {
 
   const [UUIDInput, setUUIDInput] = useState("");
   const [studentData, setStudentData] = useState(null);
-  const [
-    allPresentAttendanceRecordsForCurrentDay,
-    setAllPresentAttendanceRecordsForCurrentDay,
-  ] = useState(null);
+  const [recentCheckins, setRecentCheckins] = useState(null);
   const timeoutIdRef = useRef(null);
 
   /* ------------------------------------------- */
@@ -52,36 +49,58 @@ function DisplayOne() {
 
     try {
       await instance
-        .get("api/game/display/01/", { params })
+        .get("api/game/display/01/get_student_data/", { params })
         .then((response) => {
           if (response) {
-            console.log(response.data);
-
+            /* set student data */
             setStudentData(response.data);
+            /* fetch recent checkins */
+            fetchRecentCheckins();
           }
         });
     } catch (e) {
       console.log(e);
     }
-
-    fetchPresentAttendanceRecordsForCurrentDay();
   };
 
-  /* fetch all present attendance records for the current day */
-  const fetchPresentAttendanceRecordsForCurrentDay = async () => {
-    /* resets all present attendance records data */
-    setAllPresentAttendanceRecordsForCurrentDay(null);
-
+  /* fetch recent checkins */
+  const fetchRecentCheckins = async () => {
     try {
       await instance
-        .get(
-          "api/game/display/01/all_present_attendance_records_for_current_day/"
-        )
+        .get("api/game/display/01/get_recent_checkins/")
         .then((response) => {
           if (response) {
-            console.log(response.data);
+            /* sets new checkins */
+            const newCheckins = response.data;
 
-            setAllPresentAttendanceRecordsForCurrentDay(response.data);
+            setRecentCheckins((prevCheckins) => {
+              /* if no previous checkins, set new checkins */
+              if (!prevCheckins) return newCheckins;
+
+              /* create a map of he new checkins by ID for quick lookup */
+              const newCheckinsMap = new Map(
+                newCheckins.map((checkin) => [checkin.id, checkin])
+              );
+
+              /* Filter out items not in the new response and add new ones */
+              const updatedCheckins = prevCheckins
+                .filter((checkin) => newCheckinsMap.has(checkin.id)) // Keep only items present in the new response
+                .concat(
+                  newCheckins.filter(
+                    (checkin) =>
+                      !prevCheckins.some((prev) => prev.id === checkin.id) // Add new items not already in prevCheckins
+                  )
+                );
+
+              /* Sort the updated checkins by date_time_created */
+              updatedCheckins.sort((a, b) => {
+                const dateA = new Date(a.date_time_created);
+                const dateB = new Date(b.date_time_created);
+                return dateB - dateA; // Sort in descending order
+              });
+
+              return updatedCheckins;
+            });
           }
         });
     } catch (e) {
@@ -107,6 +126,9 @@ function DisplayOne() {
       focusOnInput();
       setUUIDInput("");
     }, 5 * 60 * 1000);
+
+    /* fetches recent checkins */
+    fetchRecentCheckins();
 
     /* cleanup interval on component unmount */
     return () => clearInterval(intervalId);
@@ -155,7 +177,7 @@ function DisplayOne() {
                   ? `next lesson`
                   : moduloCount !== 0
                   ? `${10 - moduloCount} lessons`
-                  : "LEVEL UP!"}
+                  : "level up!"}
               </div>
             </div>
           </div>
@@ -171,21 +193,31 @@ function DisplayOne() {
         </Fragment>
       ) : null}
 
-      {/* ALL PRESENT ATTENDANCE RECORDS FOR CURRENT DAY */}
-      <div id="all-present-attendance-records-container" className="glass">
-        {allPresentAttendanceRecordsForCurrentDay ? (
+      {/* RECENT CHECKINS */}
+      <div id="recent-checkins-container">
+        {recentCheckins ? (
           <Fragment>
-            {allPresentAttendanceRecordsForCurrentDay.map((record) => {
+            {recentCheckins.map((checkin) => {
               return (
-                <div key={`attendance-record-${record.id}`}>
-                  {record.student.first_name_romaji} {" - "}
-                  {`${(
-                    record.present_attendance_records_count * 10
-                  ).toLocaleString()}xp`}{" "}
-                  {" - "}
-                  {`level ${Math.floor(
-                    record.present_attendance_records_count / 10
-                  )}`}
+                <div
+                  className={`checkin-container glass${
+                    checkin.attendance_present_count % 10 === 0
+                      ? " level-up"
+                      : ""
+                  }`}
+                  key={`recent-checkin-${checkin.id}`}
+                >
+                  <div className="checkin-student-name-level">
+                    {checkin.student.first_name_romaji}
+                  </div>
+                  <div className="checkin-xp">
+                    {`${(
+                      checkin.attendance_present_count * 10
+                    ).toLocaleString()} xp`}
+                  </div>
+                  <div className="checkin-level glass">
+                    {Math.floor(checkin.attendance_present_count / 10)}
+                  </div>
                 </div>
               );
             })}
