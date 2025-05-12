@@ -29,8 +29,6 @@ function IncompleteAttendanceForInstructor() {
           .get("api/dashboard/dashboard/incomplete_attendance_for_instructor/")
           .then((response) => {
             if (response) {
-              console.log(response.data.past_month_by_date_annotated);
-
               const record_count_data =
                 response.data.past_month_by_date_annotated;
 
