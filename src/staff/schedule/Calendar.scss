@@ -58,7 +58,8 @@ body {
         .hour-increment {
           border-bottom: solid 1px $grey;
 
-          height: 11rem; /* match CSS and JS values */
+          // height: 11rem; /* match CSS and JS values */
+          height: 25rem; /* match CSS and JS values */
 
           background-color: $beige;
 
@@ -609,7 +610,8 @@ body {
       .background-and-events-container {
         .background-container {
           .hour-increment {
-            height: 15.35rem;
+            // height: 15.35rem; /* match CSS and JS values */
+            height: 25rem; /* match CSS and JS values */
           }
         }
         .events-container {

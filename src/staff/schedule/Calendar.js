@@ -223,9 +223,11 @@ function Calendar({
     /* calculates hour segment height based on viewport width */
     function calculateHourSegmentHeight() {
       if (window.innerWidth < 450) {
-        setHourSegmentHeight(11);
+        // setHourSegmentHeight(11);
+        setHourSegmentHeight(25);
       } else {
-        setHourSegmentHeight(15.35);
+        // setHourSegmentHeight(15.35);
+        setHourSegmentHeight(25);
       }
     }
 
