@@ -92,7 +92,7 @@ function Attendance({
           })
           .then((response) => {
             if (response) {
-              setAttendances(response.data.attendance);
+              setAttendances(response.data.attendance_records);
             }
           });
       } catch (e) {
@@ -159,43 +159,54 @@ function Attendance({
           <div className="attendance-records-number">{`${attendances.length}件`}</div>
         </div>
         <div className="attendance-records-body-container">
-          {attendances.map((attendance) => (
+          {attendances.map((attendance_record) => (
             <div
               className="record-container"
-              key={attendance.id}
-              date={attendance.date}
-              instructor_id={attendance.instructor.id}
+              key={attendance_record.id}
+              date={attendance_record.attendance_reverse_relationship[0].date}
+              instructor_id={
+                attendance_record.attendance_reverse_relationship[0].instructor
+                  .id
+              }
               onClick={jumpToAttendanceDateAndInstructor}
             >
               <div className="record-data-container">
                 <div
                   className="instructor-icon"
                   style={{
-                    backgroundImage: `url(/img/instructors/${attendance.instructor.userprofilesinstructors.icon_stub})`,
+                    backgroundImage: `url(/img/instructors/${attendance_record.attendance_reverse_relationship[0].instructor.userprofilesinstructors.icon_stub})`,
                   }}
                 />
                 <div className="attendance-date">
-                  {convertDateToJapanese(attendance.date)}
+                  {convertDateToJapanese(
+                    attendance_record.attendance_reverse_relationship[0].date
+                  )}
                 </div>
                 <div className="attendance-start-time">
-                  {`${attendance.start_time.slice(0, 5)} ~ ${calculateEndTime(
-                    attendance.start_time,
-                    attendance.linked_class.event_type.duration
+                  {`${attendance_record.attendance_reverse_relationship[0].start_time.slice(
+                    0,
+                    5
+                  )} ~ ${calculateEndTime(
+                    attendance_record.attendance_reverse_relationship[0]
+                      .start_time,
+                    attendance_record.attendance_reverse_relationship[0]
+                      .linked_class.event_type.duration
                   )}`}
                 </div>
                 <div className="attendance-event-name">
-                  {attendance.linked_class.event_name}
+                  {
+                    attendance_record.attendance_reverse_relationship[0]
+                      .linked_class.event_name
+                  }
                 </div>
 
                 <div className="attendance-record-grade-name">
-                  {attendance.attendance_records[0].grade.name}
+                  {attendance_record.grade.name}
                 </div>
               </div>
               <div
                 className={`attendance-record-status-icon${` ${
-                  studentAttendanceClass[
-                    attendance.attendance_records[0].status
-                  ]
+                  studentAttendanceClass[attendance_record.status]
                 }`}`}
               />
             </div>
