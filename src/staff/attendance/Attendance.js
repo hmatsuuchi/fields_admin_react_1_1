@@ -90,6 +90,39 @@ function Attendance({
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
+  /* ACTIVATE PAGE */
+  const activatePage = () => {
+    /* hide loading spinner */
+    setShowLoadingSpinner(false);
+
+    /* enable date navigation buttons */
+    setDisableDateNavigationButtons(false);
+
+    /* enable toolbar buttons */
+    setDisableToolbarButtons(false);
+
+    /* show attendance container */
+    setShowAttendanceContainer(true);
+  };
+
+  /* DEACTIVATE PAGE */
+  const deactivatePage = () => {
+    /* show loading spinner */
+    setShowLoadingSpinner(true);
+
+    /* disable date navigation buttons */
+    setDisableDateNavigationButtons(true);
+
+    /* disable toolbar buttons */
+    setDisableToolbarButtons(true);
+
+    /* hide attendance container */
+    setShowAttendanceContainer(false);
+
+    /* hides data load error */
+    setShowDataLoadError(false);
+  };
+
   /* ADJUST DATE FOR TIMEZONE */
   const adjustDateForTimezone = (date) => {
     const newDate = new Date(date);
@@ -251,22 +284,13 @@ function Attendance({
     fetchStudentChoices();
   }, []);
 
-  /* MANUAL FETCH ATTENDANCE DATA FOR DATE */
+  /* FETCH ATTENDANCE DATA FOR DATE */
   const fetchAttendanceDataForDate = () => {
     /* clears existing attendances */
     setAttendances([]);
 
-    /* hides data load error */
-    setShowDataLoadError(false);
-
-    /* disable toolbar buttons */
-    setDisableToolbarButtons(true);
-
-    /* disable date navigation buttons */
-    setDisableDateNavigationButtons(true);
-
-    /* show loading spinner */
-    setShowLoadingSpinner(true);
+    /* deactivate page */
+    deactivatePage();
 
     /* updates user preferences */
     updateUserPreferences({
@@ -289,37 +313,20 @@ function Attendance({
               /* set attendances */
               setAttendances(response.data.attendance);
 
-              /* hide loading spinner */
-              setShowLoadingSpinner(false);
-
-              /* enable date navigation buttons */
-              setDisableDateNavigationButtons(false);
-
-              /* enable toolbar buttons */
-              setDisableToolbarButtons(false);
-
-              /* show attendance container */
-              setShowAttendanceContainer(true);
+              /* activate page */
+              activatePage();
             }
           });
       } catch (e) {
         console.log(e);
-        /* hides attendance container */
-        setShowAttendanceContainer(false);
-
         /* show data load error message */
         setShowDataLoadError(true);
 
-        /* hide loading spinner */
-        setShowLoadingSpinner(false);
-
-        /* enable date navigation buttons */
-        setDisableDateNavigationButtons(false);
-
-        /* enable toolbar buttons */
-        setDisableToolbarButtons(false);
+        /* activate page */
+        activatePage();
       }
     };
+
     /* drives code */
     fetchData();
   };
@@ -332,20 +339,8 @@ function Attendance({
     /* hides date search button */
     setShowDateSearchButton(false);
 
-    /* hides attendance container */
-    setShowAttendanceContainer(false);
-
-    /* hides data load error */
-    setShowDataLoadError(false);
-
-    /* disable toolbar buttons */
-    setDisableToolbarButtons(true);
-
-    /* disable date navigation buttons */
-    setDisableDateNavigationButtons(true);
-
-    /* show loading spinner */
-    setShowLoadingSpinner(true);
+    /* deactivate page */
+    deactivatePage();
 
     /* Fetch attendance data for date */
     const fetchData = async () => {
@@ -363,35 +358,17 @@ function Attendance({
               /* set attendance records */
               setAttendances(response.data.attendance);
 
-              /* hide loading spinner */
-              setShowLoadingSpinner(false);
-
-              /* enable date navigation buttons */
-              setDisableDateNavigationButtons(false);
-
-              /* enable toolbar buttons */
-              setDisableToolbarButtons(false);
-
-              /* show attendance container */
-              setShowAttendanceContainer(true);
+              /* activate page */
+              activatePage();
             }
           });
       } catch (e) {
         console.log(e);
-        /* hides attendance container */
-        setShowAttendanceContainer(false);
-
         /* show data load error message */
         setShowDataLoadError(true);
 
-        /* hide loading spinner */
-        setShowLoadingSpinner(false);
-
-        /* enable date navigation buttons */
-        setDisableDateNavigationButtons(false);
-
-        /* enable toolbar buttons */
-        setDisableToolbarButtons(false);
+        /* activate page */
+        activatePage();
       }
     };
 
