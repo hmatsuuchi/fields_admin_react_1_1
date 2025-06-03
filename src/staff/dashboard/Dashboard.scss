@@ -12,12 +12,13 @@ $grey: #3a3939;
 #dashboard-primary-container {
   margin-top: 3rem;
 
+  padding: 1rem;
   margin-bottom: 15rem;
 
   display: grid;
+  grid-column-gap: 1rem;
 
   .component-primary-container {
-    margin: 1rem;
     padding: 1rem;
 
     border: solid 1px $light-grey;
@@ -26,6 +27,9 @@ $grey: #3a3939;
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
 
     background-color: #ffffff;
+
+    display: grid;
+    align-content: start;
 
     .component-title {
       font-size: 1.1rem;

@@ -3,6 +3,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import "./Dashboard.scss";
 // COMPONENTS
 import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceForInstructor";
+import StudentChurn from "./dashboard/StudentChurn";
 import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 
 function Dashboard() {
@@ -29,6 +30,7 @@ function Dashboard() {
     <Fragment>
       <div id="dashboard-primary-container">
         <IncompleteAttendanceForInstructor />
+        <StudentChurn />
       </div>
       <DashboardToolbar disableToolbarButtons={disableToolbarButtons} />
     </Fragment>
