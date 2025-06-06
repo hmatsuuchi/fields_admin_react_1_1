@@ -206,12 +206,23 @@ body {
               overflow-x: hidden;
               overflow-y: scroll;
 
+              cursor: pointer;
+
+              /* Hide scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+              &::-webkit-scrollbar {
+                display: none;
+              }
+
+              /* Hide scrollbar for Firefox */
+              scrollbar-width: none;
+
+              /* Hide scrollbar for IE and Edge (legacy) */
+              -ms-overflow-style: none;
+
               display: grid;
               align-items: start;
               align-content: start;
               grid-row-gap: 0.2rem;
-
-              cursor: pointer;
 
               .student-container {
                 cursor: pointer;
