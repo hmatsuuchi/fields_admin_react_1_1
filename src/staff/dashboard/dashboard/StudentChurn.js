@@ -11,6 +11,8 @@ import {
   LinearScale,
   Tooltip,
   Legend,
+  PointElement,
+  LineElement,
 } from "chart.js";
 /* CSS */
 import "./StudentChurn.scss";
@@ -34,9 +36,6 @@ function StudentChurn() {
       .then((response) => {
         /* set churn data */
         setChurnData(response.data);
-
-        /* console log the data */
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -68,7 +67,15 @@ function StudentChurn() {
   }, []);
 
   /* chart.js setup */
-  ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+  ChartJS.register(
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Legend,
+    PointElement,
+    LineElement
+  );
 
   const churnDataSliced = churnData.slice(-visibleCount);
 
@@ -81,6 +88,22 @@ function StudentChurn() {
         )}` // Format as YY/MM
     ),
     datasets: [
+      {
+        label: "純増減",
+        data: churnDataSliced.map(
+          (dataPoint) =>
+            dataPoint.starting_students_count - dataPoint.ending_students_count
+        ),
+        borderColor: "#ffde7d", // legend outline color
+        backgroundColor: "#ffde7d", // legend background color
+        type: "line",
+        yAxisID: "y",
+        pointRadius: 3,
+        borderWidth: 2,
+        pointBackgroundColor: "#ffcb31", // dot outline color
+        pointBorderColor: "#ffcb31", // dot background color
+        fill: false,
+      },
       {
         label: "入学人数",
         data: churnDataSliced.map(
@@ -115,8 +138,11 @@ function StudentChurn() {
         callbacks: {
           label: function (context) {
             // Get the value and append "名"
+            const sign = context.parsed.y > 0 ? "+" : "";
             let label =
               context.datasetIndex === 0
+                ? `純増減:  ${sign}${context.parsed.y}名`
+                : context.datasetIndex === 1
                 ? `入学人数: ${Math.abs(context.parsed.y)}名`
                 : `退学人数: ${Math.abs(context.parsed.y)}名`;
             return label;
@@ -131,12 +157,12 @@ function StudentChurn() {
 
             let names = [];
 
-            if (datasetIndex === 0 && dataPoint.starting_students_list) {
+            if (datasetIndex === 1 && dataPoint.starting_students_list) {
               names = dataPoint.starting_students_list.map(
                 (student) =>
                   `+ ${student.last_name_romaji}, ${student.first_name_romaji}`
               );
-            } else if (datasetIndex === 1 && dataPoint.ending_students_list) {
+            } else if (datasetIndex === 2 && dataPoint.ending_students_list) {
               names = dataPoint.ending_students_list.map(
                 (student) =>
                   `- ${student.last_name_romaji}, ${student.first_name_romaji}`
