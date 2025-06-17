@@ -4,6 +4,7 @@ import "./Dashboard.scss";
 // COMPONENTS
 import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceForInstructor";
 import StudentChurn from "./dashboard/StudentChurn";
+import TotalActiveStudents from "./dashboard/TotalActiveStudents";
 import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 
 function Dashboard() {
@@ -31,6 +32,7 @@ function Dashboard() {
       <div id="dashboard-primary-container">
         <IncompleteAttendanceForInstructor />
         <StudentChurn />
+        <TotalActiveStudents />
       </div>
       <DashboardToolbar disableToolbarButtons={disableToolbarButtons} />
     </Fragment>
