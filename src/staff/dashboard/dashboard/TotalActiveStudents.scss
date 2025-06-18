@@ -21,3 +21,16 @@ $grey: #3a3939;
     place-self: center;
   }
 }
+
+@media screen and (min-width: 900px) {
+  #total-active-students {
+    grid-row: 2 / 4;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #total-active-students {
+    grid-row: 1;
+    grid-column: 4;
+  }
+}

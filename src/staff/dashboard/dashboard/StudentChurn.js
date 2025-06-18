@@ -54,11 +54,11 @@ function StudentChurn() {
   useEffect(() => {
     function handleResize() {
       if (window.innerWidth < 400) {
-        setVisibleCount(6);
+        setVisibleCount(9);
       } else if (window.innerWidth < 500) {
         setVisibleCount(12);
       } else if (window.innerWidth < 600) {
-        setVisibleCount(18);
+        setVisibleCount(15);
       } else {
         setVisibleCount(25);
       }
