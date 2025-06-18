@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
 /* AXIOS */
 import instance from "../../../axios/axios_authenticated";
+/* COMPONENTS */
+import LoadingSpinner from "../../micro/LoadingSpinner";
 /* CSS */
 import "./TotalActiveStudents.scss";
 
@@ -10,20 +11,24 @@ function TotalActiveStudents() {
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
-  const [totalActiveStudentsCount, setTotalActiveStudentsCount] =
-    React.useState(0);
+  const [totalActiveStudentsCount, setTotalActiveStudentsCount] = useState(0);
+
+  const [highestActiveStudentCount, setHighestActiveStudentCount] =
+    useState(null);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
-  /* Fetch data from the API */
+  /* Fetch active student count data from the API */
   const fetchData = () => {
     instance
       .get("api/dashboard/dashboard/total_active_students/")
       .then((response) => {
-        console.log(response.data);
         setTotalActiveStudentsCount(response.data.total_active_students_count);
+        setHighestActiveStudentCount(
+          response.data.highest_active_student_count
+        );
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -42,13 +47,22 @@ function TotalActiveStudents() {
 
   return (
     <div id="total-active-students" className="component-primary-container">
-      <div className="component-title">
-        TOTAL ACTIVE STUDENTS (attendance_record count gte 2; attendance_record
-        max gte 28 days ago)
-      </div>
-      <div className="total-active-students-data-container">
-        TOTAL ACTIVE STUDENTS: {totalActiveStudentsCount}
-      </div>
+      <div className="component-title">TOTAL ACTIVE STUDENTS</div>
+      {highestActiveStudentCount ? (
+        <div className="total-active-students-data-container">
+          CURRENT ACTIVE STUDENTS: {totalActiveStudentsCount}
+          <br />
+          HIGHEST COUNT: {highestActiveStudentCount.count}
+          <br />
+          HIGHTEST DATE: {highestActiveStudentCount.date.slice(0, 10)}
+          <br />
+          *** active students are defined as students who have two or more
+          present attendance records and their most recent present attendance
+          record is within the last 28 days ***
+        </div>
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 }

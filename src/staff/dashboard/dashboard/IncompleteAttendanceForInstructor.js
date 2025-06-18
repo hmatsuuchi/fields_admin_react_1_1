@@ -1,10 +1,8 @@
 import React, { useEffect, Fragment } from "react";
-
 /* AXIOS */
 import instance from "../../../axios/axios_authenticated";
 /* COMPONENTS */
 import LoadingSpinner from "../../micro/LoadingSpinner";
-
 /* CSS */
 import "./IncompleteAttendanceForInstructor.scss";
 

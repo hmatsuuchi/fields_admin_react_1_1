@@ -13,6 +13,13 @@ $grey: #3a3939;
   .student-churn-data-container {
     max-width: calc(100vw - 4rem);
   }
+
+  .loading-spinner-container {
+    margin-top: 0;
+    margin-bottom: 4rem;
+
+    place-self: center;
+  }
 }
 
 @media screen and (min-width: 600px) {

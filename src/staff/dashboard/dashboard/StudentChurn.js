@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 /* AXIOS */
 import instance from "../../../axios/axios_authenticated";
 /* CHART JS */
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -13,7 +13,10 @@ import {
   Legend,
   PointElement,
   LineElement,
+  LineController,
 } from "chart.js";
+/* COMPONENTS */
+import LoadingSpinner from "../../micro/LoadingSpinner";
 /* CSS */
 import "./StudentChurn.scss";
 
@@ -74,7 +77,8 @@ function StudentChurn() {
     Tooltip,
     Legend,
     PointElement,
-    LineElement
+    LineElement,
+    LineController
   );
 
   const churnDataSliced = churnData.slice(-visibleCount);
@@ -206,11 +210,13 @@ function StudentChurn() {
   return (
     <div id="student-churn" className="component-primary-container">
       <div className="component-title">学生流失率</div>
-      <div className="student-churn-data-container">
-        {churnData.length > 0 ? (
+      {churnData.length > 0 ? (
+        <div className="student-churn-data-container">
           <Bar data={chartData} options={chartOptions} />
-        ) : null}
-      </div>
+        </div>
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 }
