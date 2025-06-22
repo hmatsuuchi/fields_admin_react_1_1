@@ -19,110 +19,107 @@ function IncompleteAttendanceForInstructor() {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
-  /* FETCH ATTENDANCE RECORD COUNTS FOR INSTRUCTOR ON COMPONENT MOUNT */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await instance
-          .get("api/dashboard/dashboard/incomplete_attendance_for_instructor/")
-          .then((response) => {
-            if (response) {
-              const record_count_data =
-                response.data.past_month_by_date_annotated;
 
-              /* gets the instructor's working days preference */
-              const pref_dashboard_working_days =
-                response.data.pref_dashboard_working_days;
+  /* fetch attendance record counts for instructor */
+  const fetchData = React.useCallback(() => {
+    instance
+      .get("api/dashboard/dashboard/incomplete_attendance_for_instructor/")
+      .then((response) => {
+        if (response) {
+          const record_count_data = response.data.past_month_by_date_annotated;
 
-              /* set the day of week offset integer */
-              setDayOfWeekOffsetInteger();
+          /* gets the instructor's working days preference */
+          const pref_dashboard_working_days =
+            response.data.pref_dashboard_working_days;
 
-              /* add missing dates to the array */
-              const processed_data = addMissingDates(
-                record_count_data,
-                pref_dashboard_working_days
-              );
-              setRecordsDateStatusCount(processed_data);
-            }
-          });
-      } catch (e) {
-        console.log(e);
-        window.alert("エラーが発生しました。");
-      }
-    };
+          /* set the day of week offset integer */
+          setDayOfWeekOffsetInteger();
 
-    /* sets the day of week offset integer */
-    const setDayOfWeekOffsetInteger = () => {
-      const firstDate = new Date();
-      /* calculates the day of week offset */
-      setDayOfWeekOffset(6 - firstDate.getDay());
-    };
-
-    /* adds missing dates to the array */
-    const addMissingDates = (
-      record_count_data,
-      pref_dashboard_working_days_js
-    ) => {
-      /* sets start and end dates which define the range of dates though which to iterate */
-      const firstDate = new Date();
-      const lastDate = new Date();
-      lastDate.setDate(lastDate.getDate() - 28);
-
-      const dateArray = [];
-      let currentDateBeingIterated = new Date(firstDate);
-
-      while (currentDateBeingIterated >= lastDate) {
-        /* converts the date being iterated to JST for use in ISO String conversions */
-        const currentDateBeingIteratedJST = new Date(
-          currentDateBeingIterated.getTime() + 9 * 60 * 60 * 1000
-        );
-
-        /* searches for date in the array that matches current date being iterated */
-        const matchingDate = record_count_data.find((dateRecord) => {
-          /* compares the date being iterated with the date in the record */
-          return (
-            dateRecord.attendance_reverse_relationship__date ===
-            currentDateBeingIteratedJST.toISOString().split("T")[0]
+          /* add missing dates to the array */
+          const processed_data = addMissingDates(
+            record_count_data,
+            pref_dashboard_working_days
           );
-        });
-
-        const isWorkday = pref_dashboard_working_days_js.includes(
-          currentDateBeingIterated.getDay()
-        );
-
-        /* add existing dates to the array or create new objects for non-existing dates */
-        if (matchingDate) {
-          dateArray.push({
-            attendanceDate: currentDateBeingIteratedJST
-              .toISOString()
-              .split("T")[0],
-            attendanceAllCount: matchingDate.record_count_all,
-            attendancePresentCount: matchingDate.record_count_present,
-            attendanceAbsentCount: matchingDate.record_count_absent,
-            attendanceIncompleteCount: matchingDate.record_count_incomplete,
-            isWorkday: isWorkday,
-          });
-        } else {
-          dateArray.push({
-            attendanceDate: currentDateBeingIteratedJST
-              .toISOString()
-              .split("T")[0],
-            isWorkday: isWorkday,
-          });
+          setRecordsDateStatusCount(processed_data);
         }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
-        /* decrements the current date being iterated */
-        currentDateBeingIterated.setDate(
-          currentDateBeingIterated.getDate() - 1
+  /* sets the day of week offset integer */
+  const setDayOfWeekOffsetInteger = () => {
+    const firstDate = new Date();
+    /* calculates the day of week offset */
+    setDayOfWeekOffset(6 - firstDate.getDay());
+  };
+
+  /* adds missing dates to the array */
+  const addMissingDates = (
+    record_count_data,
+    pref_dashboard_working_days_js
+  ) => {
+    /* sets start and end dates which define the range of dates though which to iterate */
+    const firstDate = new Date();
+    const lastDate = new Date();
+    lastDate.setDate(lastDate.getDate() - 28);
+
+    const dateArray = [];
+    let currentDateBeingIterated = new Date(firstDate);
+
+    while (currentDateBeingIterated >= lastDate) {
+      /* converts the date being iterated to JST for use in ISO String conversions */
+      const currentDateBeingIteratedJST = new Date(
+        currentDateBeingIterated.getTime() + 9 * 60 * 60 * 1000
+      );
+
+      /* searches for date in the array that matches current date being iterated */
+      const matchingDate = record_count_data.find((dateRecord) => {
+        /* compares the date being iterated with the date in the record */
+        return (
+          dateRecord.attendance_reverse_relationship__date ===
+          currentDateBeingIteratedJST.toISOString().split("T")[0]
         );
+      });
+
+      const isWorkday = pref_dashboard_working_days_js.includes(
+        currentDateBeingIterated.getDay()
+      );
+
+      /* add existing dates to the array or create new objects for non-existing dates */
+      if (matchingDate) {
+        dateArray.push({
+          attendanceDate: currentDateBeingIteratedJST
+            .toISOString()
+            .split("T")[0],
+          attendanceAllCount: matchingDate.record_count_all,
+          attendancePresentCount: matchingDate.record_count_present,
+          attendanceAbsentCount: matchingDate.record_count_absent,
+          attendanceIncompleteCount: matchingDate.record_count_incomplete,
+          isWorkday: isWorkday,
+        });
+      } else {
+        dateArray.push({
+          attendanceDate: currentDateBeingIteratedJST
+            .toISOString()
+            .split("T")[0],
+          isWorkday: isWorkday,
+        });
       }
 
-      return dateArray;
-    };
+      /* decrements the current date being iterated */
+      currentDateBeingIterated.setDate(currentDateBeingIterated.getDate() - 1);
+    }
 
+    return dateArray;
+  };
+
+  /* runs on component mount */
+  useEffect(() => {
     /* drives code */
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
