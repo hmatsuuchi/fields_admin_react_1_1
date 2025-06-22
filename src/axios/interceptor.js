@@ -1,43 +1,61 @@
 import instance from "./axios_authenticated";
 
-// response interceptor
+let isRefreshing = false;
+let refreshPromise = null;
+let subscribers = [];
+
+function onRefreshed(token) {
+  subscribers.forEach((callback) => callback(token));
+  subscribers = [];
+}
+
+function addSubscriber(callback) {
+  subscribers.push(callback);
+}
+
 instance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
-    // saves original request
     const originalRequest = error.config;
     const originalRequestData = error.config.data;
 
-    // 401 unauthorized error
     if (
+      error.response &&
       error.response.status === 401 &&
       !originalRequest._retry &&
-      originalRequest.url !== "api/token/refresh/" // prevents requests to refresh token endpoint from being retried
+      originalRequest.url !== "api/token/refresh/"
     ) {
-      // console.error("401 error, refreshing access token");
       originalRequest._retry = true;
-      try {
-        // send refresh token to API endpoint and get new access token
-        const response = await instance.post("api/token/refresh/");
 
-        // if access token refresh successful
-        if (response.status === 200) {
-          // reset data payload and retry original requst
-          originalRequest.data = originalRequestData;
-          return instance(originalRequest);
-        }
-      } catch (error) {
-        // Clear tokens from local storage
-        console.error(
-          "request retry error, removing access and refresh tokens from local storage"
-        );
-        // if error refreshing access token, redirect to login page
-        window.location.href = "/login";
-
-        return Promise.reject(error);
+      if (!isRefreshing) {
+        isRefreshing = true;
+        refreshPromise = instance
+          .post("api/token/refresh/")
+          .then((response) => {
+            if (response.status === 200) {
+              onRefreshed(response.data.access); // Notify all subscribers
+              return response;
+            }
+            throw new Error("Failed to refresh token");
+          })
+          .catch((err) => {
+            window.location.href = "/login";
+            throw err;
+          })
+          .finally(() => {
+            isRefreshing = false;
+            refreshPromise = null;
+          });
       }
+
+      // Return a promise that resolves when the token is refreshed
+      return new Promise((resolve, reject) => {
+        addSubscriber((token) => {
+          // Optionally update the Authorization header here if needed
+          originalRequest.data = originalRequestData;
+          resolve(instance(originalRequest));
+        });
+      });
     }
 
     return Promise.reject(error);
