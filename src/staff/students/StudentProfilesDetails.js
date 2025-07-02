@@ -8,6 +8,7 @@ import LoadingSpinner from "../micro/LoadingSpinner";
 import StudentDetailsToolbar from "../toolbar/students/StudentDetailsToolbar";
 import StudentProfile from "./StudentProfilesDetails/StudentProfile";
 import Attendance from "./StudentProfilesDetails/Attendance";
+import Journal from "./StudentProfilesDetails/Journal";
 // CSS
 import "./StudentProfilesCards.scss";
 import "./StudentProfilesDetails.scss";
@@ -111,6 +112,11 @@ function StudentProfilesDetails({
             setBackButtonText={setBackButtonText}
             setBackButtonLink={setBackButtonLink}
           />
+        ) : null}
+
+        {/* Journal */}
+        {displayProfile ? (
+          <Journal profileId={profileId} profileStatus={profile.status} />
         ) : null}
       </div>
     </Fragment>
