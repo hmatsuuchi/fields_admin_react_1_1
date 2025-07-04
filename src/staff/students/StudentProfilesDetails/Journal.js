@@ -83,27 +83,30 @@ function Journal({ profileId, profileStatus }) {
           }件`}</div>
         </div>
         <div className="journal-entries-body-container">
-          {journalEntries !== null && journalEntries.length > 0 ? (
+          {journalEntries === null ? (
+            <LoadingSpinner />
+          ) : journalEntries.length > 0 ? (
             journalEntries.map((entry) => (
               <div
                 key={`journal-entry-${entry.id}`}
                 className="journal-entry-container"
               >
                 <div>
-                  {convertDateToJapanese(entry.date)} {entry.time.slice(0, 5)}
+                  {convertDateToJapanese(entry.date)}{" "}
+                  {entry.time ? entry.time.slice(0, 5) : null}
                 </div>
-                {entry.instructor.map((instructor) => (
-                  <div key={`instructor-user-id-${instructor.id}`}>
-                    {instructor.userprofilesinstructors.last_name_kanji}先生
-                  </div>
-                ))}
+                <div className="journal-entry-instructor-container">
+                  {entry.instructor.map((instructor) => (
+                    <div key={`instructor-user-id-${instructor.id}`}>
+                      {instructor.userprofilesinstructors.last_name_kanji}先生
+                    </div>
+                  ))}
+                </div>
                 <div>{entry.type.name}</div>
-                <div>{entry.text}</div>
+                <div>{entry.text ? entry.text : null}</div>
               </div>
             ))
-          ) : journalEntries !== null && journalEntries === 0 ? null : (
-            <LoadingSpinner />
-          )}
+          ) : null}
         </div>
       </div>
     </div>
