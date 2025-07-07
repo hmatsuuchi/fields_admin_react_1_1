@@ -154,7 +154,28 @@ function AttendanceContainer({
           )
           .then((response) => {
             if (response.status === 200) {
-              /* DO SOMETHING */
+              // rerun analysis of student's attendance records to predict churn
+              const anylizeStudentToPredictChurn = async () => {
+                try {
+                  await instance.get(
+                    `api/analytics/analytics/ml_predict_for_attendance_record/${attendanceRecordId}/`,
+                    data,
+                    {
+                      headers: {
+                        "X-CSRFToken": csrfToken,
+                      },
+                    }
+                  );
+                } catch (error) {
+                  console.error(
+                    "Error predicting churn for student based on attendance record:",
+                    error
+                  );
+                }
+              };
+
+              // drives code
+              anylizeStudentToPredictChurn();
             }
           });
       } catch (e) {
