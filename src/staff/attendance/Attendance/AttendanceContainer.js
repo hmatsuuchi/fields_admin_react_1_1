@@ -240,7 +240,7 @@ function AttendanceContainer({
                     data-student_id={attendanceRecord.student.id}
                     onClick={handleClicksToStudentName}
                   >
-                    {`${attendanceRecord.student.last_name_kanji} ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.student.grade_verbose})`}
+                    {`${attendanceRecord.student.last_name_kanji} ${attendanceRecord.student.first_name_kanji} (${attendanceRecord.grade_verbose})`}
                   </div>
                   <div
                     className="student-name-katakana"
