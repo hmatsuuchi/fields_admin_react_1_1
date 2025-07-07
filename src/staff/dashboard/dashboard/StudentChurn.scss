@@ -12,6 +12,7 @@ $grey: #3a3939;
 #student-churn {
   .student-churn-data-container {
     max-width: calc(100vw - 4rem);
+    min-height: 20rem;
   }
 
   .loading-spinner-container {
