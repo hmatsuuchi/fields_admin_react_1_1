@@ -6,6 +6,7 @@ import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceF
 import StudentChurn from "./dashboard/StudentChurn";
 import TotalActiveStudents from "./dashboard/TotalActiveStudents";
 import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
+import AtRiskStudents from "./dashboard/AtRiskStudents";
 
 function Dashboard() {
   /* ------------------------------------------- */
@@ -33,6 +34,7 @@ function Dashboard() {
         <IncompleteAttendanceForInstructor />
         <StudentChurn />
         <TotalActiveStudents />
+        <AtRiskStudents />
       </div>
       <DashboardToolbar disableToolbarButtons={disableToolbarButtons} />
     </Fragment>
