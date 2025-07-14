@@ -21,12 +21,14 @@ function StudentProfile({ profile }) {
                 : profile.status === 4
                 ? " long-absence"
                 : "status-unknown"
-            }`}>
+            }`}
+          >
             <div className="section-title">生徒情報</div>
             <div
               className={`header-right-container${
                 profile.archived === true ? " archived-profile" : ""
-              }`}>
+              }`}
+            >
               <div className="status">
                 {profile.status_verbose !== "" && profile.status_verbose}
               </div>
@@ -59,40 +61,47 @@ function StudentProfile({ profile }) {
               </div>
             </div>
             <div className="student-info-container">
-              <div className="contact-container">
-                {profile.phone.map((phone) => {
-                  return (
-                    <div className="phone" key={`phone-${phone.id}`}>
-                      {phone.number}
-                      {phone.number_type_verbose !== ""
-                        ? ` (${phone.number_type_verbose})`
-                        : ""}
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="address-container">
-                <div className="post-code">
-                  {profile.post_code !== "" ? `〒${profile.post_code}` : ""}
+              {profile.phone.length !== 0 ? (
+                <div className="contact-container">
+                  {profile.phone.map((phone) => {
+                    return (
+                      <div className="phone" key={`phone-${phone.id}`}>
+                        {phone.number}
+                        {phone.number_type_verbose !== ""
+                          ? ` (${phone.number_type_verbose})`
+                          : ""}
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="address-line-1">
-                  {profile.prefecture_verbose !== ""
-                    ? profile.prefecture_verbose
-                    : ""}
-                  {profile.city !== "" ? profile.city : ""}
-                  {profile.address_1 !== "" ? profile.address_1 : ""}
+              ) : null}
+              {`${profile.post_code}${profile.prefecture_verbose}${profile.city}${profile.address_1}${profile.address_2}` !==
+              "" ? (
+                <div className="address-container">
+                  <div className="post-code">
+                    {profile.post_code !== "" ? `〒${profile.post_code}` : ""}
+                  </div>
+                  <div className="address-line-1">
+                    {profile.prefecture_verbose !== ""
+                      ? profile.prefecture_verbose
+                      : ""}
+                    {profile.city !== "" ? profile.city : ""}
+                    {profile.address_1 !== "" ? profile.address_1 : ""}
+                  </div>
+                  <div className="address-line-2">
+                    {profile.address_2 !== "" ? profile.address_2 : ""}
+                  </div>
                 </div>
-                <div className="address-line-2">
-                  {profile.address_2 !== "" ? profile.address_2 : ""}
+              ) : null}
+              {profile.birthday !== null ? (
+                <div className="birthday-container">
+                  <div className="birthday">
+                    {profile.birthday !== null
+                      ? `${profile.birthday} (${profile.age}才)`
+                      : ""}
+                  </div>
                 </div>
-              </div>
-              <div className="birthday-container">
-                <div className="birthday">
-                  {profile.birthday !== null
-                    ? `${profile.birthday} (${profile.age}才)`
-                    : ""}
-                </div>
-              </div>
+              ) : null}
               <div className="payment-container">
                 {profile.payment_method && (
                   <div className="payment-method">
@@ -105,7 +114,8 @@ function StudentProfile({ profile }) {
           <div className="student-profile-footer-container">
             <Link
               className="profile-edit-button"
-              to={`/staff/students/profiles/update/${profile.id}`}></Link>
+              to={`/staff/students/profiles/update/${profile.id}`}
+            ></Link>
           </div>
         </div>
       )}

@@ -12,15 +12,7 @@ $grey: #3a3939;
 #at-risk-students {
   align-self: start;
 
-  grid-row: 3 / 5;
-
   display: grid;
-
-  .at-risk-students-content-container {
-    aspect-ratio: 1 / 1;
-
-    overflow-y: scroll;
-  }
 }
 
 @media screen and (min-width: 1200px) {

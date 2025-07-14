@@ -22,7 +22,6 @@ function AtRiskStudents() {
       .then((response) => {
         if (response) {
           setAtRiskStudents(response.data.at_risk_students);
-          console.log(response.data.at_risk_students);
         }
       })
       .catch((error) => {
