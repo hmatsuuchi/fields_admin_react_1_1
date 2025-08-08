@@ -84,7 +84,10 @@ function Journal({
         <div
           className={`journal-entries-header-container${` ${profileStatusClass[profileStatus]}`}`}
         >
-          <div className="journal-entries-title">履歴</div>
+          <div className="journal-entries-title">
+            履歴 (WIP; only allows for creation; deletion and editing
+            implemented in admin only)
+          </div>
           <div className="journal-entries-number">{`${
             journalEntries !== null ? journalEntries.length : 0
           }件`}</div>

@@ -77,7 +77,6 @@ function JournalCreate({
         })
         .then((response) => {
           if (response) {
-            console.log(response.data);
             setJournalEntryStudent(response.data);
           }
         });
@@ -131,7 +130,6 @@ function JournalCreate({
           }
         );
         if (response.status === 201) {
-          console.log("Journal entry created successfully:", response.data);
           // redirects back to the student details page
           navigate(backButtonLink);
         } else {
