@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import JournalEntryCreateToolbar from "../../toolbar/students/JournalEntryCreateToolbar";
 // Components
 import DisplayDescriptors from "../../micro/students/DisplayDescriptors";
+// Loading Spinner
+import LoadingSpinner from "../../micro/LoadingSpinner";
 
 function JournalCreate({
   csrfToken,
@@ -30,6 +32,12 @@ function JournalCreate({
 
   const [journalTypes, setJournalTypes] = useState([]);
   const [activeInstructors, setActiveInstructors] = useState([]);
+  const [contentSubmitted, setContentSubmitted] = useState(false);
+  const [displayContent, setDisplayContent] = useState(false);
+
+  const [dateError, setDateError] = useState(false);
+  const [typeError, setTypeError] = useState(false);
+  const [instructorError, setInstructorError] = useState(false);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -103,13 +111,19 @@ function JournalCreate({
 
   // handles form submission to create a new journal entry
   const handFormSubmit = async (e) => {
+    e.preventDefault();
+
+    setDateError(false);
+    setTypeError(false);
+    setInstructorError(false);
+
     if (
       journalEntryStudent &&
       journalEntryDate &&
       journalEntryType !== "0" &&
       journalEntryInstructors.length > 0
     ) {
-      e.preventDefault();
+      setContentSubmitted(true);
 
       try {
         const response = await instance.post(
@@ -134,19 +148,24 @@ function JournalCreate({
           navigate(backButtonLink);
         } else {
           console.error("Failed to create journal entry:", response.data);
+          setContentSubmitted(false);
         }
       } catch (error) {
         console.error("Error creating journal entry:", error);
+        setContentSubmitted(false);
       }
     }
     if (!journalEntryDate) {
-      console.error("Date is required.");
+      setContentSubmitted(false);
+      setDateError(true);
     }
     if (journalEntryType === "0") {
-      console.error("Journal entry type is required.");
+      setContentSubmitted(false);
+      setTypeError(true);
     }
     if (journalEntryInstructors.length === 0) {
-      console.error("At least one instructor must be selected.");
+      setContentSubmitted(false);
+      setInstructorError(true);
     }
   };
 
@@ -158,6 +177,17 @@ function JournalCreate({
     " short-absence",
     " long-absence",
   ];
+
+  // waits for journal entry types, active instructors and student profile data to be fetched before displaying content
+  useEffect(() => {
+    if (
+      journalTypes.length > 0 &&
+      activeInstructors.length > 0 &&
+      journalEntryStudent !== null
+    ) {
+      setDisplayContent(true);
+    }
+  }, [journalTypes, activeInstructors, journalEntryStudent]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -171,131 +201,158 @@ function JournalCreate({
         backButtonLink={backButtonLink}
         displayContent={true}
       />
-      <DisplayDescriptors
-        displayTextArray={["新しいジャーナルを作成しています"]}
-      />
-      <div id="journal-create-container">
-        <div className="card-section-full-width">
-          <div className="card-container-full-width">
-            <div className="card-full-width">
-              <div id="journal-create-form">
-                <div
-                  className={`journal-entry-header-container${
-                    enrollmentStatusAsCSSClass[
-                      journalEntryStudent ? journalEntryStudent.status : null
-                    ]
-                  }`}
-                >
-                  <div></div>
-                  <div className="status">
-                    {/* {journalEntryStudent
-                      ? journalEntryStudent.status_verbose
-                      : null} */}
-                    {"\u200b"}
-                  </div>
-                </div>
-                <div className="journal-entry-body-container">
-                  <form>
-                    {/* Date */}
-                    <label htmlFor="journal-entry-date">日付</label>
-                    <input
-                      type="date"
-                      id="journal-entry-date"
-                      className="input-width-s"
-                      name="journal-entry-date"
-                      value={journalEntryDate}
-                      onChange={(e) => setJournalEntryDate(e.target.value)}
-                    ></input>
-
-                    {/* Time */}
-                    <label htmlFor="journal-entry-time">時間</label>
-                    <input
-                      type="time"
-                      id="journal-entry-time"
-                      className="input-width-s"
-                      name="journal-entry-time"
-                      value={journalEntryTime}
-                      onChange={(e) => setJournalEntryTime(e.target.value)}
-                    ></input>
-                    {/* Type */}
-                    <label htmlFor="journal-entry-type">タイプ</label>
-                    <select
-                      id="journal-entry-type"
-                      className="input-width-s"
-                      name="journal-entry-type"
-                      value={journalEntryType}
-                      onChange={(e) => setJournalEntryType(e.target.value)}
+      {displayContent ? (
+        <Fragment>
+          <DisplayDescriptors
+            displayTextArray={["新しいジャーナルを作成しています"]}
+          />
+          <div
+            id="journal-create-container"
+            className={`${contentSubmitted ? "content-submitted" : ""}`}
+          >
+            <div className="card-section-full-width">
+              <div className="card-container-full-width">
+                <div className="card-full-width">
+                  <div id="journal-create-form">
+                    <div
+                      className={`journal-entry-header-container${
+                        enrollmentStatusAsCSSClass[
+                          journalEntryStudent
+                            ? journalEntryStudent.status
+                            : null
+                        ]
+                      }`}
                     >
-                      <option value="0">-------</option>
-                      {journalTypes.length !== 0
-                        ? journalTypes.map((type) => (
-                            <option key={type.id} value={type.id}>
-                              {type.name}
-                            </option>
-                          ))
-                        : null}
-                    </select>
-
-                    {/* Instructor */}
-                    <div className="instructor-container">
-                      {activeInstructors.length !== 0
-                        ? activeInstructors.map((instructor) => (
-                            <Fragment key={`instructor-id-${instructor.id}`}>
-                              <input
-                                name={`instructor-id-${instructor.id}`}
-                                type="checkbox"
-                                value={instructor.id}
-                                checked={journalEntryInstructors.includes(
-                                  instructor.id
-                                )}
-                                onChange={() =>
-                                  handleInstructorCheckboxChange(instructor.id)
-                                }
-                              />
-                              <label htmlFor={`instructor-id-${instructor.id}`}>
-                                {
-                                  instructor.userprofilesinstructors
-                                    .last_name_kanji
-                                }
-                                先生
-                              </label>
-                            </Fragment>
-                          ))
-                        : null}
+                      <div></div>
+                      <div className="status">
+                        {/* Zero width character to prevent element collapse */}
+                        {"\u200b"}
+                      </div>
                     </div>
+                    <div className="journal-entry-body-container">
+                      <form>
+                        <div className="profile-section-header">基本情報</div>
+                        {/* Date */}
+                        <label htmlFor="journal-entry-date">日付</label>
+                        <input
+                          type="date"
+                          id="journal-entry-date"
+                          className={`input-width-s${
+                            dateError ? " error" : ""
+                          }`}
+                          name="journal-entry-date"
+                          value={journalEntryDate}
+                          onChange={(e) => setJournalEntryDate(e.target.value)}
+                        ></input>
 
-                    {/* Text */}
-                    <label htmlFor="journal-entry-text">内容</label>
-                    <textarea
-                      id="journal-entry-text"
-                      className="input-width-l"
-                      name="journal-entry-text"
-                      value={journalEntryText}
-                      onChange={(e) => setJournalEntryText(e.target.value)}
-                    ></textarea>
+                        {/* Time */}
+                        <label htmlFor="journal-entry-time">時間</label>
+                        <input
+                          type="time"
+                          id="journal-entry-time"
+                          className="input-width-s"
+                          name="journal-entry-time"
+                          value={journalEntryTime}
+                          onChange={(e) => setJournalEntryTime(e.target.value)}
+                        ></input>
+                        {/* Type */}
+                        <label htmlFor="journal-entry-type">タイプ</label>
+                        <select
+                          id="journal-entry-type"
+                          className={`input-width-s${
+                            typeError ? " error" : ""
+                          }`}
+                          name="journal-entry-type"
+                          value={journalEntryType}
+                          onChange={(e) => setJournalEntryType(e.target.value)}
+                        >
+                          <option value="0">-------</option>
+                          {journalTypes.length !== 0
+                            ? journalTypes.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                  {type.name}
+                                </option>
+                              ))
+                            : null}
+                        </select>
 
-                    <button
-                      type="submit"
-                      className="button-submit"
-                      onClick={handFormSubmit}
-                    >
-                      送信
-                    </button>
+                        <div className="profile-section-header">講師</div>
 
-                    <button
-                      onClick={() => {
-                        navigate(backButtonLink);
-                      }}
-                    >
-                      戻る
-                    </button>
-                  </form>
+                        {/* Instructor */}
+                        <div
+                          className={`instructor-container${
+                            instructorError ? " error" : ""
+                          }`}
+                        >
+                          {activeInstructors.length !== 0
+                            ? activeInstructors.map((instructor) => (
+                                <Fragment
+                                  key={`instructor-id-${instructor.id}`}
+                                >
+                                  <input
+                                    name={`instructor-id-${instructor.id}`}
+                                    type="checkbox"
+                                    value={instructor.id}
+                                    checked={journalEntryInstructors.includes(
+                                      instructor.id
+                                    )}
+                                    onChange={() =>
+                                      handleInstructorCheckboxChange(
+                                        instructor.id
+                                      )
+                                    }
+                                  />
+                                  <label
+                                    htmlFor={`instructor-id-${instructor.id}`}
+                                  >
+                                    {`${instructor.userprofilesinstructors.last_name_kanji} ${instructor.userprofilesinstructors.first_name_kanji}`}
+                                  </label>
+                                </Fragment>
+                              ))
+                            : null}
+                        </div>
+
+                        <div className="profile-section-header">コメント</div>
+
+                        {/* Text */}
+                        <label htmlFor="journal-entry-text">内容</label>
+                        <textarea
+                          id="journal-entry-text"
+                          className="input-width-l"
+                          name="journal-entry-text"
+                          rows={5}
+                          value={journalEntryText}
+                          onChange={(e) => setJournalEntryText(e.target.value)}
+                        ></textarea>
+
+                        <div className="bottom-buttons-container">
+                          <button
+                            className="button-cancel"
+                            onClick={() => {
+                              navigate(backButtonLink);
+                            }}
+                          >
+                            キャンセル
+                          </button>
+                          <button
+                            type="submit"
+                            className="button-submit"
+                            onClick={handFormSubmit}
+                          >
+                            送信
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Fragment>
+      ) : (
+        <LoadingSpinner />
+      )}
     </Fragment>
   );
 }

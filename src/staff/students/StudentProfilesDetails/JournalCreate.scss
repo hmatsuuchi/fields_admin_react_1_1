@@ -90,6 +90,24 @@ $grey: #3a3939;
         max-width: 11rem;
       }
 
+      textarea {
+        max-width: 35rem;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: 2px solid $grey;
+      }
+
+      input[type="checkbox"]:focus {
+        outline: none;
+      }
+
+      input[type="checkbox"] {
+        accent-color: $medium-grey;
+      }
+
       .instructor-container {
         justify-self: left;
 
@@ -122,6 +140,20 @@ $grey: #3a3939;
 
           padding: 0;
         }
+      }
+
+      .bottom-buttons-container {
+        .button-submit {
+          background-color: $teal;
+        }
+
+        .button-cancel {
+          background-color: $grey;
+        }
+      }
+
+      .error {
+        outline: solid 2px $red;
       }
     }
   }
