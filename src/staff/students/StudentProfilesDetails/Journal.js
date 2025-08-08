@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+// React Router DOM
+import { Link } from "react-router-dom";
 // Axios
 import instance from "../../../axios/axios_authenticated";
 // CSS
@@ -6,7 +8,14 @@ import "./Journal.scss";
 // Components
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
-function Journal({ profileId, profileStatus }) {
+function Journal({
+  profileId,
+  profileStatus,
+  profileLastNameKanji,
+  profileFirstNameKanji,
+  setBackButtonText,
+  setBackButtonLink,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -75,9 +84,7 @@ function Journal({ profileId, profileStatus }) {
         <div
           className={`journal-entries-header-container${` ${profileStatusClass[profileStatus]}`}`}
         >
-          <div className="journal-entries-title">
-            履歴 (WIP; input only via admin panel)
-          </div>
+          <div className="journal-entries-title">履歴</div>
           <div className="journal-entries-number">{`${
             journalEntries !== null ? journalEntries.length : 0
           }件`}</div>
@@ -107,6 +114,20 @@ function Journal({ profileId, profileStatus }) {
               </div>
             ))
           ) : null}
+        </div>
+        <div className="journal-entries-footer-container">
+          <Link
+            className="journal-entry-add-button"
+            to={`/staff/students/journal/create/?profile_id=${profileId}`}
+            onClick={() => {
+              setBackButtonText(
+                `${profileLastNameKanji} ${profileFirstNameKanji} (明細)`
+              );
+              setBackButtonLink(
+                `/staff/students/profiles/details/${profileId}/`
+              );
+            }}
+          ></Link>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ $yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
+$lighter-grey: #f1f1f1;
 $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
@@ -89,6 +90,28 @@ $grey: #3a3939;
 
       .loading-spinner-container {
         margin-top: -2.5rem;
+      }
+    }
+
+    .journal-entries-footer-container {
+      min-height: 1.8rem;
+
+      background-color: $lighter-grey;
+
+      border-top: solid 1px $light-grey;
+
+      padding: 0.8rem 1rem;
+
+      display: grid;
+
+      .journal-entry-add-button {
+        width: 1.8rem;
+        height: 1.8rem;
+
+        background-image: url("../img/plus_icon_grey.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
       }
     }
   }

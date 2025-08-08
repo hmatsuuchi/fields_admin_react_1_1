@@ -48,6 +48,13 @@ function StudentProfilesDetails({
     })();
   }, [profileId]);
 
+  // sets back button text and link on component mount
+  useEffect(() => {
+    // sets back button text and link
+    setBackButtonText("生徒情報");
+    setBackButtonLink("/staff/students/profiles/cards/");
+  }, [setBackButtonText, setBackButtonLink]);
+
   return (
     <Fragment>
       {/* Toolbar */}
@@ -116,7 +123,14 @@ function StudentProfilesDetails({
 
         {/* Journal */}
         {displayProfile ? (
-          <Journal profileId={profileId} profileStatus={profile.status} />
+          <Journal
+            profileId={profileId}
+            profileStatus={profile.status}
+            profileLastNameKanji={profile.last_name_kanji}
+            profileFirstNameKanji={profile.first_name_kanji}
+            setBackButtonText={setBackButtonText}
+            setBackButtonLink={setBackButtonLink}
+          />
         ) : null}
       </div>
     </Fragment>

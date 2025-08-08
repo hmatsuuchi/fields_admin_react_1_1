@@ -6,7 +6,6 @@ import StudentProfileCreateToolbar from "../toolbar/students/StudentProfileCreat
 import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
 import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
-
 // CSS
 import "./StudentProfilesCreateUpdate.scss";
 import "./StudentProfilesCards";

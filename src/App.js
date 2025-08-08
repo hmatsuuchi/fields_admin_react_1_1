@@ -17,6 +17,7 @@ import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
 import StudentProfilesCreate from "./staff/students/StudentProfilesCreate";
 import StudentProfilesUpdate from "./staff/students/StudentProfilesUpdate";
 import StudentProfilesDelete from "./staff/students/StudentProfilesDelete";
+import JournalCreate from "./staff/students/StudentProfilesDetails/JournalCreate";
 // COMPONENTS - STAFF - SCHEDULE
 import Calendar from "./staff/schedule/Calendar";
 import CalendarEventCreate from "./staff/schedule/CalendarEventCreate";
@@ -145,8 +146,10 @@ function App() {
         isAuth && isCustomer && <CustomerNavigation />
       )}
       <Routes>
+        {/* AUTHENTICATION ROUTES - DASHBOARD */}
         <Route path="/" element={<Navigate replace to="/staff/dashboard/" />} />
 
+        {/* AUTHENTICATION ROUTES - LOGIN */}
         <Route
           path="/login"
           element={
@@ -164,6 +167,7 @@ function App() {
           }
         />
 
+        {/* AUTHENTICATION ROUTES - LOGOUT */}
         <Route
           path="/logout"
           element={
@@ -314,6 +318,21 @@ function App() {
                 csrfToken={csrfToken}
                 setBackButtonText={setBackButtonText}
                 setBackButtonLink={setBackButtonLink}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - JOURNAL - CREATE JOURNAL ENTRY */}
+        <Route
+          path="/staff/students/journal/create/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <JournalCreate
+                csrfToken={csrfToken}
+                backButtonText={backButtonText}
+                setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
               />
             </StaffProtectedRoute>
           }
