@@ -14,6 +14,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  overscroll-behavior: none; /* makes less like a webpage and more like an app */
+}
+
+img {
+  -webkit-touch-callout: none; /* makes less like a webpage and more like an app */
+  -webkit-user-drag: none; /* makes less like a webpage and more like an app */
 }
 
 code {

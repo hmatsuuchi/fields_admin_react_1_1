@@ -178,6 +178,27 @@ function JournalCreate({
     " long-absence",
   ];
 
+  // resets missing field error indicator for date input
+  useEffect(() => {
+    if (journalEntryDate) {
+      setDateError(false);
+    }
+  }, [journalEntryDate]);
+
+  // reset missing field error indicator for type input
+  useEffect(() => {
+    if (journalEntryType !== "0") {
+      setTypeError(false);
+    }
+  }, [journalEntryType]);
+
+  // reset missing field error indicator for instructor input
+  useEffect(() => {
+    if (journalEntryInstructors.length > 0) {
+      setInstructorError(false);
+    }
+  }, [journalEntryInstructors]);
+
   // waits for journal entry types, active instructors and student profile data to be fetched before displaying content
   useEffect(() => {
     if (
