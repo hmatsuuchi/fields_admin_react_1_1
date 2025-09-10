@@ -51,6 +51,7 @@ function JournalCreate({
         .then((response) => {
           if (response) {
             setJournalTypes(response.data.journal_types);
+            console.log(response.data.journal_types);
           }
         });
     } catch (e) {
@@ -210,6 +211,28 @@ function JournalCreate({
     }
   }, [journalTypes, activeInstructors, journalEntryStudent]);
 
+  /* CONVERTS DATE TO JAPANESE FORMAT */
+  const convertDateToJapanese = (date) => {
+    const dayOfWeekKanjiShort = {
+      0: "日",
+      1: "月",
+      2: "火",
+      3: "水",
+      4: "木",
+      5: "金",
+      6: "土",
+    };
+
+    const dateObject = new Date(date);
+
+    const recordYear = dateObject.getFullYear();
+    const recordMonth = dateObject.getMonth() + 1;
+    const recordDate = dateObject.getDate();
+    const recordDay = dayOfWeekKanjiShort[dateObject.getDay()];
+
+    return `${recordYear}年${recordMonth}月${recordDate}日 (${recordDay})`;
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -244,10 +267,21 @@ function JournalCreate({
                         ]
                       }`}
                     >
-                      <div></div>
-                      <div className="status">
-                        {/* Zero width character to prevent element collapse */}
-                        {"\u200b"}
+                      <div className="journal-type">
+                        {
+                          journalEntryType !== "0"
+                            ? journalTypes.find(
+                                (type) => type.id === Number(journalEntryType)
+                              )?.name
+                            : "\u200b" // Zero width character to prevent element collapse
+                        }
+                      </div>
+                      <div className="journal-date">
+                        {
+                          journalEntryDate
+                            ? convertDateToJapanese(journalEntryDate)
+                            : "\u200b" // Zero width character to prevent element collapse
+                        }
                       </div>
                     </div>
                     <div className="journal-entry-body-container">
@@ -360,7 +394,7 @@ function JournalCreate({
                             className="button-submit"
                             onClick={handFormSubmit}
                           >
-                            送信
+                            作成
                           </button>
                         </div>
                       </form>

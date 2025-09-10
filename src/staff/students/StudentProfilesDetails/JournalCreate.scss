@@ -14,8 +14,13 @@ $grey: #3a3939;
   grid-auto-flow: row;
 
   .journal-entry-header-container {
-    margin-bottom: 0.4rem;
-    padding: 0.5rem;
+    height: 3rem;
+
+    padding: 0 1rem;
+
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 500;
 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -38,10 +43,11 @@ $grey: #3a3939;
       background-color: $grey;
     }
 
-    .status {
-      color: #ffffff;
-      font-size: 1.3rem;
-      font-weight: 500;
+    .journal-type {
+      justify-self: left;
+    }
+
+    .journal-date {
       justify-self: right;
     }
   }
@@ -83,11 +89,11 @@ $grey: #3a3939;
       }
 
       input[type="time"] {
-        max-width: 5.5rem;
+        max-width: 6rem;
       }
 
       select {
-        max-width: 11rem;
+        max-width: 11.5rem;
       }
 
       textarea {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 // React Router DOM
 import { Link } from "react-router-dom";
 // Axios
@@ -15,12 +15,14 @@ function Journal({
   profileFirstNameKanji,
   setBackButtonText,
   setBackButtonLink,
+  setShowJournalArchive,
+  journalEntries,
+  setJournalEntries,
+  setSelectedEntry,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
-
-  const [journalEntries, setJournalEntries] = useState(null);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -42,7 +44,7 @@ function Journal({
       }
     };
     fetchJournal();
-  }, [profileId]);
+  }, [profileId, setJournalEntries]);
 
   /* PROFILE STATUS CSS CLASS CONVERSION */
   const profileStatusClass = {
@@ -74,6 +76,14 @@ function Journal({
     return `${recordYear}年${recordMonth}月${recordDate}日 (${recordDay})`;
   };
 
+  /* LOADS SELECTED JOURNAL OBJECT INTO STATE */
+  const loadJournalIntoState = (journalId) => {
+    const journalObject = journalEntries.find(
+      (entry) => entry.id === journalId
+    );
+    setSelectedEntry(journalObject);
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -84,10 +94,7 @@ function Journal({
         <div
           className={`journal-entries-header-container${` ${profileStatusClass[profileStatus]}`}`}
         >
-          <div className="journal-entries-title">
-            履歴 (WIP; only allows for creation; deletion and editing
-            implemented in admin only)
-          </div>
+          <div className="journal-entries-title">活動記録</div>
           <div className="journal-entries-number">{`${
             journalEntries !== null ? journalEntries.length : 0
           }件`}</div>
@@ -100,7 +107,12 @@ function Journal({
               <div
                 key={`journal-entry-${entry.id}`}
                 className="journal-entry-container"
+                onClick={() => {
+                  setShowJournalArchive(true);
+                  loadJournalIntoState(entry.id);
+                }}
               >
+                <div className="more-info-container" />
                 <div>
                   {convertDateToJapanese(entry.date)}{" "}
                   {entry.time ? entry.time.slice(0, 5) : null}

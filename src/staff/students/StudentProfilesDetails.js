@@ -9,6 +9,7 @@ import StudentDetailsToolbar from "../toolbar/students/StudentDetailsToolbar";
 import StudentProfile from "./StudentProfilesDetails/StudentProfile";
 import Attendance from "./StudentProfilesDetails/Attendance";
 import Journal from "./StudentProfilesDetails/Journal";
+import JournalArchive from "./StudentProfilesDetails/JournalArchive";
 // CSS
 import "./StudentProfilesCards.scss";
 import "./StudentProfilesDetails.scss";
@@ -22,10 +23,30 @@ function StudentProfilesDetails({
   backButtonLink,
   setBackButtonLink,
 }) {
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState("");
   const [displayProfile, setDisplayProfile] = useState(false);
+
+  const [journalEntries, setJournalEntries] = useState(null);
+  const [showJournalArchive, setShowJournalArchive] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState(null);
+
+  /* ----------------------------------------------- */
+  /* ------------------ FUNCTIONS ------------------ */
+  /* ----------------------------------------------- */
+
+  useEffect(() => {
+    // DEVELOPMENT
+    console.log(journalEntries);
+    console.log("-".repeat(30));
+    console.log(selectedEntry);
+    console.log("=".repeat(60));
+  }, [journalEntries, selectedEntry]);
 
   // makes API call and fetches profile details
   useEffect(() => {
@@ -54,6 +75,10 @@ function StudentProfilesDetails({
     setBackButtonText("生徒情報");
     setBackButtonLink("/staff/students/profiles/cards/");
   }, [setBackButtonText, setBackButtonLink]);
+
+  /* ---------------------------------------- */
+  /* -----------------  JSX ----------------- */
+  /* ---------------------------------------- */
 
   return (
     <Fragment>
@@ -130,9 +155,25 @@ function StudentProfilesDetails({
             profileFirstNameKanji={profile.first_name_kanji}
             setBackButtonText={setBackButtonText}
             setBackButtonLink={setBackButtonLink}
+            setShowJournalArchive={setShowJournalArchive}
+            journalEntries={journalEntries}
+            setJournalEntries={setJournalEntries}
+            setSelectedEntry={setSelectedEntry}
           />
         ) : null}
       </div>
+
+      {/* Journal Edit/Delete Modal */}
+      {showJournalArchive ? (
+        <JournalArchive
+          csrfToken={csrfToken}
+          setShowJournalArchive={setShowJournalArchive}
+          journalEntries={journalEntries}
+          setJournalEntries={setJournalEntries}
+          selectedEntry={selectedEntry}
+          setSelectedEntry={setSelectedEntry}
+        />
+      ) : null}
     </Fragment>
   );
 }
