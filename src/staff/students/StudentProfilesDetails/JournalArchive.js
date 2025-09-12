@@ -88,9 +88,8 @@ function JournalArchive({
             <div className="section-header">講師</div>
             <div className="instructor-container">
               {selectedEntry.instructor.map((instructor) => (
-                <Fragment>
+                <Fragment key={instructor.id}>
                   <div
-                    key={instructor.id}
                     className="instructor-icon"
                     style={{
                       backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,

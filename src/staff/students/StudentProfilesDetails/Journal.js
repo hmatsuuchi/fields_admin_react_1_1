@@ -121,21 +121,17 @@ function Journal({
                   <div>{entry.type.name}</div>
                 </div>
                 {entry.instructor.length > 0 ? (
-                  <Fragment>
-                    <div className="instructor-container">
-                      {entry.instructor.map((instructor) => (
-                        <Fragment>
-                          <div
-                            key={instructor.id}
-                            className="instructor-icon"
-                            style={{
-                              backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
-                            }}
-                          ></div>
-                        </Fragment>
-                      ))}
-                    </div>
-                  </Fragment>
+                  <div className="instructor-container">
+                    {entry.instructor.map((instructor) => (
+                      <div
+                        key={instructor.id}
+                        className="instructor-icon"
+                        style={{
+                          backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
+                        }}
+                      ></div>
+                    ))}
+                  </div>
                 ) : null}
                 {entry.text !== "" ? (
                   <Fragment>
