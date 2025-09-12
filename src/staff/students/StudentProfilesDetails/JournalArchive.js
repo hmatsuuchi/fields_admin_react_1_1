@@ -74,7 +74,7 @@ function JournalArchive({
             />
           </div>
           <div className="archive-journal-card-body">
-            {/* <div className="section-header">基礎情報</div> */}
+            <div className="section-header">基礎情報</div>
             <div className="data-container">
               <div className="label">日付:</div>
               <div className="data">
@@ -85,20 +85,29 @@ function JournalArchive({
               <div className="label">タイプ:</div>
               <div className="data">{selectedEntry.type.name}</div>
             </div>
-            {/* <div className="section-header">講師</div> */}
+            <div className="section-header">講師</div>
             <div className="instructor-container">
               {selectedEntry.instructor.map((instructor) => (
-                <div
-                  key={instructor.id}
-                  className="instructor"
-                  style={{
-                    backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
-                  }}
-                ></div>
+                <Fragment>
+                  <div
+                    key={instructor.id}
+                    className="instructor-icon"
+                    style={{
+                      backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
+                    }}
+                  ></div>
+                  <div className="instructor-name">
+                    {`${instructor.userprofilesinstructors.last_name_kanji}先生`}
+                  </div>
+                </Fragment>
               ))}
             </div>
-            {/* <div className="section-header">コメント</div> */}
-            <div className="comment-container">{selectedEntry.text}</div>
+            {selectedEntry.text ? (
+              <Fragment>
+                <div className="section-header">コメント</div>
+                <div className="comment-container">{selectedEntry.text}</div>
+              </Fragment>
+            ) : null}
           </div>
           <div className="archive-journal-card-footer">
             <button

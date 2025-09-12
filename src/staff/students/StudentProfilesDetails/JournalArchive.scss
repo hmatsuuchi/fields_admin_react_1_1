@@ -90,17 +90,22 @@ $grey: #3a3939;
       -ms-overflow-style: none;
 
       display: grid;
-      grid-row-gap: 1.5rem;
+      // grid-row-gap: 1.5rem;
 
-      // .section-header {
-      //   border-bottom: solid 1px #000000;
+      .section-header {
+        border-bottom: solid 1px #000000;
 
-      //   margin-top: 2rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
 
-      //   text-align: right;
+        text-align: right;
 
-      //   width: 100%;
-      // }
+        width: 100%;
+      }
+
+      .section-header:first-child {
+        margin-top: 0;
+      }
 
       .data-container {
         display: grid;
@@ -129,9 +134,11 @@ $grey: #3a3939;
         display: grid;
         grid-auto-flow: column;
         grid-column-gap: 1rem;
+        grid-row-gap: 0.5rem;
         justify-content: start;
+        justify-items: center;
 
-        .instructor {
+        .instructor-icon {
           background-color: $teal;
 
           width: 3.5rem;
@@ -146,6 +153,12 @@ $grey: #3a3939;
           background-repeat: no-repeat;
           background-position: 50% calc(100% + 0.1rem);
           background-size: auto 90%;
+        }
+
+        .instructor-name {
+          grid-row: 2;
+
+          font-size: 0.75rem;
         }
       }
 
@@ -186,7 +199,7 @@ $grey: #3a3939;
   cursor: pointer;
 
   width: 100vw;
-  height: 100vw;
+  height: 100vh;
 
   background-color: rgba(0, 0, 0, 0.4);
 }

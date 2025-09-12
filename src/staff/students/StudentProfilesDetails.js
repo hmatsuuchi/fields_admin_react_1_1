@@ -40,14 +40,6 @@ function StudentProfilesDetails({
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
-  useEffect(() => {
-    // DEVELOPMENT
-    console.log(journalEntries);
-    console.log("-".repeat(30));
-    console.log(selectedEntry);
-    console.log("=".repeat(60));
-  }, [journalEntries, selectedEntry]);
-
   // makes API call and fetches profile details
   useEffect(() => {
     (async () => {

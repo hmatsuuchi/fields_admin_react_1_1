@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 // React Router DOM
 import { Link } from "react-router-dom";
 // Axios
@@ -112,20 +112,37 @@ function Journal({
                   loadJournalIntoState(entry.id);
                 }}
               >
-                <div className="more-info-container" />
-                <div>
-                  {convertDateToJapanese(entry.date)}{" "}
-                  {entry.time ? entry.time.slice(0, 5) : null}
+                <div className="more-info-container">
+                  <div className="more-info-tab" />
                 </div>
-                <div className="journal-entry-instructor-container">
-                  {entry.instructor.map((instructor) => (
-                    <div key={`instructor-user-id-${instructor.id}`}>
-                      {instructor.userprofilesinstructors.last_name_kanji}先生
+                <div className="data-container">
+                  <div>{convertDateToJapanese(entry.date)}</div>
+                  <div>{entry.time ? entry.time.slice(0, 5) : null}</div>
+                  <div>{entry.type.name}</div>
+                </div>
+                {entry.instructor.length > 0 ? (
+                  <Fragment>
+                    <div className="instructor-container">
+                      {entry.instructor.map((instructor) => (
+                        <Fragment>
+                          <div
+                            key={instructor.id}
+                            className="instructor-icon"
+                            style={{
+                              backgroundImage: `url(/img/instructors/${instructor.userprofilesinstructors.icon_stub})`,
+                            }}
+                          ></div>
+                        </Fragment>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <div>{entry.type.name}</div>
-                <div>{entry.text ? entry.text : null}</div>
+                  </Fragment>
+                ) : null}
+                {entry.text !== "" ? (
+                  <Fragment>
+                    <div className="divider-line" />
+                    <div>{entry.text}</div>
+                  </Fragment>
+                ) : null}
               </div>
             ))
           ) : null}

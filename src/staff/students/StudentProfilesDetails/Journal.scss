@@ -49,7 +49,7 @@ $grey: #3a3939;
     }
 
     .journal-entries-body-container {
-      max-height: 500px;
+      max-height: 700px;
 
       overflow-y: scroll;
 
@@ -68,7 +68,7 @@ $grey: #3a3939;
       margin-bottom: 0.4rem;
 
       display: grid;
-      grid-row-gap: 0.5rem;
+      grid-row-gap: 0.75rem;
 
       .journal-entry-container {
         position: relative;
@@ -84,24 +84,73 @@ $grey: #3a3939;
 
         font-size: 0.8rem;
 
-        overflow: hidden;
-
         display: grid;
+
+        .divider-line {
+          width: 100%;
+
+          margin: 0.75rem 0 0.25rem 0;
+
+          border-bottom: solid 1px $light-grey;
+        }
 
         .more-info-container {
           position: absolute;
 
-          top: -1.1rem;
-          right: -1.1rem;
+          overflow: hidden;
 
-          background-color: $light-grey;
+          top: 0;
+          right: 0;
 
-          transform: rotate(45deg);
-
-          box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+          border-top-right-radius: calc(0.5rem - 1px);
 
           width: 2rem;
           height: 2rem;
+
+          .more-info-tab {
+            position: absolute;
+
+            top: -50%;
+            right: -50%;
+
+            background-color: $light-grey;
+
+            transform: rotate(45deg);
+
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+
+        .data-container {
+          margin-bottom: 0.25rem;
+        }
+
+        .instructor-container {
+          display: grid;
+          grid-auto-flow: column;
+          grid-column-gap: 0.5rem;
+          grid-row-gap: 0.25rem;
+          justify-content: start;
+          justify-items: center;
+
+          .instructor-icon {
+            width: 2rem;
+            height: 2rem;
+
+            border-radius: 50%;
+            border: solid 2px #ffffff;
+
+            box-shadow: 0.1rem 0.2rem 0.2rem rgba(0, 0, 0, 0.4);
+
+            background-color: $teal;
+
+            background-repeat: no-repeat;
+            background-position: 50% calc(100% + 0.1rem);
+            background-size: auto 90%;
+          }
         }
 
         .journal-entry-instructor-container {
@@ -143,6 +192,35 @@ $grey: #3a3939;
         background-repeat: no-repeat;
         background-position: center;
         background-size: contain;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 350px) {
+  #journal {
+    .journal-entries-container {
+      .journal-entries-body-container {
+        .journal-entry-container {
+          font-size: 0.9rem;
+
+          .data-container {
+            margin-bottom: 0.5rem;
+          }
+
+          .divider-line {
+            margin: 1rem 0 0.5rem 0;
+          }
+
+          .instructor-container {
+            grid-column-gap: 0.75rem;
+
+            .instructor-icon {
+              width: 2.5rem;
+              height: 2.5rem;
+            }
+          }
+        }
       }
     }
   }
