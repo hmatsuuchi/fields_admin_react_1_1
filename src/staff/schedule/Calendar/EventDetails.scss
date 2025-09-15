@@ -65,7 +65,7 @@ $grey: #3a3939;
 
     width: calc(100vw - 1rem);
     max-width: calc(550px - 1rem);
-    max-height: calc(100vh - 2rem);
+    max-height: calc(100svh - 2rem);
 
     display: grid;
     grid-template-rows: auto 1fr;
