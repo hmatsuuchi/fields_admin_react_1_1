@@ -122,7 +122,7 @@ function Journal({
                 </div>
                 {entry.instructor.length > 0 ? (
                   <div className="instructor-container">
-                    {entry.instructor.map((instructor) => (
+                    {entry.instructor.slice(0, 3).map((instructor) => (
                       <div
                         key={instructor.id}
                         className="instructor-icon"
@@ -136,7 +136,7 @@ function Journal({
                 {entry.text !== "" ? (
                   <Fragment>
                     <div className="divider-line" />
-                    <div>{entry.text}</div>
+                    <div className="journal-entry-text">{entry.text}</div>
                   </Fragment>
                 ) : null}
               </div>
