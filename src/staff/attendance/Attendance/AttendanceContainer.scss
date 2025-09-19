@@ -48,6 +48,8 @@ $grey: #3a3939;
 
       cursor: pointer;
 
+      -webkit-tap-highlight-color: transparent; // Removes grey highlight on iOS/Safari
+
       transform: rotate(45deg);
 
       box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
