@@ -13,8 +13,75 @@ $grey: #3a3939;
   align-self: start;
 
   .upcoming-birthdays-container {
-    background-color: pink;
-    height: 15rem;
+    max-height: 30rem;
+
+    overflow-y: scroll;
+
+    /* Hide scrollbar for Chrome, Safari, and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none;
+
+    /* Hide scrollbar for IE and Edge */
+    -ms-overflow-style: none;
+
+    display: grid;
+    grid-row-gap: 1rem;
+    align-content: start;
+
+    .student-container {
+      padding: 0.5rem 0.75rem;
+
+      border: solid 1px $light-grey;
+      border-radius: 0.3rem;
+
+      box-shadow: 0.2rem 0.2rem 0.54rem rgba(0, 0, 0, 0.15);
+
+      display: grid;
+
+      .student-name-container {
+        border-bottom: solid 1px $light-grey;
+        padding-bottom: 0.2rem;
+        margin-bottom: 0.2rem;
+
+        .student-name-kanji {
+          font-weight: 500;
+        }
+
+        .student-name-katakana {
+          font-size: 0.75rem;
+          color: $grey;
+        }
+      }
+
+      .event-container {
+        margin-top: 0.2rem;
+        margin-bottom: 0.5rem;
+
+        padding: 0.2rem 0.5rem;
+
+        border-radius: 0.3rem;
+
+        background-color: rgba(255, 222, 125, 0.7);
+
+        display: grid;
+        grid-row-gap: 0.2rem;
+        grid-auto-flow: column;
+        justify-content: space-between;
+      }
+    }
+
+    .loading-spinner-container {
+      margin-top: 0;
+      margin-bottom: 3rem;
+    }
+
+    .no-upcoming-birthdays {
+      text-align: center;
+    }
   }
 }
 
