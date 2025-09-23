@@ -61,13 +61,6 @@ function StudentProfilesDetails({
     })();
   }, [profileId]);
 
-  // sets back button text and link on component mount
-  useEffect(() => {
-    // sets back button text and link
-    setBackButtonText("生徒情報");
-    setBackButtonLink("/staff/students/profiles/cards/");
-  }, [setBackButtonText, setBackButtonLink]);
-
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */

@@ -186,7 +186,10 @@ function App() {
           path="/staff/dashboard"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <StaffDashboard />
+              <StaffDashboard
+                setBackButtonText={setBackButtonText}
+                setBackButtonLink={setBackButtonLink}
+              />
             </StaffProtectedRoute>
           }
         ></Route>

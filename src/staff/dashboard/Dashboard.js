@@ -9,7 +9,7 @@ import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 // import AtRiskStudents from "./dashboard/AtRiskStudents";
 import UpcomingBirthdays from "./dashboard/UpcomingBirthdays";
 
-function Dashboard() {
+function Dashboard({ setBackButtonText, setBackButtonLink }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -36,7 +36,10 @@ function Dashboard() {
         <StudentChurn />
         <TotalActiveStudents />
         {/* <AtRiskStudents /> */}
-        <UpcomingBirthdays />
+        <UpcomingBirthdays
+          setBackButtonText={setBackButtonText}
+          setBackButtonLink={setBackButtonLink}
+        />
       </div>
       <DashboardToolbar disableToolbarButtons={disableToolbarButtons} />
     </Fragment>

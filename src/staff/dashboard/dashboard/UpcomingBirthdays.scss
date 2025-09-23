@@ -40,6 +40,8 @@ $grey: #3a3939;
 
       box-shadow: 0.2rem 0.2rem 0.54rem rgba(0, 0, 0, 0.15);
 
+      cursor: pointer;
+
       display: grid;
 
       .student-name-container {
@@ -61,11 +63,11 @@ $grey: #3a3939;
         margin-top: 0.2rem;
         margin-bottom: 0.5rem;
 
-        padding: 0.2rem 0.5rem;
+        padding: 0.3rem 0.5rem;
 
         border-radius: 0.3rem;
 
-        background-color: rgba(255, 222, 125, 0.7);
+        background-color: rgba(0, 184, 169, 0.3);
 
         display: grid;
         grid-row-gap: 0.2rem;

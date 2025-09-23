@@ -5,8 +5,10 @@ import instance from "../../../axios/axios_authenticated";
 import "./UpcomingBirthdays.scss";
 /* COMPONENTS */
 import LoadingSpinner from "../../micro/LoadingSpinner";
+// React Router DOM
+import { useNavigate } from "react-router-dom";
 
-function UpcomingBirthdays() {
+function UpcomingBirthdays({ setBackButtonText, setBackButtonLink }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -17,6 +19,9 @@ function UpcomingBirthdays() {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
+
+  /* REACT ROUTER DOM USENAVIGATE */
+  const navigate = useNavigate();
 
   /* fetch list of students with upcoming birthdays */
   const fetchData = React.useCallback(() => {
@@ -56,6 +61,37 @@ function UpcomingBirthdays() {
     );
   };
 
+  const jumpToStudentProfile = (studentId) => {
+    /* sets back button text and link */
+    setBackButtonText("ダッシュボード");
+    setBackButtonLink("/staff/dashboard/");
+
+    /* navigates to clicked student profile */
+    navigate(`/staff/students/profiles/details/${studentId}`);
+  };
+
+  const howOldStudentWillBecome = (student) => {
+    const today = new Date();
+    const studentBirthday = new Date(student.birthday);
+    const studentAge = parseInt(student.age);
+
+    const todayMonthDayString = `${today.getMonth()}${today.getDate()}`;
+    const todayMonthDay = parseInt(todayMonthDayString);
+
+    const studentBirthdayMonthDayString = `${studentBirthday.getMonth()}${studentBirthday.getDate()}`;
+    const studentBirthdayMonthDay = parseInt(studentBirthdayMonthDayString);
+
+    if (todayMonthDay === studentBirthdayMonthDay) {
+      return `本日 (${studentAge - 1}歳 → ${studentAge}歳)`;
+    } else if (todayMonthDay + 1 === studentBirthdayMonthDay) {
+      return `明日 (${studentAge}歳 → ${studentAge + 1}歳)`;
+    } else {
+      return `${getDayOfWeek(studentBirthday)} (${studentAge}歳 → ${
+        studentAge + 1
+      }歳)`;
+    }
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -72,14 +108,13 @@ function UpcomingBirthdays() {
               <div
                 key={`student-id-${student.id}`}
                 className="student-container"
+                onClick={() => jumpToStudentProfile(student.id)}
               >
                 <div className="student-name-container">
                   <div className="student-name-kanji">{`${student.last_name_kanji} ${student.first_name_kanji}`}</div>
                   <div className="student-name-katakana">{`${student.last_name_katakana} ${student.first_name_katakana}`}</div>
                 </div>
-                <div>{`${getDayOfWeek(student.birthday)} (${[
-                  parseInt(student.age) + 1,
-                ]}歳)`}</div>
+                <div>{howOldStudentWillBecome(student)}</div>
                 <div>{`${convertToJapaneseDate(student.birthday)}`}</div>
                 {student.events_set.map((event) => {
                   return (
