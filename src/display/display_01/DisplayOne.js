@@ -40,7 +40,7 @@ function DisplayOne() {
     // Set a new resetScreen timeout
     timeoutIdRef.current = setTimeout(() => {
       resetScreen();
-    }, 30 * 1000);
+    }, 60 * 1000);
 
     /* card uuid */
     const params = {
