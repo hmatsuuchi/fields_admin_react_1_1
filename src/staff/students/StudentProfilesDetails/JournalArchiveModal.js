@@ -34,7 +34,7 @@ function JournalArchiveModal({
     setDisableAllModals(true);
 
     try {
-      const response = await instance.post(
+      const response = await instance.put(
         "api/journal/journal/archive_journal_entry/",
         {
           journal_id: selectedEntry.id,

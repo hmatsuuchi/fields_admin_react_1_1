@@ -51,7 +51,6 @@ function JournalCreate({
         .then((response) => {
           if (response) {
             setJournalTypes(response.data.journal_types);
-            console.log(response.data.journal_types);
           }
         });
     } catch (e) {
