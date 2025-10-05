@@ -11,7 +11,14 @@ import "./CalendarEventCreate.scss";
 import { Link, useNavigate } from "react-router-dom";
 
 /* COMPONENTS - CALENDAR EVENT CREATE */
-function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
+function CalendarEventCreate({
+  csrfToken,
+  setHighlightedEventId,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
+}) {
   /* ----------- CALENDAR EVENT CREATE - STATE ----------- */
   const [submitted, setSubmitted] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(false);
@@ -297,10 +304,15 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
                   <Link
                     to="/staff/schedule/events/calendar/week-view/"
                     className="button cancel"
+                    onClick={() => setDisplayBackButton(false)}
                   >
                     キャンセル
                   </Link>
-                  <button type="submit" className="button submit">
+                  <button
+                    type="submit"
+                    className="button submit"
+                    onClick={() => setDisplayBackButton(false)}
+                  >
                     作成
                   </button>
                 </div>
@@ -309,7 +321,13 @@ function CalendarEventCreate({ csrfToken, setHighlightedEventId }) {
           </div>
         </div>
       </section>
-      <CalendarCreateToolbar disableToolbarButtons={disableToolbarButtons} />
+      <CalendarCreateToolbar
+        disableToolbarButtons={disableToolbarButtons}
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
+      />
     </Fragment>
   );
 }

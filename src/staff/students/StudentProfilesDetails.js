@@ -22,6 +22,8 @@ function StudentProfilesDetails({
   setBackButtonText,
   backButtonLink,
   setBackButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -42,6 +44,8 @@ function StudentProfilesDetails({
 
   // makes API call and fetches profile details
   useEffect(() => {
+    setDisplayProfile(false);
+
     (async () => {
       try {
         await instance
@@ -70,9 +74,9 @@ function StudentProfilesDetails({
       {/* Toolbar */}
       <StudentDetailsToolbar
         backButtonLink={backButtonLink}
-        setBackButtonLink={setBackButtonLink}
         backButtonText={backButtonText}
-        setBackButtonText={setBackButtonText}
+        setDisplayBackButton={setDisplayBackButton}
+        displayBackButton={displayBackButton}
         profileLastNameKanji={profile.last_name_kanji}
         profileFirstNameKanji={profile.first_name_kanji}
         profileId={profileId}
@@ -100,7 +104,12 @@ function StudentProfilesDetails({
       <div className="card-section-full-width">
         {/* Profile */}
         {displayProfile ? (
-          <StudentProfile profile={profile} />
+          <StudentProfile
+            profile={profile}
+            setBackButtonText={setBackButtonText}
+            setBackButtonLink={setBackButtonLink}
+            setDisplayBackButton={setDisplayBackButton}
+          />
         ) : (
           <LoadingSpinner />
         )}
@@ -115,6 +124,7 @@ function StudentProfilesDetails({
             profileFirstNameKanji={profile.first_name_kanji}
             setBackButtonText={setBackButtonText}
             setBackButtonLink={setBackButtonLink}
+            setDisplayBackButton={setDisplayBackButton}
           />
         ) : null}
 
@@ -128,6 +138,7 @@ function StudentProfilesDetails({
             profileFirstNameKanji={profile.first_name_kanji}
             setBackButtonText={setBackButtonText}
             setBackButtonLink={setBackButtonLink}
+            setDisplayBackButton={setDisplayBackButton}
           />
         ) : null}
 
@@ -140,6 +151,7 @@ function StudentProfilesDetails({
             profileFirstNameKanji={profile.first_name_kanji}
             setBackButtonText={setBackButtonText}
             setBackButtonLink={setBackButtonLink}
+            setDisplayBackButton={setDisplayBackButton}
             setShowJournalArchive={setShowJournalArchive}
             journalEntries={journalEntries}
             setJournalEntries={setJournalEntries}

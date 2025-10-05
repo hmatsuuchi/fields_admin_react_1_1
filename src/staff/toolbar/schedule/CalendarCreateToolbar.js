@@ -2,16 +2,25 @@ import React from "react";
 // CSS
 import "./CalendarCreateToolbar.scss";
 // COMPONENTS
-import ToolbarBackButton from "../../micro/schedule/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/ToolbarBackButton";
 
-function CalendarCreateToolbar({ disableToolbarButtons }) {
+function CalendarCreateToolbar({
+  disableToolbarButtons,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
+}) {
   return (
     <div
       id="calendar-create-toolbar"
-      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}>
+      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}
+    >
       <ToolbarBackButton
-        backButtonLink={"/staff/schedule/events/calendar/week-view"}
-        backButtonText={"カレンダー"}
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
     </div>
   );

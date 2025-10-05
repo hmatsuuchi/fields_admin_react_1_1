@@ -18,6 +18,8 @@ function Attendance({
   setBackButtonText,
   backButtonLink,
   setBackButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   /* ----------------------------------------------------- */
   /* ------------------ STATE FUNCTIONS ------------------ */
@@ -524,6 +526,7 @@ function Attendance({
           setAttendanceSelectedId={setAttendanceSelectedId}
           setBackButtonText={setBackButtonText}
           setBackButtonLink={setBackButtonLink}
+          setDisplayBackButton={setDisplayBackButton}
         />
 
         {/* Attendance Completed Indicator */}
@@ -591,6 +594,8 @@ function Attendance({
         setBackButtonText={setBackButtonText}
         backButtonLink={backButtonLink}
         setBackButtonLink={setBackButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
     </Fragment>
   );

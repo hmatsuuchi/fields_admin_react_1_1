@@ -30,7 +30,7 @@ nav.staff-navigation {
 
     -webkit-tap-highlight-color: transparent;
 
-    transition-duration: 400ms;
+    transition-duration: 300ms;
 
     display: grid;
     place-items: center;
@@ -38,6 +38,8 @@ nav.staff-navigation {
     #hamburger-container {
       width: 60%;
       height: 45%;
+
+      pointer-events: none;
 
       display: grid;
       grid-template-rows: repeat(5, 1fr);
@@ -97,15 +99,15 @@ nav.staff-navigation.nav-active {
 
     #hamburger-container {
       #hamburger-line-1 {
-        animation: hamburger-line-1-in 400ms ease-in forwards;
+        animation: hamburger-line-1-in 300ms ease-in forwards;
       }
 
       #hamburger-line-2 {
-        animation: hamburger-line-2-in 400ms ease-in forwards;
+        animation: hamburger-line-2-in 300ms ease-in forwards;
       }
 
       #hamburger-line-3 {
-        animation: hamburger-line-3-in 400ms ease-in forwards;
+        animation: hamburger-line-3-in 300ms ease-in forwards;
       }
 
       @keyframes hamburger-line-1-in {
@@ -164,19 +166,19 @@ nav.staff-navigation.nav-active {
     }
 
     #link-item-02 {
-      animation: nav-list-in 300ms 50ms ease-out both;
+      animation: nav-list-in 300ms 25ms ease-out both;
     }
 
     #link-item-03 {
-      animation: nav-list-in 300ms 150ms ease-out both;
+      animation: nav-list-in 300ms 50ms ease-out both;
     }
 
     #link-item-04 {
-      animation: nav-list-in 300ms 200ms ease-out both;
+      animation: nav-list-in 300ms 75ms ease-out both;
     }
 
     #link-item-05 {
-      animation: nav-list-in 300ms 250ms ease-out both;
+      animation: nav-list-in 300ms 100ms ease-out both;
     }
 
     @keyframes nav-list-in {
@@ -268,19 +270,19 @@ nav.staff-navigation.nav-inactive {
     opacity: 1;
 
     #link-item-01 {
-      animation: nav-list-out 300ms 200ms ease-out both;
-    }
-
-    #link-item-02 {
-      animation: nav-list-out 300ms 150ms ease-out both;
-    }
-
-    #link-item-03 {
       animation: nav-list-out 300ms 100ms ease-out both;
     }
 
-    #link-item-04 {
+    #link-item-02 {
+      animation: nav-list-out 300ms 75ms ease-out both;
+    }
+
+    #link-item-03 {
       animation: nav-list-out 300ms 50ms ease-out both;
+    }
+
+    #link-item-04 {
+      animation: nav-list-out 300ms 25ms ease-out both;
     }
 
     #link-item-05 {
@@ -321,4 +323,20 @@ nav.staff-navigation.nav-disabled {
 
 #close-navigation.nav-active {
   display: block;
+}
+
+nav.staff-navigation.nav-inactive.nav-animating {
+  #hamburger-button {
+    pointer-events: none;
+  }
+}
+
+nav.staff-navigation.nav-active.nav-animating {
+  #hamburger-button {
+    pointer-events: none;
+  }
+}
+
+#close-navigation.nav-animating {
+  pointer-events: none;
 }

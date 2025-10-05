@@ -18,8 +18,10 @@ function StudentProfiles({
   setArchiveFilters,
   sorts,
   setSorts,
-  setBackButtonText,
-  setBackButtonLink,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   // source of truth for student profiles
   const [studentProfilesTruth, setstudentProfilesTruth] = useState([]);
@@ -42,12 +44,6 @@ function StudentProfiles({
   const [filtersActive, setFiltersActive] = useState(false);
   // boolean used to display error message and retry button if API call fails
   const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
-
-  // sets back button text and link
-  useEffect(() => {
-    setBackButtonText("生徒情報");
-    setBackButtonLink("/staff/students/profiles/cards/");
-  }, [setBackButtonText, setBackButtonLink]);
 
   // fetches profile data from API
   const fetchProfiles = async () => {
@@ -266,6 +262,10 @@ function StudentProfiles({
         filtersActive={filtersActive}
         sorts={sorts}
         setSorts={setSorts}
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
 
       {/* Error Loading Data */}

@@ -17,6 +17,8 @@ function JournalCreate({
   backButtonText,
   setBackButtonText,
   backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -110,7 +112,7 @@ function JournalCreate({
   };
 
   // handles form submission to create a new journal entry
-  const handFormSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     setDateError(false);
@@ -243,6 +245,8 @@ function JournalCreate({
         setBackButtonText={setBackButtonText}
         backButtonLink={backButtonLink}
         displayContent={true}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
       {displayContent ? (
         <Fragment>
@@ -383,6 +387,7 @@ function JournalCreate({
                           <button
                             className="button-cancel"
                             onClick={() => {
+                              setDisplayBackButton(false);
                               navigate(backButtonLink);
                             }}
                           >
@@ -391,7 +396,10 @@ function JournalCreate({
                           <button
                             type="submit"
                             className="button-submit"
-                            onClick={handFormSubmit}
+                            onClick={() => {
+                              setDisplayBackButton(false);
+                              handleFormSubmit();
+                            }}
                           >
                             作成
                           </button>

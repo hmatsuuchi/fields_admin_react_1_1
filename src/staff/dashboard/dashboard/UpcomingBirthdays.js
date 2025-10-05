@@ -8,7 +8,11 @@ import LoadingSpinner from "../../micro/LoadingSpinner";
 // React Router DOM
 import { useNavigate } from "react-router-dom";
 
-function UpcomingBirthdays({ setBackButtonText, setBackButtonLink }) {
+function UpcomingBirthdays({
+  setBackButtonText,
+  setBackButtonLink,
+  setDisplayBackButton,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -65,6 +69,7 @@ function UpcomingBirthdays({ setBackButtonText, setBackButtonLink }) {
     /* sets back button text and link */
     setBackButtonText("ダッシュボード");
     setBackButtonLink("/staff/dashboard/");
+    setDisplayBackButton(true);
 
     /* navigates to clicked student profile */
     navigate(`/staff/students/profiles/details/${studentId}`);

@@ -15,8 +15,12 @@ function Calendar({
   csrfToken,
   highlightedEventId,
   setHighlightedEventId,
+  backButtonText,
   setBackButtonText,
+  backButtonLink,
   setBackButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -44,12 +48,6 @@ function Calendar({
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
-
-  /* SETS BACK BUTTON TEXT AND LINK */
-  useEffect(() => {
-    setBackButtonText("カレンダー");
-    setBackButtonLink("/staff/schedule/events/calendar/week-view/");
-  }, [setBackButtonText, setBackButtonLink]);
 
   /* DAY OF WEEK CONVERSTION (FULL DAY) */
   const dayOfWeekArray = [
@@ -445,6 +443,12 @@ function Calendar({
   /* HANDLE STUDENT DETAILS OPEN */
   const navigate = useNavigate();
   const handleClicksToStudentContainer = (e) => {
+    e.stopPropagation();
+
+    setBackButtonText("生徒情報");
+    setBackButtonLink("/staff/schedule/events/calendar/week-view/");
+    setDisplayBackButton(true);
+
     const studentId = e.currentTarget.dataset.student_id;
     navigate(`/staff/students/profiles/details/${studentId}`);
   };
@@ -778,7 +782,15 @@ function Calendar({
       ) : (
         <LoadingSpinner />
       )}
-      <CalendarToolbar disableToolbarButtons={disableToolbarButtons} />
+      <CalendarToolbar
+        disableToolbarButtons={disableToolbarButtons}
+        backButtonText={backButtonText}
+        setBackButtonText={setBackButtonText}
+        backButtonLink={backButtonLink}
+        setBackButtonLink={setBackButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
+      />
       {eventDetailsVisible && (
         <Fragment>
           <EventDetails

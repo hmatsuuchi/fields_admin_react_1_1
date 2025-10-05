@@ -53,10 +53,9 @@ function App() {
   const [csrfToken, setCsrfToken] = useState("");
 
   /* BACK BUTTON */
-  const [backButtonText, setBackButtonText] = useState("生徒情報");
-  const [backButtonLink, setBackButtonLink] = useState(
-    "/staff/students/profiles/cards/"
-  );
+  const [backButtonText, setBackButtonText] = useState("");
+  const [backButtonLink, setBackButtonLink] = useState("");
+  const [displayBackButton, setDisplayBackButton] = useState(false);
 
   /* SCHEDULE */
   const [highlightedEventId, setHighlightedEventId] = useState(null);
@@ -134,6 +133,13 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(`Back button text: ${backButtonText}`);
+    console.log(`Back button link: ${backButtonLink}`);
+    console.log(`Display back button: ${displayBackButton}`);
+    console.log("-----------------------");
+  }, [backButtonText, backButtonLink, displayBackButton]);
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -141,7 +147,11 @@ function App() {
   return (
     <BrowserRouter>
       {isAuth && isStaff ? (
-        <StaffNavigation />
+        <StaffNavigation
+          setBackButtonText={setBackButtonText}
+          setBackButtonLink={setBackButtonLink}
+          setDisplayBackButton={setDisplayBackButton}
+        />
       ) : (
         isAuth && isCustomer && <CustomerNavigation />
       )}
@@ -187,8 +197,12 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StaffDashboard
+                backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -206,8 +220,10 @@ function App() {
                 setArchiveFilters={setArchiveFilters}
                 sorts={sorts}
                 setSorts={setSorts}
-                setBackButtonText={setBackButtonText}
-                setBackButtonLink={setBackButtonLink}
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -224,6 +240,8 @@ function App() {
                 setBackButtonText={setBackButtonText}
                 backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -246,8 +264,12 @@ function App() {
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesUpdate
                 csrfToken={csrfToken}
+                backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -276,8 +298,12 @@ function App() {
                 csrfToken={csrfToken}
                 highlightedEventId={highlightedEventId}
                 setHighlightedEventId={setHighlightedEventId}
+                backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -291,6 +317,10 @@ function App() {
               <CalendarEventCreate
                 csrfToken={csrfToken}
                 setHighlightedEventId={setHighlightedEventId}
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -307,20 +337,24 @@ function App() {
                 setBackButtonText={setBackButtonText}
                 backButtonLink={backButtonLink}
                 setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
         ></Route>
 
-        {/* STAFF ROUTES - ATTENDANCE - DAY VIEW */}
+        {/* STAFF ROUTES - ATTENDANCE - CREATE ATTENDANCE */}
         <Route
           path="/staff/attendance/create/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <AttendanceCreate
                 csrfToken={csrfToken}
-                setBackButtonText={setBackButtonText}
-                setBackButtonLink={setBackButtonLink}
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }
@@ -336,6 +370,8 @@ function App() {
                 backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
                 backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
           }

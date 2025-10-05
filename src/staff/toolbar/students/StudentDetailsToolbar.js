@@ -2,19 +2,21 @@ import React from "react";
 // CSS
 import "./StudentDetailsToolbar.scss";
 // Components
-import ToolbarBackButton from "../../micro/students/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/ToolbarBackButton";
 
 function StudentDetailsToolbar({
   backButtonLink,
   backButtonText,
-  setBackButtonText,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   return (
     <div id="student-profile-details-toolbar">
       <ToolbarBackButton
         backButtonLink={backButtonLink}
         backButtonText={backButtonText}
-        setBackButtonText={setBackButtonText}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
     </div>
   );

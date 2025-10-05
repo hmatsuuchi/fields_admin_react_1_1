@@ -11,11 +11,7 @@ import "./StudentProfilesDelete.scss";
 // React Router DOM
 import { useParams, Link, useNavigate } from "react-router-dom";
 
-function StudentProfilesDelete({
-  csrfToken,
-  setBackButtonText,
-  setBackButtonLink,
-}) {
+function StudentProfilesDelete({ csrfToken }) {
   const { profileId } = useParams();
 
   const [profile, setProfile] = useState("");
@@ -24,12 +20,6 @@ function StudentProfilesDelete({
 
   // React Router DOM Navigate
   const navigate = useNavigate();
-
-  // sets back button text and link
-  useEffect(() => {
-    setBackButtonText("生徒情報");
-    setBackButtonLink("/staff/students/profiles/cards/");
-  }, [setBackButtonText, setBackButtonLink]);
 
   // makes API call and fetches profile details
   useEffect(() => {
@@ -82,19 +72,7 @@ function StudentProfilesDelete({
 
   return (
     <Fragment>
-      <StudentDeleteToolbar
-        backButtonLink={`/staff/students/profiles/update/${profileId}`}
-        backButtonText={
-          profile
-            ? profile.last_name_kanji && profile.first_name_kanji
-              ? `${profile.last_name_kanji} ${profile.first_name_kanji} (編集)`
-              : profile.last_name_kanji || profile.first_name_kanji
-              ? `${profile.last_name_kanji}${profile.first_name_kanji} (編集)`
-              : "編集へ戻る"
-            : "編集へ戻る"
-        }
-        displayContent={displayContent}
-      />
+      <StudentDeleteToolbar />
       <DisplayDescriptors
         displayTextArray={
           displayContent

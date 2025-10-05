@@ -9,7 +9,13 @@ import ClassSelectContainer from "./Attendance/AttendanceCreate/ClassSelectConta
 import LoadingSpinner from "../micro/LoadingSpinner";
 import BottomButtons from "./Attendance/AttendanceCreate/BottomButtons";
 
-function AttendanceCreate({ csrfToken }) {
+function AttendanceCreate({
+  csrfToken,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
+}) {
   /* ----------------------------------------------------- */
   /* ----------------------- STATE ----------------------- */
   /* ----------------------------------------------------- */
@@ -170,7 +176,13 @@ function AttendanceCreate({ csrfToken }) {
       ) : (
         <LoadingSpinner />
       )}
-      <AttendanceCreateToolbar disableToolbarButtons={disableToolbarButtons} />
+      <AttendanceCreateToolbar
+        disableToolbarButtons={disableToolbarButtons}
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
+      />
     </Fragment>
   );
 }

@@ -15,6 +15,7 @@ function EnrolledClasses({
   profileFirstNameKanji,
   setBackButtonText,
   setBackButtonLink,
+  setDisplayBackButton,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -54,10 +55,27 @@ function EnrolledClasses({
     setDisplayProfile(false);
 
     /* sets back button text and link */
+    function formatNameForButton(profile) {
+      if (profile.last_name_kanji !== "" && profile.first_name_kanji !== "") {
+        return `${profile.last_name_kanji} ${profile.first_name_kanji}`;
+      } else if (
+        profile.first_name_kanji === "" &&
+        profile.last_name_kanji === ""
+      ) {
+        return "戻る";
+      } else {
+        return `${profile.last_name_kanji}${profile.first_name_kanji}`;
+      }
+    }
+
     setBackButtonText(
-      `生徒情報 (${profileLastNameKanji} ${profileFirstNameKanji})`
+      formatNameForButton({
+        last_name_kanji: profileLastNameKanji,
+        first_name_kanji: profileFirstNameKanji,
+      })
     );
     setBackButtonLink(`/staff/students/profiles/details/${profileId}`);
+    setDisplayBackButton(true);
 
     /* navigates to clicked student profile */
     const studentId = event.target.dataset.student_id;

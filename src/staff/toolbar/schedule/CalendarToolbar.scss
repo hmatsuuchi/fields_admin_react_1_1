@@ -21,7 +21,8 @@ $grey: #3a3939;
 
   display: grid;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
+  grid-auto-flow: column;
 }
 
 /* prevents clicks to the toolbar before API call is complete */

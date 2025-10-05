@@ -2,9 +2,15 @@ import React from "react";
 // CSS
 import "./AttendanceCreateToolbar.scss";
 // COMPONENTS
-import ToolbarBackButton from "../../micro/attendance/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/ToolbarBackButton";
 
-function AttendanceCreateToolbar({ disableToolbarButtons }) {
+function AttendanceCreateToolbar({
+  disableToolbarButtons,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
+}) {
   /* ----------------------------------------------------- */
   /* ------- ATTENDANCE CREATE TOOLBAR - FUNCTIONS ------- */
   /* ----------------------------------------------------- */
@@ -16,10 +22,13 @@ function AttendanceCreateToolbar({ disableToolbarButtons }) {
   return (
     <div
       id="attendance-create-toolbar"
-      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}>
+      className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}
+    >
       <ToolbarBackButton
-        backButtonLink="/staff/attendance/day-view/"
-        backButtonText="欠席表"
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
     </div>
   );

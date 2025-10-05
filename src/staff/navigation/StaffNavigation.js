@@ -1,15 +1,31 @@
 import { React, Fragment } from "react";
 // React Router DOM
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 // CSS
 import "./StaffNavigation.scss";
 
-function StaffNavigation() {
+function StaffNavigation({
+  setBackButtonText,
+  setBackButtonLink,
+  setDisplayBackButton,
+}) {
+  // sets current location
+  const location = useLocation();
+
   // toggles navigation open/closed
   // adds/removes closeNavOnScroll event listener when nav is open/closed
-  function toggleNavigation() {
+  function toggleNavigation(e) {
+    e.stopPropagation();
+
     const navigation = document.getElementById("navigation");
     const closeNavigation = document.getElementById("close-navigation");
+
+    navigation.classList.add("nav-animating");
+    closeNavigation.classList.add("nav-animating");
+    setTimeout(() => {
+      navigation.classList.remove("nav-animating");
+      closeNavigation.classList.remove("nav-animating");
+    }, 500);
 
     if (navigation.classList.contains("nav-active")) {
       navigation.classList.add("nav-inactive");
@@ -39,8 +55,36 @@ function StaffNavigation() {
     window.removeEventListener("scroll", closeNavOnScroll);
   }
 
-  function clicksToNavHousekeeping() {
+  // handles back button logic
+  const handleBackButtonLogic = (e) => {
+    const currentPath = location.pathname;
+    const currentLocationLabelPrefix = [
+      { prefix: "/staff/dashboard/", label: "ダッシュボード" },
+      { prefix: "/staff/attendance/day-view/", label: "出欠・日程" },
+      { prefix: "/staff/students/profiles/cards/", label: "生徒情報" },
+      // { prefix: "/staff/students/profiles/details/", label: "生徒情報" },
+      {
+        prefix: "/staff/schedule/events/calendar/week-view",
+        label: "カレンダー",
+      },
+      { prefix: "/logout/", label: "ログアウト" },
+    ];
+
+    // this logic attempts to finds the first matching prefix in the array
+    const match = currentLocationLabelPrefix.find((item) =>
+      currentPath.startsWith(item.prefix)
+    );
+
+    const currentLocationText = match ? match.label : "";
+
+    setBackButtonText(currentLocationText);
+    setBackButtonLink(currentPath);
+    setDisplayBackButton(true);
+  };
+
+  function clicksToNavHousekeeping(e) {
     closeNavOnScroll();
+    handleBackButtonLogic(e);
   }
 
   return (
@@ -53,7 +97,8 @@ function StaffNavigation() {
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
             }
-            onClick={clicksToNavHousekeeping}>
+            onClick={clicksToNavHousekeeping}
+          >
             ダッシュボード
           </NavLink>
           <NavLink
@@ -62,7 +107,8 @@ function StaffNavigation() {
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
             }
-            onClick={clicksToNavHousekeeping}>
+            onClick={clicksToNavHousekeeping}
+          >
             出欠・日程
           </NavLink>
           <NavLink
@@ -71,7 +117,8 @@ function StaffNavigation() {
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
             }
-            onClick={clicksToNavHousekeeping}>
+            onClick={clicksToNavHousekeeping}
+          >
             生徒情報
           </NavLink>
           <NavLink
@@ -80,7 +127,8 @@ function StaffNavigation() {
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
             }
-            onClick={clicksToNavHousekeeping}>
+            onClick={clicksToNavHousekeeping}
+          >
             カレンダー
           </NavLink>
           <NavLink
@@ -88,7 +136,8 @@ function StaffNavigation() {
             to="/logout/"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""
-            }>
+            }
+          >
             ログアウト
           </NavLink>
         </div>

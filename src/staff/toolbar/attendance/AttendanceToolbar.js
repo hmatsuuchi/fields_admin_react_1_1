@@ -8,7 +8,7 @@ import AddNewAttendanceButton from "../../micro/attendance/AddNewAttendanceButto
 import VerticalDividerThin from "../../micro/attendance/VerticalDividerThin";
 import JumpToTodayButton from "./AttendanceToolbar/JumpToTodayButton";
 import AutoGenerateAttendanceRecords from "./AttendanceToolbar/AutoGenerateAttendanceRecords";
-import ToolbarBackButton from "../../micro/attendance/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/ToolbarBackButton";
 
 function AttendanceToolbar({
   csrfToken,
@@ -33,6 +33,8 @@ function AttendanceToolbar({
   setBackButtonText,
   backButtonLink,
   setBackButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -86,10 +88,10 @@ function AttendanceToolbar({
       className={disableToolbarButtons ? "disable-toolbar-buttons" : ""}
     >
       <ToolbarBackButton
-        backButtonLink={backButtonLink}
-        setBackButtonLink={setBackButtonLink}
         backButtonText={backButtonText}
-        setBackButtonText={setBackButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
       />
       <div className="button-set-container">
         <AutoGenerateAttendanceRecords
@@ -142,6 +144,9 @@ function AttendanceToolbar({
           }
           activePrimaryInstructor={activePrimaryInstructor}
           attendanceDate={attendanceDate}
+          setBackButtonText={setBackButtonText}
+          setBackButtonLink={setBackButtonLink}
+          setDisplayBackButton={setDisplayBackButton}
         />
       </div>
     </div>

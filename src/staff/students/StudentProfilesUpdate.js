@@ -14,8 +14,10 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 
 function StudentProfilesUpdate({
   csrfToken,
-  setBackButtonText,
-  setBackButtonLink,
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
 }) {
   // get profile id from URL params
   const { profileId } = useParams();
@@ -53,12 +55,6 @@ function StudentProfilesUpdate({
 
   // React Router DOM Navigate
   const navigate = useNavigate();
-
-  // sets back button text and link
-  useEffect(() => {
-    setBackButtonText("生徒情報");
-    setBackButtonLink("/staff/students/profiles/cards/");
-  }, [setBackButtonText, setBackButtonLink]);
 
   // makes API call and fetches choice values for the form
   useEffect(() => {
@@ -228,14 +224,10 @@ function StudentProfilesUpdate({
   return (
     <Fragment>
       <StudentProfileUpdateToolbar
-        backButtonLink={`/staff/students/profiles/details/${profileId}`}
-        backButtonText={
-          lastNameKanji && firstNameKanji
-            ? `${lastNameKanji} ${firstNameKanji} (明細)`
-            : lastNameKanji || firstNameKanji
-            ? `${lastNameKanji}${firstNameKanji} (明細)`
-            : "明細へ戻る"
-        }
+        backButtonLink={backButtonLink}
+        backButtonText={backButtonText}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
         displayContent={displayContent}
       />
 
@@ -574,6 +566,9 @@ function StudentProfilesUpdate({
                       <Link
                         to={`/staff/students/profiles/delete/${profileId}`}
                         className="button delete"
+                        onClick={() => {
+                          setDisplayBackButton(false);
+                        }}
                       >
                         削除
                       </Link>
@@ -581,10 +576,19 @@ function StudentProfilesUpdate({
                         <Link
                           to={`/staff/students/profiles/details/${profileId}`}
                           className="button cancel"
+                          onClick={() => {
+                            setDisplayBackButton(false);
+                          }}
                         >
                           キャンセル
                         </Link>
-                        <button type="submit" className="button submit">
+                        <button
+                          type="submit"
+                          className="button submit"
+                          onClick={() => {
+                            setDisplayBackButton(false);
+                          }}
+                        >
                           編集
                         </button>
                       </div>

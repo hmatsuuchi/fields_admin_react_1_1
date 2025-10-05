@@ -14,6 +14,7 @@ function Attendance({
   profileFirstNameKanji,
   setBackButtonText,
   setBackButtonLink,
+  setDisplayBackButton,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -122,12 +123,32 @@ function Attendance({
           .then((response) => {
             if (response.status === 200) {
               /* set back button text and link */
+              function formatNameForButton(profile) {
+                if (
+                  profile.last_name_kanji !== "" &&
+                  profile.first_name_kanji !== ""
+                ) {
+                  return `${profile.last_name_kanji} ${profile.first_name_kanji}`;
+                } else if (
+                  profile.first_name_kanji === "" &&
+                  profile.last_name_kanji === ""
+                ) {
+                  return "戻る";
+                } else {
+                  return `${profile.last_name_kanji}${profile.first_name_kanji}`;
+                }
+              }
+
               setBackButtonText(
-                `生徒情報 (${profileLastNameKanji} ${profileFirstNameKanji})`
+                formatNameForButton({
+                  last_name_kanji: profileLastNameKanji,
+                  first_name_kanji: profileFirstNameKanji,
+                })
               );
               setBackButtonLink(
                 `/staff/students/profiles/details/${profileId}`
               );
+              setDisplayBackButton(true);
 
               /* navigate to attendance page */
               navigate(`/staff/attendance/day-view/`);

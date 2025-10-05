@@ -2,11 +2,13 @@ import React from "react";
 // CSS
 import "./StudentProfileUpdateToolbar.scss";
 // Components
-import ToolbarBackButton from "../../micro/students/ToolbarBackButton";
+import ToolbarBackButton from "../../micro/ToolbarBackButton";
 
 function StudentProfileUpdateToolbar({
   backButtonLink,
   backButtonText,
+  displayBackButton,
+  setDisplayBackButton,
   displayContent,
 }) {
   return (
@@ -15,6 +17,8 @@ function StudentProfileUpdateToolbar({
         <ToolbarBackButton
           backButtonLink={backButtonLink}
           backButtonText={backButtonText}
+          displayBackButton={displayBackButton}
+          setDisplayBackButton={setDisplayBackButton}
         />
       )}
     </div>

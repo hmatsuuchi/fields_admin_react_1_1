@@ -20,42 +20,53 @@ $grey: #3a3939;
   box-shadow: 0 0 0.3rem 0.3rem rgba(0, 0, 0, 0.2);
 
   display: grid;
-  justify-content: right;
+  justify-content: space-between;
   align-content: center;
   grid-auto-flow: column;
 
-  #search-container {
-    margin: 0 0.25rem;
-    order: 4;
+  #toolbar-back-button {
+    display: none;
+  }
 
+  .right-side-element-container {
     display: grid;
+    justify-content: space-between;
+    align-content: center;
     grid-auto-flow: column;
-    grid-column-gap: 0.5rem;
 
-    #search-input {
-      width: calc(100% - 2.6rem);
-      height: 2rem;
-      font-size: 1.2rem;
-      border-radius: 0.3rem;
-      border: none;
-      padding: 0 0.5rem 0 2.1rem;
-      color: $grey;
+    #search-container {
+      margin: 0 0.25rem;
+      order: 4;
 
-      background-image: url("./img/magnifying_glass.svg");
-      background-repeat: no-repeat;
-      background-position: 0.5rem 50%;
-      background-size: auto 60%;
-    }
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 0.5rem;
 
-    #search-input:focus {
-      outline: $grey solid 2px;
-    }
+      #search-input {
+        width: calc(100% - 2.6rem);
+        height: 2rem;
+        font-size: 1.2rem;
+        border-radius: 0.3rem;
+        border: none;
+        padding: 0 0.5rem 0 2.1rem;
+        color: $grey;
 
-    #search-button {
-      color: #fff;
-      font-size: 1rem;
-      border: solid 2px #fff;
-      border-radius: 0.3rem;
+        background-image: url("./img/magnifying_glass.svg");
+        background-repeat: no-repeat;
+        background-position: 0.5rem 50%;
+        background-size: auto 60%;
+      }
+
+      #search-input:focus {
+        outline: $grey solid 2px;
+      }
+
+      #search-button {
+        color: #fff;
+        font-size: 1rem;
+        border: solid 2px #fff;
+        border-radius: 0.3rem;
+      }
     }
   }
 }
@@ -63,4 +74,12 @@ $grey: #3a3939;
 /* prevents clicks to the toolbar */
 #student-profile-list-toolbar.disable-toolbar-buttons {
   pointer-events: none;
+}
+
+@media screen and (min-width: 550px) {
+  #student-profile-list-toolbar {
+    #toolbar-back-button {
+      display: block;
+    }
+  }
 }

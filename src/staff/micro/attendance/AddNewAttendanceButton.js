@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 /* CSS */
 import "./AddNewAttendanceButton.scss";
 
-function AddNewAttendanceButton() {
+function AddNewAttendanceButton({
+  setBackButtonText,
+  setBackButtonLink,
+  setDisplayBackButton,
+}) {
   /* ----------------------------------------------- */
   /* ---- ADD NEW ATTENDANCE BUTTON - FUNCTIONS ---- */
   /* ----------------------------------------------- */
@@ -12,6 +16,11 @@ function AddNewAttendanceButton() {
   const navigate = useNavigate();
 
   const handleClicksToAddNewAttendanceButton = () => {
+    /* set back button state */
+    setBackButtonText("出欠・日程");
+    setBackButtonLink("/staff/attendance/day-view/");
+    setDisplayBackButton(true);
+
     navigate(`/staff/attendance/create/`);
   };
 
@@ -22,7 +31,8 @@ function AddNewAttendanceButton() {
   return (
     <button
       className="add-new-attendance-button"
-      onClick={handleClicksToAddNewAttendanceButton}></button>
+      onClick={handleClicksToAddNewAttendanceButton}
+    ></button>
   );
 }
 

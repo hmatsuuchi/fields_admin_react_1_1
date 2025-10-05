@@ -15,6 +15,7 @@ function Journal({
   profileFirstNameKanji,
   setBackButtonText,
   setBackButtonLink,
+  setDisplayBackButton,
   setShowJournalArchive,
   journalEntries,
   setJournalEntries,
@@ -84,6 +85,32 @@ function Journal({
     setSelectedEntry(journalObject);
   };
 
+  /* HANDLE CLICKS TO JOURNAL CREATE BUTTON */
+  const handleClicksToJournalCreate = () => {
+    /* set back button text and link */
+    function formatNameForButton(profile) {
+      if (profile.last_name_kanji !== "" && profile.first_name_kanji !== "") {
+        return `${profile.last_name_kanji} ${profile.first_name_kanji}`;
+      } else if (
+        profile.first_name_kanji === "" &&
+        profile.last_name_kanji === ""
+      ) {
+        return "戻る";
+      } else {
+        return `${profile.last_name_kanji}${profile.first_name_kanji}`;
+      }
+    }
+
+    setBackButtonText(
+      formatNameForButton({
+        last_name_kanji: profileLastNameKanji,
+        first_name_kanji: profileFirstNameKanji,
+      })
+    );
+    setBackButtonLink(`/staff/students/profiles/details/${profileId}/`);
+    setDisplayBackButton(true);
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -148,12 +175,7 @@ function Journal({
             className="journal-entry-add-button"
             to={`/staff/students/journal/create/?profile_id=${profileId}`}
             onClick={() => {
-              setBackButtonText(
-                `${profileLastNameKanji} ${profileFirstNameKanji} (明細)`
-              );
-              setBackButtonLink(
-                `/staff/students/profiles/details/${profileId}/`
-              );
+              handleClicksToJournalCreate();
             }}
           ></Link>
         </div>

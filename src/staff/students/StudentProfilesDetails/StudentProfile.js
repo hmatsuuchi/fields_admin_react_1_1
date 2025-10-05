@@ -5,7 +5,31 @@ import "./StudentProfile.scss";
 // React Router DOM
 import { Link } from "react-router-dom";
 
-function StudentProfile({ profile }) {
+function StudentProfile({
+  profile,
+  setBackButtonText,
+  setBackButtonLink,
+  setDisplayBackButton,
+}) {
+  const handleClicksToEditProfileButton = () => {
+    function formatNameForButton(profile) {
+      if (profile.last_name_kanji !== "" && profile.first_name_kanji !== "") {
+        return `${profile.last_name_kanji} ${profile.first_name_kanji}`;
+      } else if (
+        profile.first_name_kanji === "" &&
+        profile.last_name_kanji === ""
+      ) {
+        return "戻る";
+      } else {
+        return `${profile.last_name_kanji}${profile.first_name_kanji}`;
+      }
+    }
+
+    setBackButtonText(formatNameForButton(profile));
+    setBackButtonLink(`/staff/students/profiles/details/${profile.id}`);
+    setDisplayBackButton(true);
+  };
+
   return (
     <div className="card-container-full-width">
       {profile && (
@@ -115,6 +139,7 @@ function StudentProfile({ profile }) {
             <Link
               className="profile-edit-button"
               to={`/staff/students/profiles/update/${profile.id}`}
+              onClick={() => handleClicksToEditProfileButton()}
             ></Link>
           </div>
         </div>
