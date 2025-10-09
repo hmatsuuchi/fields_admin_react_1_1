@@ -113,8 +113,6 @@ function JournalCreate({
 
   // handles form submission to create a new journal entry
   const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
     setDateError(false);
     setTypeError(false);
     setInstructorError(false);
@@ -147,7 +145,9 @@ function JournalCreate({
         );
         if (response.status === 201) {
           // redirects back to the student details page
-          navigate(backButtonLink);
+          navigate(
+            `/staff/students/profiles/details/${journalEntryStudent.id}/`
+          );
         } else {
           console.error("Failed to create journal entry:", response.data);
           setContentSubmitted(false);
@@ -396,7 +396,8 @@ function JournalCreate({
                           <button
                             type="submit"
                             className="button-submit"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setDisplayBackButton(false);
                               handleFormSubmit();
                             }}

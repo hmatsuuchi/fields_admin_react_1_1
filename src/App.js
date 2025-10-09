@@ -8,9 +8,11 @@ import Logout from "./authentication/Logout";
 import StaffProtectedRoute from "./authentication/StaffProtectedRoute";
 import CustomerProtectedRoute from "./authentication/CustomerProtectedRoute";
 import DisplayProtectedRoute from "./authentication/DisplayProtectedRoute";
+import SuperuserProtectedRoute from "./authentication/SuperuserProtectedRoute";
 // COMPONENTS - STAFF - GENERAL
 import StaffNavigation from "./staff/navigation/StaffNavigation";
 import StaffDashboard from "./staff/dashboard/Dashboard";
+import StaffOverview from "./staff/dashboard/Overview";
 // COMPONENTS - STAFF - STUDENTS
 import StudentProfilesCards from "./staff/students/StudentProfilesCards";
 import StudentProfilesDetails from "./staff/students/StudentProfilesDetails";
@@ -49,6 +51,9 @@ function App() {
   );
   const [isDisplay, setIsDisplay] = useState(
     localStorage.getItem("is_display")
+  );
+  const [isSuperuser, setIsSuperuser] = useState(
+    localStorage.getItem("is_superuser")
   );
   const [csrfToken, setCsrfToken] = useState("");
 
@@ -133,13 +138,6 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(`Back button text: ${backButtonText}`);
-    console.log(`Back button link: ${backButtonLink}`);
-    console.log(`Display back button: ${displayBackButton}`);
-    console.log("-----------------------");
-  }, [backButtonText, backButtonLink, displayBackButton]);
-
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -172,6 +170,7 @@ function App() {
               setIsCustomer={setIsCustomer}
               isDisplay={isDisplay}
               setIsDisplay={setIsDisplay}
+              setIsSuperuser={setIsSuperuser}
               setCsrfToken={setCsrfToken}
             />
           }
@@ -193,7 +192,7 @@ function App() {
 
         {/* STAFF ROUTES - DASHBOARD */}
         <Route
-          path="/staff/dashboard"
+          path="/staff/dashboard/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StaffDashboard
@@ -205,6 +204,16 @@ function App() {
                 setDisplayBackButton={setDisplayBackButton}
               />
             </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* DISPLAY ROUTES - OVERVIEW */}
+        <Route
+          path="/staff/overview/"
+          element={
+            <SuperuserProtectedRoute isAuth={isAuth} isSuperuser={isSuperuser}>
+              <StaffOverview />
+            </SuperuserProtectedRoute>
           }
         ></Route>
 
@@ -389,7 +398,7 @@ function App() {
 
         {/* DISPLAY ROUTES - DASHBOARD */}
         <Route
-          path="/display/dashboard"
+          path="/display/dashboard/"
           element={
             <DisplayProtectedRoute isAuth={isAuth} isDisplay={isDisplay}>
               <DisplayDashboard />

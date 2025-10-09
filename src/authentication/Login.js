@@ -20,6 +20,7 @@ function Login({
   setIsCustomer,
   setCsrfToken,
   setIsDisplay,
+  setIsSuperuser,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -35,9 +36,10 @@ function Login({
     setIsStaff(null);
     setIsCustomer(null);
     setIsDisplay(null);
+    setIsSuperuser(null);
 
     setDisplayContent(true);
-  }, [setIsAuth, setIsStaff, setIsCustomer, setIsDisplay]);
+  }, [setIsAuth, setIsStaff, setIsCustomer, setIsDisplay, setIsSuperuser]);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -102,6 +104,13 @@ function Login({
                   setIsDisplay(true);
                   // set is_display bool in local storage
                   localStorage.setItem("is_display", true);
+                }
+
+                if (loggedInUserGroups.includes("Superusers")) {
+                  // set superuser prop
+                  setIsSuperuser(true);
+                  // set is_superuser bool in local storage
+                  localStorage.setItem("is_superuser", true);
                 }
               });
           } catch (e) {

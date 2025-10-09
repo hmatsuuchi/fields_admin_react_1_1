@@ -47,7 +47,6 @@ function JournalArchiveModal({
         }
       );
       if (response.status === 200) {
-        console.log("Journal entry archived successfully");
         removeJournalEntryFromArray(selectedEntry.id);
         setShowJournalArchiveModal(false);
         setShowJournalArchive(false);
