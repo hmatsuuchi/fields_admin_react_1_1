@@ -5,6 +5,7 @@ import "./Dashboard.scss";
 import IncompleteAttendanceForInstructor from "./dashboard/IncompleteAttendanceForInstructor";
 import StudentChurn from "./dashboard/StudentChurn";
 import TotalActiveStudents from "./dashboard/TotalActiveStudents";
+import TotalActiveStudentsHistory from "./dashboard/TotalActiveStudentsHistory";
 import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 // import AtRiskStudents from "./dashboard/AtRiskStudents";
 import UpcomingBirthdays from "./dashboard/UpcomingBirthdays";
@@ -48,6 +49,7 @@ function Dashboard({
           setBackButtonLink={setBackButtonLink}
           setDisplayBackButton={setDisplayBackButton}
         />
+        <TotalActiveStudentsHistory />
       </div>
       <DashboardToolbar
         disableToolbarButtons={disableToolbarButtons}

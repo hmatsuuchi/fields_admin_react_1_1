@@ -10,7 +10,7 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #incomplete-attendance-for-instructor {
-  align-self: start;
+  grid-row: 1;
 
   .dates-container {
     direction: rtl;
@@ -72,6 +72,9 @@ $grey: #3a3939;
 
 @media screen and (min-width: 600px) {
   #incomplete-attendance-for-instructor {
+    grid-column: 1;
+    grid-row: 1;
+
     .dates-container {
       .day-of-week-title {
         font-size: max(0.7rem, 1.6vw);
@@ -91,6 +94,9 @@ $grey: #3a3939;
 
 @media screen and (min-width: 900px) {
   #incomplete-attendance-for-instructor {
+    grid-column: 1;
+    grid-row: 1 / 11;
+
     .dates-container {
       .day-of-week-title {
         font-size: max(0.7rem, 1.1vw);
@@ -110,6 +116,8 @@ $grey: #3a3939;
 
 @media screen and (min-width: 1200px) {
   #incomplete-attendance-for-instructor {
+    grid-row: 1 / 4;
+
     .dates-container {
       .day-of-week-title {
         font-size: max(0.7rem, 0.8vw);

@@ -19,6 +19,8 @@ $over-1200px-rem: 2.9rem;
 $over-1200px-vw: 3.3vw;
 
 #total-active-students {
+  grid-row: 3;
+
   .total-active-students-content-container {
     font-size: 0.9rem;
 
@@ -113,6 +115,8 @@ $over-1200px-vw: 3.3vw;
 
 @media screen and (min-width: 600px) {
   #total-active-students {
+    grid-row: 1;
+
     .total-active-students-content-container {
       .data-container {
         .current-count-container {
@@ -152,11 +156,8 @@ $over-1200px-vw: 3.3vw;
 
 @media screen and (min-width: 900px) {
   #total-active-students {
-    align-self: start;
-
-    grid-row: 2 / 5;
-    align-items: start;
-    align-content: start;
+    grid-row: 11 / 21;
+    grid-column: 1;
 
     .total-active-students-content-container {
       .data-container {
@@ -197,7 +198,7 @@ $over-1200px-vw: 3.3vw;
 
 @media screen and (min-width: 1200px) {
   #total-active-students {
-    grid-row: 1;
+    grid-row: 1 / 4;
     grid-column: 4;
 
     .total-active-students-content-container {
