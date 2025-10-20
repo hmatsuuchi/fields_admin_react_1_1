@@ -230,7 +230,9 @@ function App() {
                 sorts={sorts}
                 setSorts={setSorts}
                 backButtonText={backButtonText}
+                setBackButtonText={setBackButtonText}
                 backButtonLink={backButtonLink}
+                setBackButtonLink={setBackButtonLink}
                 displayBackButton={displayBackButton}
                 setDisplayBackButton={setDisplayBackButton}
               />

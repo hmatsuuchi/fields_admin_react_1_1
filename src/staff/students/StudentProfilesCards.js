@@ -19,7 +19,9 @@ function StudentProfiles({
   sorts,
   setSorts,
   backButtonText,
+  setBackButtonText,
   backButtonLink,
+  setBackButtonLink,
   displayBackButton,
   setDisplayBackButton,
 }) {
@@ -248,6 +250,13 @@ function StudentProfiles({
     setDisplayTextArray(displayArray);
   }, [resultCount, monthsToDisplay, archiveFilters, searchInput, sorts]);
 
+  // handles click to student profile card
+  const handleClickToStudentCard = () => {
+    setBackButtonText("生徒情報");
+    setBackButtonLink("/staff/students/profiles/cards/");
+    setDisplayBackButton(true);
+  };
+
   return (
     <Fragment>
       {/* Toolbar */}
@@ -291,6 +300,7 @@ function StudentProfiles({
                   to={`/staff/students/profiles/details/${profile.id}`}
                   className="student-profile-card card"
                   key={`student-profile-${profile.id}`}
+                  onClick={() => handleClickToStudentCard()}
                 >
                   {" "}
                   <div
