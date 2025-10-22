@@ -5,7 +5,6 @@ import instance from "../../../axios/axios_authenticated";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  BarElement,
   CategoryScale,
   LinearScale,
   Tooltip,

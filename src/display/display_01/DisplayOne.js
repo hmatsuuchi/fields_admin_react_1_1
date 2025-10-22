@@ -54,6 +54,8 @@ function DisplayOne() {
           if (response) {
             /* set student data */
             setStudentData(response.data);
+
+            console.log(response.data);
             /* fetch recent checkins */
             fetchRecentCheckins();
           }
@@ -181,7 +183,8 @@ function DisplayOne() {
               </div>
             </div>
           </div>
-          <div id="student-attendance-record-container" className="glass">
+          {/* displays record of student's previous attendance records */}
+          {/* <div id="student-attendance-record-container" className="glass">
             {studentData.attendance_records.map((record) => {
               return (
                 <div key={`attendance-record-${record.id}`}>
@@ -189,7 +192,7 @@ function DisplayOne() {
                 </div>
               );
             })}
-          </div>
+          </div> */}
         </Fragment>
       ) : null}
 
