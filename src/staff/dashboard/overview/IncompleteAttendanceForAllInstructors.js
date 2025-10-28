@@ -37,7 +37,12 @@ function IncompleteAttendanceForAllInstructors() {
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
 
-  return <div id="incomplete-attendance-for-all-instructors-container"></div>;
+  return (
+    <div
+      id="incomplete-attendance-for-all-instructors-container"
+      onClick={() => fetchData()}
+    ></div>
+  );
 }
 
 export default IncompleteAttendanceForAllInstructors;
