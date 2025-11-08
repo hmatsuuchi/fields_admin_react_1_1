@@ -26,6 +26,9 @@ import CalendarEventCreate from "./staff/schedule/CalendarEventCreate";
 // COMPONENTS - STAFF - ATTENDANCE
 import Attendance from "./staff/attendance/Attendance";
 import AttendanceCreate from "./staff/attendance/AttendanceCreate";
+// COMPONENTS - STAFF - INVOICE
+import InvoiceListAll from "./staff/invoice/InvoiceListAll";
+import InvoiceCreate from "./staff/invoice/InvoiceCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -380,6 +383,36 @@ function App() {
                 csrfToken={csrfToken}
                 backButtonText={backButtonText}
                 setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - INVOICE - LIST ALL */}
+        <Route
+          path="/staff/invoice/list/all/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <InvoiceListAll
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - INVOICE - CREATE */}
+        <Route
+          path="/staff/invoice/create/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <InvoiceCreate
+                backButtonText={backButtonText}
                 backButtonLink={backButtonLink}
                 displayBackButton={displayBackButton}
                 setDisplayBackButton={setDisplayBackButton}

@@ -1,0 +1,118 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#customer-search-container {
+  pointer-events: none;
+
+  position: relative;
+
+  display: grid;
+  justify-content: space-between;
+
+  #customer-search {
+    z-index: 1;
+
+    grid-column: 1;
+    grid-row: 1;
+
+    align-self: start;
+
+    width: 20rem;
+
+    font-size: 1.2rem;
+    font-weight: 400;
+
+    background-color: #ffffff;
+
+    border: solid 1px #000000;
+    border-radius: 0.3rem;
+
+    padding: 0.3rem;
+
+    pointer-events: auto;
+
+    &.disable-clicks {
+      pointer-events: none;
+      background-color: $light-grey;
+    }
+  }
+
+  #customer-search:focus {
+    -webkit-text-fill-color: #000000;
+
+    outline: solid 2px $grey;
+  }
+
+  #customer-search-results {
+    grid-column: 1;
+    grid-row: 2;
+
+    border: solid 1px #000000;
+
+    position: absolute;
+
+    justify-self: left;
+
+    padding-top: 0.2rem;
+    margin-top: -0.2rem;
+
+    pointer-events: auto;
+
+    max-height: 20rem;
+
+    background-color: #ffffff;
+
+    overflow-y: scroll;
+
+    /* allow scrolling but hide scrollbars */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none;
+
+    /* Hide scrollbar for IE and Edge */
+    -ms-overflow-style: none;
+
+    display: grid;
+
+    .customer-name-container {
+      cursor: pointer;
+
+      width: 20rem;
+
+      padding: 0.4rem 0.3rem;
+
+      &:hover {
+        background-color: $beige;
+      }
+
+      &.selected-customer {
+        background-color: $yellow;
+      }
+    }
+  }
+
+  #linked-customer-data-container {
+    grid-column: 2;
+    grid-row: 2;
+
+    display: grid;
+    justify-items: right;
+  }
+}

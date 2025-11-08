@@ -1,0 +1,274 @@
+import React, { useEffect, useState } from "react";
+/* AXIOS */
+import instance from "../../../axios/axios_authenticated";
+/* CSS */
+import "./CustomerSelect.scss";
+
+function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
+  /* ------------------------------------------- */
+  /* ------------------ STATE ------------------ */
+  /* ------------------------------------------- */
+
+  const [customerList, setCustomerList] = useState([]);
+  const [filteredCustomerList, setFilteredCustomerList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [selectedCustomerData, setSelectedCustomerData] = useState({
+    last_name_kanji: "",
+    first_name_kanji: "",
+    last_name_romaji: "",
+    first_name_romaji: "",
+    last_name_katakana: "",
+    first_name_katakana: "",
+    grade_verbose: "",
+    post_code: "",
+    prefecture_verbose: "",
+    city: "",
+    address_line_1: "",
+    address_line_2: "",
+  });
+
+  const [displayCustomerSearchResults, setDisplayCustomerSearchResults] =
+    useState(false);
+  const [ignoreChangesToSearchField, setIgnoreChangesToSearchField] =
+    useState(false);
+
+  /* ----------------------------------------------- */
+  /* ------------------ FUNCTIONS ------------------ */
+  /* ----------------------------------------------- */
+
+  /* run on component mount */
+  useEffect(() => {
+    /* fetch list of student profiles for select list */
+    const fetchCustomerList = async () => {
+      try {
+        await instance
+          .get("api/invoices/invoices/profiles-list-for-select/")
+          .then((response) => {
+            if (response) {
+              setCustomerList(response.data);
+              setFilteredCustomerList(response.data);
+              /* re-enable toolbar buttons after customer list is loaded */
+              setDisableToolbarButtons(false);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchCustomerList();
+  }, [setDisableToolbarButtons]);
+
+  /* filters customer list based on search term */
+  useEffect(() => {
+    /* Ignore changes to search field if flag is set */
+    if (ignoreChangesToSearchField) {
+      return;
+    }
+
+    /* Filter customer list based on search term */
+    const workingList = customerList.filter((customer) => {
+      /* Create a string that includes relevant customer fields for searching */
+      const customerIdentifierString =
+        `${customer.last_name_kanji}${customer.first_name_kanji}${customer.last_name_kanji}${customer.last_name_romaji}${customer.first_name_romaji}${customer.last_name_romaji}${customer.last_name_katakana}${customer.first_name_katakana}${customer.last_name_katakana}`
+          .toLowerCase()
+          .replace(" ", "");
+
+      /* Clean the search term by removing commas and spaces */
+      const filteredSearchTerm = searchTerm
+        .toLowerCase()
+        .replace(",", "")
+        .replace(" ", "");
+
+      return customerIdentifierString.includes(filteredSearchTerm);
+    });
+
+    /* Update state with filtered list */
+    setFilteredCustomerList(workingList);
+
+    /* update selected customer data with first item in the filtered list */
+    if (workingList.length > 0 && workingList.length !== customerList.length) {
+      setSelectedCustomerData(workingList[0]);
+      setInvoiceCustomerData({
+        ...workingList[0],
+        full_name_kanji: `${workingList[0].last_name_kanji} ${workingList[0].first_name_kanji}`,
+      });
+    }
+  }, [
+    searchTerm,
+    customerList,
+    setInvoiceCustomerData,
+    ignoreChangesToSearchField,
+  ]);
+
+  /* sets search term back to selected customer to avoid partial names */
+  const setSearchFieldToSelectedCustomerName = (last, first, grade) => {
+    setIgnoreChangesToSearchField(true);
+    setSearchTerm(`${last} ${first}${grade ? ` (${grade})` : ""}`);
+
+    setIgnoreChangesToSearchField(false);
+  };
+
+  /* Handle clicks on customer search results */
+  const handleClicksToCustomerSearchResult = (customer) => {
+    setSelectedCustomerData(customer);
+    setInvoiceCustomerData({
+      ...customer,
+      full_name_kanji: `${customer.last_name_kanji} ${customer.first_name_kanji}`,
+    });
+    setSearchFieldToSelectedCustomerName(
+      customer.last_name_kanji,
+      customer.first_name_kanji,
+      customer.grade_verbose
+    );
+  };
+
+  /* Handle focus to customer search input */
+  const handleOnFocusToCustomerSearch = () => {
+    setDisplayCustomerSearchResults(true);
+  };
+
+  /* Handle blur to customer search input */
+  const handleOnBlurToCustomerSearch = () => {
+    setSearchFieldToSelectedCustomerName(
+      selectedCustomerData.last_name_kanji,
+      selectedCustomerData.first_name_kanji,
+      selectedCustomerData.grade_verbose
+    );
+    setDisplayCustomerSearchResults(false);
+  };
+
+  /* Handle key down events to customer search input */
+  const handleKeyDownToCustomerSearch = () => (e) => {
+    /* down arrow */
+    if (e.key === "ArrowDown" && filteredCustomerList.length > 0) {
+      e.preventDefault();
+      /* get index of current customer */
+      const currentIndex = filteredCustomerList.findIndex(
+        (customer) => customer.id === selectedCustomerData.id
+      );
+      /* get next customer (or disable arrow key functionality) */
+      const nextIndex =
+        currentIndex !== filteredCustomerList.length - 1
+          ? currentIndex + 1
+          : currentIndex;
+      const nextCustomer = filteredCustomerList[nextIndex];
+
+      /* scroll customer search result into view */
+      const customerSearchResultElement = document.querySelector(
+        `.customer-name-container:nth-child(${nextIndex + 1})`
+      );
+      if (customerSearchResultElement) {
+        customerSearchResultElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+
+      /* update selected customer data */
+      setSelectedCustomerData(nextCustomer);
+      setInvoiceCustomerData({
+        ...nextCustomer,
+        full_name_kanji: `${nextCustomer.last_name_kanji} ${nextCustomer.first_name_kanji}`,
+      });
+      /* up arrow */
+    } else if (e.key === "ArrowUp" && filteredCustomerList.length > 0) {
+      e.preventDefault();
+      /* get index of current customer */
+      const currentIndex = filteredCustomerList.findIndex(
+        (customer) => customer.id === selectedCustomerData.id
+      );
+      /* get previous customer (or disable arrow key functionality) */
+      const previousIndex =
+        currentIndex !== 0 ? currentIndex - 1 : currentIndex;
+      const previousCustomer = filteredCustomerList[previousIndex];
+
+      /* scroll customer search result into view */
+      const customerSearchResultElement = document.querySelector(
+        `.customer-name-container:nth-child(${previousIndex + 1})`
+      );
+      if (customerSearchResultElement) {
+        customerSearchResultElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+
+      /* update selected customer data */
+      setSelectedCustomerData(previousCustomer);
+      setInvoiceCustomerData({
+        ...previousCustomer,
+        full_name_kanji: `${previousCustomer.last_name_kanji} ${previousCustomer.first_name_kanji}`,
+      });
+      /* enter */
+    } else if (e.key === "Enter" && filteredCustomerList.length > 0) {
+      e.preventDefault();
+      e.target.blur();
+    }
+  };
+
+  /* ---------------------------------------- */
+  /* -----------------  JSX ----------------- */
+  /* ---------------------------------------- */
+
+  return (
+    <div id="customer-search-container">
+      <input
+        type="text"
+        id="customer-search"
+        className={`${customerList.length === 0 ? "disable-clicks" : ""}`}
+        placeholder="生徒検索"
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+        }}
+        onFocus={() => {
+          handleOnFocusToCustomerSearch();
+        }}
+        onBlur={() => {
+          handleOnBlurToCustomerSearch();
+        }}
+        onKeyDown={handleKeyDownToCustomerSearch()}
+      />
+
+      {displayCustomerSearchResults ? (
+        <div id="customer-search-results">
+          {filteredCustomerList.map((customer) => (
+            <div
+              key={customer.id}
+              className={`customer-name-container${
+                customer.id === selectedCustomerData.id
+                  ? " selected-customer"
+                  : ""
+              }`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleClicksToCustomerSearchResult(customer);
+              }}
+            >{`${customer.last_name_kanji} ${customer.first_name_kanji}${
+              customer.grade_verbose ? ` (${customer.grade_verbose})` : ""
+            }`}</div>
+          ))}
+        </div>
+      ) : null}
+
+      <div id="linked-customer-data-container">
+        <div className="linked-customer-name-kanji">{`${
+          selectedCustomerData.last_name_kanji
+        } ${selectedCustomerData.first_name_kanji}${
+          selectedCustomerData.grade_verbose
+            ? ` (${selectedCustomerData.grade_verbose})`
+            : ""
+        }`}</div>
+        <div className="linked-customer-name-katakana">{`${selectedCustomerData.last_name_katakana} ${selectedCustomerData.first_name_katakana}`}</div>
+        <div className="linked-customer-name-romaji">{`${selectedCustomerData.last_name_romaji} ${selectedCustomerData.first_name_romaji}`}</div>
+        <div className="linked-customer-post-code">{`${selectedCustomerData.post_code}`}</div>
+        <div className="linked-customer-prefecture-city">{`${selectedCustomerData.prefecture_verbose}${selectedCustomerData.city}`}</div>
+        <div className="linked-customer-address-1">{`${selectedCustomerData.address_1}`}</div>
+        <div className="linked-customer-address-2">{`${selectedCustomerData.address_2}`}</div>
+      </div>
+    </div>
+  );
+}
+
+export default CustomerSelect;
