@@ -4,7 +4,7 @@ import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./CustomerSelect.scss";
 
-function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
+function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -24,8 +24,8 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
     post_code: "",
     prefecture_verbose: "",
     city: "",
-    address_line_1: "",
-    address_line_2: "",
+    address_1: "",
+    address_2: "",
   });
 
   const [displayCustomerSearchResults, setDisplayCustomerSearchResults] =
@@ -89,17 +89,20 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
     /* update selected customer data with first item in the filtered list */
     if (workingList.length > 0 && workingList.length !== customerList.length) {
       setSelectedCustomerData(workingList[0]);
-      setInvoiceCustomerData({
+      setInvoiceData((prev = {}) => ({
+        ...prev,
         ...workingList[0],
-        full_name_kanji: `${workingList[0].last_name_kanji} ${workingList[0].first_name_kanji}`,
-      });
+        customer_name: `${workingList[0].last_name_kanji} ${workingList[0].first_name_kanji}`,
+        prefecture_city: `${workingList[0].prefecture_verbose}${workingList[0].city}`,
+        customer_address_line_1: workingList[0].address_1,
+        customer_address_line_2: workingList[0].address_2,
+        student: workingList[0].id,
+        customer_postal_code: workingList[0].post_code,
+        customer_prefecture: workingList[0].prefecture_verbose,
+        customer_city: workingList[0].city,
+      }));
     }
-  }, [
-    searchTerm,
-    customerList,
-    setInvoiceCustomerData,
-    ignoreChangesToSearchField,
-  ]);
+  }, [searchTerm, customerList, setInvoiceData, ignoreChangesToSearchField]);
 
   /* sets search term back to selected customer to avoid partial names */
   const setSearchFieldToSelectedCustomerName = (last, first, grade) => {
@@ -112,10 +115,18 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
   /* Handle clicks on customer search results */
   const handleClicksToCustomerSearchResult = (customer) => {
     setSelectedCustomerData(customer);
-    setInvoiceCustomerData({
+    setInvoiceData((prev = {}) => ({
+      ...prev,
       ...customer,
-      full_name_kanji: `${customer.last_name_kanji} ${customer.first_name_kanji}`,
-    });
+      customer_name: `${customer.last_name_kanji} ${customer.first_name_kanji}`,
+      prefecture_city: `${customer.prefecture_verbose}${customer.city}`,
+      customer_address_line_1: customer.address_1,
+      customer_address_line_2: customer.address_2,
+      student: customer.id,
+      customer_postal_code: customer.post_code,
+      customer_prefecture: customer.prefecture_verbose,
+      customer_city: customer.city,
+    }));
     setSearchFieldToSelectedCustomerName(
       customer.last_name_kanji,
       customer.first_name_kanji,
@@ -124,8 +135,9 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
   };
 
   /* Handle focus to customer search input */
-  const handleOnFocusToCustomerSearch = () => {
+  const handleOnFocusToCustomerSearch = (e) => {
     setDisplayCustomerSearchResults(true);
+    e.target.select();
   };
 
   /* Handle blur to customer search input */
@@ -167,10 +179,17 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
 
       /* update selected customer data */
       setSelectedCustomerData(nextCustomer);
-      setInvoiceCustomerData({
+      setInvoiceData((prev = {}) => ({
+        ...prev,
         ...nextCustomer,
-        full_name_kanji: `${nextCustomer.last_name_kanji} ${nextCustomer.first_name_kanji}`,
-      });
+        customer_name: `${nextCustomer.last_name_kanji} ${nextCustomer.first_name_kanji}`,
+        prefecture_city: `${nextCustomer.prefecture_verbose}${nextCustomer.city}`,
+        customer_address_line_1: nextCustomer.address_1,
+        customer_address_line_2: nextCustomer.address_2,
+        customer_postal_code: nextCustomer.post_code,
+        customer_prefecture: nextCustomer.prefecture_verbose,
+        customer_city: nextCustomer.city,
+      }));
       /* up arrow */
     } else if (e.key === "ArrowUp" && filteredCustomerList.length > 0) {
       e.preventDefault();
@@ -196,10 +215,17 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
 
       /* update selected customer data */
       setSelectedCustomerData(previousCustomer);
-      setInvoiceCustomerData({
+      setInvoiceData((prev = {}) => ({
+        ...prev,
         ...previousCustomer,
-        full_name_kanji: `${previousCustomer.last_name_kanji} ${previousCustomer.first_name_kanji}`,
-      });
+        customer_name: `${previousCustomer.last_name_kanji} ${previousCustomer.first_name_kanji}`,
+        prefecture_city: `${previousCustomer.prefecture_verbose}${previousCustomer.city}`,
+        customer_address_line_1: previousCustomer.address_1,
+        customer_address_line_2: previousCustomer.address_2,
+        student: previousCustomer.id,
+        customer_prefecture: previousCustomer.prefecture_verbose,
+        customer_city: previousCustomer.city,
+      }));
       /* enter */
     } else if (e.key === "Enter" && filteredCustomerList.length > 0) {
       e.preventDefault();
@@ -222,8 +248,8 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
         onChange={(e) => {
           setSearchTerm(e.target.value);
         }}
-        onFocus={() => {
-          handleOnFocusToCustomerSearch();
+        onFocus={(e) => {
+          handleOnFocusToCustomerSearch(e);
         }}
         onBlur={() => {
           handleOnBlurToCustomerSearch();
@@ -253,19 +279,36 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceCustomerData }) {
       ) : null}
 
       <div id="linked-customer-data-container">
-        <div className="linked-customer-name-kanji">{`${
-          selectedCustomerData.last_name_kanji
-        } ${selectedCustomerData.first_name_kanji}${
-          selectedCustomerData.grade_verbose
-            ? ` (${selectedCustomerData.grade_verbose})`
-            : ""
-        }`}</div>
-        <div className="linked-customer-name-katakana">{`${selectedCustomerData.last_name_katakana} ${selectedCustomerData.first_name_katakana}`}</div>
-        <div className="linked-customer-name-romaji">{`${selectedCustomerData.last_name_romaji} ${selectedCustomerData.first_name_romaji}`}</div>
+        <div className="customer-name-container">
+          <div className="linked-customer-name-kanji">{`${
+            selectedCustomerData.last_name_kanji
+          } ${selectedCustomerData.first_name_kanji}${
+            selectedCustomerData.grade_verbose
+              ? ` (${selectedCustomerData.grade_verbose})`
+              : ""
+          }`}</div>
+          <div className="linked-customer-name-katakana">{`${selectedCustomerData.last_name_katakana} ${selectedCustomerData.first_name_katakana}`}</div>
+
+          <div className="linked-customer-name-romaji">
+            {selectedCustomerData.last_name_romaji &&
+            selectedCustomerData.first_name_romaji
+              ? `${selectedCustomerData.last_name_romaji}, ${selectedCustomerData.first_name_romaji}`
+              : selectedCustomerData.last_name_romaji
+              ? selectedCustomerData.last_name_romaji
+              : selectedCustomerData.first_name_romaji
+              ? selectedCustomerData.first_name_romaji
+              : ""}
+          </div>
+        </div>
         <div className="linked-customer-post-code">{`${selectedCustomerData.post_code}`}</div>
         <div className="linked-customer-prefecture-city">{`${selectedCustomerData.prefecture_verbose}${selectedCustomerData.city}`}</div>
-        <div className="linked-customer-address-1">{`${selectedCustomerData.address_1}`}</div>
-        <div className="linked-customer-address-2">{`${selectedCustomerData.address_2}`}</div>
+        <div className="linked-customer-address-1">{`${
+          selectedCustomerData.address_1 ? selectedCustomerData.address_1 : ""
+        }`}</div>
+
+        <div className="linked-customer-address-2">{`${
+          selectedCustomerData.address_2 ? selectedCustomerData.address_2 : ""
+        }`}</div>
       </div>
     </div>
   );

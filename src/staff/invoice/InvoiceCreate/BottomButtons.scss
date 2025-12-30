@@ -1,0 +1,48 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#invoice-creation-bottom-buttons-section {
+  width: 100%;
+
+  margin-bottom: 20rem;
+
+  display: grid;
+  justify-items: center;
+
+  .bottom-buttons-container {
+    width: calc(100% - 2rem);
+    max-width: calc(1100px - 2rem);
+
+    display: grid;
+    justify-content: right;
+    grid-auto-flow: column;
+
+    .button-group-container {
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 1rem;
+
+      .button[type="submit"] {
+        background-color: $teal;
+        color: #fff;
+      }
+
+      .button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+        background-color: $grey;
+        color: #fff;
+      }
+    }
+  }
+}

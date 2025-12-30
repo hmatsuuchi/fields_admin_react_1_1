@@ -112,14 +112,16 @@ function BottomButtons({
   /* ----------------------------------------------------- */
 
   return (
-    <div className="bottom-buttons-container">
-      <button className="button cancel" onClick={handleClicksToCancelButton}>
-        キャンセル
-      </button>
-      <button className="button submit" onClick={handleClicksToSubmitButton}>
-        作成
-      </button>
-    </div>
+    <section id="attendance-create-bottom-buttons-section">
+      <div className="bottom-buttons-container">
+        <button className="button cancel" onClick={handleClicksToCancelButton}>
+          キャンセル
+        </button>
+        <button className="button submit" onClick={handleClicksToSubmitButton}>
+          作成
+        </button>
+      </div>
+    </section>
   );
 }
 

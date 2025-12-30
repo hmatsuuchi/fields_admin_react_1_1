@@ -12,34 +12,28 @@ $grey: #3a3939;
 #invoice-create {
   margin-top: 2.75rem;
 
-  #input-section {
+  display: grid;
+  justify-items: center;
+
+  #customer-input-section {
     padding: 1rem;
+
+    width: calc(100% - 2rem);
+    max-width: calc(1100px - 2rem);
 
     display: grid;
     grid-row-gap: 1rem;
 
-    #customer-manual-input-section {
-      display: grid;
+    .section-header {
+      font-size: 0.9rem;
+      color: $grey;
+      text-align: right;
 
-      #customer-postal-code {
-        grid-row: 2;
-      }
+      border-bottom: solid 1px $grey;
 
-      #customer-prefecture {
-        grid-row: 3;
-      }
+      margin-bottom: 0.5rem;
 
-      #customer-city {
-        grid-row: 4;
-      }
-
-      #customer-address-line-1 {
-        grid-row: 5;
-      }
-
-      #customer-address-line-2 {
-        grid-row: 6;
-      }
+      width: 100%;
     }
   }
 

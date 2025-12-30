@@ -1,0 +1,59 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#customer-manual-input-section {
+  display: grid;
+  grid-row-gap: 0.5rem;
+  justify-content: left;
+  align-content: start;
+
+  input {
+    font-size: 1rem;
+    font-weight: 400;
+
+    margin-right: 1rem;
+
+    background-color: #ffffff;
+
+    border: solid 1px #000000;
+    border-radius: 0.3rem;
+
+    padding: 0.3rem;
+  }
+
+  input:focus {
+    outline: $grey solid 2px;
+  }
+
+  #customer-name {
+    grid-row: 2;
+  }
+
+  #customer-postal-code {
+    grid-row: 3;
+  }
+
+  #customer-prefecture {
+    grid-row: 4;
+  }
+
+  #customer-city {
+    grid-row: 5;
+  }
+
+  #customer-address-line-1 {
+    grid-row: 6;
+  }
+
+  #customer-address-line-2 {
+    grid-row: 7;
+  }
+}

@@ -25,6 +25,13 @@ $grey: #3a3939;
 
       background-color: #ffffff;
 
+      display: grid;
+      grid-row-gap: 0.25rem;
+
+      .placeholder-gap {
+        height: 1rem;
+      }
+
       .invoice-items-container {
         display: grid;
         grid-row-gap: 1rem;
@@ -33,6 +40,9 @@ $grey: #3a3939;
           padding: 1rem;
 
           border: solid 1px $grey;
+
+          display: grid;
+          grid-row-gap: 0.25rem;
         }
       }
     }

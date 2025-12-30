@@ -1,0 +1,95 @@
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+.section-header {
+  font-size: 0.9rem;
+  color: $grey;
+  text-align: right;
+
+  border-bottom: solid 1px $grey;
+
+  margin-bottom: 0.5rem;
+
+  width: 100%;
+}
+
+#invoice-line-items-section {
+  width: calc(100% - 2rem);
+  max-width: calc(1100px - 2rem);
+
+  display: grid;
+  grid-row-gap: 1rem;
+
+  .line-item-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 0.5rem;
+    grid-template-columns: 0.5fr 3fr 10fr 1.2fr 2fr 3fr 1.2fr 2fr;
+
+    .delete-line-item-button {
+      place-self: center;
+
+      width: 100%;
+      aspect-ratio: 1 / 1;
+
+      cursor: pointer;
+
+      background-color: pink;
+    }
+
+    input {
+      min-width: 0;
+
+      font-size: 1rem;
+      font-weight: 400;
+
+      background-color: #ffffff;
+
+      border: solid 1px #000000;
+      border-radius: 0.3rem;
+
+      padding: 0.3rem;
+    }
+
+    select {
+      font-size: 1rem;
+      border-radius: 0.3rem;
+      padding: 0.3rem;
+      cursor: pointer;
+      border: solid 1px #000;
+
+      -webkit-text-fill-color: #000;
+    }
+
+    input:focus,
+    select:focus {
+      outline: $grey solid 2px;
+    }
+
+    .line-item-total {
+      text-align: right;
+
+      align-content: center;
+
+      font-size: 1.2rem;
+    }
+  }
+}
+
+#add-invoice-line-item-container {
+  margin-bottom: 5rem;
+
+  cursor: pointer;
+
+  width: 100%;
+  height: 2rem;
+  background-color: pink;
+}

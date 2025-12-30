@@ -10,6 +10,8 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #customer-search-container {
+  grid-column: 1 / 3;
+
   pointer-events: none;
 
   position: relative;
@@ -94,7 +96,7 @@ $grey: #3a3939;
     .customer-name-container {
       cursor: pointer;
 
-      width: 20rem;
+      min-width: 20rem;
 
       padding: 0.4rem 0.3rem;
 
@@ -112,7 +114,49 @@ $grey: #3a3939;
     grid-column: 2;
     grid-row: 2;
 
+    min-height: 10rem;
+    min-width: calc(10rem * 1.618);
+
+    background-color: $beige;
+
+    padding: 0.5rem 0.75rem;
+
+    border-radius: 0.3rem;
+    border: solid 1px $light-grey;
+
     display: grid;
-    justify-items: right;
+    align-content: start;
+
+    .customer-name-container {
+      margin-right: 5rem;
+
+      display: grid;
+      grid-template-rows: repeat(3, auto);
+
+      .linked-customer-name-kanji {
+        font-weight: 500;
+      }
+
+      .linked-customer-name-katakana {
+        font-size: 0.8rem;
+        color: $grey;
+      }
+
+      .linked-customer-name-romaji {
+        font-size: 0.9rem;
+        color: $grey;
+      }
+    }
+
+    .linked-customer-post-code,
+    .linked-customer-prefecture-city,
+    .linked-customer-address-1,
+    .linked-customer-address-2 {
+      justify-self: right;
+
+      font-size: 0.85rem;
+
+      margin-left: 5rem;
+    }
   }
 }
