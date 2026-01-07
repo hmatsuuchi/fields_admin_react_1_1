@@ -201,7 +201,7 @@ function StudentProfilesCreate({ csrfToken }) {
       birthday: birthday,
       grade: grade,
       status: profileStatus,
-      payment_method: paymentMethod,
+      payment_method_from_invoice: paymentMethod,
       archived: archived,
     };
 

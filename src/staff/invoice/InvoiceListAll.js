@@ -53,56 +53,54 @@ function InvoiceListAll({
           {invoicesAll.map((invoice) => {
             return (
               <div className="invoice-container" key={invoice.id}>
-                <div>Invoice ID: {invoice.id}</div>
-                <div className="placeholder-gap" />
-                <div>Customer Name: {invoice.customer_name}</div>
-                <div>Customer Postal Code: {invoice.customer_postal_code}</div>
-                <div>Customer Prefecture: {invoice.customer_prefecture}</div>
-                <div>Customer City: {invoice.customer_city}</div>
-                <div>
-                  Customer Address Line 1: {invoice.customer_address_line_1}
+                <div className="invoice-id">
+                  {("000000" + invoice.id).slice(-7)}
                 </div>
-                <div>
-                  Customer Address Line 2: {invoice.customer_address_line_2}
+                <div className="customer-info-container">
+                  <div>{invoice.customer_name}</div>
+                  <div>〒{invoice.customer_postal_code}</div>
+                  <div>
+                    {invoice.customer_prefecture}
+                    {invoice.customer_city}
+                  </div>
+                  <div>{invoice.customer_address_line_1}</div>
+                  <div>{invoice.customer_address_line_2}</div>
                 </div>
-                <div className="placeholder-gap" />
-                <div>Year: {invoice.year}</div>
-                <div>Month: {invoice.month}</div>
-                <div className="placeholder-gap" />
-                <div>Creation Date: {invoice.creation_date}</div>
-                <div>Transfer Date: {invoice.transfer_date}</div>
-                <div>Issued Date: {invoice.issued_date}</div>
-                <div>Paid Date: {invoice.paid_date}</div>
-                <div className="placeholder-gap" />
-                <div>Issued: {invoice.issued ? "Yes" : "No"}</div>
-                <div>Paid: {invoice.paid ? "Yes" : "No"}</div>
-                <div className="placeholder-gap" />
-                <div>Student [FK]: {invoice.student.id}</div>
-                <div>Payment Method [FK]: {invoice.payment_method.name}</div>
-                <div className="placeholder-gap" />
-                <div>Date/Time Created: {invoice.date_time_created}</div>
-                <div>Date/Time Modified: {invoice.date_time_modified}</div>
+                <div className="year-month">
+                  {invoice.year}年{invoice.month}月
+                </div>
+                <div className="related-student">
+                  関連生徒: {invoice.student.last_name_kanji}{" "}
+                  {invoice.student.first_name_kanji}
+                </div>
+                <div className="invoice-details-container">
+                  <div>支払方法: {invoice.payment_method.name}</div>
+                  <div>作成日: {invoice.creation_date}</div>
+                  <div>振込日: {invoice.transfer_date}</div>
+                </div>
+                <div className="invoice-status-container">
+                  <div>発行日: {invoice.issued_date}</div>
+                  <div>支払日: {invoice.paid_date}</div>
+                  <div>発行済み: {invoice.issued ? "はい" : "いいえ"}</div>
+                  <div>支払済み: {invoice.paid ? "はい" : "いいえ"}</div>
+                </div>
 
                 <div className="invoice-items-container">
                   {invoice.invoice_items.map((item) => {
                     return (
                       <div className="invoice-item" key={item.id}>
-                        <div>Item Id: {item.id}</div>
-                        <div className="placeholder-gap" />
-                        <div>Description: {item.description}</div>
-                        <div>Quantity: {item.quantity}</div>
-                        <div>Rate: {item.rate}</div>
-                        <div>Tax Rate: {item.tax_rate}</div>
-                        <div className="placeholder-gap" />
-                        <div>Invoice [FK]: {item.invoice.id}</div>
-                        <div>Service Type [FK]: {item.service_type.id}</div>
-                        <div>Tax Type [FK]: {item.tax_type.id}</div>
-                        <div className="placeholder-gap" />
-                        <div>Date/Time Created: {item.date_time_created}</div>
-                        <div>Date/Time Modified: {item.date_time_modified}</div>
+                        <div>{item.service_type.name}</div>
+                        <div>{item.description}</div>
+                        <div>{item.quantity}</div>
+                        <div>¥{item.rate}</div>
+                        <div>{item.tax_rate}%</div>
                       </div>
                     );
                   })}
+                </div>
+                <div className="invoice-timestamps">
+                  <div>{invoice.date_time_created}</div>
+                  <div>{invoice.date_time_modified}</div>
                 </div>
               </div>
             );

@@ -43,6 +43,10 @@ $grey: #3a3939;
         background-color: $grey;
         color: #fff;
       }
+
+      button:focus {
+        outline: $grey solid 2px;
+      }
     }
   }
 }

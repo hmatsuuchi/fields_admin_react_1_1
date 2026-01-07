@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 /* CSS */
 import "./InvoiceCreate.scss";
 /* COMPONENTS */
@@ -22,6 +22,27 @@ function InvoiceCreate({
 
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
+  /* search term input field value for the customer select dropdown*/
+  const [searchTerm, setSearchTerm] = useState("");
+
+  /* selected customer data */
+  const [selectedCustomerData, setSelectedCustomerData] = useState({
+    last_name_kanji: "",
+    first_name_kanji: "",
+    last_name_romaji: "",
+    first_name_romaji: "",
+    last_name_katakana: "",
+    first_name_katakana: "",
+    grade_verbose: "",
+    post_code: "",
+    prefecture_verbose: "",
+    city: "",
+    address_1: "",
+    address_2: "",
+  });
+
+  const dateTodayString = new Date().toISOString().slice(0, 10);
+
   const [invoiceData, setInvoiceData] = useState({
     customer_name: "",
     customer_postal_code: "",
@@ -30,10 +51,10 @@ function InvoiceCreate({
     customer_address_line_1: "",
     customer_address_line_2: "",
 
-    year: "",
-    month: "",
+    year: parseInt(dateTodayString.slice(0, 4)), // default to this year
+    month: parseInt(dateTodayString.slice(5, 7)), // default to this month
+    creation_date: dateTodayString, // default to today's date
     transfer_date: "",
-    creation_date: "",
     paid_date: "",
 
     issued: false,
@@ -45,13 +66,17 @@ function InvoiceCreate({
     line_items: [],
   });
 
+  const [serviceTypeList, setServiceTypeList] = React.useState([]);
+  const [taxesList, setTaxesList] = React.useState([]);
+  const [taxesDefault, setTaxesDefault] = React.useState("");
+
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
-  useEffect(() => {
-    console.log(invoiceData);
-  }, [invoiceData]);
+  // useEffect(() => {
+  //   console.log(invoiceData);
+  // }, [invoiceData]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -64,7 +89,12 @@ function InvoiceCreate({
           {/* select the associated customer from a search field and dropdown menu */}
           <CustomerSelect
             setDisableToolbarButtons={setDisableToolbarButtons}
+            invoiceData={invoiceData}
             setInvoiceData={setInvoiceData}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedCustomerData={selectedCustomerData}
+            setSelectedCustomerData={setSelectedCustomerData}
           />
 
           {/* manually input customer data */}
@@ -83,9 +113,23 @@ function InvoiceCreate({
           <InvoiceLineItems
             invoiceData={invoiceData}
             setInvoiceData={setInvoiceData}
+            serviceTypeList={serviceTypeList}
+            setServiceTypeList={setServiceTypeList}
+            taxesList={taxesList}
+            setTaxesList={setTaxesList}
+            taxesDefault={taxesDefault}
+            setTaxesDefault={setTaxesDefault}
           />
         </div>
-        <BottomButtons csrfToken={csrfToken} invoiceData={invoiceData} />
+        <BottomButtons
+          csrfToken={csrfToken}
+          invoiceData={invoiceData}
+          setInvoiceData={setInvoiceData}
+          setSearchTerm={setSearchTerm}
+          setSelectedCustomerData={setSelectedCustomerData}
+          taxesList={taxesList}
+          taxesDefault={taxesDefault}
+        />
       </section>
       <InvoiceCreateToolbar
         disableToolbarButtons={disableToolbarButtons}

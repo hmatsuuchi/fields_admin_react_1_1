@@ -4,14 +4,19 @@ import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./InvoiceLineItems.scss";
 
-function InvoiceLineItems({ invoiceData, setInvoiceData }) {
+function InvoiceLineItems({
+  invoiceData,
+  setInvoiceData,
+  serviceTypeList,
+  setServiceTypeList,
+  taxesList,
+  setTaxesList,
+  taxesDefault,
+  setTaxesDefault,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
-
-  const [serviceTypeList, setServiceTypeList] = React.useState([]);
-  const [taxesList, setTaxesList] = React.useState([]);
-  const [taxesDefault, setTaxesDefault] = React.useState("");
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -55,7 +60,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
 
     /* drives code */
     fetchTaxesTypeList();
-  }, []);
+  }, [setServiceTypeList, setTaxesList, setTaxesDefault]);
 
   /* calculates default tax rate based on default tax type */
   function calculateDefaultTaxRate(taxesList, taxesDefault) {
@@ -144,6 +149,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
               <select
                 className="line-item-service-type"
                 value={item.service_type}
+                tabIndex={2 + index * 6}
                 onChange={(e) =>
                   setInvoiceData({
                     ...invoiceData,
@@ -171,6 +177,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
                 placeholder="内容"
                 className="line-item-description"
                 value={item.description}
+                tabIndex={3 + index * 6}
                 onChange={(e) => {
                   setInvoiceData({
                     ...invoiceData,
@@ -188,6 +195,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
                 value={item.quantity}
                 placeholder="数量"
                 className="line-item-quantity"
+                tabIndex={4 + index * 6}
                 onChange={(e) => {
                   setInvoiceData({
                     ...invoiceData,
@@ -205,6 +213,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
                 value={item.rate}
                 placeholder="値段"
                 className="line-item-rate"
+                tabIndex={5 + index * 6}
                 onChange={(e) => {
                   setInvoiceData({
                     ...invoiceData,
@@ -221,6 +230,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
               <select
                 value={item.tax_type}
                 className="line-item-tax"
+                tabIndex={6 + index * 6}
                 onChange={(e) => {
                   setInvoiceData({
                     ...invoiceData,
@@ -245,6 +255,7 @@ function InvoiceLineItems({ invoiceData, setInvoiceData }) {
                 value={item.tax_rate}
                 placeholder="税率"
                 className="line-item-tax-rate"
+                tabIndex={7 + index * 6}
                 onChange={(e) => {
                   setInvoiceData({
                     ...invoiceData,

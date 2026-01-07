@@ -104,7 +104,7 @@ function StudentProfilesUpdate({
               setBirthday(responseData.birthday);
               setGrade(responseData.grade);
               setProfileStatus(responseData.status);
-              setPaymentMethod(responseData.payment_method);
+              setPaymentMethod(responseData.payment_method_from_invoice);
               setArchived(responseData.archived);
               // displays content
               setDisplayContent(true);
@@ -195,7 +195,7 @@ function StudentProfilesUpdate({
       birthday: birthday,
       grade: grade,
       status: profileStatus,
-      payment_method: paymentMethod,
+      payment_method_from_invoice: paymentMethod,
       archived: archived,
     };
 

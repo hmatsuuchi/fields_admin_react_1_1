@@ -4,29 +4,21 @@ import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./CustomerSelect.scss";
 
-function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
+function CustomerSelect({
+  setDisableToolbarButtons,
+  invoiceData,
+  setInvoiceData,
+  searchTerm,
+  setSearchTerm,
+  selectedCustomerData,
+  setSelectedCustomerData,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
   const [customerList, setCustomerList] = useState([]);
   const [filteredCustomerList, setFilteredCustomerList] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const [selectedCustomerData, setSelectedCustomerData] = useState({
-    last_name_kanji: "",
-    first_name_kanji: "",
-    last_name_romaji: "",
-    first_name_romaji: "",
-    last_name_katakana: "",
-    first_name_katakana: "",
-    grade_verbose: "",
-    post_code: "",
-    prefecture_verbose: "",
-    city: "",
-    address_1: "",
-    address_2: "",
-  });
 
   const [displayCustomerSearchResults, setDisplayCustomerSearchResults] =
     useState(false);
@@ -36,6 +28,18 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
+
+  /* enables & disables transfer date field based on payment method of selected customer */
+  useEffect(() => {
+    const paymentMethod = invoiceData.payment_method;
+
+    const transferDateInput = document.getElementById("transfer-date");
+    if (paymentMethod === 2) {
+      transferDateInput.classList.remove("disable-clicks");
+    } else {
+      transferDateInput.classList.add("disable-clicks");
+    }
+  }, [invoiceData.payment_method]);
 
   /* run on component mount */
   useEffect(() => {
@@ -60,49 +64,63 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
   }, [setDisableToolbarButtons]);
 
   /* filters customer list based on search term */
-  useEffect(() => {
-    /* Ignore changes to search field if flag is set */
-    if (ignoreChangesToSearchField) {
-      return;
-    }
+  useEffect(
+    () => {
+      /* Ignore changes to search field if flag is set */
+      if (ignoreChangesToSearchField) {
+        return;
+      }
 
-    /* Filter customer list based on search term */
-    const workingList = customerList.filter((customer) => {
-      /* Create a string that includes relevant customer fields for searching */
-      const customerIdentifierString =
-        `${customer.last_name_kanji}${customer.first_name_kanji}${customer.last_name_kanji}${customer.last_name_romaji}${customer.first_name_romaji}${customer.last_name_romaji}${customer.last_name_katakana}${customer.first_name_katakana}${customer.last_name_katakana}`
+      /* Filter customer list based on search term */
+      const workingList = customerList.filter((customer) => {
+        /* Create a string that includes relevant customer fields for searching */
+        const customerIdentifierString =
+          `${customer.last_name_kanji}${customer.first_name_kanji}${customer.last_name_kanji}${customer.last_name_romaji}${customer.first_name_romaji}${customer.last_name_romaji}${customer.last_name_katakana}${customer.first_name_katakana}${customer.last_name_katakana}`
+            .toLowerCase()
+            .replace(" ", "");
+
+        /* Clean the search term by removing commas and spaces */
+        const filteredSearchTerm = searchTerm
           .toLowerCase()
+          .replace(",", "")
           .replace(" ", "");
 
-      /* Clean the search term by removing commas and spaces */
-      const filteredSearchTerm = searchTerm
-        .toLowerCase()
-        .replace(",", "")
-        .replace(" ", "");
+        return customerIdentifierString.includes(filteredSearchTerm);
+      });
 
-      return customerIdentifierString.includes(filteredSearchTerm);
-    });
+      /* Update state with filtered list */
+      setFilteredCustomerList(workingList);
 
-    /* Update state with filtered list */
-    setFilteredCustomerList(workingList);
-
-    /* update selected customer data with first item in the filtered list */
-    if (workingList.length > 0 && workingList.length !== customerList.length) {
-      setSelectedCustomerData(workingList[0]);
-      setInvoiceData((prev = {}) => ({
-        ...prev,
-        ...workingList[0],
-        customer_name: `${workingList[0].last_name_kanji} ${workingList[0].first_name_kanji}`,
-        prefecture_city: `${workingList[0].prefecture_verbose}${workingList[0].city}`,
-        customer_address_line_1: workingList[0].address_1,
-        customer_address_line_2: workingList[0].address_2,
-        student: workingList[0].id,
-        customer_postal_code: workingList[0].post_code,
-        customer_prefecture: workingList[0].prefecture_verbose,
-        customer_city: workingList[0].city,
-      }));
-    }
-  }, [searchTerm, customerList, setInvoiceData, ignoreChangesToSearchField]);
+      /* update selected customer data with first item in the filtered list */
+      if (
+        workingList.length > 0 &&
+        workingList.length !== customerList.length
+      ) {
+        setSelectedCustomerData(workingList[0]);
+        setInvoiceData((prev = {}) => ({
+          ...prev,
+          ...workingList[0],
+          customer_name: `${workingList[0].last_name_kanji} ${workingList[0].first_name_kanji}`,
+          prefecture_city: `${workingList[0].prefecture_verbose}${workingList[0].city}`,
+          customer_address_line_1: workingList[0].address_1,
+          customer_address_line_2: workingList[0].address_2,
+          student: workingList[0].id,
+          customer_postal_code: workingList[0].post_code,
+          customer_prefecture: workingList[0].prefecture_verbose,
+          customer_city: workingList[0].city,
+          payment_method: workingList[0].payment_method_from_invoice,
+        }));
+      }
+    },
+    [
+      searchTerm,
+      customerList,
+      setInvoiceData,
+      ignoreChangesToSearchField,
+      setSelectedCustomerData,
+    ],
+    setSelectedCustomerData
+  );
 
   /* sets search term back to selected customer to avoid partial names */
   const setSearchFieldToSelectedCustomerName = (last, first, grade) => {
@@ -115,6 +133,7 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
   /* Handle clicks on customer search results */
   const handleClicksToCustomerSearchResult = (customer) => {
     setSelectedCustomerData(customer);
+
     setInvoiceData((prev = {}) => ({
       ...prev,
       ...customer,
@@ -126,7 +145,9 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
       customer_postal_code: customer.post_code,
       customer_prefecture: customer.prefecture_verbose,
       customer_city: customer.city,
+      payment_method: customer.payment_method_from_invoice,
     }));
+
     setSearchFieldToSelectedCustomerName(
       customer.last_name_kanji,
       customer.first_name_kanji,
@@ -189,7 +210,9 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
         customer_postal_code: nextCustomer.post_code,
         customer_prefecture: nextCustomer.prefecture_verbose,
         customer_city: nextCustomer.city,
+        payment_method: nextCustomer.payment_method_from_invoice,
       }));
+
       /* up arrow */
     } else if (e.key === "ArrowUp" && filteredCustomerList.length > 0) {
       e.preventDefault();
@@ -225,7 +248,9 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
         student: previousCustomer.id,
         customer_prefecture: previousCustomer.prefecture_verbose,
         customer_city: previousCustomer.city,
+        payment_method: previousCustomer.payment_method_from_invoice,
       }));
+
       /* enter */
     } else if (e.key === "Enter" && filteredCustomerList.length > 0) {
       e.preventDefault();
@@ -245,6 +270,7 @@ function CustomerSelect({ setDisableToolbarButtons, setInvoiceData }) {
         className={`${customerList.length === 0 ? "disable-clicks" : ""}`}
         placeholder="生徒検索"
         value={searchTerm}
+        tabIndex="1"
         onChange={(e) => {
           setSearchTerm(e.target.value);
         }}

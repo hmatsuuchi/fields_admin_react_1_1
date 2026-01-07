@@ -198,7 +198,7 @@ function StudentProfilesDelete({ csrfToken }) {
                       </div>
                     ) : null}
                     <div className="payment-container">
-                      {profile.payment_method && (
+                      {profile.payment_method_from_invoice && (
                         <div className="payment-method">
                           {profile.payment_method_verbose}
                         </div>

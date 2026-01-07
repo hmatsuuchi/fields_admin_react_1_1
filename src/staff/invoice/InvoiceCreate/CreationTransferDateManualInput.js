@@ -43,7 +43,7 @@ function CreationTransferDateManualInput({ invoiceData, setInvoiceData }) {
       setInvoiceData((prev) => ({ ...prev, transfer_date: "" }));
     };
 
-    invoiceData.payment_method !== "2"
+    parseInt(invoiceData.payment_method) !== 2
       ? disableInput()
       : transferDateInput.classList.remove("disable-clicks");
   }, [invoiceData.payment_method, setInvoiceData]);
