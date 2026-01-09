@@ -304,7 +304,7 @@ function CustomerSelect({
         </div>
       ) : null}
 
-      <div id="linked-customer-data-container">
+      {/* <div id="linked-customer-data-container">
         <div className="customer-name-container">
           <div className="linked-customer-name-kanji">{`${
             selectedCustomerData.last_name_kanji
@@ -335,7 +335,7 @@ function CustomerSelect({
         <div className="linked-customer-address-2">{`${
           selectedCustomerData.address_2 ? selectedCustomerData.address_2 : ""
         }`}</div>
-      </div>
+      </div> */}
     </div>
   );
 }

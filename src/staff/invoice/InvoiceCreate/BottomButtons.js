@@ -34,6 +34,8 @@ function BottomButtons({
   }
 
   const resetInvoiceData = () => {
+    const dateToday = new Date().toISOString().slice(0, 10);
+
     /* resets invoice data state to initial state */
     setInvoiceData({
       customer_name: "",
@@ -43,10 +45,10 @@ function BottomButtons({
       customer_address_line_1: "",
       customer_address_line_2: "",
 
-      year: "",
-      month: "",
+      year: parseInt(dateToday.slice(0, 4)), // defaults to current year
+      month: parseInt(dateToday.slice(5, 7)), // defaults to current month
       transfer_date: "",
-      creation_date: new Date().toISOString().slice(0, 10), // default to today's date
+      creation_date: dateToday, // default to today's date
       paid_date: "",
 
       issued: false,

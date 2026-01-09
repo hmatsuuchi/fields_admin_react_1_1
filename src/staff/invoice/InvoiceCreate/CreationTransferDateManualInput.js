@@ -76,7 +76,9 @@ function CreationTransferDateManualInput({ invoiceData, setInvoiceData }) {
           }}
         >
           <option value="">-------</option>
+          <option value={2025}>2025年</option>
           <option value={2026}>2026年</option>
+          <option value={2027}>2027年</option>
         </select>
         <select
           id="invoice-month-dropdown"

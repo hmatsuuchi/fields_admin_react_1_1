@@ -51,11 +51,12 @@ function InvoiceListAll({
       <section id="invoice-list-all">
         <div id="invoice-list-container">
           {invoicesAll.map((invoice) => {
+            let subtotal = 0; // subtotal value for each invoice
+            let taxTotal = 0; // tax total value for each invoice
+            let total = 0; // total value for each invoice
+
             return (
               <div className="invoice-container" key={invoice.id}>
-                <div className="invoice-id">
-                  {("000000" + invoice.id).slice(-7)}
-                </div>
                 <div className="customer-info-container">
                   <div>{invoice.customer_name}</div>
                   <div>〒{invoice.customer_postal_code}</div>
@@ -74,33 +75,80 @@ function InvoiceListAll({
                   {invoice.student.first_name_kanji}
                 </div>
                 <div className="invoice-details-container">
-                  <div>支払方法: {invoice.payment_method.name}</div>
                   <div>作成日: {invoice.creation_date}</div>
+                  <div>支払方法: {invoice.payment_method.name}</div>
                   <div>振込日: {invoice.transfer_date}</div>
                 </div>
                 <div className="invoice-status-container">
-                  <div>発行日: {invoice.issued_date}</div>
-                  <div>支払日: {invoice.paid_date}</div>
-                  <div>発行済み: {invoice.issued ? "はい" : "いいえ"}</div>
-                  <div>支払済み: {invoice.paid ? "はい" : "いいえ"}</div>
+                  <div
+                    className={`invoice-issued-container ${
+                      invoice.issued & (invoice.issued_date !== null)
+                        ? "issued"
+                        : ""
+                    }`}
+                  >
+                    <div>{invoice.issued ? "発行済" : "未発行"}</div>
+                    <div>{invoice.issued_date}</div>
+                  </div>
+                  <div
+                    className={`invoice-paid-container ${
+                      invoice.paid & (invoice.paid_date !== null) ? "paid" : ""
+                    }`}
+                  >
+                    <div>{invoice.paid ? "支払済" : "未払"}</div>
+                    <div>{invoice.paid_date}</div>
+                  </div>
                 </div>
 
                 <div className="invoice-items-container">
                   {invoice.invoice_items.map((item) => {
+                    subtotal += item.quantity * item.rate;
+                    taxTotal +=
+                      item.quantity * item.rate * (item.tax_rate / 100);
+                    total = subtotal + taxTotal;
+
                     return (
                       <div className="invoice-item" key={item.id}>
                         <div>{item.service_type.name}</div>
                         <div>{item.description}</div>
-                        <div>{item.quantity}</div>
-                        <div>¥{item.rate}</div>
-                        <div>{item.tax_rate}%</div>
+                        <div className="invoice-item-number">
+                          {item.quantity}
+                        </div>
+                        <div className="invoice-item-number">
+                          ¥{item.rate.toLocaleString("ja-JP")}
+                        </div>
+                        <div className="invoice-item-number">
+                          {item.tax_rate}%
+                        </div>
+                        <div className="invoice-item-number">
+                          ¥{(item.quantity * item.rate).toLocaleString("ja-JP")}
+                        </div>
                       </div>
                     );
                   })}
                 </div>
+                <div className="subtotal-tax-total-container">
+                  <div>小計</div>
+                  <div>¥{subtotal.toLocaleString("ja-JP")}</div>
+                  <div>税額</div>
+                  <div>¥{taxTotal.toLocaleString("ja-JP")}</div>
+                  <div className="invoice-total">合計</div>
+                  <div className="invoice-total">
+                    ¥{total.toLocaleString("ja-JP")}
+                  </div>
+                </div>
                 <div className="invoice-timestamps">
-                  <div>{invoice.date_time_created}</div>
-                  <div>{invoice.date_time_modified}</div>
+                  <div>
+                    {invoice.date_time_created.slice(0, 10)}{" "}
+                    {invoice.date_time_created.slice(11, 16)}
+                  </div>
+                  <div>
+                    {invoice.date_time_modified.slice(0, 10)}{" "}
+                    {invoice.date_time_modified.slice(11, 16)}
+                  </div>
+                  <div className="invoice-id">
+                    {("000000" + invoice.id).slice(-7)}
+                  </div>
                 </div>
               </div>
             );
