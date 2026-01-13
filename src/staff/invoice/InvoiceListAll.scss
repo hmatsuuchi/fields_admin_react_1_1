@@ -67,8 +67,6 @@ $grey: #3a3939;
 
         .invoice-issued-container,
         .invoice-paid-container {
-          padding: 0.5rem;
-
           color: #ffffff;
 
           font-size: 1.1rem;
@@ -76,12 +74,27 @@ $grey: #3a3939;
 
           border-radius: 99rem;
 
-          padding: 0.5rem 1rem;
-
           display: grid;
           justify-content: space-between;
           align-content: center;
+          align-items: center;
           grid-auto-flow: column;
+
+          .status-text {
+            margin: 0.75rem 1rem;
+          }
+
+          .date {
+            background-color: #ffffff;
+
+            color: #000000;
+            font-weight: 400;
+
+            margin: 0.35rem;
+            padding: 0.35rem 1.3rem;
+
+            border-radius: 99rem;
+          }
         }
 
         .invoice-issued-container {
@@ -115,11 +128,18 @@ $grey: #3a3939;
         .invoice-item {
           display: grid;
           grid-auto-flow: column;
-          grid-template-columns: 5fr 10fr 3fr 3fr 3fr 3fr;
+          grid-template-columns: 7fr 10fr 3fr 3fr 3fr 3fr;
 
           .invoice-item-number {
             justify-self: right;
           }
+        }
+
+        .column-header-container {
+          font-weight: 500;
+          border-bottom: solid 1px $light-grey;
+          padding-bottom: 0.5rem;
+          margin-bottom: 0.5rem;
         }
       }
 

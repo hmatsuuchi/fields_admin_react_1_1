@@ -87,20 +87,34 @@ function InvoiceListAll({
                         : ""
                     }`}
                   >
-                    <div>{invoice.issued ? "発行済" : "未発行"}</div>
-                    <div>{invoice.issued_date}</div>
+                    <div className="status-text">
+                      {invoice.issued ? "発行済" : "未発行"}
+                    </div>
+                    <div className="date">{invoice.issued_date}</div>
                   </div>
                   <div
                     className={`invoice-paid-container ${
                       invoice.paid & (invoice.paid_date !== null) ? "paid" : ""
                     }`}
                   >
-                    <div>{invoice.paid ? "支払済" : "未払"}</div>
-                    <div>{invoice.paid_date}</div>
+                    <div className="status-text">
+                      {invoice.paid ? "支払済" : "未払"}
+                    </div>
+                    {invoice.paid_date !== null ? (
+                      <div className="date">{invoice.paid_date}</div>
+                    ) : null}
                   </div>
                 </div>
 
                 <div className="invoice-items-container">
+                  <div className="invoice-item column-header-container">
+                    <div>種類</div>
+                    <div>内容</div>
+                    <div className="invoice-item-number">数量</div>
+                    <div className="invoice-item-number">単価</div>
+                    <div className="invoice-item-number">税率</div>
+                    <div className="invoice-item-number">金額</div>
+                  </div>
                   {invoice.invoice_items.map((item) => {
                     subtotal += item.quantity * item.rate;
                     taxTotal +=
