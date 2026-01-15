@@ -151,6 +151,24 @@ $grey: #3a3939;
       }
 
       .bottom-buttons-container {
+        margin: 3rem 0 2rem 0;
+
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+
+        button {
+          padding: 0.5rem 1rem;
+
+          border-radius: 0.5rem;
+
+          font-size: 1.2rem;
+
+          color: #ffffff;
+
+          cursor: pointer;
+        }
+
         .button-submit {
           background-color: $teal;
         }

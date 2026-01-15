@@ -2,11 +2,11 @@ import React, { useEffect, useState, Fragment } from "react";
 /* AXIOS */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
-import "./InvoiceListAll.scss";
+import "./InvoiceStatusAll.scss";
 /* COMPONENTS */
-import InvoiceListAllToolbar from "../../staff/toolbar/invoice/InvoiceListAllToolbar";
+import InvoiceStatusAllToolbar from "../toolbar/invoice/InvoiceStatusAllToolbar";
 
-function InvoiceListAll({
+function InvoiceStatusAll({
   backButtonText,
   backButtonLink,
   displayBackButton,
@@ -26,13 +26,15 @@ function InvoiceListAll({
 
   const fetchInvoicesAll = async () => {
     try {
-      await instance.get("api/invoices/invoices/list/all/").then((response) => {
-        if (response) {
-          console.log(response.data.invoices);
-          setInvoicesAll(response.data.invoices);
-          setDisableToolbarButtons(false);
-        }
-      });
+      await instance
+        .get("api/invoices/invoices/status/all/")
+        .then((response) => {
+          if (response) {
+            console.log(response.data.invoices);
+            setInvoicesAll(response.data.invoices);
+            setDisableToolbarButtons(false);
+          }
+        });
     } catch (e) {
       console.log(e);
     }
@@ -48,7 +50,7 @@ function InvoiceListAll({
 
   return (
     <Fragment>
-      <section id="invoice-list-all">
+      <section id="invoice-status-all">
         <div id="invoice-list-container">
           {invoicesAll.map((invoice) => {
             let subtotal = 0; // subtotal value for each invoice
@@ -59,25 +61,13 @@ function InvoiceListAll({
               <div className="invoice-container" key={invoice.id}>
                 <div className="customer-info-container">
                   <div>{invoice.customer_name}</div>
-                  <div>〒{invoice.customer_postal_code}</div>
-                  <div>
-                    {invoice.customer_prefecture}
-                    {invoice.customer_city}
-                  </div>
-                  <div>{invoice.customer_address_line_1}</div>
-                  <div>{invoice.customer_address_line_2}</div>
                 </div>
                 <div className="year-month">
                   {invoice.year}年{invoice.month}月
                 </div>
-                <div className="related-student">
-                  関連生徒: {invoice.student.last_name_kanji}{" "}
-                  {invoice.student.first_name_kanji}
-                </div>
+
                 <div className="invoice-details-container">
                   <div>作成日: {invoice.creation_date}</div>
-                  <div>支払方法: {invoice.payment_method.name}</div>
-                  <div>振込日: {invoice.transfer_date}</div>
                 </div>
                 <div className="invoice-status-container">
                   <div
@@ -108,46 +98,13 @@ function InvoiceListAll({
                   </div>
                 </div>
 
-                <div className="invoice-items-container">
-                  <div className="invoice-item column-header-container">
-                    <div>種類</div>
-                    <div>内容</div>
-                    <div className="invoice-item-number">数量</div>
-                    <div className="invoice-item-number">単価</div>
-                    <div className="invoice-item-number">税率</div>
-                    <div className="invoice-item-number">金額</div>
-                  </div>
-                  {invoice.invoice_items.map((item) => {
-                    subtotal += item.quantity * item.rate;
-                    taxTotal +=
-                      item.quantity * item.rate * (item.tax_rate / 100);
-                    total = subtotal + taxTotal;
+                {invoice.invoice_items.forEach((item) => {
+                  subtotal += item.quantity * item.rate;
+                  taxTotal += item.quantity * item.rate * (item.tax_rate / 100);
+                  total = subtotal + taxTotal;
+                })}
 
-                    return (
-                      <div className="invoice-item" key={item.id}>
-                        <div>{item.service_type.name}</div>
-                        <div>{item.description}</div>
-                        <div className="invoice-item-number">
-                          {item.quantity}
-                        </div>
-                        <div className="invoice-item-number">
-                          ¥{item.rate.toLocaleString("ja-JP")}
-                        </div>
-                        <div className="invoice-item-number">
-                          {item.tax_rate}%
-                        </div>
-                        <div className="invoice-item-number">
-                          ¥{(item.quantity * item.rate).toLocaleString("ja-JP")}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
                 <div className="subtotal-tax-total-container">
-                  <div>小計</div>
-                  <div>¥{subtotal.toLocaleString("ja-JP")}</div>
-                  <div>税額</div>
-                  <div>¥{taxTotal.toLocaleString("ja-JP")}</div>
                   <div className="invoice-total">合計</div>
                   <div className="invoice-total">
                     ¥{total.toLocaleString("ja-JP")}
@@ -171,7 +128,7 @@ function InvoiceListAll({
           })}
         </div>
       </section>
-      <InvoiceListAllToolbar
+      <InvoiceStatusAllToolbar
         disableToolbarButtons={disableToolbarButtons}
         backButtonText={backButtonText}
         backButtonLink={backButtonLink}
@@ -182,4 +139,4 @@ function InvoiceListAll({
   );
 }
 
-export default InvoiceListAll;
+export default InvoiceStatusAll;

@@ -28,6 +28,7 @@ import Attendance from "./staff/attendance/Attendance";
 import AttendanceCreate from "./staff/attendance/AttendanceCreate";
 // COMPONENTS - STAFF - INVOICE
 import InvoiceListAll from "./staff/invoice/InvoiceListAll";
+import InvoiceStatusAll from "./staff/invoice/InvoiceStatusAll";
 import InvoiceCreate from "./staff/invoice/InvoiceCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
@@ -397,6 +398,21 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <InvoiceListAll
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - INVOICE - STATUS ALL */}
+        <Route
+          path="/staff/invoice/status/all/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <InvoiceStatusAll
                 backButtonText={backButtonText}
                 backButtonLink={backButtonLink}
                 displayBackButton={displayBackButton}
