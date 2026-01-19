@@ -413,6 +413,7 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <InvoiceStatusAll
+                csrfToken={csrfToken}
                 backButtonText={backButtonText}
                 backButtonLink={backButtonLink}
                 displayBackButton={displayBackButton}

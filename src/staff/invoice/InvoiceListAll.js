@@ -28,7 +28,7 @@ function InvoiceListAll({
     try {
       await instance.get("api/invoices/invoices/list/all/").then((response) => {
         if (response) {
-          console.log(response.data.invoices);
+          // console.log(response.data.invoices);
           setInvoicesAll(response.data.invoices);
           setDisableToolbarButtons(false);
         }
