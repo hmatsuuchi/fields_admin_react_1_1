@@ -21,6 +21,7 @@ function InvoiceStatusAll({
   const [invoicesAll, setInvoicesAll] = useState([]);
   const [stagedChanges, setStagedChanges] = useState([]);
 
+  const [sendingChanges, setSendingChanges] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
   /* ----------------------------------------------- */
@@ -57,6 +58,8 @@ function InvoiceStatusAll({
     month
   ) => {
     // UPDATE STAGED CHANGES ARRAY
+    const valueIsChanged = newValue !== previousValue;
+
     const createNewRecord = !stagedChanges.find(
       (record) => record.id === invoiceId && record.field === field
     );
@@ -73,7 +76,7 @@ function InvoiceStatusAll({
     let updatedRecordFlag = false;
 
     // if no existing record, add new record to stagedChanges
-    if (createNewRecord) {
+    if (createNewRecord && valueIsChanged) {
       updatedRecordFlag = true;
 
       setStagedChanges((prevStagedChanges) => [
@@ -90,7 +93,7 @@ function InvoiceStatusAll({
       ]);
     }
     // if existing record found, update the newValue
-    else if (updateExistingRecord) {
+    else if (updateExistingRecord && valueIsChanged) {
       updatedRecordFlag = true;
 
       setStagedChanges((prevStagedChanges) =>
@@ -130,6 +133,9 @@ function InvoiceStatusAll({
       )
     );
   };
+
+  // gets current date
+  const dateToday = new Date().toISOString().slice(0, 10);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -174,7 +180,22 @@ function InvoiceStatusAll({
                         : ""
                     } ${invoice.creation_date_updated ? "updated" : ""}`}
                   >
-                    <div className="status-text">作成日</div>
+                    <div
+                      className="status-text"
+                      onClick={(e) =>
+                        handleDateInputChange(
+                          invoice.id,
+                          "creation_date",
+                          new Date().toISOString().slice(0, 10),
+                          invoice.creation_date,
+                          invoice.customer_name,
+                          invoice.year,
+                          invoice.month
+                        )
+                      }
+                    >
+                      作成日
+                    </div>
                     <input
                       type="date"
                       className="date-input"
@@ -204,7 +225,20 @@ function InvoiceStatusAll({
                         : ""
                     } ${invoice.issued_date_updated ? "updated" : ""}`}
                   >
-                    <div className="status-text">
+                    <div
+                      className="status-text"
+                      onClick={(e) =>
+                        handleDateInputChange(
+                          invoice.id,
+                          "issued_date",
+                          dateToday,
+                          invoice.issued_date,
+                          invoice.customer_name,
+                          invoice.year,
+                          invoice.month
+                        )
+                      }
+                    >
                       {invoice.issued_date ? "発行日" : "未発行"}
                     </div>
                     <input
@@ -234,7 +268,20 @@ function InvoiceStatusAll({
                         : ""
                     } ${invoice.paid_date_updated ? "updated" : ""}`}
                   >
-                    <div className="status-text">
+                    <div
+                      className="status-text"
+                      onClick={(e) =>
+                        handleDateInputChange(
+                          invoice.id,
+                          "paid_date",
+                          dateToday,
+                          invoice.paid_date,
+                          invoice.customer_name,
+                          invoice.year,
+                          invoice.month
+                        )
+                      }
+                    >
                       {invoice.paid_date ? "支払日" : "未払"}
                     </div>
                     <input
@@ -280,6 +327,8 @@ function InvoiceStatusAll({
           setInvoicesAll={setInvoicesAll}
           stagedChanges={stagedChanges}
           setStagedChanges={setStagedChanges}
+          setSendingChanges={setSendingChanges}
+          setDisableToolbarButtons={setDisableToolbarButtons}
         />
       </section>
       <InvoiceStatusAllToolbar
@@ -289,6 +338,7 @@ function InvoiceStatusAll({
         displayBackButton={displayBackButton}
         setDisplayBackButton={setDisplayBackButton}
       />
+      <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>
   );
 }

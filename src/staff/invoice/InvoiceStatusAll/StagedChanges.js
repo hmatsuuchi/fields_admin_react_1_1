@@ -9,6 +9,8 @@ function StagedChanges({
   setInvoicesAll,
   stagedChanges,
   setStagedChanges,
+  setSendingChanges,
+  setDisableToolbarButtons,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -32,20 +34,28 @@ function StagedChanges({
   };
 
   const handleClicksToClearButton = () => {
-    // edit invoicesAll to set creation_date_updated, issued_date_updated, paid_date_updated to false
+    // create a map of changes for quick lookup
+    const changesMap = new Map();
+    stagedChanges.forEach((record) => {
+      if (!changesMap.has(record.id)) {
+        changesMap.set(record.id, {});
+      }
+      changesMap.get(record.id)[record.field] = record.originalValue;
+    });
+
+    // edit invoicesAll to reset values and updated flags
     setInvoicesAll((prevInvoices) =>
       prevInvoices.map((invoice) => {
-        let updatedInvoice = { ...invoice };
-        if (invoice.creation_date_updated) {
-          updatedInvoice.creation_date_updated = false;
-        }
-        if (invoice.issued_date_updated) {
-          updatedInvoice.issued_date_updated = false;
-        }
-        if (invoice.paid_date_updated) {
-          updatedInvoice.paid_date_updated = false;
-        }
-        return updatedInvoice;
+        const changes = changesMap.get(invoice.id);
+        if (!changes) return invoice;
+
+        return {
+          ...invoice,
+          ...changes,
+          creation_date_updated: false,
+          issued_date_updated: false,
+          paid_date_updated: false,
+        };
       })
     );
 
@@ -58,6 +68,10 @@ function StagedChanges({
 
     // send stagedChanges to backend to update invoices
     const batchUpdateInvoiceStatus = async () => {
+      // disable screen and toolbar
+      setSendingChanges(true);
+      setDisableToolbarButtons(true);
+
       try {
         await instance
           .post("api/invoices/invoices/status/batch-update/", stagedChanges, {
@@ -66,12 +80,31 @@ function StagedChanges({
             },
           })
           .then((response) => {
-            if (response) {
-              console.log(response.data);
+            if (response.status === 200) {
+              // re-enable screen and toolbar
+              setSendingChanges(false);
+              setDisableToolbarButtons(false);
+
+              // clear stagedChanges array and keep changes in invoicesAll
+              setStagedChanges([]);
+              setInvoicesAll((prevInvoices) =>
+                prevInvoices.map((invoice) => {
+                  return {
+                    ...invoice,
+                    creation_date_updated: false,
+                    issued_date_updated: false,
+                    paid_date_updated: false,
+                  };
+                })
+              );
             }
           });
       } catch (e) {
         console.log(e);
+        window.Error("エラーが発生しました。もう一度お試しください。");
+        // re-enable screen and toolbar
+        setSendingChanges(false);
+        setDisableToolbarButtons(false);
       }
     };
 

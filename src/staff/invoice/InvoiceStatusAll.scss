@@ -94,6 +94,10 @@ $grey: #3a3939;
 
           .status-text {
             margin: 0.75rem 1rem;
+
+            user-select: none;
+
+            cursor: pointer;
           }
 
           input[type="date"].date-input {
@@ -170,4 +174,17 @@ $grey: #3a3939;
       outline: 1px solid $red;
     }
   }
+}
+
+#overlay.active {
+  z-index: 99;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.3);
 }
