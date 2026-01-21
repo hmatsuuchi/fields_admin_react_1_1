@@ -12,8 +12,17 @@ $grey: #3a3939;
 #invoice-status-all {
   margin-top: 2.75rem;
 
+  #display-descriptors-container {
+    justify-self: center;
+
+    font-size: 1.2rem;
+    color: $grey;
+  }
+
   #invoice-list-container {
     padding: 1rem;
+
+    padding-bottom: 15rem;
 
     display: grid;
     grid-row-gap: 1rem;

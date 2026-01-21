@@ -56,7 +56,7 @@ function StagedChanges({
           issued_date_updated: false,
           paid_date_updated: false,
         };
-      })
+      }),
     );
 
     // clear stagedChanges array
@@ -95,7 +95,7 @@ function StagedChanges({
                     issued_date_updated: false,
                     paid_date_updated: false,
                   };
-                })
+                }),
               );
             }
           });
@@ -118,28 +118,32 @@ function StagedChanges({
 
   return stagedChanges.length > 0 ? (
     <div id="staged-changes-container">
-      {stagedChanges.map((record) => {
-        return (
-          <div
-            className="record-container"
-            key={`staged-change-${record.id}-${record.field}`}
-          >
-            <div>{record.customerName}</div>
-            <div>
-              {record.year.toString().slice(-2)}年{record.month}月
+      {/* All Records Container */}
+      <div id="all-records-container">
+        {stagedChanges.map((record) => {
+          return (
+            <div
+              className="record-container"
+              key={`staged-change-${record.id}-${record.field}`}
+            >
+              <div>{record.customerName}</div>
+              <div>
+                {record.year.toString().slice(-2)}年{record.month}月
+              </div>
+              <div>#{("000000" + record.id).slice(-7)}</div>
+              <div>{formatValue[record.field]}</div>
+              <div className="date">
+                {convertNullOrEmptyToVerbose(record.originalValue)}
+              </div>
+              <div>→</div>
+              <div className="date">
+                {convertNullOrEmptyToVerbose(record.newValue)}
+              </div>
             </div>
-            <div>#{("000000" + record.id).slice(-7)}</div>
-            <div>{formatValue[record.field]}</div>
-            <div className="date">
-              {convertNullOrEmptyToVerbose(record.originalValue)}
-            </div>
-            <div>→</div>
-            <div className="date">
-              {convertNullOrEmptyToVerbose(record.newValue)}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+      {/* Button Container */}
       <div className="button-container">
         <button className="clear-button" onClick={handleClicksToClearButton}>
           クリア

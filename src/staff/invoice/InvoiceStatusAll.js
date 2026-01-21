@@ -18,32 +18,58 @@ function InvoiceStatusAll({
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
+  const currentDate = new Date();
+
   const [invoicesAll, setInvoicesAll] = useState([]);
   const [stagedChanges, setStagedChanges] = useState([]);
 
   const [sendingChanges, setSendingChanges] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
+  const [selectedYear, setSelectedYear] = React.useState(
+    currentDate.toISOString().slice(0, 4),
+  );
+  const [selectedMonth, setSelectedMonth] = React.useState(
+    currentDate.toISOString().slice(5, 7),
+  );
+
+  const [displayDescriptors, setDisplayDescriptors] = useState([
+    `0件を表示しています`,
+  ]);
+
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
-  const fetchInvoicesAll = async () => {
-    try {
-      await instance
-        .get("api/invoices/invoices/status/all/")
-        .then((response) => {
-          if (response) {
-            setInvoicesAll(response.data.invoices);
-            setDisableToolbarButtons(false);
-          }
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
+  // fetch invoices on component mount
   useEffect(() => {
+    // fetches all invoices based on selected year and month
+    const fetchInvoicesAll = async () => {
+      const currentDate = new Date();
+
+      try {
+        await instance
+          .get("api/invoices/invoices/status/all/", {
+            params: {
+              year: currentDate.toISOString().slice(0, 4),
+              month: currentDate.toISOString().slice(5, 7),
+            },
+          })
+          .then((response) => {
+            if (response) {
+              setInvoicesAll(response.data.invoices);
+              setDisableToolbarButtons(false);
+              setDisplayDescriptors([
+                `${response.data.invoices.length}件を表示しています`,
+              ]);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    // drives code
     fetchInvoicesAll();
   }, []);
 
@@ -55,13 +81,13 @@ function InvoiceStatusAll({
     previousValue,
     customerName,
     year,
-    month
+    month,
   ) => {
     // UPDATE STAGED CHANGES ARRAY
     const valueIsChanged = newValue !== previousValue;
 
     const createNewRecord = !stagedChanges.find(
-      (record) => record.id === invoiceId && record.field === field
+      (record) => record.id === invoiceId && record.field === field,
     );
 
     const updateExistingRecord = stagedChanges.find(
@@ -70,7 +96,7 @@ function InvoiceStatusAll({
         record.field === field &&
         record.newValue !== newValue &&
         record.originalValue !== newValue &&
-        !(record.originalValue === null && newValue === "")
+        !(record.originalValue === null && newValue === ""),
     );
 
     let updatedRecordFlag = false;
@@ -100,8 +126,8 @@ function InvoiceStatusAll({
         prevStagedChanges.map((record) =>
           record.id === invoiceId && record.field === field
             ? { ...record, newValue: newValue }
-            : record
-        )
+            : record,
+        ),
       );
     }
     // if existing record's originalValue matches newValue, remove the record
@@ -116,8 +142,8 @@ function InvoiceStatusAll({
               record.field === field &&
               (record.originalValue === newValue ||
                 (record.originalValue === null && newValue === ""))
-            )
-        )
+            ),
+        ),
       );
     }
 
@@ -129,8 +155,8 @@ function InvoiceStatusAll({
               [field]: newValue,
               [`${field}_updated`]: updatedRecordFlag,
             }
-          : invoice
-      )
+          : invoice,
+      ),
     );
   };
 
@@ -144,6 +170,11 @@ function InvoiceStatusAll({
   return (
     <Fragment>
       <section id="invoice-status-all">
+        <ul id="display-descriptors-container">
+          {displayDescriptors.map((descriptor, index) => (
+            <li key={`display-descriptor-${index}`}>{descriptor}</li>
+          ))}
+        </ul>
         <div id="invoice-list-container">
           {invoicesAll.map((invoice) => {
             let subtotal = 0; // subtotal value for each invoice
@@ -190,7 +221,7 @@ function InvoiceStatusAll({
                           invoice.creation_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     >
@@ -212,7 +243,7 @@ function InvoiceStatusAll({
                           invoice.creation_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     />
@@ -235,7 +266,7 @@ function InvoiceStatusAll({
                           invoice.issued_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     >
@@ -255,7 +286,7 @@ function InvoiceStatusAll({
                           invoice.issued_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     />
@@ -278,7 +309,7 @@ function InvoiceStatusAll({
                           invoice.paid_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     >
@@ -298,7 +329,7 @@ function InvoiceStatusAll({
                           invoice.paid_date,
                           invoice.customer_name,
                           invoice.year,
-                          invoice.month
+                          invoice.month,
                         )
                       }
                     />
@@ -333,10 +364,18 @@ function InvoiceStatusAll({
       </section>
       <InvoiceStatusAllToolbar
         disableToolbarButtons={disableToolbarButtons}
+        setDisableToolbarButtons={setDisableToolbarButtons}
         backButtonText={backButtonText}
         backButtonLink={backButtonLink}
         displayBackButton={displayBackButton}
         setDisplayBackButton={setDisplayBackButton}
+        invoicesAll={invoicesAll}
+        setInvoicesAll={setInvoicesAll}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedMonth={selectedMonth}
+        setSelectedMonth={setSelectedMonth}
+        setDisplayDescriptors={setDisplayDescriptors}
       />
       <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>

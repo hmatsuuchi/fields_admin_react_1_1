@@ -28,28 +28,49 @@ $grey: #3a3939;
   .toolbar-right-side-container {
     display: grid;
     grid-auto-flow: column;
-    grid-column-gap: 1rem;
     align-items: center;
 
-    .year-month-container {
-      display: grid;
-      grid-auto-flow: column;
-      grid-column-gap: 0.5rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto auto auto auto auto auto 4.1rem;
 
-      select {
-        background-color: #ffffff;
+    select {
+      background-color: #ffffff;
 
-        border: solid 1px #000000;
-        border-radius: 0.3rem;
+      border: solid 1px #000000;
+      border-radius: 0.3rem;
 
-        font-size: 1rem;
+      font-size: 1rem;
 
-        padding: 0.3rem;
-      }
+      padding: 0.3rem;
 
-      select:focus {
-        outline: $grey solid 2px;
-      }
+      margin-left: 0.5rem;
+    }
+
+    select:focus {
+      outline: $grey solid 2px;
+    }
+
+    .vertical-divider-thin {
+      width: 1px;
+      height: 100%;
+
+      background-color: #ffffff;
+      margin: 0 0.5rem;
+    }
+
+    .filter-results-button {
+      justify-self: right;
+
+      width: 2rem;
+      aspect-ratio: 1 / 1;
+
+      border: solid 1px #ffffff;
+      border-radius: 0.3rem;
+
+      margin-left: 0.5rem;
+
+      background-color: lightgreen;
     }
 
     .issued-filter-button,
@@ -61,6 +82,20 @@ $grey: #3a3939;
       border-radius: 0.3rem;
 
       background-color: pink;
+    }
+
+    .paid-filter-button {
+      margin-left: 0.5rem;
+    }
+
+    .number-of-results {
+      text-align: center;
+
+      margin-left: 0.5rem;
+
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 500;
     }
   }
 }

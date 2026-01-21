@@ -67,12 +67,9 @@ $grey: #3a3939;
 
         .invoice-issued-container,
         .invoice-paid-container {
-          color: #ffffff;
+          font-size: 1.2rem;
 
-          font-size: 1.1rem;
-          font-weight: 500;
-
-          border-radius: 99rem;
+          border-radius: 0.8rem;
 
           display: grid;
           justify-content: space-between;
@@ -85,32 +82,27 @@ $grey: #3a3939;
           }
 
           .date {
-            background-color: #ffffff;
-
-            color: #000000;
-            font-weight: 400;
-
             margin: 0.35rem;
             padding: 0.35rem 1.3rem;
 
-            border-radius: 99rem;
+            border-radius: 0.4rem;
           }
         }
 
         .invoice-issued-container {
-          background-color: $red;
+          border: solid 4px $deep-yellow;
         }
 
         .invoice-issued-container.issued {
-          background-color: $teal;
+          border: solid 4px $teal;
         }
 
         .invoice-paid-container {
-          background-color: $red;
+          border: solid 4px $deep-yellow;
         }
 
         .invoice-paid-container.paid {
-          background-color: $teal;
+          border: solid 4px $teal;
         }
       }
 

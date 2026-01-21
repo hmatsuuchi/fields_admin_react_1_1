@@ -82,13 +82,11 @@ function InvoiceListAll({
                 <div className="invoice-status-container">
                   <div
                     className={`invoice-issued-container ${
-                      invoice.issued & (invoice.issued_date !== null)
-                        ? "issued"
-                        : ""
+                      invoice.issued_date !== null ? "issued" : ""
                     }`}
                   >
                     <div className="status-text">
-                      {invoice.issued ? "発行済" : "未発行"}
+                      {invoice.issued_date !== null ? "発行済" : "未発行"}
                     </div>
                     {invoice.issued_date !== null ? (
                       <div className="date">{invoice.issued_date}</div>
@@ -96,11 +94,11 @@ function InvoiceListAll({
                   </div>
                   <div
                     className={`invoice-paid-container ${
-                      invoice.paid & (invoice.paid_date !== null) ? "paid" : ""
+                      invoice.paid_date !== null ? "paid" : ""
                     }`}
                   >
                     <div className="status-text">
-                      {invoice.paid ? "支払済" : "未払"}
+                      {invoice.paid_date !== null ? "支払済" : "未払"}
                     </div>
                     {invoice.paid_date !== null ? (
                       <div className="date">{invoice.paid_date}</div>

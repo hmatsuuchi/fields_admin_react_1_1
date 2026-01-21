@@ -16,7 +16,7 @@ $grey: #3a3939;
 
   padding: 1rem;
 
-  background-color: $beige;
+  background-color: $yellow;
   opacity: 1;
 
   box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
@@ -26,11 +26,26 @@ $grey: #3a3939;
   border-radius: 0 0.3rem 0.3rem 0;
 
   display: grid;
-  grid-row-gap: 0.25rem;
+
+  #all-records-container {
+    scrollbar-width: none;
+
+    background-color: $beige;
+
+    border-radius: 0.3rem;
+
+    padding: 0 0.5rem;
+
+    max-height: 15.3rem;
+    overflow-y: auto;
+
+    display: grid;
+    grid-row-gap: 0.3rem;
+  }
 
   .button-container {
-    margin-top: 2rem;
-    padding: 0 1rem;
+    margin: 1rem;
+    margin-bottom: 0;
 
     display: grid;
     grid-auto-flow: column;
