@@ -73,8 +73,8 @@ $grey: #3a3939;
       background-color: lightgreen;
     }
 
-    .issued-filter-button,
-    .paid-filter-button {
+    .display-unissued-only-button,
+    .display-unpaid-only-button {
       width: 2rem;
       aspect-ratio: 1 / 1;
 
@@ -84,7 +84,7 @@ $grey: #3a3939;
       background-color: pink;
     }
 
-    .paid-filter-button {
+    .display-unpaid-only-button {
       margin-left: 0.5rem;
     }
 

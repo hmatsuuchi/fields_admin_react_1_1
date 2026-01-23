@@ -119,7 +119,7 @@ function CustomerSelect({
       ignoreChangesToSearchField,
       setSelectedCustomerData,
     ],
-    setSelectedCustomerData
+    setSelectedCustomerData,
   );
 
   /* sets search term back to selected customer to avoid partial names */
@@ -151,7 +151,7 @@ function CustomerSelect({
     setSearchFieldToSelectedCustomerName(
       customer.last_name_kanji,
       customer.first_name_kanji,
-      customer.grade_verbose
+      customer.grade_verbose,
     );
   };
 
@@ -166,7 +166,7 @@ function CustomerSelect({
     setSearchFieldToSelectedCustomerName(
       selectedCustomerData.last_name_kanji,
       selectedCustomerData.first_name_kanji,
-      selectedCustomerData.grade_verbose
+      selectedCustomerData.grade_verbose,
     );
     setDisplayCustomerSearchResults(false);
   };
@@ -178,7 +178,7 @@ function CustomerSelect({
       e.preventDefault();
       /* get index of current customer */
       const currentIndex = filteredCustomerList.findIndex(
-        (customer) => customer.id === selectedCustomerData.id
+        (customer) => customer.id === selectedCustomerData.id,
       );
       /* get next customer (or disable arrow key functionality) */
       const nextIndex =
@@ -189,7 +189,7 @@ function CustomerSelect({
 
       /* scroll customer search result into view */
       const customerSearchResultElement = document.querySelector(
-        `.customer-name-container:nth-child(${nextIndex + 1})`
+        `.customer-name-container:nth-child(${nextIndex + 1})`,
       );
       if (customerSearchResultElement) {
         customerSearchResultElement.scrollIntoView({
@@ -211,6 +211,7 @@ function CustomerSelect({
         customer_prefecture: nextCustomer.prefecture_verbose,
         customer_city: nextCustomer.city,
         payment_method: nextCustomer.payment_method_from_invoice,
+        student: nextCustomer.id,
       }));
 
       /* up arrow */
@@ -218,7 +219,7 @@ function CustomerSelect({
       e.preventDefault();
       /* get index of current customer */
       const currentIndex = filteredCustomerList.findIndex(
-        (customer) => customer.id === selectedCustomerData.id
+        (customer) => customer.id === selectedCustomerData.id,
       );
       /* get previous customer (or disable arrow key functionality) */
       const previousIndex =
@@ -227,7 +228,7 @@ function CustomerSelect({
 
       /* scroll customer search result into view */
       const customerSearchResultElement = document.querySelector(
-        `.customer-name-container:nth-child(${previousIndex + 1})`
+        `.customer-name-container:nth-child(${previousIndex + 1})`,
       );
       if (customerSearchResultElement) {
         customerSearchResultElement.scrollIntoView({
@@ -245,10 +246,11 @@ function CustomerSelect({
         prefecture_city: `${previousCustomer.prefecture_verbose}${previousCustomer.city}`,
         customer_address_line_1: previousCustomer.address_1,
         customer_address_line_2: previousCustomer.address_2,
-        student: previousCustomer.id,
+        customer_postal_code: previousCustomer.post_code,
         customer_prefecture: previousCustomer.prefecture_verbose,
         customer_city: previousCustomer.city,
         payment_method: previousCustomer.payment_method_from_invoice,
+        student: previousCustomer.id,
       }));
 
       /* enter */

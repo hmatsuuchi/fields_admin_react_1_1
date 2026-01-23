@@ -26,16 +26,22 @@ function InvoiceStatusAll({
   const [sendingChanges, setSendingChanges] = useState(false);
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
+  // filter parameters
   const [selectedYear, setSelectedYear] = React.useState(
-    currentDate.toISOString().slice(0, 4),
+    parseInt(currentDate.toISOString().slice(0, 4)),
   );
   const [selectedMonth, setSelectedMonth] = React.useState(
-    currentDate.toISOString().slice(5, 7),
+    parseInt(currentDate.toISOString().slice(5, 7)),
   );
+  const [displayUnissuedOnly, setDisplayUnissuedOnly] = useState(false);
+  const [displayUnpaidOnly, setDisplayUnpaidOnly] = useState(false);
 
-  const [displayDescriptors, setDisplayDescriptors] = useState([
-    `0件を表示しています`,
-  ]);
+  const [displayDescriptors, setDisplayDescriptors] = useState([]);
+
+  // invoice total calculations
+  const [invoiceTotalWithoutTax, setInvoiceTotalWithoutTax] = useState(0);
+  const [unpaidInvoiceTotalWithoutTax, setUnpaidInvoiceTotalWithoutTax] =
+    useState(0);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -59,9 +65,6 @@ function InvoiceStatusAll({
             if (response) {
               setInvoicesAll(response.data.invoices);
               setDisableToolbarButtons(false);
-              setDisplayDescriptors([
-                `${response.data.invoices.length}件を表示しています`,
-              ]);
             }
           });
       } catch (e) {
@@ -162,6 +165,28 @@ function InvoiceStatusAll({
 
   // gets current date
   const dateToday = new Date().toISOString().slice(0, 10);
+
+  useEffect(() => {
+    let workingInvoiceTotal = 0;
+    let workingUnpaidInvoiceTotal = 0;
+
+    invoicesAll.forEach((invoice) => {
+      // calculates total for all invoices
+      invoice.invoice_items.forEach((item) => {
+        workingInvoiceTotal += item.quantity * item.rate;
+      });
+
+      // calculates total for unpaid invoices
+      if (invoice.paid_date === null || invoice.paid_date === "") {
+        invoice.invoice_items.forEach((item) => {
+          workingUnpaidInvoiceTotal += item.quantity * item.rate;
+        });
+      }
+    });
+
+    setInvoiceTotalWithoutTax(workingInvoiceTotal);
+    setUnpaidInvoiceTotalWithoutTax(workingUnpaidInvoiceTotal);
+  }, [invoicesAll]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -376,6 +401,12 @@ function InvoiceStatusAll({
         selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
         setDisplayDescriptors={setDisplayDescriptors}
+        invoiceTotalWithoutTax={invoiceTotalWithoutTax}
+        unpaidInvoiceTotalWithoutTax={unpaidInvoiceTotalWithoutTax}
+        displayUnissuedOnly={displayUnissuedOnly}
+        setDisplayUnissuedOnly={setDisplayUnissuedOnly}
+        displayUnpaidOnly={displayUnpaidOnly}
+        setDisplayUnpaidOnly={setDisplayUnpaidOnly}
       />
       <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>
