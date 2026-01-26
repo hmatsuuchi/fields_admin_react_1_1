@@ -35,6 +35,8 @@ function InvoiceStatusAllToolbar({
   setDisplayUnissuedOnly,
   displayUnpaidOnly,
   setDisplayUnpaidOnly,
+  displayStudentOnlyId,
+  setDisplayStudentOnlyId,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */

@@ -35,7 +35,9 @@ function InvoiceStatusAll({
   );
   const [displayUnissuedOnly, setDisplayUnissuedOnly] = useState(false);
   const [displayUnpaidOnly, setDisplayUnpaidOnly] = useState(false);
+  const [displayStudentOnlyId, setDisplayStudentOnlyId] = useState(null);
 
+  // display descriptors
   const [displayDescriptors, setDisplayDescriptors] = useState([]);
 
   // invoice total calculations
@@ -75,6 +77,39 @@ function InvoiceStatusAll({
     // drives code
     fetchInvoicesAll();
   }, []);
+
+  // fetches invoices for clicks to display student only button
+  const fetchInvoicesAll = async (studentId) => {
+    // disables toolbar buttons
+    setDisableToolbarButtons(true);
+
+    // resets invoices
+    setInvoicesAll([]);
+
+    // resets filters
+    setSelectedYear("");
+    setSelectedMonth("");
+    setDisplayUnissuedOnly(false);
+    setDisplayUnpaidOnly(false);
+
+    // fetches invoices
+    try {
+      await instance
+        .get("api/invoices/invoices/status/all/", {
+          params: {
+            display_student_only_id: studentId,
+          },
+        })
+        .then((response) => {
+          if (response) {
+            setInvoicesAll(response.data.invoices);
+            setDisableToolbarButtons(false);
+          }
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // handles date input changes
   const handleDateInputChange = (
@@ -188,6 +223,28 @@ function InvoiceStatusAll({
     setUnpaidInvoiceTotalWithoutTax(workingUnpaidInvoiceTotal);
   }, [invoicesAll]);
 
+  // handles clicks to display student only button
+  const handleClicksToDisplayStudentOnlyButton = (studentId) => {
+    setDisplayStudentOnlyId(studentId);
+    fetchInvoicesAll(studentId);
+  };
+
+  // debug
+  useEffect(() => {
+    console.log(`selectedYear: ${selectedYear}`);
+    console.log(`selectedMonth: ${selectedMonth}`);
+    console.log(`displayUnissuedOnly: ${displayUnissuedOnly}`);
+    console.log(`displayUnpaidOnly: ${displayUnpaidOnly}`);
+    console.log(`displayStudentOnlyId: ${displayStudentOnlyId}`);
+    console.log("------------------");
+  }, [
+    selectedYear,
+    selectedMonth,
+    displayUnissuedOnly,
+    displayUnpaidOnly,
+    displayStudentOnlyId,
+  ]);
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -215,6 +272,13 @@ function InvoiceStatusAll({
 
             return (
               <div className="invoice-container" key={invoice.id}>
+                {/* display student only button */}
+                <div
+                  className="display-student-only-button"
+                  onClick={() =>
+                    handleClicksToDisplayStudentOnlyButton(invoice.student.id)
+                  }
+                />
                 <div className="invoice-header">
                   <div>{invoice.customer_name}</div>
                   <div className="customer-name-romaji">{`${invoice.student.last_name_romaji}, ${invoice.student.first_name_romaji}`}</div>

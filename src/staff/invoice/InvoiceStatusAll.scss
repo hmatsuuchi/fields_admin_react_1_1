@@ -28,6 +28,8 @@ $grey: #3a3939;
     grid-row-gap: 1rem;
 
     .invoice-container {
+      position: relative;
+
       padding: 1rem;
       padding-bottom: 0.5rem;
 
@@ -38,6 +40,18 @@ $grey: #3a3939;
 
       display: grid;
       grid-row-gap: 1rem;
+
+      .display-student-only-button {
+        position: absolute;
+        top: 0;
+        left: 20%;
+
+        cursor: pointer;
+
+        width: 2rem;
+        height: 2rem;
+        background-color: pink;
+      }
 
       .invoice-header {
         font-size: 1.35rem;
