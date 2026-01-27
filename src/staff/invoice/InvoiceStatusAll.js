@@ -35,7 +35,19 @@ function InvoiceStatusAll({
   );
   const [displayUnissuedOnly, setDisplayUnissuedOnly] = useState(false);
   const [displayUnpaidOnly, setDisplayUnpaidOnly] = useState(false);
-  const [displayStudentOnlyId, setDisplayStudentOnlyId] = useState(null);
+  const [displayStudentOnly, setDisplayStudentOnly] = useState({
+    id: null,
+    nameKanji: "",
+  });
+  const [textFilterInput, setTextFilterInput] = React.useState("");
+
+  // applied filters
+  const [appliedFilters, setAppliedFilters] = React.useState({
+    selectedYear: selectedYear,
+    selectedMonth: selectedMonth,
+    displayUnissuedOnly: false,
+    displayUnpaidOnly: false,
+  });
 
   // display descriptors
   const [displayDescriptors, setDisplayDescriptors] = useState([]);
@@ -224,26 +236,50 @@ function InvoiceStatusAll({
   }, [invoicesAll]);
 
   // handles clicks to display student only button
-  const handleClicksToDisplayStudentOnlyButton = (studentId) => {
-    setDisplayStudentOnlyId(studentId);
+  const handleClicksToDisplayStudentOnlyButton = (
+    studentId,
+    studentNameKanji,
+  ) => {
+    // clears all filters
+    setSelectedYear("");
+    setSelectedMonth("");
+    setDisplayUnissuedOnly(false);
+    setDisplayUnpaidOnly(false);
+
+    // resets applied filters
+    setAppliedFilters({
+      selectedYear: "",
+      selectedMonth: "",
+      displayUnissuedOnly: false,
+      displayUnpaidOnly: false,
+    });
+
+    // sets display student only filter
+    setDisplayStudentOnly({ id: studentId, nameKanji: studentNameKanji });
+    // fetches invoices for the selected student only
     fetchInvoicesAll(studentId);
   };
 
   // debug
-  useEffect(() => {
-    console.log(`selectedYear: ${selectedYear}`);
-    console.log(`selectedMonth: ${selectedMonth}`);
-    console.log(`displayUnissuedOnly: ${displayUnissuedOnly}`);
-    console.log(`displayUnpaidOnly: ${displayUnpaidOnly}`);
-    console.log(`displayStudentOnlyId: ${displayStudentOnlyId}`);
-    console.log("------------------");
-  }, [
-    selectedYear,
-    selectedMonth,
-    displayUnissuedOnly,
-    displayUnpaidOnly,
-    displayStudentOnlyId,
-  ]);
+  // useEffect(() => {
+  //   console.log(`selectedYear: ${selectedYear}`);
+  //   console.log(`selectedMonth: ${selectedMonth}`);
+  //   console.log(`displayUnissuedOnly: ${displayUnissuedOnly}`);
+  //   console.log(`displayUnpaidOnly: ${displayUnpaidOnly}`);
+  //   console.log(`displayStudentOnly.id: ${displayStudentOnly.id}`);
+  //   console.log(
+  //     `displayStudentOnly.nameKanji: ${displayStudentOnly.nameKanji}`,
+  //   );
+  //   console.log(`textFilterInput: ${textFilterInput}`);
+  //   console.log("------------------");
+  // }, [
+  //   selectedYear,
+  //   selectedMonth,
+  //   displayUnissuedOnly,
+  //   displayUnpaidOnly,
+  //   displayStudentOnly,
+  //   textFilterInput,
+  // ]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -276,7 +312,10 @@ function InvoiceStatusAll({
                 <div
                   className="display-student-only-button"
                   onClick={() =>
-                    handleClicksToDisplayStudentOnlyButton(invoice.student.id)
+                    handleClicksToDisplayStudentOnlyButton(
+                      invoice.student.id,
+                      `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
+                    )
                   }
                 />
                 <div className="invoice-header">
@@ -471,6 +510,12 @@ function InvoiceStatusAll({
         setDisplayUnissuedOnly={setDisplayUnissuedOnly}
         displayUnpaidOnly={displayUnpaidOnly}
         setDisplayUnpaidOnly={setDisplayUnpaidOnly}
+        displayStudentOnly={displayStudentOnly}
+        setDisplayStudentOnly={setDisplayStudentOnly}
+        appliedFilters={appliedFilters}
+        setAppliedFilters={setAppliedFilters}
+        textFilterInput={textFilterInput}
+        setTextFilterInput={setTextFilterInput}
       />
       <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>

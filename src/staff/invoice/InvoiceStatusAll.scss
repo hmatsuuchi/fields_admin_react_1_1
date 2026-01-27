@@ -20,12 +20,14 @@ $grey: #3a3939;
   }
 
   #invoice-list-container {
-    padding: 1rem;
+    min-height: 110vh;
 
+    padding: 1rem;
     padding-bottom: 15rem;
 
     display: grid;
     grid-row-gap: 1rem;
+    align-content: start;
 
     .invoice-container {
       position: relative;

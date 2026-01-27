@@ -26,6 +26,10 @@ function InvoiceStatusAllToolbar({
   invoiceTotalWithoutTax,
   unpaidInvoiceTotalWithoutTax,
 
+  // applied filters
+  appliedFilters,
+  setAppliedFilters,
+
   // filter parameters
   selectedYear,
   setSelectedYear,
@@ -35,33 +39,36 @@ function InvoiceStatusAllToolbar({
   setDisplayUnissuedOnly,
   displayUnpaidOnly,
   setDisplayUnpaidOnly,
-  displayStudentOnlyId,
-  setDisplayStudentOnlyId,
+  displayStudentOnly,
+  setDisplayStudentOnly,
+  textFilterInput,
+  setTextFilterInput,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
-
-  const [appliedFilters, setAppliedFilters] = React.useState({
-    selectedYear: selectedYear,
-    selectedMonth: selectedMonth,
-    displayUnissuedOnly: false,
-    displayUnpaidOnly: false,
-  });
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
 
   // Handle Clicks to Date Filter Button
-  const handleClicksToFilterResultsButton = () => {
-    // resets other filters
+  const handleClicksToDateFilterButton = () => {
+    // resets filter states
     setDisplayUnissuedOnly(false);
     setDisplayUnpaidOnly(false);
+    setDisplayStudentOnly({
+      id: null,
+      nameKanji: "",
+    });
+    setTextFilterInput("");
+
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
     // clears invoices all state
     setInvoicesAll([]);
+
     // resets applied filters
     setAppliedFilters({
       selectedYear: "",
@@ -78,8 +85,6 @@ function InvoiceStatusAllToolbar({
             params: {
               year: selectedYear,
               month: selectedMonth,
-              display_unissued_only: false,
-              display_unpaid_only: false,
             },
           })
           .then((response) => {
@@ -111,11 +116,24 @@ function InvoiceStatusAllToolbar({
     // clears invoices all state
     setInvoicesAll([]);
 
-    // sets filter states
+    // resets applied filters
+    setAppliedFilters({
+      selectedYear: "",
+      selectedMonth: "",
+      displayUnissuedOnly: false,
+      displayUnpaidOnly: false,
+    });
+
+    // resets filter states
     setSelectedYear("");
     setSelectedMonth("");
     setDisplayUnissuedOnly(true);
     setDisplayUnpaidOnly(false);
+    setDisplayStudentOnly({
+      id: null,
+      nameKanji: "",
+    });
+    setTextFilterInput("");
 
     // fetches all invoices
     const fetchInvoicesAll = async () => {
@@ -123,10 +141,7 @@ function InvoiceStatusAllToolbar({
         await instance
           .get("api/invoices/invoices/status/all/", {
             params: {
-              year: "",
-              month: "",
               display_unissued_only: true,
-              display_unpaid_only: false,
             },
           })
           .then((response) => {
@@ -158,11 +173,24 @@ function InvoiceStatusAllToolbar({
     // clears invoices all state
     setInvoicesAll([]);
 
-    // sets filter states
+    // resets applied filters
+    setAppliedFilters({
+      selectedYear: "",
+      selectedMonth: "",
+      displayUnissuedOnly: false,
+      displayUnpaidOnly: false,
+    });
+
+    // resets filter states
     setSelectedYear("");
     setSelectedMonth("");
     setDisplayUnissuedOnly(false);
     setDisplayUnpaidOnly(true);
+    setDisplayStudentOnly({
+      id: null,
+      nameKanji: "",
+    });
+    setTextFilterInput("");
 
     // fetches all invoices
     const fetchInvoicesAll = async () => {
@@ -170,9 +198,6 @@ function InvoiceStatusAllToolbar({
         await instance
           .get("api/invoices/invoices/status/all/", {
             params: {
-              year: "",
-              month: "",
-              display_unissued_only: false,
               display_unpaid_only: true,
             },
           })
@@ -197,20 +222,91 @@ function InvoiceStatusAllToolbar({
     fetchInvoicesAll();
   };
 
-  // handles changes to invoice list
+  // Handle Clicks to Text Filter Button
+  const handleClicksToTextFilterButton = () => {
+    // disables toolbar buttons
+    setDisableToolbarButtons(true);
+
+    // clears invoices all state
+    setInvoicesAll([]);
+
+    // resets applied filters
+    setAppliedFilters({
+      selectedYear: "",
+      selectedMonth: "",
+      displayUnissuedOnly: false,
+      displayUnpaidOnly: false,
+      textFilter: "",
+    });
+
+    // resets filter states
+    setSelectedYear("");
+    setSelectedMonth("");
+    setDisplayUnissuedOnly(false);
+    setDisplayUnpaidOnly(false);
+    setDisplayStudentOnly({
+      id: null,
+      nameKanji: "",
+    });
+
+    // fetches all invoices
+    const fetchInvoicesAll = async () => {
+      try {
+        await instance
+          .get("api/invoices/invoices/status/all/", {
+            params: {
+              text_filter: textFilterInput,
+            },
+          })
+          .then((response) => {
+            if (response) {
+              setInvoicesAll(response.data.invoices);
+              setDisableToolbarButtons(false);
+              setAppliedFilters({
+                selectedYear: "",
+                selectedMonth: "",
+                displayUnissuedOnly: false,
+                displayUnpaidOnly: false,
+                textFilter: textFilterInput,
+              });
+            }
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    // drives code
+    fetchInvoicesAll();
+  };
+
+  // updates display descriptors
   useEffect(() => {
-    // resets display descriptors
     setDisplayDescriptors([
+      // invoice count
       `${invoicesAll.length}件を表示しています`,
+      // invoice totals & unpaid totals
       `税抜合計 ${invoiceTotalWithoutTax.toLocaleString("ja-JP")}円 (未払 ${unpaidInvoiceTotalWithoutTax.toLocaleString("ja-JP")}円)`,
-      appliedFilters.selectedYear && appliedFilters.selectedMonth
+      // year & month filter
+      appliedFilters.selectedYear !== "" && appliedFilters.selectedMonth !== ""
         ? `${appliedFilters.selectedYear}年${appliedFilters.selectedMonth}月の請求書を表示しています`
         : null,
+      // unissued only filter
       appliedFilters.displayUnissuedOnly
         ? "未発行の請求書のみ表示しています"
         : null,
+      // unpaid only filter
       appliedFilters.displayUnpaidOnly
         ? "未入金の請求書のみ表示しています"
+        : null,
+      // student only filter
+      displayStudentOnly.nameKanji !== ""
+        ? `「${displayStudentOnly.nameKanji}」の請求書を表示しています`
+        : null,
+      // text filter
+      appliedFilters.textFilter !== "" &&
+      appliedFilters.textFilter !== undefined
+        ? `「${appliedFilters.textFilter}」の検索結果を表示しています`
         : null,
     ]);
   }, [
@@ -219,6 +315,7 @@ function InvoiceStatusAllToolbar({
     unpaidInvoiceTotalWithoutTax,
     setDisplayDescriptors,
     appliedFilters,
+    displayStudentOnly,
   ]);
 
   /* ---------------------------------------- */
@@ -245,7 +342,24 @@ function InvoiceStatusAllToolbar({
       />
 
       <div className="toolbar-right-side-container">
+        {/* text search filter */}
+        <input
+          type="text"
+          className="text-filter-input"
+          value={textFilterInput}
+          onChange={(e) => {
+            setTextFilterInput(e.target.value);
+          }}
+        />
+        <button
+          className="filter-results-button"
+          onClick={handleClicksToTextFilterButton}
+        ></button>
+        <div className="vertical-divider-thin" />
+
+        {/* year and month filter */}
         <select
+          className="year-select"
           value={selectedYear}
           onChange={(e) => {
             setSelectedYear(e.target.value);
@@ -256,6 +370,7 @@ function InvoiceStatusAllToolbar({
           <option value={2025}>2025年</option>
         </select>
         <select
+          className="month-select"
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
         >
@@ -275,17 +390,23 @@ function InvoiceStatusAllToolbar({
         </select>
         <button
           className="filter-results-button"
-          onClick={handleClicksToFilterResultsButton}
+          onClick={handleClicksToDateFilterButton}
         ></button>
         <div className="vertical-divider-thin" />
+
+        {/* unissued only filter */}
         <button
           className="display-unissued-only-button"
           onClick={handleClicksToDisplayUnissuedOnlyButton}
         ></button>
+
+        {/* unpaid only filter */}
         <button
           className="display-unpaid-only-button"
           onClick={handleClicksToDisplayUnpaidOnlyButton}
         ></button>
+
+        {/* filtered results */}
         <div className="number-of-results">{`${invoicesAll.length}件`}</div>
       </div>
     </div>
