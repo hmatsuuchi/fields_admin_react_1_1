@@ -11,13 +11,12 @@ $grey: #3a3939;
 
 #staged-changes-container {
   position: fixed;
-  bottom: 5rem;
+  bottom: 0.5rem;
   left: 0;
 
   padding: 1rem;
 
   background-color: $yellow;
-  opacity: 1;
 
   box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
 
@@ -36,7 +35,7 @@ $grey: #3a3939;
 
     padding: 0.45rem 0.6rem;
 
-    max-height: 14.8rem;
+    max-height: 9.5rem;
     overflow-y: auto;
 
     display: grid;

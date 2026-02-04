@@ -12,6 +12,11 @@ $grey: #3a3939;
 #invoice-status-all {
   margin-top: 2.75rem;
 
+  .loading-spinner-container {
+    margin-top: 0;
+    margin-bottom: 110vh;
+  }
+
   #display-descriptors-container {
     justify-self: center;
 
@@ -32,6 +37,8 @@ $grey: #3a3939;
     .invoice-container {
       position: relative;
 
+      overflow: hidden;
+
       padding: 1rem;
       padding-bottom: 0.5rem;
 
@@ -46,13 +53,24 @@ $grey: #3a3939;
       .display-student-only-button {
         position: absolute;
         top: 0;
-        left: 20%;
+        left: 17%;
 
         cursor: pointer;
 
-        width: 2rem;
-        height: 2rem;
-        background-color: pink;
+        width: 2.8rem;
+        height: 2.8rem;
+
+        border-radius: 0 0 0.6rem 0.6rem;
+        border-top: none;
+
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
+
+        background-color: $teal;
+
+        background-image: url("InvoiceStatusAll/img/isolate_icon.svg");
+        background-size: 75% auto;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
       }
 
       .invoice-header {

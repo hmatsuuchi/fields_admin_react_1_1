@@ -6,6 +6,8 @@ import "./InvoiceStatusAll.scss";
 /* COMPONENTS */
 import InvoiceStatusAllToolbar from "../toolbar/invoice/InvoiceStatusAllToolbar";
 import StagedChanges from "./InvoiceStatusAll/StagedChanges";
+/* LOADING SPINNER */
+import LoadingSpinner from "../micro/LoadingSpinner";
 
 function InvoiceStatusAll({
   csrfToken,
@@ -57,6 +59,9 @@ function InvoiceStatusAll({
   const [unpaidInvoiceTotalWithoutTax, setUnpaidInvoiceTotalWithoutTax] =
     useState(0);
 
+  // content loading state
+  const [contentLoading, setContentLoading] = useState(true);
+
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
@@ -79,10 +84,15 @@ function InvoiceStatusAll({
             if (response) {
               setInvoicesAll(response.data.invoices);
               setDisableToolbarButtons(false);
+              setContentLoading(false);
             }
           });
       } catch (e) {
         console.log(e);
+        window.alert("エラーが発生しました。ページをリロードしてください。");
+
+        setDisableToolbarButtons(false);
+        setContentLoading(false);
       }
     };
 
@@ -94,6 +104,9 @@ function InvoiceStatusAll({
   const fetchInvoicesAll = async (studentId) => {
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
+    // sets content loading state
+    setContentLoading(true);
 
     // resets invoices
     setInvoicesAll([]);
@@ -116,10 +129,14 @@ function InvoiceStatusAll({
           if (response) {
             setInvoicesAll(response.data.invoices);
             setDisableToolbarButtons(false);
+            setContentLoading(false);
           }
         });
     } catch (e) {
       console.log(e);
+      window.alert("エラーが発生しました。ページをリロードしてください。");
+      setDisableToolbarButtons(false);
+      setContentLoading(false);
     }
   };
 
@@ -260,27 +277,6 @@ function InvoiceStatusAll({
     fetchInvoicesAll(studentId);
   };
 
-  // debug
-  // useEffect(() => {
-  //   console.log(`selectedYear: ${selectedYear}`);
-  //   console.log(`selectedMonth: ${selectedMonth}`);
-  //   console.log(`displayUnissuedOnly: ${displayUnissuedOnly}`);
-  //   console.log(`displayUnpaidOnly: ${displayUnpaidOnly}`);
-  //   console.log(`displayStudentOnly.id: ${displayStudentOnly.id}`);
-  //   console.log(
-  //     `displayStudentOnly.nameKanji: ${displayStudentOnly.nameKanji}`,
-  //   );
-  //   console.log(`textFilterInput: ${textFilterInput}`);
-  //   console.log("------------------");
-  // }, [
-  //   selectedYear,
-  //   selectedMonth,
-  //   displayUnissuedOnly,
-  //   displayUnpaidOnly,
-  //   displayStudentOnly,
-  //   textFilterInput,
-  // ]);
-
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -293,194 +289,203 @@ function InvoiceStatusAll({
             <li key={`display-descriptor-${index}`}>{descriptor}</li>
           ))}
         </ul>
-        <div id="invoice-list-container">
-          {invoicesAll.map((invoice) => {
-            let subtotal = 0; // subtotal value for each invoice
-            let taxTotal = 0; // tax total value for each invoice
-            let total = 0; // total value for each invoice
+        {contentLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div id="invoice-list-container">
+            {invoicesAll.map((invoice) => {
+              let subtotal = 0; // subtotal value for each invoice
+              let taxTotal = 0; // tax total value for each invoice
+              let total = 0; // total value for each invoice
 
-            // calculates subtotal, tax total, and total for each invoice
-            invoice.invoice_items.forEach((item) => {
-              subtotal += item.quantity * item.rate;
-              taxTotal += item.quantity * item.rate * (item.tax_rate / 100);
-              total = subtotal + taxTotal;
-            });
+              // calculates subtotal, tax total, and total for each invoice
+              invoice.invoice_items.forEach((item) => {
+                subtotal += item.quantity * item.rate;
+                taxTotal += item.quantity * item.rate * (item.tax_rate / 100);
+                total = subtotal + taxTotal;
+              });
 
-            return (
-              <div className="invoice-container" key={invoice.id}>
-                {/* display student only button */}
-                <div
-                  className="display-student-only-button"
-                  onClick={() =>
-                    handleClicksToDisplayStudentOnlyButton(
-                      invoice.student.id,
-                      `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
-                    )
-                  }
-                />
-                <div className="invoice-header">
-                  <div>{invoice.customer_name}</div>
-                  <div className="customer-name-romaji">{`${invoice.student.last_name_romaji}, ${invoice.student.first_name_romaji}`}</div>
-                  <div className="invoice-year-month">
-                    {invoice.year}年{invoice.month}月
+              return (
+                <div className="invoice-container" key={invoice.id}>
+                  {/* display student only button */}
+                  <div
+                    className="display-student-only-button"
+                    onClick={() =>
+                      handleClicksToDisplayStudentOnlyButton(
+                        invoice.student.id,
+                        `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
+                      )
+                    }
+                  />
+                  <div className="invoice-header">
+                    <div>{invoice.customer_name}</div>
+                    <div className="customer-name-romaji">{`${invoice.student.last_name_romaji}, ${invoice.student.first_name_romaji}`}</div>
+                    <div className="invoice-year-month">
+                      {invoice.year}年{invoice.month}月
+                    </div>
+                    <div className="invoice-total">
+                      ¥{total.toLocaleString("ja-JP")}
+                    </div>
                   </div>
-                  <div className="invoice-total">
-                    ¥{total.toLocaleString("ja-JP")}
+
+                  <div className="invoice-status-container">
+                    {/* invoice created status */}
+                    <div
+                      className={`invoice-creation-container ${
+                        invoice.creation_date !== null &&
+                        invoice.creation_date !== ""
+                          ? "created"
+                          : ""
+                      } ${invoice.creation_date_updated ? "updated" : ""}`}
+                    >
+                      <div
+                        className="status-text"
+                        onClick={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "creation_date",
+                            new Date().toISOString().slice(0, 10),
+                            invoice.creation_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      >
+                        作成日
+                      </div>
+                      <input
+                        type="date"
+                        className="date-input"
+                        value={
+                          invoice.creation_date === null
+                            ? ""
+                            : invoice.creation_date
+                        }
+                        onChange={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "creation_date",
+                            e.target.value,
+                            invoice.creation_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      />
+                    </div>
+                    {/* invoice issued status */}
+                    <div
+                      className={`invoice-issued-container ${
+                        invoice.issued_date !== null &&
+                        invoice.issued_date !== ""
+                          ? "issued"
+                          : ""
+                      } ${invoice.issued_date_updated ? "updated" : ""}`}
+                    >
+                      <div
+                        className="status-text"
+                        onClick={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "issued_date",
+                            dateToday,
+                            invoice.issued_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      >
+                        {invoice.issued_date ? "発行日" : "未発行"}
+                      </div>
+                      <input
+                        type="date"
+                        className="date-input"
+                        value={
+                          invoice.issued_date === null
+                            ? ""
+                            : invoice.issued_date
+                        }
+                        onChange={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "issued_date",
+                            e.target.value,
+                            invoice.issued_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      />
+                    </div>
+                    {/* invoice paid status */}
+                    <div
+                      className={`invoice-paid-container ${
+                        invoice.paid_date !== null && invoice.paid_date !== ""
+                          ? "paid"
+                          : ""
+                      } ${invoice.paid_date_updated ? "updated" : ""}`}
+                    >
+                      <div
+                        className="status-text"
+                        onClick={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "paid_date",
+                            dateToday,
+                            invoice.paid_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      >
+                        {invoice.paid_date ? "支払日" : "未払"}
+                      </div>
+                      <input
+                        type="date"
+                        className="date-input"
+                        value={
+                          invoice.paid_date === null ? "" : invoice.paid_date
+                        }
+                        onChange={(e) =>
+                          handleDateInputChange(
+                            invoice.id,
+                            "paid_date",
+                            e.target.value,
+                            invoice.paid_date,
+                            invoice.customer_name,
+                            invoice.year,
+                            invoice.month,
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="invoice-timestamps">
+                    <div>
+                      {invoice.date_time_created.slice(0, 10)}{" "}
+                      {invoice.date_time_created.slice(11, 16)}
+                    </div>
+                    <div>
+                      {invoice.date_time_modified.slice(0, 10)}{" "}
+                      {invoice.date_time_modified.slice(11, 16)}
+                    </div>
+                    <div className="invoice-id">
+                      {("000000" + invoice.id).slice(-7)}
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+          </div>
+        )}
 
-                <div className="invoice-status-container">
-                  {/* invoice created status */}
-                  <div
-                    className={`invoice-creation-container ${
-                      invoice.creation_date !== null &&
-                      invoice.creation_date !== ""
-                        ? "created"
-                        : ""
-                    } ${invoice.creation_date_updated ? "updated" : ""}`}
-                  >
-                    <div
-                      className="status-text"
-                      onClick={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "creation_date",
-                          new Date().toISOString().slice(0, 10),
-                          invoice.creation_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    >
-                      作成日
-                    </div>
-                    <input
-                      type="date"
-                      className="date-input"
-                      value={
-                        invoice.creation_date === null
-                          ? ""
-                          : invoice.creation_date
-                      }
-                      onChange={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "creation_date",
-                          e.target.value,
-                          invoice.creation_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    />
-                  </div>
-                  {/* invoice issued status */}
-                  <div
-                    className={`invoice-issued-container ${
-                      invoice.issued_date !== null && invoice.issued_date !== ""
-                        ? "issued"
-                        : ""
-                    } ${invoice.issued_date_updated ? "updated" : ""}`}
-                  >
-                    <div
-                      className="status-text"
-                      onClick={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "issued_date",
-                          dateToday,
-                          invoice.issued_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    >
-                      {invoice.issued_date ? "発行日" : "未発行"}
-                    </div>
-                    <input
-                      type="date"
-                      className="date-input"
-                      value={
-                        invoice.issued_date === null ? "" : invoice.issued_date
-                      }
-                      onChange={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "issued_date",
-                          e.target.value,
-                          invoice.issued_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    />
-                  </div>
-                  {/* invoice paid status */}
-                  <div
-                    className={`invoice-paid-container ${
-                      invoice.paid_date !== null && invoice.paid_date !== ""
-                        ? "paid"
-                        : ""
-                    } ${invoice.paid_date_updated ? "updated" : ""}`}
-                  >
-                    <div
-                      className="status-text"
-                      onClick={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "paid_date",
-                          dateToday,
-                          invoice.paid_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    >
-                      {invoice.paid_date ? "支払日" : "未払"}
-                    </div>
-                    <input
-                      type="date"
-                      className="date-input"
-                      value={
-                        invoice.paid_date === null ? "" : invoice.paid_date
-                      }
-                      onChange={(e) =>
-                        handleDateInputChange(
-                          invoice.id,
-                          "paid_date",
-                          e.target.value,
-                          invoice.paid_date,
-                          invoice.customer_name,
-                          invoice.year,
-                          invoice.month,
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="invoice-timestamps">
-                  <div>
-                    {invoice.date_time_created.slice(0, 10)}{" "}
-                    {invoice.date_time_created.slice(11, 16)}
-                  </div>
-                  <div>
-                    {invoice.date_time_modified.slice(0, 10)}{" "}
-                    {invoice.date_time_modified.slice(11, 16)}
-                  </div>
-                  <div className="invoice-id">
-                    {("000000" + invoice.id).slice(-7)}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* staged changes component */}
         <StagedChanges
           csrfToken={csrfToken}
           setInvoicesAll={setInvoicesAll}
@@ -516,6 +521,7 @@ function InvoiceStatusAll({
         setAppliedFilters={setAppliedFilters}
         textFilterInput={textFilterInput}
         setTextFilterInput={setTextFilterInput}
+        setContentLoading={setContentLoading}
       />
       <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>

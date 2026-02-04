@@ -1,3 +1,5 @@
+$grey: #3a3939;
+
 #toolbar-back-button {
   border-radius: 0.2rem;
   padding: 0.2rem 0.5rem 0.2rem 1.5rem;
@@ -12,4 +14,8 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 50%;
+}
+
+#toolbar-back-button:focus {
+  outline: $grey solid 2px;
 }

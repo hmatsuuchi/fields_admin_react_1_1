@@ -43,6 +43,9 @@ function InvoiceStatusAllToolbar({
   setDisplayStudentOnly,
   textFilterInput,
   setTextFilterInput,
+
+  // content loading state
+  setContentLoading,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -53,7 +56,10 @@ function InvoiceStatusAllToolbar({
   /* ----------------------------------------------- */
 
   // Handle Clicks to Date Filter Button
-  const handleClicksToDateFilterButton = () => {
+  const handleClicksToDateFilterButton = (e) => {
+    // blur button
+    e.target.blur();
+
     // resets filter states
     setDisplayUnissuedOnly(false);
     setDisplayUnpaidOnly(false);
@@ -65,6 +71,9 @@ function InvoiceStatusAllToolbar({
 
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
+    // set content loading state
+    setContentLoading(true);
 
     // clears invoices all state
     setInvoicesAll([]);
@@ -90,7 +99,10 @@ function InvoiceStatusAllToolbar({
           .then((response) => {
             if (response) {
               setInvoicesAll(response.data.invoices);
+
               setDisableToolbarButtons(false);
+              setContentLoading(false);
+
               setAppliedFilters({
                 selectedYear: selectedYear,
                 selectedMonth: selectedMonth,
@@ -101,6 +113,9 @@ function InvoiceStatusAllToolbar({
           });
       } catch (e) {
         console.log(e);
+        window.alert("エラーが発生しました。ページをリロードしてください。");
+        setDisableToolbarButtons(false);
+        setContentLoading(false);
       }
     };
 
@@ -109,9 +124,15 @@ function InvoiceStatusAllToolbar({
   };
 
   // Handle Clicks to Display Unissued Only Button
-  const handleClicksToDisplayUnissuedOnlyButton = () => {
+  const handleClicksToDisplayUnissuedOnlyButton = (e) => {
+    // blurs button
+    e.target.blur();
+
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
+    // set content loading state
+    setContentLoading(true);
 
     // clears invoices all state
     setInvoicesAll([]);
@@ -148,6 +169,7 @@ function InvoiceStatusAllToolbar({
             if (response) {
               setInvoicesAll(response.data.invoices);
               setDisableToolbarButtons(false);
+              setContentLoading(false);
               setAppliedFilters({
                 selectedYear: "",
                 selectedMonth: "",
@@ -158,6 +180,9 @@ function InvoiceStatusAllToolbar({
           });
       } catch (e) {
         console.log(e);
+        window.alert("エラーが発生しました。ページをリロードしてください。");
+        setDisableToolbarButtons(false);
+        setContentLoading(false);
       }
     };
 
@@ -166,9 +191,15 @@ function InvoiceStatusAllToolbar({
   };
 
   // Handle Clicks to Display Unpaid Only Button
-  const handleClicksToDisplayUnpaidOnlyButton = () => {
+  const handleClicksToDisplayUnpaidOnlyButton = (e) => {
+    // blurs button
+    e.target.blur();
+
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
+    // set content loading state
+    setContentLoading(true);
 
     // clears invoices all state
     setInvoicesAll([]);
@@ -205,6 +236,7 @@ function InvoiceStatusAllToolbar({
             if (response) {
               setInvoicesAll(response.data.invoices);
               setDisableToolbarButtons(false);
+              setContentLoading(false);
               setAppliedFilters({
                 selectedYear: "",
                 selectedMonth: "",
@@ -215,6 +247,9 @@ function InvoiceStatusAllToolbar({
           });
       } catch (e) {
         console.log(e);
+        window.alert("エラーが発生しました。ページをリロードしてください。");
+        setDisableToolbarButtons(false);
+        setContentLoading(false);
       }
     };
 
@@ -223,25 +258,36 @@ function InvoiceStatusAllToolbar({
   };
 
   // Handle Clicks to Text Filter Button
-  const handleClicksToTextFilterButton = () => {
+  const handleClicksToTextFilterButton = (e) => {
+    // blurs button
+    e.target.blur();
+
+    // gets date today
+    const today = new Date();
+    const yearToday = today.getFullYear();
+    const monthToday = today.getMonth() + 1;
+
     // disables toolbar buttons
     setDisableToolbarButtons(true);
+
+    // set content loading state
+    setContentLoading(true);
 
     // clears invoices all state
     setInvoicesAll([]);
 
     // resets applied filters
     setAppliedFilters({
-      selectedYear: "",
-      selectedMonth: "",
+      selectedYear: textFilterInput ? "" : yearToday,
+      selectedMonth: textFilterInput ? "" : monthToday,
       displayUnissuedOnly: false,
       displayUnpaidOnly: false,
       textFilter: "",
     });
 
     // resets filter states
-    setSelectedYear("");
-    setSelectedMonth("");
+    setSelectedYear(textFilterInput ? "" : yearToday);
+    setSelectedMonth(textFilterInput ? "" : monthToday);
     setDisplayUnissuedOnly(false);
     setDisplayUnpaidOnly(false);
     setDisplayStudentOnly({
@@ -262,6 +308,7 @@ function InvoiceStatusAllToolbar({
             if (response) {
               setInvoicesAll(response.data.invoices);
               setDisableToolbarButtons(false);
+              setContentLoading(false);
               setAppliedFilters({
                 selectedYear: "",
                 selectedMonth: "",
@@ -273,11 +320,25 @@ function InvoiceStatusAllToolbar({
           });
       } catch (e) {
         console.log(e);
+        window.alert("エラーが発生しました。ページをリロードしてください。");
+        setDisableToolbarButtons(false);
+        setContentLoading(false);
       }
     };
 
     // drives code
     fetchInvoicesAll();
+  };
+
+  // Handle Key Up On Text Search Filter Input
+  const handleKeyUpOnTextSearchFilterInput = (e) => {
+    if (e.key === "Enter") {
+      // blurs input field
+      e.target.blur();
+
+      // runs text search
+      handleClicksToTextFilterButton();
+    }
   };
 
   // updates display descriptors
@@ -350,6 +411,7 @@ function InvoiceStatusAllToolbar({
           onChange={(e) => {
             setTextFilterInput(e.target.value);
           }}
+          onKeyUp={handleKeyUpOnTextSearchFilterInput}
         />
         <button
           className="filter-results-button"
