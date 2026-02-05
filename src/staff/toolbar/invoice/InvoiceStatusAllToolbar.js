@@ -57,6 +57,17 @@ function InvoiceStatusAllToolbar({
 
   // Handle Clicks to Date Filter Button
   const handleClicksToDateFilterButton = (e) => {
+    // today's date
+    const today = new Date();
+    const yearToday = today.getFullYear();
+    const monthToday = today.getMonth() + 1;
+
+    // chcecks if year and month are selected
+    if (selectedYear === "" || selectedMonth === "") {
+      setSelectedYear(yearToday);
+      setSelectedMonth(monthToday);
+    }
+
     // blur button
     e.target.blur();
 
@@ -92,8 +103,8 @@ function InvoiceStatusAllToolbar({
         await instance
           .get("api/invoices/invoices/status/all/", {
             params: {
-              year: selectedYear,
-              month: selectedMonth,
+              year: selectedYear !== "" ? selectedYear : yearToday,
+              month: selectedMonth !== "" ? selectedMonth : monthToday,
             },
           })
           .then((response) => {
@@ -104,8 +115,9 @@ function InvoiceStatusAllToolbar({
               setContentLoading(false);
 
               setAppliedFilters({
-                selectedYear: selectedYear,
-                selectedMonth: selectedMonth,
+                selectedYear: selectedYear !== "" ? selectedYear : yearToday,
+                selectedMonth:
+                  selectedMonth !== "" ? selectedMonth : monthToday,
                 displayUnissuedOnly: false,
                 displayUnpaidOnly: false,
               });
@@ -333,11 +345,8 @@ function InvoiceStatusAllToolbar({
   // Handle Key Up On Text Search Filter Input
   const handleKeyUpOnTextSearchFilterInput = (e) => {
     if (e.key === "Enter") {
-      // blurs input field
-      e.target.blur();
-
       // runs text search
-      handleClicksToTextFilterButton();
+      handleClicksToTextFilterButton(e);
     }
   };
 
@@ -412,10 +421,12 @@ function InvoiceStatusAllToolbar({
             setTextFilterInput(e.target.value);
           }}
           onKeyUp={handleKeyUpOnTextSearchFilterInput}
+          tabIndex={1}
         />
         <button
           className="filter-results-button"
           onClick={handleClicksToTextFilterButton}
+          tabIndex={2}
         ></button>
         <div className="vertical-divider-thin" />
 
@@ -426,6 +437,7 @@ function InvoiceStatusAllToolbar({
           onChange={(e) => {
             setSelectedYear(e.target.value);
           }}
+          tabIndex={3}
         >
           <option value={""}>-------</option>
           <option value={2026}>2026年</option>
@@ -435,6 +447,7 @@ function InvoiceStatusAllToolbar({
           className="month-select"
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(e.target.value)}
+          tabIndex={4}
         >
           <option value={""}>-------</option>
           <option value={1}>1月</option>
@@ -453,19 +466,22 @@ function InvoiceStatusAllToolbar({
         <button
           className="filter-results-button"
           onClick={handleClicksToDateFilterButton}
+          tabIndex={5}
         ></button>
         <div className="vertical-divider-thin" />
 
         {/* unissued only filter */}
         <button
-          className="display-unissued-only-button"
+          className={`display-unissued-only-button${displayUnissuedOnly ? " active" : ""}`}
           onClick={handleClicksToDisplayUnissuedOnlyButton}
+          tabIndex={6}
         ></button>
 
         {/* unpaid only filter */}
         <button
-          className="display-unpaid-only-button"
+          className={`display-unpaid-only-button${displayUnpaidOnly ? " active" : ""}`}
           onClick={handleClicksToDisplayUnpaidOnlyButton}
+          tabIndex={7}
         ></button>
 
         {/* filtered results */}

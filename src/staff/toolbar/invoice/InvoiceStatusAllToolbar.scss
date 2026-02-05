@@ -113,14 +113,37 @@ $grey: #3a3939;
       width: 2rem;
       aspect-ratio: 1 / 1;
 
-      border: solid 1px #ffffff;
+      border: solid 2px #ffffff;
       border-radius: 0.3rem;
+    }
 
-      background-color: pink;
+    .display-unissued-only-button {
+      background-image: url("img/unissued_icon.svg");
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 80% auto;
     }
 
     .display-unpaid-only-button {
       margin-left: 0.5rem;
+
+      background-image: url("img/unpaid_icon.svg");
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 80% auto;
+    }
+
+    .display-unissued-only-button.active,
+    .display-unpaid-only-button.active {
+      background-color: #ffffff;
+    }
+
+    .display-unissued-only-button.active {
+      background-image: url("img/unissued_icon_teal.svg");
+    }
+
+    .display-unpaid-only-button.active {
+      background-image: url("img/unpaid_icon_teal.svg");
     }
 
     .number-of-results {

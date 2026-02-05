@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="265.99902"
+   height="133.86646"
+   viewBox="0 0 265.99903 133.86645"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer-MC1"
+     transform="translate(-6161.9251,-1268.8991)">
+    <path
+       id="path64"
+       d="M 4301.7773,1672.2448 H 6858.3394 V -148.66802 H 4301.7773 Z"
+       style="fill:#00b8a9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.33333" />
+    <g
+       id="layer7">
+      <rect
+         style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:35;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         id="rect4"
+         width="327.04529"
+         height="327.04529"
+         x="6131.4023"
+         y="1172.3097"
+         rx="18.897638"
+         ry="18.897638" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:35;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         id="rect5"
+         width="327.04529"
+         height="327.04529"
+         x="6131.4023"
+         y="1172.3097"
+         rx="18.897638"
+         ry="18.897638" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.333px;line-height:137.56px;font-family:'Hiragino Maru Gothic ProN';-inkscape-font-specification:'Hiragino Maru Gothic ProN, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#00b8a9;fill-opacity:1;stroke:#00b8a9;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         x="6294.9248"
+         y="1386.5656"
+         id="text6"><tspan
+           x="6294.9248"
+           y="1386.5656"
+           id="tspan6"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:133.333px;line-height:137.56px;font-family:'Hiragino Maru Gothic ProN';-inkscape-font-specification:'Hiragino Maru Gothic ProN, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#00b8a9;fill-opacity:1;stroke:#00b8a9;stroke-width:10;stroke-dasharray:none;stroke-opacity:1">未払</tspan></text>
+    </g>
+  </g>
+</svg>
