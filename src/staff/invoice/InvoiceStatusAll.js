@@ -6,6 +6,8 @@ import "./InvoiceStatusAll.scss";
 /* COMPONENTS */
 import InvoiceStatusAllToolbar from "../toolbar/invoice/InvoiceStatusAllToolbar";
 import StagedChanges from "./InvoiceStatusAll/StagedChanges";
+/* LIVE INPUT FILTER */
+import LiveInputFilter from "./InvoiceStatusAll/LiveInputFilter";
 /* LOADING SPINNER */
 import LoadingSpinner from "../micro/LoadingSpinner";
 
@@ -62,6 +64,9 @@ function InvoiceStatusAll({
   // content loading state
   const [contentLoading, setContentLoading] = useState(true);
 
+  // live filter text input
+  const [liveFilterTextInput, setLiveFilterTextInput] = useState("");
+
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
@@ -100,7 +105,7 @@ function InvoiceStatusAll({
     fetchInvoicesAll();
   }, []);
 
-  // fetches invoices for clicks to display student only button
+  // fetches invoices for manual clicks to various filters in toolbar
   const fetchInvoicesAll = async (studentId) => {
     // disables toolbar buttons
     setDisableToolbarButtons(true);
@@ -127,7 +132,10 @@ function InvoiceStatusAll({
         })
         .then((response) => {
           if (response) {
+            // sets invoice data with response from server
             setInvoicesAll(response.data.invoices);
+
+            // re-enables toolbar buttons and content
             setDisableToolbarButtons(false);
             setContentLoading(false);
           }
@@ -306,7 +314,10 @@ function InvoiceStatusAll({
               });
 
               return (
-                <div className="invoice-container" key={invoice.id}>
+                <div
+                  className={`invoice-container${invoice.matchesLiveFilter ? " matches-filter" : ""}`}
+                  key={invoice.id}
+                >
                   {/* display student only button */}
                   <div
                     className="display-student-only-button"
@@ -495,6 +506,16 @@ function InvoiceStatusAll({
           setDisableToolbarButtons={setDisableToolbarButtons}
         />
       </section>
+
+      {/* live input filter component */}
+      <LiveInputFilter
+        liveFilterTextInput={liveFilterTextInput}
+        setLiveFilterTextInput={setLiveFilterTextInput}
+        invoicesAll={invoicesAll}
+        setInvoicesAll={setInvoicesAll}
+      />
+
+      {/* toolbar */}
       <InvoiceStatusAllToolbar
         disableToolbarButtons={disableToolbarButtons}
         setDisableToolbarButtons={setDisableToolbarButtons}
