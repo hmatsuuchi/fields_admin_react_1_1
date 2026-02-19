@@ -22,6 +22,82 @@ $grey: #3a3939;
   display: grid;
   align-items: center;
   justify-content: start;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  grid-column-gap: 0.5rem;
+
+  .toolbar-right-side-container {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+
+    display: grid;
+    grid-auto-flow: column;
+
+    select {
+      background-color: #ffffff;
+
+      border: solid 1px #000000;
+      border-radius: 0.3rem;
+
+      font-size: 1rem;
+
+      padding: 0.3rem;
+    }
+
+    select.month-select {
+      margin-left: 0.5rem;
+    }
+
+    select:focus {
+      outline: $grey solid 2px;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    button:focus-visible {
+      outline: $grey solid 2px;
+    }
+
+    .vertical-divider-thin {
+      width: 1px;
+      height: 100%;
+
+      background-color: #ffffff;
+      margin: 0 0.5rem;
+    }
+
+    .filter-results-button {
+      justify-self: right;
+
+      width: 2rem;
+      aspect-ratio: 1 / 1;
+
+      border: solid 2px #ffffff;
+      border-radius: 0.3rem;
+
+      margin-left: 0.5rem;
+
+      background-image: url("img/refresh_icon.svg");
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: auto 65%;
+    }
+
+    .number-of-results {
+      width: 4.1rem;
+
+      text-align: center;
+
+      margin-left: 0.5rem;
+
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+  }
 }
 
 /* prevents clicks to the toolbar before API call is complete */

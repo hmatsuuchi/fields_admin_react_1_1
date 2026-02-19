@@ -11,33 +11,90 @@ $grey: #3a3939;
 
 #live-input-filter {
   position: fixed;
-  left: 1rem;
+  left: 0.5rem;
   top: 2.7rem;
 
-  background-color: $teal;
+  transform: translateY(-4.2rem);
 
-  padding: 1.1rem 1.5rem 1.1rem 1.5rem;
+  transition-duration: 400ms;
+  transition-timing-function: ease-in-out;
 
-  box-shadow: 0 0 0.3rem 0.15rem rgba(0, 0, 0, 0.2);
+  display: grid;
+  justify-items: center;
 
-  border-radius: 0 0 0.3rem 0.3rem;
+  .input-container {
+    background-color: $teal;
 
-  input {
-    height: 2rem;
+    padding: 1.1rem 1.5rem 1.1rem 1.5rem;
 
-    max-width: 15rem;
+    border-radius: 0 0 0.3rem 0.3rem;
 
-    border: none;
-    border-radius: 0.3rem;
+    input {
+      pointer-events: none;
 
-    color: $grey;
-    font-size: 1.2rem;
-    text-align: center;
+      height: 2rem;
 
-    padding: 0 0.5rem;
+      max-width: 15rem;
+
+      border: none;
+      border-radius: 0.3rem;
+
+      color: $grey;
+      font-size: 1.2rem;
+      text-align: center;
+
+      padding: 0 0.5rem;
+    }
+
+    input:focus {
+      outline: 2px solid $grey;
+    }
   }
 
-  input:focus {
-    outline: 2px solid $grey;
+  .open-close-tab {
+    z-index: -1;
+
+    padding: 0.4rem 2rem 0.6rem 2rem;
+
+    background-color: $teal;
+
+    box-shadow: 0 0 0.3rem 0.15rem rgba(0, 0, 0, 0.2);
+
+    cursor: pointer;
+
+    border-radius: 0 0 0.3rem 0.3rem;
+
+    display: grid;
+    place-items: center;
+
+    .arrow {
+      height: 0.5rem;
+      width: 0.5rem;
+
+      transform: rotate(45deg);
+
+      border-right: solid 2px #ffffff;
+      border-bottom: solid 2px #ffffff;
+
+      transition-duration: 400ms;
+    }
+  }
+}
+
+#live-input-filter.open {
+  transform: translateY(0);
+
+  .input-container {
+    input {
+      pointer-events: auto;
+    }
+  }
+
+  .open-close-tab {
+    padding: 0.6rem 2rem 0.4rem 2rem;
+
+    .arrow {
+      transform: rotate(225deg);
+    }
   }
 }

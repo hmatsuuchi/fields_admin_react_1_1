@@ -7,6 +7,8 @@ function LiveInputFilter({
   setLiveFilterTextInput,
   invoicesAll,
   setInvoicesAll,
+  liveFilterTextInputIsOpen,
+  setLiveFilterTextInputIsOpen,
 }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
@@ -54,18 +56,47 @@ function LiveInputFilter({
     );
   }, [liveFilterTextInput, invoicesAll, setInvoicesAll]);
 
+  // handle clicks to open/close button
+  const handleClicksToOpenCloseButton = () => {
+    // run only when opening
+    if (!liveFilterTextInputIsOpen) {
+      // focus the input after animation
+      setTimeout(() => {
+        const inputElement = document.getElementById("live-input-filter-input");
+        if (inputElement) {
+          inputElement.focus();
+        }
+      }, 300); // match with CSS animation duration
+    } else {
+      // clear the input when closing
+      setLiveFilterTextInput("");
+    }
+
+    setLiveFilterTextInputIsOpen(!liveFilterTextInputIsOpen);
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
 
   return (
-    <div id="live-input-filter">
-      <input
-        value={liveFilterTextInput}
-        onChange={(e) => {
-          setLiveFilterTextInput(e.target.value);
-        }}
-      />
+    <div
+      id="live-input-filter"
+      className={liveFilterTextInputIsOpen ? "open" : ""}
+    >
+      <div className="input-container">
+        <input
+          id="live-input-filter-input"
+          value={liveFilterTextInput}
+          onChange={(e) => {
+            setLiveFilterTextInput(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="open-close-tab" onClick={handleClicksToOpenCloseButton}>
+        <div className="arrow"></div>
+      </div>
     </div>
   );
 }

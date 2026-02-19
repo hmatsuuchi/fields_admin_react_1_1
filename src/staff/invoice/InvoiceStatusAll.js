@@ -22,7 +22,15 @@ function InvoiceStatusAll({
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
-  const currentDate = new Date();
+  // gets current date in Japan timezone as string
+  const currentDate = new Date()
+    .toLocaleDateString("ja-JP", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .replaceAll("/", "-");
 
   const [invoicesAll, setInvoicesAll] = useState([]);
   const [stagedChanges, setStagedChanges] = useState([]);
@@ -32,10 +40,10 @@ function InvoiceStatusAll({
 
   // filter parameters
   const [selectedYear, setSelectedYear] = React.useState(
-    parseInt(currentDate.toISOString().slice(0, 4)),
+    parseInt(currentDate.slice(0, 4)),
   );
   const [selectedMonth, setSelectedMonth] = React.useState(
-    parseInt(currentDate.toISOString().slice(5, 7)),
+    parseInt(currentDate.slice(5, 7)),
   );
   const [displayUnissuedOnly, setDisplayUnissuedOnly] = useState(false);
   const [displayUnpaidOnly, setDisplayUnpaidOnly] = useState(false);
@@ -66,6 +74,8 @@ function InvoiceStatusAll({
 
   // live filter text input
   const [liveFilterTextInput, setLiveFilterTextInput] = useState("");
+  const [liveFilterTextInputIsOpen, setLiveFilterTextInputIsOpen] =
+    useState(false);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -75,14 +85,12 @@ function InvoiceStatusAll({
   useEffect(() => {
     // fetches all invoices based on selected year and month
     const fetchInvoicesAll = async () => {
-      const currentDate = new Date();
-
       try {
         await instance
           .get("api/invoices/invoices/status/all/", {
             params: {
-              year: currentDate.toISOString().slice(0, 4),
-              month: currentDate.toISOString().slice(5, 7),
+              year: currentDate.slice(0, 4),
+              month: currentDate.slice(5, 7),
             },
           })
           .then((response) => {
@@ -103,7 +111,7 @@ function InvoiceStatusAll({
 
     // drives code
     fetchInvoicesAll();
-  }, []);
+  }, [currentDate]);
 
   // fetches invoices for manual clicks to various filters in toolbar
   const fetchInvoicesAll = async (studentId) => {
@@ -176,7 +184,7 @@ function InvoiceStatusAll({
 
     let updatedRecordFlag = false;
 
-    // if no existing record, add new record to stagedChanges
+    // (1) if no existing record, add new record to stagedChanges
     if (createNewRecord && valueIsChanged) {
       updatedRecordFlag = true;
 
@@ -193,7 +201,8 @@ function InvoiceStatusAll({
         ...prevStagedChanges,
       ]);
     }
-    // if existing record found, update the newValue
+
+    // (2) if existing record found, update the newValue
     else if (updateExistingRecord && valueIsChanged) {
       updatedRecordFlag = true;
 
@@ -205,9 +214,13 @@ function InvoiceStatusAll({
         ),
       );
     }
-    // if existing record's originalValue matches newValue, remove the record
+
+    // (3) if existing record's originalValue matches newValue, remove the record
     else {
-      updatedRecordFlag = false;
+      // if values differ, mark as updated
+      if (!valueIsChanged) {
+        updatedRecordFlag = true;
+      }
 
       setStagedChanges((prevStagedChanges) =>
         prevStagedChanges.filter(
@@ -233,11 +246,18 @@ function InvoiceStatusAll({
           : invoice,
       ),
     );
+
+    // refocus on quick search input if active
+    if (liveFilterTextInputIsOpen) {
+      const inputElement = document.getElementById("live-input-filter-input");
+      if (inputElement) {
+        inputElement.focus();
+        inputElement.select();
+      }
+    }
   };
 
   // gets current date
-  const dateToday = new Date().toISOString().slice(0, 10);
-
   useEffect(() => {
     let workingInvoiceTotal = 0;
     let workingUnpaidInvoiceTotal = 0;
@@ -265,6 +285,9 @@ function InvoiceStatusAll({
     studentId,
     studentNameKanji,
   ) => {
+    // resets staged changes
+    setStagedChanges([]);
+
     // clears all filters
     setSelectedYear("");
     setSelectedMonth("");
@@ -355,7 +378,7 @@ function InvoiceStatusAll({
                           handleDateInputChange(
                             invoice.id,
                             "creation_date",
-                            new Date().toISOString().slice(0, 10),
+                            currentDate.slice(0, 10),
                             invoice.creation_date,
                             invoice.customer_name,
                             invoice.year,
@@ -401,7 +424,7 @@ function InvoiceStatusAll({
                           handleDateInputChange(
                             invoice.id,
                             "issued_date",
-                            dateToday,
+                            currentDate.slice(0, 10),
                             invoice.issued_date,
                             invoice.customer_name,
                             invoice.year,
@@ -446,7 +469,7 @@ function InvoiceStatusAll({
                           handleDateInputChange(
                             invoice.id,
                             "paid_date",
-                            dateToday,
+                            currentDate.slice(0, 10),
                             invoice.paid_date,
                             invoice.customer_name,
                             invoice.year,
@@ -513,6 +536,8 @@ function InvoiceStatusAll({
         setLiveFilterTextInput={setLiveFilterTextInput}
         invoicesAll={invoicesAll}
         setInvoicesAll={setInvoicesAll}
+        liveFilterTextInputIsOpen={liveFilterTextInputIsOpen}
+        setLiveFilterTextInputIsOpen={setLiveFilterTextInputIsOpen}
       />
 
       {/* toolbar */}
@@ -530,6 +555,7 @@ function InvoiceStatusAll({
         selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
         setDisplayDescriptors={setDisplayDescriptors}
+        setStagedChanges={setStagedChanges}
         invoiceTotalWithoutTax={invoiceTotalWithoutTax}
         unpaidInvoiceTotalWithoutTax={unpaidInvoiceTotalWithoutTax}
         displayUnissuedOnly={displayUnissuedOnly}

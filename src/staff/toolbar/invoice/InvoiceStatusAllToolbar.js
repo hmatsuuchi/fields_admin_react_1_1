@@ -30,6 +30,9 @@ function InvoiceStatusAllToolbar({
   appliedFilters,
   setAppliedFilters,
 
+  // staged changes
+  setStagedChanges,
+
   // filter parameters
   selectedYear,
   setSelectedYear,
@@ -70,6 +73,9 @@ function InvoiceStatusAllToolbar({
 
     // blur button
     e.target.blur();
+
+    // resets staged changes
+    setStagedChanges([]);
 
     // resets filter states
     setDisplayUnissuedOnly(false);
@@ -149,6 +155,9 @@ function InvoiceStatusAllToolbar({
     // clears invoices all state
     setInvoicesAll([]);
 
+    // resets staged changes
+    setStagedChanges([]);
+
     // resets applied filters
     setAppliedFilters({
       selectedYear: "",
@@ -216,6 +225,9 @@ function InvoiceStatusAllToolbar({
     // clears invoices all state
     setInvoicesAll([]);
 
+    // resets staged changes
+    setStagedChanges([]);
+
     // resets applied filters
     setAppliedFilters({
       selectedYear: "",
@@ -279,6 +291,9 @@ function InvoiceStatusAllToolbar({
     const yearToday = today.getFullYear();
     const monthToday = today.getMonth() + 1;
 
+    // resets staged changes
+    setStagedChanges([]);
+
     // disables toolbar buttons
     setDisableToolbarButtons(true);
 
@@ -322,8 +337,8 @@ function InvoiceStatusAllToolbar({
               setDisableToolbarButtons(false);
               setContentLoading(false);
               setAppliedFilters({
-                selectedYear: "",
-                selectedMonth: "",
+                selectedYear: textFilterInput ? "" : yearToday,
+                selectedMonth: textFilterInput ? "" : monthToday,
                 displayUnissuedOnly: false,
                 displayUnpaidOnly: false,
                 textFilter: textFilterInput,
