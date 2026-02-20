@@ -42,7 +42,7 @@ function InvoiceListAllToolbar({
       verifiedMonth = currentMonth;
 
       setFilterParameters({
-        ...filterParameters,
+        display_student_only_id: null,
         year: currentYear,
         month: currentMonth,
       });

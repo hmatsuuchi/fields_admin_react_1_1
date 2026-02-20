@@ -15,12 +15,14 @@ $grey: #3a3939;
   min-height: 92vh;
 
   #invoice-list-container {
-    padding: 1rem;
+    padding: 1rem 1rem 15rem 1rem;
 
     display: grid;
     grid-row-gap: 1rem;
 
     .invoice-container {
+      position: relative;
+
       padding: 1rem;
       padding-bottom: 0.5rem;
 
@@ -31,6 +33,29 @@ $grey: #3a3939;
       display: grid;
       grid-row-gap: 1rem;
       grid-template-columns: repeat(2, 1fr);
+
+      .display-student-only-button {
+        position: absolute;
+        top: 0;
+        left: 17%;
+
+        cursor: pointer;
+
+        width: 2.8rem;
+        height: 2.8rem;
+
+        border-radius: 0 0 0.6rem 0.6rem;
+        border-top: none;
+
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
+
+        background-color: $teal;
+
+        background-image: url("InvoiceStatusAll/img/isolate_icon.svg");
+        background-size: 75% auto;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+      }
 
       .year-month {
         grid-row: 1;

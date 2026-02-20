@@ -28,6 +28,7 @@ function InvoiceListAll({
   const [filterParameters, setFilterParameters] = useState({
     year: currentYear,
     month: currentMonth,
+    display_student_only_id: null,
   });
 
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
@@ -38,7 +39,8 @@ function InvoiceListAll({
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
-  const fetchInvoicesAll = async () => {
+  // this is only used for the initial fetch of invoice data
+  const fetchInvoicesAllOnMount = async () => {
     // defaults to current year and month upon initial fetch
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -65,9 +67,52 @@ function InvoiceListAll({
     }
   };
 
+  // runs on mount to fetch all invoices for the current year and month by default
   useEffect(() => {
-    fetchInvoicesAll();
+    fetchInvoicesAllOnMount();
   }, []);
+
+  const fetchInvoicesAllWithParameters = async (studentId) => {
+    try {
+      await instance
+        .get("api/invoices/invoices/list/all/", {
+          params: {
+            display_student_only_id: studentId,
+          },
+        })
+        .then((response) => {
+          if (response) {
+            setInvoicesAll(response.data.invoices);
+            setDisableToolbarButtons(false);
+            setContentLoading(false);
+          }
+        });
+    } catch (e) {
+      setContentLoading(false);
+      console.log(e);
+    }
+  };
+
+  const handleClicksToDisplayStudentOnlyButton = (studentId, studentName) => {
+    // resets filter parameters
+    setFilterParameters({
+      year: "",
+      month: "",
+      display_student_only_id: studentId,
+    });
+
+    // resets invoice array
+    setInvoicesAll([]);
+
+    // disables toolbar buttons
+    setDisableToolbarButtons(true);
+
+    // enables content loading spinner
+    setContentLoading(true);
+
+    // fetches invoices
+    fetchInvoicesAllWithParameters(studentId);
+  };
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -87,6 +132,17 @@ function InvoiceListAll({
 
               return (
                 <div className="invoice-container" key={invoice.id}>
+                  {/* display student only button */}
+                  <div
+                    className="display-student-only-button"
+                    onClick={() =>
+                      handleClicksToDisplayStudentOnlyButton(
+                        invoice.student.id,
+                        `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
+                      )
+                    }
+                  />
+
                   <div className="customer-info-container">
                     <div>{invoice.customer_name}</div>
                     <div>〒{invoice.customer_postal_code}</div>
