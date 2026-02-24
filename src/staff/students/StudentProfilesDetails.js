@@ -83,25 +83,26 @@ function StudentProfilesDetails({
         setDisplayProfile={setDisplayProfile}
       />
 
-      {/* Text Descriptors */}
-      <DisplayDescriptors
-        displayTextArray={
-          displayProfile
-            ? [
-                `${
-                  profile
-                    ? profile.last_name_kanji && profile.first_name_kanji
-                      ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」の明細`
-                      : profile.last_name_kanji || profile.first_name_kanji
-                      ? `「${profile.last_name_kanji}${profile.first_name_kanji}」の明細`
+      <div className="card-section-full-width student-profiles-details">
+        {/* Text Descriptors */}
+        <DisplayDescriptors
+          displayTextArray={
+            displayProfile
+              ? [
+                  `${
+                    profile
+                      ? profile.last_name_kanji && profile.first_name_kanji
+                        ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」の明細`
+                        : profile.last_name_kanji || profile.first_name_kanji
+                          ? `「${profile.last_name_kanji}${profile.first_name_kanji}」の明細`
+                          : "明細"
                       : "明細"
-                    : "明細"
-                }を表示しています`,
-              ]
-            : []
-        }
-      />
-      <div className="card-section-full-width">
+                  }を表示しています`,
+                ]
+              : []
+          }
+        />
+
         {/* Profile */}
         {displayProfile ? (
           <StudentProfile

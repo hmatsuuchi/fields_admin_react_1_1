@@ -1,9 +1,21 @@
-$teal: #00B8A9;
-$beige: #F8F3D4;
-$red: #F6416C;
-$yellow: #FFDE7D;
+$teal: #00b8a9;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
 
 $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
+.card-section-full-width.student-profiles-details {
+  margin-top: 2.75rem;
+
+  height: calc(100vh - 2.75rem - 15rem);
+  overflow-y: scroll;
+
+  margin-bottom: 0;
+  padding-bottom: 15rem;
+
+  align-content: start;
+  align-items: start;
+}
