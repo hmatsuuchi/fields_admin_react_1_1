@@ -77,7 +77,7 @@ function StudentChurn() {
     Legend,
     PointElement,
     LineElement,
-    LineController
+    LineController,
   );
 
   const churnDataSliced = churnData.slice(-visibleCount);
@@ -87,15 +87,15 @@ function StudentChurn() {
       (dataPoint) =>
         `${String(dataPoint.year).slice(-2)}/${String(dataPoint.month).padStart(
           2,
-          "0"
-        )}` // Format as YY/MM
+          "0",
+        )}`, // Format as YY/MM
     ),
     datasets: [
       {
         label: "純増減",
         data: churnDataSliced.map(
           (dataPoint) =>
-            dataPoint.starting_students_count - dataPoint.ending_students_count
+            dataPoint.starting_students_count - dataPoint.ending_students_count,
         ),
         borderColor: "#ffde7d", // legend outline color
         backgroundColor: "#ffde7d", // legend background color
@@ -110,14 +110,14 @@ function StudentChurn() {
       {
         label: "入学人数",
         data: churnDataSliced.map(
-          (dataPoint) => dataPoint.starting_students_count
+          (dataPoint) => dataPoint.starting_students_count,
         ),
         backgroundColor: "rgba(0, 184, 169, 0.7)",
       },
       {
         label: "退学人数",
         data: churnDataSliced.map(
-          (dataPoint) => -dataPoint.ending_students_count
+          (dataPoint) => -dataPoint.ending_students_count,
         ),
         backgroundColor: "rgba(246, 65, 108, 0.7)",
       },
@@ -147,8 +147,8 @@ function StudentChurn() {
               context.datasetIndex === 0
                 ? `純増減:  ${sign}${context.parsed.y}名`
                 : context.datasetIndex === 1
-                ? `入学人数: ${Math.abs(context.parsed.y)}名`
-                : `退学人数: ${Math.abs(context.parsed.y)}名`;
+                  ? `入学人数: ${Math.abs(context.parsed.y)}名`
+                  : `退学人数: ${Math.abs(context.parsed.y)}名`;
             return label;
           },
           afterBody: function (context) {
@@ -164,12 +164,12 @@ function StudentChurn() {
             if (datasetIndex === 1 && dataPoint.starting_students_list) {
               names = dataPoint.starting_students_list.map(
                 (student) =>
-                  `+ ${student.last_name_romaji}, ${student.first_name_romaji}`
+                  `+ ${student.last_name_romaji}, ${student.first_name_romaji}`,
               );
             } else if (datasetIndex === 2 && dataPoint.ending_students_list) {
               names = dataPoint.ending_students_list.map(
                 (student) =>
-                  `- ${student.last_name_romaji}, ${student.first_name_romaji}`
+                  `- ${student.last_name_romaji}, ${student.first_name_romaji}`,
               );
             }
 

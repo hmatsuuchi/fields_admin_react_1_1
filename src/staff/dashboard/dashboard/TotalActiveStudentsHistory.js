@@ -75,7 +75,7 @@ function TotalActiveStudentsHistory() {
     Legend,
     PointElement,
     LineElement,
-    LineController
+    LineController,
   );
 
   const activeStudentDataSliced = activeStudentsData.slice(-visibleCount);
@@ -85,14 +85,14 @@ function TotalActiveStudentsHistory() {
       (dataPoint) =>
         `${String(dataPoint.year).slice(-2)}/${String(dataPoint.month).padStart(
           2,
-          "0"
-        )}` // Format as YY/MM
+          "0",
+        )}`, // Format as YY/MM
     ),
     datasets: [
       {
         label: "在校生数",
         data: activeStudentDataSliced.map(
-          (dataPoint) => dataPoint.active_students_count
+          (dataPoint) => dataPoint.active_students_count,
         ),
         borderColor: "rgba(0, 184, 169, 0.7)", // legend outline color
         backgroundColor: "rgba(0, 184, 169, 0.7)", // legend background color

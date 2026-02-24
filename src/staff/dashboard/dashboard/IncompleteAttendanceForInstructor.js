@@ -12,7 +12,7 @@ function IncompleteAttendanceForInstructor() {
   /* ------------------------------------------- */
 
   const [recordsDateStatusCount, setRecordsDateStatusCount] = React.useState(
-    []
+    [],
   );
   const [dayOfWeekOffset, setDayOfWeekOffset] = React.useState(0);
 
@@ -38,7 +38,7 @@ function IncompleteAttendanceForInstructor() {
           /* add missing dates to the array */
           const processed_data = addMissingDates(
             record_count_data,
-            pref_dashboard_working_days
+            pref_dashboard_working_days,
           );
           setRecordsDateStatusCount(processed_data);
         }
@@ -58,7 +58,7 @@ function IncompleteAttendanceForInstructor() {
   /* adds missing dates to the array */
   const addMissingDates = (
     record_count_data,
-    pref_dashboard_working_days_js
+    pref_dashboard_working_days_js,
   ) => {
     /* sets start and end dates which define the range of dates though which to iterate */
     const firstDate = new Date();
@@ -71,7 +71,7 @@ function IncompleteAttendanceForInstructor() {
     while (currentDateBeingIterated >= lastDate) {
       /* converts the date being iterated to JST for use in ISO String conversions */
       const currentDateBeingIteratedJST = new Date(
-        currentDateBeingIterated.getTime() + 9 * 60 * 60 * 1000
+        currentDateBeingIterated.getTime() + 9 * 60 * 60 * 1000,
       );
 
       /* searches for date in the array that matches current date being iterated */
@@ -84,7 +84,7 @@ function IncompleteAttendanceForInstructor() {
       });
 
       const isWorkday = pref_dashboard_working_days_js.includes(
-        currentDateBeingIterated.getDay()
+        currentDateBeingIterated.getDay(),
       );
 
       /* add existing dates to the array or create new objects for non-existing dates */

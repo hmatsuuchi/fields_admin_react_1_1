@@ -39,17 +39,19 @@ function Dashboard({
 
   return (
     <Fragment>
-      <div id="dashboard-primary-container">
-        <IncompleteAttendanceForInstructor />
-        <StudentChurn />
-        <TotalActiveStudents />
-        {/* <AtRiskStudents /> */}
-        <UpcomingBirthdays
-          setBackButtonText={setBackButtonText}
-          setBackButtonLink={setBackButtonLink}
-          setDisplayBackButton={setDisplayBackButton}
-        />
-        <TotalActiveStudentsHistory />
+      <div id="dashboard-primary-container-scroll-container">
+        <div id="dashboard-primary-container">
+          <IncompleteAttendanceForInstructor />
+          <StudentChurn />
+          <TotalActiveStudents />
+          {/* <AtRiskStudents /> */}
+          <UpcomingBirthdays
+            setBackButtonText={setBackButtonText}
+            setBackButtonLink={setBackButtonLink}
+            setDisplayBackButton={setDisplayBackButton}
+          />
+          <TotalActiveStudentsHistory />
+        </div>
       </div>
       <DashboardToolbar
         disableToolbarButtons={disableToolbarButtons}

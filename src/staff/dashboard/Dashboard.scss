@@ -9,36 +9,40 @@ $light-grey: #adadad;
 $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
-#dashboard-primary-container {
+#dashboard-primary-container-scroll-container {
   margin-top: 2.75rem;
-  height: calc(100vh - 2.75rem - 16rem);
+  height: calc(100vh - 2.75rem);
   overflow-y: scroll;
 
-  padding: 1rem;
-  padding-bottom: 15rem;
-
   display: grid;
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
 
-  .component-primary-container {
+  #dashboard-primary-container {
     padding: 1rem;
-
-    border: solid 1px $light-grey;
-    border-radius: 0.3rem;
-
-    box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
-
-    background-color: #ffffff;
+    padding-bottom: 15rem;
 
     display: grid;
-    align-content: start;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
 
-    .component-title {
-      font-size: 1.1rem;
-      font-weight: 500;
+    .component-primary-container {
+      padding: 1rem;
 
-      margin-bottom: 1rem;
+      border: solid 1px $light-grey;
+      border-radius: 0.3rem;
+
+      box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
+
+      background-color: #ffffff;
+
+      display: grid;
+      align-content: start;
+
+      .component-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+
+        margin-bottom: 1rem;
+      }
     }
   }
 }
@@ -56,10 +60,14 @@ $grey: #3a3939;
 }
 
 @media screen and (min-width: 1200px) {
-  #dashboard-primary-container {
-    grid-template-columns: repeat(4, 1fr);
+  #dashboard-primary-container-scroll-container {
+    justify-content: center;
 
-    max-width: 1300px;
-    // margin: 3rem auto;
+    #dashboard-primary-container {
+      grid-template-columns: repeat(4, 1fr);
+
+      width: calc(100vw - 2rem);
+      max-width: 1300px;
+    }
   }
 }

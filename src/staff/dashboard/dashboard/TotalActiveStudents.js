@@ -28,10 +28,10 @@ function TotalActiveStudents() {
       .then((response) => {
         setTotalActiveStudentsCount(response.data.total_active_students_count);
         setHighestActiveStudentCount(
-          response.data.highest_active_student_count.count
+          response.data.highest_active_student_count.count,
         );
         setHighestActiveStudentDate(
-          response.data.highest_active_student_count.date
+          response.data.highest_active_student_count.date,
         );
       })
       .catch((error) => {
@@ -57,7 +57,7 @@ function TotalActiveStudents() {
           totalActiveStudentsCount,
           Math.min(
             (highestActiveStudentCount - totalActiveStudentsCount) * 10,
-            highestActiveStudentCount * 5
+            highestActiveStudentCount * 5,
           ), // exaggerates the shortfall for visual effect but limits it to a maximum of 5x the highest count
         ],
         backgroundColor: ["#00b8a9", "#ffde7d"],
