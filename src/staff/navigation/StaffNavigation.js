@@ -62,17 +62,20 @@ function StaffNavigation({
       { prefix: "/staff/dashboard/", label: "ダッシュボード" },
       { prefix: "/staff/attendance/day-view/", label: "出欠・日程" },
       { prefix: "/staff/students/profiles/cards/", label: "生徒情報" },
-      // { prefix: "/staff/students/profiles/details/", label: "生徒情報" },
       {
         prefix: "/staff/schedule/events/calendar/week-view",
         label: "カレンダー",
+      },
+      {
+        prefix: "/staff/invoice/list/all/",
+        label: "明細書",
       },
       { prefix: "/logout/", label: "ログアウト" },
     ];
 
     // this logic attempts to finds the first matching prefix in the array
     const match = currentLocationLabelPrefix.find((item) =>
-      currentPath.startsWith(item.prefix)
+      currentPath.startsWith(item.prefix),
     );
 
     const currentLocationText = match ? match.label : "";
@@ -133,6 +136,16 @@ function StaffNavigation({
           </NavLink>
           <NavLink
             id="link-item-05"
+            to="/staff/invoice/list/all/"
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "active" : ""
+            }
+            onClick={clicksToNavHousekeeping}
+          >
+            明細書
+          </NavLink>
+          <NavLink
+            id="link-item-06"
             to="/logout/"
             className={({ isActive, isPending }) =>
               isPending ? "pending" : isActive ? "active" : ""

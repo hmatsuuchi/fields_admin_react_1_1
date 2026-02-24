@@ -4,7 +4,6 @@ import instance from "../../axios/axios_authenticated";
 // Components
 import StudentProfileCreateToolbar from "../toolbar/students/StudentProfileCreateToolbar";
 import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
-import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
 // CSS
 import "./StudentProfilesCreateUpdate.scss";
@@ -82,7 +81,7 @@ function StudentProfilesCreate({ csrfToken }) {
     const inputFieldParent = inputField.parentElement;
     const inputFieldParentId = inputFieldParent.id;
     const inputFieldParentIdInteger = parseInt(
-      inputFieldParentId.split("-").pop()
+      inputFieldParentId.split("-").pop(),
     );
 
     setPhoneNumberArray((phoneNumberArray) => {
@@ -99,7 +98,7 @@ function StudentProfilesCreate({ csrfToken }) {
     const inputFieldParent = inputField.parentElement;
     const inputFieldParentId = inputFieldParent.id;
     const inputFieldParentIdInteger = parseInt(
-      inputFieldParentId.split("-").pop()
+      inputFieldParentId.split("-").pop(),
     );
 
     setPhoneNumberArray((phoneNumberArray) => {
@@ -113,7 +112,7 @@ function StudentProfilesCreate({ csrfToken }) {
   // removes blank phone number dictionary elements from the phone number array
   function removeBlankPhoneNumberFieldsFromArray() {
     return phoneNumberArray.filter(
-      (phone) => phone.number !== undefined && phone.number !== ""
+      (phone) => phone.number !== undefined && phone.number !== "",
     );
   }
 
@@ -122,10 +121,10 @@ function StudentProfilesCreate({ csrfToken }) {
     setPhoneNumberArray(phoneNumberArray.concat({}));
 
     const addPhoneNumberButton = document.getElementById(
-      "add-phone-number-button"
+      "add-phone-number-button",
     );
     const removePhoneNumberButton = document.getElementById(
-      "remove-phone-number-button"
+      "remove-phone-number-button",
     );
 
     // Limit the creation of "phone-number-data" elements to 9
@@ -142,10 +141,10 @@ function StudentProfilesCreate({ csrfToken }) {
   function removePhoneNumberField() {
     setPhoneNumberArray(phoneNumberArray.slice(0, -1));
     const addPhoneNumberButton = document.getElementById(
-      "add-phone-number-button"
+      "add-phone-number-button",
     );
     const removePhoneNumberButton = document.getElementById(
-      "remove-phone-number-button"
+      "remove-phone-number-button",
     );
 
     // Limit the creation of "phone-number-data" elements to 9
@@ -163,7 +162,7 @@ function StudentProfilesCreate({ csrfToken }) {
     let idInteger = parseInt(idString.split("-").pop());
     setProfileStatus(idInteger);
     setProfileStatusName(
-      statusChoices.find((element) => element.id === idInteger).name
+      statusChoices.find((element) => element.id === idInteger).name,
     );
   }
 
@@ -234,11 +233,11 @@ function StudentProfilesCreate({ csrfToken }) {
         backButtonText={"生徒情報"}
         displayContent={displayContent}
       />
-      <DisplayDescriptors
-        displayTextArray={
-          displayContent ? ["新しいプロフィールを作成しています"] : []
-        }
-      />
+
+      <ul id="student-profile-create-descriptors-container">
+        <li>新しいプロフィールを作成しています</li>
+      </ul>
+
       {displayContent ? (
         <div
           className={`card-section-full-width${
@@ -252,12 +251,12 @@ function StudentProfilesCreate({ csrfToken }) {
                   profileStatus === 1
                     ? " pre-enrolled"
                     : profileStatus === 2
-                    ? " enrolled"
-                    : profileStatus === 3
-                    ? " short-absence"
-                    : profileStatus === 4
-                    ? " long-absence"
-                    : ""
+                      ? " enrolled"
+                      : profileStatus === 3
+                        ? " short-absence"
+                        : profileStatus === 4
+                          ? " long-absence"
+                          : ""
                 }`}
               >
                 {archived ? <div className="archived"></div> : <div></div>}

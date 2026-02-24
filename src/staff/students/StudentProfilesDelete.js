@@ -4,7 +4,6 @@ import instance from "../../axios/axios_authenticated";
 // Components
 import StudentDeleteToolbar from "../toolbar/students/StudentDeleteToolbar";
 import LoadingSpinner from "../micro/LoadingSpinner";
-import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 // CSS
 import "./StudentProfilesCards.scss";
 import "./StudentProfilesDelete.scss";
@@ -73,23 +72,17 @@ function StudentProfilesDelete({ csrfToken }) {
   return (
     <Fragment>
       <StudentDeleteToolbar />
-      <DisplayDescriptors
-        displayTextArray={
-          displayContent
-            ? [
-                `${
-                  profile
-                    ? profile.last_name_kanji && profile.first_name_kanji
-                      ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」`
-                      : profile.last_name_kanji || profile.first_name_kanji
-                      ? `「${profile.last_name_kanji}${profile.first_name_kanji}」`
-                      : "プロフィール"
-                    : "プロフィール"
-                }を削除しますか？`,
-              ]
-            : []
-        }
-      ></DisplayDescriptors>
+      <ul id="student-profile-delete-descriptors-container">
+        <li>{`${
+          profile
+            ? profile.last_name_kanji && profile.first_name_kanji
+              ? `「${profile.last_name_kanji} ${profile.first_name_kanji}」`
+              : profile.last_name_kanji || profile.first_name_kanji
+                ? `「${profile.last_name_kanji}${profile.first_name_kanji}」`
+                : "プロフィール"
+            : "プロフィール"
+        }を削除しますか？`}</li>
+      </ul>
       {displayContent ? (
         <div
           className={`card-section-full-width${
@@ -104,12 +97,12 @@ function StudentProfilesDelete({ csrfToken }) {
                     profile.status === 1
                       ? " pre-enrolled"
                       : profile.status === 2
-                      ? " enrolled"
-                      : profile.status === 3
-                      ? " short-absence"
-                      : profile.status === 4
-                      ? " long-absence"
-                      : "status-unknown"
+                        ? " enrolled"
+                        : profile.status === 3
+                          ? " short-absence"
+                          : profile.status === 4
+                            ? " long-absence"
+                            : "status-unknown"
                   }`}
                 >
                   {profile.archived === true ? (

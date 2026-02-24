@@ -9,6 +9,24 @@ $light-grey: #adadad;
 $grey: #3a3939;
 
 #calendar-event-create {
+  #create-calendar-event-display-descriptors {
+    font-size: 1rem;
+    color: $grey;
+    text-align: center;
+
+    margin: 0;
+    margin-top: 3.3rem;
+    padding: 0;
+
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+  }
   .card-container-full-width {
     .card-full-width {
       .event-header-container {
@@ -123,6 +141,14 @@ $grey: #3a3939;
           }
         }
       }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #calendar-event-create {
+    #create-calendar-event-display-descriptors {
+      font-size: 1.2rem;
     }
   }
 }

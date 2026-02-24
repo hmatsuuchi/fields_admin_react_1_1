@@ -272,10 +272,18 @@ function InvoiceListAll({
                     <div>小計</div>
                     <div>¥{subtotal.toLocaleString("ja-JP")}</div>
                     <div>税額</div>
-                    <div>¥{taxTotal.toLocaleString("ja-JP")}</div>
+                    <div>
+                      ¥
+                      {taxTotal.toLocaleString("ja-JP", {
+                        maximumFractionDigits: 0,
+                      })}
+                    </div>
                     <div className="invoice-total">合計</div>
                     <div className="invoice-total">
-                      ¥{total.toLocaleString("ja-JP")}
+                      ¥
+                      {total.toLocaleString("ja-JP", {
+                        maximumFractionDigits: 0,
+                      })}
                     </div>
                   </div>
                   <div className="invoice-timestamps">

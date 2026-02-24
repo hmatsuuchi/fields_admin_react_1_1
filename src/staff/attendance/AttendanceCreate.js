@@ -26,7 +26,7 @@ function AttendanceCreate({
   const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
     useState("");
   const [attendanceStudentsSelected, setAttendanceStudentsSelected] = useState(
-    []
+    [],
   );
   const [primaryInstructorChoices, setPrimaryInstructorChoices] = useState([]);
   const [activePrimaryInstructor, setActivePrimaryInstructor] = useState(null);
@@ -46,7 +46,7 @@ function AttendanceCreate({
             if (response) {
               /* primary instructor choices */
               setPrimaryInstructorChoices(
-                response.data.primary_instructor_choices
+                response.data.primary_instructor_choices,
               );
             }
           });
@@ -73,7 +73,7 @@ function AttendanceCreate({
                   .pref_attendance_selected_instructor;
               /* find instructor */
               const instructor = primaryInstructorChoices.find(
-                (item) => item.id === instructorId
+                (item) => item.id === instructorId,
               );
               /* set active primary instructor */
               setActivePrimaryInstructor(instructor);
@@ -111,7 +111,7 @@ function AttendanceCreate({
       {primaryInstructorChoices && activePrimaryInstructor ? (
         <section id="attendance-create-section">
           {/* TEXT DESCRIPTORS */}
-          <div id="display-descriptors-container">
+          <div id="create-attendance-display-descriptors-container">
             <ul>
               <li>新しい出欠表を作成しています</li>
             </ul>

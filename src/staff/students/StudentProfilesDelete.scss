@@ -7,6 +7,25 @@ $pre-enrolled: #fdbc00;
 $light-grey: #adadad;
 $grey: #3a3939;
 
+#student-profile-delete-descriptors-container {
+  font-size: 1rem;
+  color: $grey;
+  text-align: center;
+
+  margin: 0;
+  margin-top: 3.3rem;
+  padding: 0;
+
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+}
+
 .student-profile-footer-container {
   min-height: 1.8rem;
 }
@@ -30,5 +49,11 @@ $grey: #3a3939;
 
   .button.delete {
     background-color: $red;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #student-profile-delete-descriptors-container {
+    font-size: 1.2rem;
   }
 }

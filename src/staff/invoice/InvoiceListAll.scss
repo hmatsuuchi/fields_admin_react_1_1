@@ -131,18 +131,22 @@ $grey: #3a3939;
 
         .invoice-issued-container {
           border: solid 4px $deep-yellow;
+          background-color: #ffcb3115;
         }
 
         .invoice-issued-container.issued {
           border: solid 4px $teal;
+          background-color: #00b8a915;
         }
 
         .invoice-paid-container {
           border: solid 4px $deep-yellow;
+          background-color: #ffcb3115;
         }
 
         .invoice-paid-container.paid {
           border: solid 4px $teal;
+          background-color: #00b8a915;
         }
       }
 

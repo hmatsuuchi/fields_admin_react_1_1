@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import instance from "../../axios/axios_authenticated";
 /* Components  */
 import CalendarCreateToolbar from "../toolbar/schedule/CalendarCreateToolbar";
-import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
 /* CSS */
 import "./CalendarEventCreate.scss";
@@ -67,7 +66,7 @@ function CalendarEventCreate({
             if (response.status === 200) {
               setEventTypeChoices(response.data.event_type_choices);
               setPrimaryInstructorChoices(
-                response.data.primary_instructor_choices
+                response.data.primary_instructor_choices,
               );
             } else {
               /* popup system error message */
@@ -176,9 +175,10 @@ function CalendarEventCreate({
           submitted ? " content-submitted" : ""
         }`}
       >
-        <DisplayDescriptors
-          displayTextArray={["新しいイベントを作成しています"]}
-        />
+        <ul id="create-calendar-event-display-descriptors">
+          <li>新しいイベントを作成しています</li>
+        </ul>
+
         <div className="card-container-full-width">
           <div className="card-full-width">
             <div className="event-header-container">

@@ -4,7 +4,6 @@ import instance from "../../axios/axios_authenticated";
 // Components
 import StudentProfileUpdateToolbar from "../toolbar/students/StudentProfileUpdateToolbar";
 import ProfileSectionHeader from "../micro/students/ProfileSectionHeader";
-import DisplayDescriptors from "../micro/students/DisplayDescriptors";
 import LoadingSpinner from "../micro/LoadingSpinner";
 // CSS
 import "./StudentProfilesCreateUpdate.scss";
@@ -99,7 +98,7 @@ function StudentProfilesUpdate({
               setAddress1(responseData.address_1);
               setAddress2(responseData.address_2);
               setPhoneNumberArray(
-                responseData.phone.length === 0 ? [{}] : responseData.phone
+                responseData.phone.length === 0 ? [{}] : responseData.phone,
               );
               setBirthday(responseData.birthday);
               setGrade(responseData.grade);
@@ -146,7 +145,7 @@ function StudentProfilesUpdate({
     return newPhoneNumberArray.filter(
       (phone) =>
         (phone.number !== undefined && phone.number !== "") ||
-        (phone.id !== undefined && phone.id !== "")
+        (phone.id !== undefined && phone.id !== ""),
     );
   }
 
@@ -156,7 +155,7 @@ function StudentProfilesUpdate({
     let idInteger = parseInt(idString.split("-").pop());
     setProfileStatus(idInteger);
     setProfileStatusName(
-      statusChoices.find((element) => element.id === idInteger).name
+      statusChoices.find((element) => element.id === idInteger).name,
     );
   }
 
@@ -231,21 +230,22 @@ function StudentProfilesUpdate({
         displayContent={displayContent}
       />
 
-      <DisplayDescriptors
-        displayTextArray={
-          displayContent
-            ? [
-                `${
-                  lastNameKanji && firstNameKanji
-                    ? `「${lastNameKanji} ${firstNameKanji}」`
-                    : lastNameKanji || firstNameKanji
+      {displayContent ? (
+        <div id="student-profile-update-descriptors-container">
+          <ul>
+            <li>
+              {`${
+                lastNameKanji && firstNameKanji
+                  ? `「${lastNameKanji} ${firstNameKanji}」`
+                  : lastNameKanji || firstNameKanji
                     ? `「${lastNameKanji}${firstNameKanji}」`
                     : "プロフィール"
-                }を編集しています`,
-              ]
-            : []
-        }
-      />
+              }を編集しています`}
+            </li>
+          </ul>
+        </div>
+      ) : null}
+
       {displayContent ? (
         <div
           className={`card-section-full-width${
@@ -259,12 +259,12 @@ function StudentProfilesUpdate({
                   profileStatus === 1
                     ? " pre-enrolled"
                     : profileStatus === 2
-                    ? " enrolled"
-                    : profileStatus === 3
-                    ? " short-absence"
-                    : profileStatus === 4
-                    ? " long-absence"
-                    : ""
+                      ? " enrolled"
+                      : profileStatus === 3
+                        ? " short-absence"
+                        : profileStatus === 4
+                          ? " long-absence"
+                          : ""
                 }`}
               >
                 {archived ? <div className="archived"></div> : <div></div>}

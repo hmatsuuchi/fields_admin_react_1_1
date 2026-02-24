@@ -10,6 +10,25 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #attendance-create-section {
+  #create-attendance-display-descriptors-container {
+    font-size: 1rem;
+    color: $grey;
+    text-align: center;
+
+    margin: 0;
+    margin-top: 3.3rem;
+    padding: 0;
+
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
   #display-descriptors-container {
     font-size: 1.2rem;
 
@@ -164,6 +183,10 @@ $grey: #3a3939;
 
 @media screen and (min-width: 450px) {
   #attendance-create-section {
+    #create-attendance-display-descriptors-container {
+      font-size: 1.2rem;
+    }
+
     .attendance-create-card-container {
       .attendance-create-card {
         .attendance-body-container {
