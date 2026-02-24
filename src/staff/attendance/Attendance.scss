@@ -14,8 +14,10 @@ $grey: #3a3939;
 
   padding-top: 3.75rem;
 
-  height: calc(100vh - 3.75rem);
+  height: calc(100vh - 3.75rem - 15rem);
   overflow-y: scroll;
+
+  padding-bottom: 15rem;
 
   display: grid;
   justify-items: center;

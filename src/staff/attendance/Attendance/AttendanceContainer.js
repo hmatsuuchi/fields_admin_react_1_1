@@ -71,7 +71,7 @@ function AttendanceContainer({
         })
         .map((record) => ({
           ...record.student,
-        }))
+        })),
     );
 
     /* toggles attendance update container visibility */
@@ -154,7 +154,7 @@ function AttendanceContainer({
               headers: {
                 "X-CSRFToken": csrfToken,
               },
-            }
+            },
           )
           .then((response) => {
             if (response.status === 200) {
@@ -168,12 +168,12 @@ function AttendanceContainer({
                       headers: {
                         "X-CSRFToken": csrfToken,
                       },
-                    }
+                    },
                   );
                 } catch (error) {
                   console.error(
                     "Error predicting churn for student based on attendance record:",
-                    error
+                    error,
                   );
                 }
               };
@@ -251,9 +251,10 @@ function AttendanceContainer({
                     data-student_id={attendanceRecord.student.id}
                     onClick={handleClicksToStudentName}
                   >{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
+                  <div className="student-name-romaji">{`${attendanceRecord.student.last_name_romaji}, ${attendanceRecord.student.first_name_romaji}`}</div>
                   <div
                     className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
-                      attendanceRecord.status
+                      attendanceRecord.status,
                     )}`}
                     data-attendance_record_id={attendanceRecord.id}
                     data-attendance_status_integer={attendanceRecord.status}
@@ -274,7 +275,7 @@ function AttendanceContainer({
               {`0${record.breakDuration % 60}`.slice(-2)}
             </div>
           </div>
-        )
+        ),
       )}
     </div>
   ) : null;
