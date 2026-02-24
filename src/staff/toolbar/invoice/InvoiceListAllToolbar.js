@@ -15,6 +15,7 @@ function InvoiceListAllToolbar({
   setDisplayBackButton,
   filterParameters,
   setFilterParameters,
+  setFilterParametersApplied,
   invoiceCount,
   setInvoicesAll,
   setContentLoading,
@@ -28,33 +29,118 @@ function InvoiceListAllToolbar({
   /* ----------------------------------------------- */
 
   // fetches invoices using the query parameters
-  const fetchInvoicesAll = async () => {
-    // defaults to current year and month upon initial fetch
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
+  const fetchInvoicesAll = async (searchType) => {
+    // verified parameters to be sent with request to backend
+    let verifiedParameters = {};
 
-    let verifiedYear = filterParameters.year;
-    let verifiedMonth = filterParameters.month;
+    // date search button is pressed and both year and month values are present
+    if (
+      searchType === "dateSearch" &&
+      filterParameters.year !== "" &&
+      filterParameters.month !== ""
+    ) {
+      setFilterParameters({
+        ...filterParameters,
+        display_student_only_id: null,
+        text_filter: "",
+      });
 
-    if (filterParameters.year === "" || filterParameters.month === "") {
-      verifiedYear = currentYear;
-      verifiedMonth = currentMonth;
+      // sets filter parameters for text descriptor
+      setFilterParametersApplied({
+        display_student_only_id: null,
+        year: filterParameters.year,
+        month: filterParameters.month,
+        text_filter: null,
+      });
+
+      verifiedParameters = {
+        year: filterParameters.year,
+        month: filterParameters.month,
+      };
+    }
+    // date search button is pressed and year or month values are missing
+    else if (searchType === "dateSearch") {
+      // current year and month
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
 
       setFilterParameters({
         display_student_only_id: null,
         year: currentYear,
         month: currentMonth,
+        text_filter: "",
       });
+
+      // sets filter parameters for text descriptor
+      setFilterParametersApplied({
+        display_student_only_id: null,
+        year: currentYear,
+        month: currentMonth,
+        text_filter: null,
+      });
+
+      verifiedParameters = {
+        year: currentYear,
+        month: currentMonth,
+      };
+    }
+
+    // text search button is pressed and text filter value is present
+    if (searchType === "textSearch" && filterParameters.text_filter !== "") {
+      // sets parameters to be sent with request to backend
+      verifiedParameters = {
+        text_filter: filterParameters.text_filter,
+      };
+
+      // sets filter parameters
+      setFilterParameters({
+        ...filterParameters,
+        display_student_only_id: null,
+        year: "",
+        month: "",
+      });
+
+      // sets filter parameters for text descriptor
+      setFilterParametersApplied({
+        display_student_only_id: null,
+        year: null,
+        month: null,
+        text_filter: filterParameters.text_filter,
+      });
+    }
+    // text search button is pressed and text filter value is missing
+    else if (searchType === "textSearch") {
+      // current year and month
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+
+      setFilterParameters({
+        display_student_only_id: null,
+        year: currentYear,
+        month: currentMonth,
+        text_filter: "",
+      });
+
+      // sets filter parameters for text descriptor
+      setFilterParametersApplied({
+        display_student_only_id: null,
+        year: currentYear,
+        month: currentMonth,
+        text_filter: null,
+      });
+
+      verifiedParameters = {
+        year: currentYear,
+        month: currentMonth,
+      };
     }
 
     try {
       await instance
         .get("api/invoices/invoices/list/all/", {
-          params: {
-            year: verifiedYear,
-            month: verifiedMonth,
-          },
+          params: verifiedParameters,
         })
         .then((response) => {
           if (response) {
@@ -80,15 +166,30 @@ function InvoiceListAllToolbar({
     setDisableToolbarButtons(true);
 
     // fetch data using the query parameters
-    fetchInvoicesAll();
+    fetchInvoicesAll("dateSearch");
   };
 
-  // DEBUG
-  // useEffect(() => {
-  //   console.log(filterParameters);
-  //   console.log(filterParameters.year === "");
-  //   console.log(filterParameters.month === "");
-  // }, [filterParameters]);
+  const handleClicksToTextFilterButton = () => {
+    // reset invoice array to empty array
+    setInvoicesAll([]);
+
+    // set content loading state
+    setContentLoading(true);
+
+    // disable toolbar buttons while fetching data
+    setDisableToolbarButtons(true);
+
+    // fetch data using the query parameters
+    fetchInvoicesAll("textSearch");
+  };
+
+  // Handle Key Up On Text Search Filter Input
+  const handleKeyUpOnTextSearchFilterInput = (e) => {
+    if (e.key === "Enter") {
+      // runs text search
+      handleClicksToTextFilterButton(e);
+    }
+  };
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -106,6 +207,28 @@ function InvoiceListAllToolbar({
       />
 
       <div className="toolbar-right-side-container">
+        {/* text search filter */}
+        <input
+          type="text"
+          className="text-filter-input"
+          value={filterParameters.text_filter}
+          onChange={(e) => {
+            setFilterParameters({
+              ...filterParameters,
+              text_filter: e.target.value,
+            });
+          }}
+          onKeyUp={handleKeyUpOnTextSearchFilterInput}
+          tabIndex={1}
+        />
+        <button
+          className="filter-results-button"
+          onClick={handleClicksToTextFilterButton}
+          tabIndex={2}
+        ></button>
+
+        <div className="vertical-divider-thin" />
+
         {/* year and month filter */}
         <select
           className="year-select"

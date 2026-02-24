@@ -26,15 +26,25 @@ function InvoiceListAll({
   // invoices
   const [invoicesAll, setInvoicesAll] = useState([]);
   const [filterParameters, setFilterParameters] = useState({
+    display_student_only_id: null,
     year: currentYear,
     month: currentMonth,
+    text_filter: "",
+  });
+  const [filterParametersApplied, setFilterParametersApplied] = useState({
     display_student_only_id: null,
+    year: currentYear,
+    month: currentMonth,
+    text_filter: "",
   });
 
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
   // content loading state
   const [contentLoading, setContentLoading] = useState(true);
+
+  // display descriptors
+  const [displayDescriptors, setDisplayDescriptors] = useState([]);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -72,6 +82,23 @@ function InvoiceListAll({
     fetchInvoicesAllOnMount();
   }, []);
 
+  // sets display desriptors
+  useEffect(() => {
+    setDisplayDescriptors([
+      // invoice count
+      `${invoicesAll.length}件を表示しています`,
+      filterParametersApplied.year && filterParametersApplied.month
+        ? `${filterParametersApplied.year}年${filterParametersApplied.month}月の請求書を表示しています`
+        : null,
+      filterParametersApplied.text_filter
+        ? `「${filterParametersApplied.text_filter}」の検索結果を表示しています`
+        : null,
+      filterParametersApplied.display_student_only_full_name
+        ? `「${filterParametersApplied.display_student_only_full_name}」の請求書を表示しています`
+        : null,
+    ]);
+  }, [invoicesAll, filterParametersApplied]);
+
   const fetchInvoicesAllWithParameters = async (studentId) => {
     try {
       await instance
@@ -96,9 +123,19 @@ function InvoiceListAll({
   const handleClicksToDisplayStudentOnlyButton = (studentId, studentName) => {
     // resets filter parameters
     setFilterParameters({
+      ...filterParameters,
       year: "",
       month: "",
       display_student_only_id: studentId,
+    });
+
+    // sets filter parameters for text descriptor
+    setFilterParametersApplied({
+      display_student_only_id: null,
+      display_student_only_full_name: studentName,
+      year: null,
+      month: null,
+      text_filter: null,
     });
 
     // resets invoice array
@@ -121,6 +158,11 @@ function InvoiceListAll({
   return (
     <Fragment>
       <section id="invoice-list-all">
+        <ul id="invoice-list-all-display-descriptors-container">
+          {displayDescriptors.map((descriptor, index) => (
+            <li key={`display-descriptor-${index}`}>{descriptor}</li>
+          ))}
+        </ul>
         {contentLoading ? (
           <LoadingSpinner />
         ) : (
@@ -269,6 +311,7 @@ function InvoiceListAll({
         setDisplayBackButton={setDisplayBackButton}
         filterParameters={filterParameters}
         setFilterParameters={setFilterParameters}
+        setFilterParametersApplied={setFilterParametersApplied}
         invoiceCount={invoicesAll.length}
         setInvoicesAll={setInvoicesAll}
         setContentLoading={setContentLoading}

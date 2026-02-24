@@ -12,7 +12,20 @@ $grey: #3a3939;
 #invoice-list-all {
   margin-top: 2.75rem;
 
-  min-height: 92vh;
+  height: calc(100vh - 2.75rem);
+  overflow-y: scroll;
+
+  #invoice-list-all-display-descriptors-container {
+    margin: 0.55rem 0 0 0;
+    padding: 0;
+
+    font-size: 1.2rem;
+    color: $grey;
+
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+  }
 
   #invoice-list-container {
     padding: 1rem 1rem 15rem 1rem;

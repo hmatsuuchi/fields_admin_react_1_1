@@ -315,7 +315,7 @@ function InvoiceStatusAll({
   return (
     <Fragment>
       <section id="invoice-status-all">
-        <ul id="display-descriptors-container">
+        <ul id="invoice-status-all-display-descriptors-container">
           {displayDescriptors.map((descriptor, index) => (
             <li key={`display-descriptor-${index}`}>{descriptor}</li>
           ))}
