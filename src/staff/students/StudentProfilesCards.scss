@@ -8,6 +8,13 @@ $light-grey: #adadad;
 $lighter-grey: #f1f1f1;
 $grey: #3a3939;
 
+#student-profiles-cards-display-descriptors-container {
+  margin-top: 2.75rem;
+
+  overflow-y: scroll;
+  height: calc(100vh - 2.75rem);
+}
+
 /* Header */
 .student-profile-header-container {
   margin-bottom: 0.4rem;

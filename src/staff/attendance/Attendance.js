@@ -85,7 +85,7 @@ function Attendance({
   const [attendanceStartTimeSelected, setAttendanceStartTimeSelected] =
     useState("");
   const [attendanceStudentsSelected, setAttendanceStudentsSelected] = useState(
-    []
+    [],
   );
 
   /* ----------------------------------------------- */
@@ -149,7 +149,7 @@ function Attendance({
               const instructorId =
                 userPreferences.pref_attendance_selected_instructor;
               const instructor = primaryInstructorChoices.find(
-                (item) => item.id === instructorId
+                (item) => item.id === instructorId,
               );
               setActivePrimaryInstructor(instructor);
 
@@ -185,7 +185,7 @@ function Attendance({
             headers: {
               "X-CSRFToken": csrfToken,
             },
-          }
+          },
         )
         .then((response) => {
           if (response) {
@@ -206,7 +206,7 @@ function Attendance({
             if (response) {
               /* primary instructor choices */
               setPrimaryInstructorChoices(
-                response.data.primary_instructor_choices
+                response.data.primary_instructor_choices,
               );
             }
           });
@@ -251,7 +251,7 @@ function Attendance({
             if (response) {
               /* sorts event choices */
               const eventChoices = sortEventChoices(
-                response.data.event_choices
+                response.data.event_choices,
               );
               setEventChoices(eventChoices);
             }
@@ -476,7 +476,7 @@ function Attendance({
 
     /* looks for gaps between lessons and inserts schedule break elements */
     setAttendancesWithScheduleBreaks(
-      insertScheduleBreakElementsAndSort(attendances)
+      insertScheduleBreakElementsAndSort(attendances),
     );
   }, [attendances, setAttendancesWithScheduleBreaks]);
 

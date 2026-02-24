@@ -19,6 +19,8 @@ body {
 
   width: 100%;
   overflow: scroll;
+  overflow-y: scroll;
+  height: calc(100vh - 15rem);
 
   padding-bottom: 15rem;
 

@@ -119,7 +119,7 @@ function StudentProfiles({
                   .trim()
                   .toLowerCase()
                   .replace(" ", "")
-                  .replace(",", "")
+                  .replace(",", ""),
               )) &&
           monthsToDisplay.includes(profileBirthdayMonth) &&
           (profile.archived === archiveFilters.archived ||
@@ -127,7 +127,7 @@ function StudentProfiles({
           (archiveFilters.archived === true ||
             archiveFilters.unarchived === true)
         );
-      }
+      },
     );
 
     setStudentProfilesFiltered(studentProfilesSearchFiltered);
@@ -139,12 +139,12 @@ function StudentProfiles({
     if (sorts.id === 1) {
       // sorts by descending ID
       setStudentProfilesFilteredSorted(
-        [...studentProfilesFiltered].sort((b, a) => a.id - b.id)
+        [...studentProfilesFiltered].sort((b, a) => a.id - b.id),
       );
     } else if (sorts.id === 2) {
       // sorts by ascending ID
       setStudentProfilesFilteredSorted(
-        [...studentProfilesFiltered].sort((a, b) => a.id - b.id)
+        [...studentProfilesFiltered].sort((a, b) => a.id - b.id),
       );
     } else if (sorts.birth_month_day === 1) {
       // sorts by ascending birth month and day
@@ -159,7 +159,7 @@ function StudentProfiles({
           }
 
           return aBirthday.getDate() - bBirthday.getDate();
-        })
+        }),
       );
     } else if (sorts.birth_month_day === 2) {
       // sorts by ascending birth month and day
@@ -174,7 +174,7 @@ function StudentProfiles({
           }
 
           return aBirthday.getDate() - bBirthday.getDate();
-        })
+        }),
       );
     }
   }, [studentProfilesFiltered, sorts]);
@@ -235,7 +235,7 @@ function StudentProfiles({
       archiveFilters.unarchived === false ||
       archiveFilters.archived === false) &&
       displayArray.push(
-        `「${filterTextList}」のフィルターが有効になっています`
+        `「${filterTextList}」のフィルターが有効になっています`,
       );
     // search input
     searchInput !== "" && displayArray.push(`「${searchInput}」で検索しました`);
@@ -285,151 +285,160 @@ function StudentProfiles({
         />
       )}
 
-      {/* Display Descriptors */}
-      {displayContent && (
-        <DisplayDescriptors displayTextArray={displayTextArray} />
-      )}
+      <div id="student-profiles-cards-display-descriptors-container">
+        {/* Display Descriptors */}
+        {displayContent && (
+          <DisplayDescriptors displayTextArray={displayTextArray} />
+        )}
 
-      {/* Student Profiles */}
-      {displayContent && (
-        <div className="card-section">
-          <div className="card-container">
-            {studentProfilesFilteredSorted.map((profile) => {
-              return (
-                <Link
-                  to={`/staff/students/profiles/details/${profile.id}`}
-                  className="student-profile-card card"
-                  key={`student-profile-${profile.id}`}
-                  onClick={() => handleClickToStudentCard()}
-                >
-                  {" "}
-                  <div
-                    className={`student-profile-header-container${
-                      profile.status === 1
-                        ? " pre-enrolled"
-                        : profile.status === 2
-                        ? " enrolled"
-                        : profile.status === 3
-                        ? " short-absence"
-                        : profile.status === 4
-                        ? " long-absence"
-                        : "status-unknown"
-                    }`}
+        {/* Student Profiles */}
+        {displayContent && (
+          <div className="card-section">
+            <div className="card-container">
+              {studentProfilesFilteredSorted.map((profile) => {
+                return (
+                  <Link
+                    to={`/staff/students/profiles/details/${profile.id}`}
+                    className="student-profile-card card"
+                    key={`student-profile-${profile.id}`}
+                    onClick={() => handleClickToStudentCard()}
                   >
-                    {profile.archived === true ? (
-                      <div className="archived"></div>
-                    ) : (
-                      <div></div>
-                    )}
-                    <div className="status">
-                      {profile.status_verbose !== "" && profile.status_verbose}
+                    {" "}
+                    <div
+                      className={`student-profile-header-container${
+                        profile.status === 1
+                          ? " pre-enrolled"
+                          : profile.status === 2
+                            ? " enrolled"
+                            : profile.status === 3
+                              ? " short-absence"
+                              : profile.status === 4
+                                ? " long-absence"
+                                : "status-unknown"
+                      }`}
+                    >
+                      {profile.archived === true ? (
+                        <div className="archived"></div>
+                      ) : (
+                        <div></div>
+                      )}
+                      <div className="status">
+                        {profile.status_verbose !== "" &&
+                          profile.status_verbose}
+                      </div>
+                      <div className="more-info-container"></div>
                     </div>
-                    <div className="more-info-container"></div>
-                  </div>
-                  <div className="student-profile-body-container">
-                    <div className="name-container">
-                      <div className="name-kanji-grade">
-                        {profile.last_name_kanji !== "" &&
-                          profile.last_name_kanji}
-                        {profile.last_name_kanji !== "" &&
-                          profile.first_name_kanji !== "" &&
-                          " "}
-                        {profile.first_name_kanji !== "" &&
-                          profile.first_name_kanji}
-                        {profile.first_name_kanji !== "" &&
-                          profile.grade_verbose !== "" &&
-                          " "}
-                        {profile.grade_verbose !== "" &&
-                          `(${profile.grade_verbose})`}
-                      </div>
-                      <div className="name-katakana">
-                        {profile.last_name_katakana !== "" &&
-                          profile.last_name_katakana}
-                        {profile.first_name_katakana !== "" &&
-                          ` ${profile.first_name_katakana}`}
-                      </div>
-                      <div className="name-romaji">
-                        {profile.last_name_romaji !== "" &&
-                          profile.last_name_romaji}
-                        {profile.last_name_romaji &&
-                          profile.first_name_romaji &&
-                          ", "}
-                        {profile.first_name_romaji !== "" &&
-                          profile.first_name_romaji}
-                      </div>
-                    </div>
-                    {/* Student Info Container */}
-                    <div className="student-info-container">
-                      {/* Contact Container */}
-                      {profile.phone.length !== 0 ? (
-                        <div className="contact-container">
-                          {profile.phone.map((phone) => {
-                            return (
-                              <div className="phone" key={`phone-${phone.id}`}>
-                                {phone.number}
-                                {phone.number_type_verbose !== ""
-                                  ? ` (${phone.number_type_verbose})`
-                                  : ""}
-                              </div>
-                            );
-                          })}
+                    <div className="student-profile-body-container">
+                      <div className="name-container">
+                        <div className="name-kanji-grade">
+                          {profile.last_name_kanji !== "" &&
+                            profile.last_name_kanji}
+                          {profile.last_name_kanji !== "" &&
+                            profile.first_name_kanji !== "" &&
+                            " "}
+                          {profile.first_name_kanji !== "" &&
+                            profile.first_name_kanji}
+                          {profile.first_name_kanji !== "" &&
+                            profile.grade_verbose !== "" &&
+                            " "}
+                          {profile.grade_verbose !== "" &&
+                            `(${profile.grade_verbose})`}
                         </div>
-                      ) : null}
-                      {/* Address Container */}
-                      {profile.post_code !== "" ||
-                      profile.prefecture_verbose !== "" ||
-                      profile.city !== "" ||
-                      profile.address_1 !== "" ||
-                      profile.address_2 !== "" ? (
-                        <div className="address-container">
-                          <div className="post-code">
-                            {profile.post_code !== ""
-                              ? `〒${profile.post_code}`
-                              : ""}
-                          </div>
-                          <div className="address-line-1">
-                            {profile.prefecture_verbose !== ""
-                              ? profile.prefecture_verbose
-                              : ""}
-                            {profile.city !== "" ? profile.city : ""}
-                            {profile.address_1 !== "" ? profile.address_1 : ""}
-                          </div>
-                          <div className="address-line-2">
-                            {profile.address_2 !== "" ? profile.address_2 : ""}
-                          </div>
+                        <div className="name-katakana">
+                          {profile.last_name_katakana !== "" &&
+                            profile.last_name_katakana}
+                          {profile.first_name_katakana !== "" &&
+                            ` ${profile.first_name_katakana}`}
                         </div>
-                      ) : null}
-                      {/* Birthday Container */}
-                      {profile.birthday !== null ? (
-                        <div className="birthday-container">
-                          <div className="birthday">
-                            {profile.birthday !== null
-                              ? `${profile.birthday} (${profile.age}才)`
-                              : ""}
-                          </div>
+                        <div className="name-romaji">
+                          {profile.last_name_romaji !== "" &&
+                            profile.last_name_romaji}
+                          {profile.last_name_romaji &&
+                            profile.first_name_romaji &&
+                            ", "}
+                          {profile.first_name_romaji !== "" &&
+                            profile.first_name_romaji}
                         </div>
-                      ) : null}
-                      {/* Payment Container */}
-                      {profile.payment_method_from_invoice !== null ? (
-                        <div className="payment-container">
-                          {profile.payment_method_from_invoice && (
-                            <div className="payment-method">
-                              {profile.payment_method_verbose}
+                      </div>
+                      {/* Student Info Container */}
+                      <div className="student-info-container">
+                        {/* Contact Container */}
+                        {profile.phone.length !== 0 ? (
+                          <div className="contact-container">
+                            {profile.phone.map((phone) => {
+                              return (
+                                <div
+                                  className="phone"
+                                  key={`phone-${phone.id}`}
+                                >
+                                  {phone.number}
+                                  {phone.number_type_verbose !== ""
+                                    ? ` (${phone.number_type_verbose})`
+                                    : ""}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : null}
+                        {/* Address Container */}
+                        {profile.post_code !== "" ||
+                        profile.prefecture_verbose !== "" ||
+                        profile.city !== "" ||
+                        profile.address_1 !== "" ||
+                        profile.address_2 !== "" ? (
+                          <div className="address-container">
+                            <div className="post-code">
+                              {profile.post_code !== ""
+                                ? `〒${profile.post_code}`
+                                : ""}
                             </div>
-                          )}
-                        </div>
-                      ) : null}
+                            <div className="address-line-1">
+                              {profile.prefecture_verbose !== ""
+                                ? profile.prefecture_verbose
+                                : ""}
+                              {profile.city !== "" ? profile.city : ""}
+                              {profile.address_1 !== ""
+                                ? profile.address_1
+                                : ""}
+                            </div>
+                            <div className="address-line-2">
+                              {profile.address_2 !== ""
+                                ? profile.address_2
+                                : ""}
+                            </div>
+                          </div>
+                        ) : null}
+                        {/* Birthday Container */}
+                        {profile.birthday !== null ? (
+                          <div className="birthday-container">
+                            <div className="birthday">
+                              {profile.birthday !== null
+                                ? `${profile.birthday} (${profile.age}才)`
+                                : ""}
+                            </div>
+                          </div>
+                        ) : null}
+                        {/* Payment Container */}
+                        {profile.payment_method_from_invoice !== null ? (
+                          <div className="payment-container">
+                            {profile.payment_method_from_invoice && (
+                              <div className="payment-method">
+                                {profile.payment_method_verbose}
+                              </div>
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Loading Spinner */}
-      {!displayContent && !displayErrorMessage && <LoadingSpinner />}
+        )}
+        {/* Loading Spinner */}
+        {!displayContent && !displayErrorMessage && <LoadingSpinner />}
+      </div>
     </Fragment>
   );
 }
