@@ -7,8 +7,6 @@ import "./JournalCreate.scss";
 import { useNavigate } from "react-router-dom";
 // Toolbar
 import JournalEntryCreateToolbar from "../../toolbar/students/JournalEntryCreateToolbar";
-// Components
-import DisplayDescriptors from "../../micro/students/DisplayDescriptors";
 // Loading Spinner
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
@@ -107,7 +105,7 @@ function JournalCreate({
     setJournalEntryInstructors((prev) =>
       prev.includes(instructorId)
         ? prev.filter((id) => id !== instructorId)
-        : [...prev, instructorId]
+        : [...prev, instructorId],
     );
   };
 
@@ -141,12 +139,12 @@ function JournalCreate({
               "Content-Type": "application/json",
               "X-CSRFToken": csrfToken,
             },
-          }
+          },
         );
         if (response.status === 201) {
           // redirects back to the student details page
           navigate(
-            `/staff/students/profiles/details/${journalEntryStudent.id}/`
+            `/staff/students/profiles/details/${journalEntryStudent.id}/`,
           );
         } else {
           console.error("Failed to create journal entry:", response.data);
@@ -250,9 +248,9 @@ function JournalCreate({
       />
       {displayContent ? (
         <Fragment>
-          <DisplayDescriptors
-            displayTextArray={["新しいジャーナルを作成しています"]}
-          />
+          <ul id="journal-create-display-descriptors">
+            <li>新しいジャーナルを作成しています</li>
+          </ul>
           <div
             id="journal-create-container"
             className={`${contentSubmitted ? "content-submitted" : ""}`}
@@ -274,7 +272,7 @@ function JournalCreate({
                         {
                           journalEntryType !== "0"
                             ? journalTypes.find(
-                                (type) => type.id === Number(journalEntryType)
+                                (type) => type.id === Number(journalEntryType),
                               )?.name
                             : "\u200b" // Zero width character to prevent element collapse
                         }
@@ -352,11 +350,11 @@ function JournalCreate({
                                     type="checkbox"
                                     value={instructor.id}
                                     checked={journalEntryInstructors.includes(
-                                      instructor.id
+                                      instructor.id,
                                     )}
                                     onChange={() =>
                                       handleInstructorCheckboxChange(
-                                        instructor.id
+                                        instructor.id,
                                       )
                                     }
                                   />

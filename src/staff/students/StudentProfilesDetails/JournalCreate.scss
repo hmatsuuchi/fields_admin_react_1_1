@@ -9,6 +9,16 @@ $lighter-grey: #f1f1f1;
 $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
+#journal-create-display-descriptors {
+  font-size: 1.2rem;
+  text-align: center;
+
+  padding: 0;
+  margin: 3.3rem 0 0 0;
+
+  color: $grey;
+}
+
 #journal-create-form {
   display: grid;
   grid-auto-flow: row;
