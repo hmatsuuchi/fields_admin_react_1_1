@@ -9,6 +9,8 @@ function Dashboard() {
     <Fragment>
       <h1>Display Dashboard</h1>
       <Link to="/display/game/display/01">Display 01</Link>
+      <br />
+      <Link to="/display/game/display/02">Display 02</Link>
     </Fragment>
   );
 }

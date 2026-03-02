@@ -37,6 +37,7 @@ import CustomerDashboard from "./customer/Dashboard";
 import DisplayDashboard from "./display/dashboard/Dashboard";
 // COMPONENTS - DISPLAY - GAME
 import DisplayOne from "./display/display_01/DisplayOne";
+import DisplayTwo from "./display/display_02/DisplayTwo";
 
 // CSS
 import "./App.css";
@@ -51,13 +52,13 @@ function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("is_auth"));
   const [isStaff, setIsStaff] = useState(localStorage.getItem("is_staff"));
   const [isCustomer, setIsCustomer] = useState(
-    localStorage.getItem("is_customer")
+    localStorage.getItem("is_customer"),
   );
   const [isDisplay, setIsDisplay] = useState(
-    localStorage.getItem("is_display")
+    localStorage.getItem("is_display"),
   );
   const [isSuperuser, setIsSuperuser] = useState(
-    localStorage.getItem("is_superuser")
+    localStorage.getItem("is_superuser"),
   );
   const [csrfToken, setCsrfToken] = useState("");
 
@@ -465,6 +466,16 @@ function App() {
           element={
             <DisplayProtectedRoute isAuth={isAuth} isDisplay={isDisplay}>
               <DisplayOne csrfToken={csrfToken} />
+            </DisplayProtectedRoute>
+          }
+        ></Route>
+
+        {/* DISPLAY ROUTES - GAME - DISPLAY TWO */}
+        <Route
+          path="/display/game/display/02"
+          element={
+            <DisplayProtectedRoute isAuth={isAuth} isDisplay={isDisplay}>
+              <DisplayTwo />
             </DisplayProtectedRoute>
           }
         ></Route>

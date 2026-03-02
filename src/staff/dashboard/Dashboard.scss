@@ -14,11 +14,16 @@ $grey: #3a3939;
   height: calc(100vh - 2.75rem);
   overflow-y: scroll;
 
+  width: 100dvw;
+
   display: grid;
+  justify-items: center;
 
   #dashboard-primary-container {
     padding: 1rem;
     padding-bottom: 15rem;
+
+    width: calc(100% - 2rem);
 
     display: grid;
     grid-column-gap: 1rem;
@@ -61,12 +66,11 @@ $grey: #3a3939;
 
 @media screen and (min-width: 1200px) {
   #dashboard-primary-container-scroll-container {
-    justify-content: center;
+    // justify-items: center;
 
     #dashboard-primary-container {
       grid-template-columns: repeat(4, 1fr);
 
-      width: calc(100vw - 2rem);
       max-width: 1300px;
     }
   }
