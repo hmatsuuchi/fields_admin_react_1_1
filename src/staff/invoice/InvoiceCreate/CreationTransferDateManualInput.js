@@ -43,9 +43,35 @@ function CreationTransferDateManualInput({ invoiceData, setInvoiceData }) {
       setInvoiceData((prev) => ({ ...prev, transfer_date: "" }));
     };
 
-    parseInt(invoiceData.payment_method) !== 2
-      ? disableInput()
-      : transferDateInput.classList.remove("disable-clicks");
+    const enableInput = () => {
+      // today
+      const dateToday = new Date();
+
+      // first day of next month
+      const firstDayOfNextMonth = new Date(
+        dateToday.getFullYear(),
+        dateToday.getMonth() + 1,
+        1,
+      );
+
+      // finds the first weekday of next month
+      while (
+        firstDayOfNextMonth.getDay() === 0 ||
+        firstDayOfNextMonth.getDay() === 6
+      ) {
+        firstDayOfNextMonth.setDate(firstDayOfNextMonth.getDate() + 1);
+      }
+
+      transferDateInput.classList.remove("disable-clicks");
+      setInvoiceData((prev) => ({
+        ...prev,
+        transfer_date: firstDayOfNextMonth
+          .toLocaleDateString("en-CA", { timeZone: "Asia/Tokyo" })
+          .slice(0, 10),
+      }));
+    };
+
+    parseInt(invoiceData.payment_method) !== 2 ? disableInput() : enableInput();
   }, [invoiceData.payment_method, setInvoiceData]);
 
   /* ---------------------------------------- */

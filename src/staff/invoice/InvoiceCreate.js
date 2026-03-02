@@ -41,7 +41,14 @@ function InvoiceCreate({
     address_2: "",
   });
 
-  const dateTodayString = new Date().toISOString().slice(0, 10);
+  // today
+  const dateToday = new Date();
+  // get the date object for the first day of the next month to set as the default creation date
+  const nextMonth = new Date(
+    dateToday.getFullYear(),
+    dateToday.getMonth() + 1,
+    1,
+  );
 
   const [invoiceData, setInvoiceData] = useState({
     customer_name: "",
@@ -51,9 +58,9 @@ function InvoiceCreate({
     customer_address_line_1: "",
     customer_address_line_2: "",
 
-    year: parseInt(dateTodayString.slice(0, 4)), // default to this year
-    month: parseInt(dateTodayString.slice(5, 7)), // default to this month
-    creation_date: dateTodayString, // default to today's date
+    year: dateToday.getFullYear(), // default to this year
+    month: nextMonth.getMonth() + 1, // default to next month
+    creation_date: dateToday.toISOString().slice(0, 10), // default to today's date
     transfer_date: "",
     paid_date: "",
 
