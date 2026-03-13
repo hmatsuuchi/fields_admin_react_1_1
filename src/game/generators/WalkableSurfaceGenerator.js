@@ -75,12 +75,17 @@ export function generateWalkableSurface(scene, config) {
   scene.physics.add.existing(collisionBox, true); // true for static body
 
   return {
+    layer,
     collisionBox,
   };
 }
 
 /* ------------------ One Way Platform Collider ------------------ */
-export function addOneWayPlatformCollider(scene, player, platformCollisionBox) {
+export function generateOneWayPlatformCollider(
+  scene,
+  player,
+  platformCollisionBox,
+) {
   return scene.physics.add.collider(
     player,
     platformCollisionBox,
