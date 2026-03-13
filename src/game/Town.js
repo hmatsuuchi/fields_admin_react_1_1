@@ -1,82 +1,148 @@
 import Phaser from "phaser";
+// import EventBus from "./EventBus";
+// GENERATORS
+import {
+  generateWalkableSurface,
+  addOneWayPlatformCollider,
+} from "./generators/WalkableSurfaceGenerator";
 
-/* Town scene - defines the game logic and rendering for the town scene */
 export default class Town extends Phaser.Scene {
   constructor() {
-    super("Town"); // registers this scene with the key "Town" in the Phaser scene manager
-    this.player = null; // reference to the player circle
-    this.platforms = null; // reference to the platform group
-    this.keys = null; // reference to the WASD + space key bindings
-    this.speed = 200; // player horizontal movement speed in pixels per second
-    this.jumpForce = -500; // upward velocity applied when jumping (negative = up)
+    super("Town");
   }
 
-  /* called before create() - used to load assets (images, spritesheets, audio, etc.) */
+  /* --------------------------------------------- */
+  /* ------------------ PRELOAD ------------------ */
+  /* --------------------------------------------- */
+
   preload() {
-    // load assets here
-  }
+    /* ------------------ Fonts ------------------ */
+    // Ari W9500 Display Font - 11px
+    this.load.bitmapFont(
+      "ari_w9500_display_11px",
+      "/game_assets/fonts/ari_w9500_display_11px.png",
+      "/game_assets/fonts/ari_w9500_display_11px.xml",
+    );
 
-  /* called once after preload() - used to set up game objects, physics, and initial state */
-  create() {
-    // create a static physics group for platforms (static = immovable, unaffected by gravity)
-    this.platforms = this.physics.add.staticGroup();
+    /* ------------------ Walkable Surfaces ------------------ */
+    // Grass 01 Tileset
+    this.load.spritesheet("grass_01", "/game_assets/tilesets/grass_01.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
 
-    // ground platform spanning the full width of the screen
-    const ground = this.add.rectangle(400, 590, 800, 20, 0x4a4a4a); // x, y, width, height, color (dark gray)
-    this.platforms.add(ground);
-
-    // floating platforms at various positions (spaced ~100px apart vertically)
-    const platform1 = this.add.rectangle(550, 480, 100, 15, 0x4a4a4a);
-    this.platforms.add(platform1);
-
-    const platform2 = this.add.rectangle(400, 380, 100, 15, 0x4a4a4a);
-    this.platforms.add(platform2);
-
-    const platform3 = this.add.rectangle(250, 280, 100, 15, 0x4a4a4a);
-    this.platforms.add(platform3);
-
-    const platform4 = this.add.rectangle(100, 180, 100, 15, 0x4a4a4a);
-    this.platforms.add(platform4);
-
-    // refresh static bodies so Phaser recalculates their hitboxes after positioning
-    this.platforms.refresh();
-
-    // create a circle graphic and add it as a physics-enabled game object
-    this.player = this.add.circle(400, 500, 20, 0x00ff00); // x, y, radius, color (green)
-    this.physics.add.existing(this.player); // enable physics on the circle
-
-    // prevent the player from leaving the screen
-    this.player.body.setCollideWorldBounds(true);
-    this.player.body.setBounce(0.1); // slight bounce when landing
-
-    // enable collision between the player and all platforms
-    this.physics.add.collider(this.player, this.platforms);
-
-    // bind WASD + space keys for movement and jump input
-    this.keys = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
-      jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
+    // Grass 02 Tileset
+    this.load.spritesheet("grass_02", "/game_assets/tilesets/grass_02.png", {
+      frameWidth: 16,
+      frameHeight: 16,
     });
   }
 
-  /* called every frame (~60 times per second) - used for continuous game logic like movement and collisions */
+  /* -------------------------------------------- */
+  /* ------------------ CREATE ------------------ */
+  /* -------------------------------------------- */
+
+  create() {
+    /* ------------------ Player ------------------ */
+    // create rectangle
+    this.player = this.add
+      .rectangle(100, 100, 16, 32, 0x000000)
+      .setOrigin(0, 1);
+
+    // add physics to rectangle
+    this.physics.add.existing(this.player);
+    this.player.body.setCollideWorldBounds(true);
+    this.player.body.setGravityY(300);
+
+    // 'AD' + Space
+    this.keys = this.input.keyboard.addKeys({
+      jump: Phaser.Input.Keyboard.KeyCodes.SPACE,
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+    });
+
+    /* ------------------ General ------------------ */
+    // Game Viewport Height and Width
+    this.gameViewportHeight = this.sys.game.config.height;
+    this.gameViewportWidth = this.sys.game.config.width;
+
+    /* ------------------ Platform 01 ------------------ */
+    const platform01 = generateWalkableSurface(this, {
+      // sprite configuration
+      xStartPosition: 16 * 1,
+      yStartPosition: this.gameViewportHeight - 16 * 4,
+      length: 38,
+      tileset: "grass_02",
+      centerTileIndex: [2, 3],
+      rightTileIndex: [4],
+      // collision box configuration
+      xStartPositionCollisionOffset: 0,
+      yStartPositionCollisionOffset: 6,
+      collisionBoxHeightOffset: 11,
+    });
+
+    this.platform01 = platform01;
+
+    /* ------------------ Platform 02 ------------------ */
+    const platform02 = generateWalkableSurface(this, {
+      // sprite configuration
+      xStartPosition: 16 * 15,
+      yStartPosition: this.gameViewportHeight - 16 * 7,
+      length: 15,
+      tileset: "grass_02",
+      centerTileIndex: [2, 3],
+      rightTileIndex: [4],
+      // collision box configuration
+      xStartPositionCollisionOffset: 0,
+      yStartPositionCollisionOffset: 6,
+      collisionBoxHeightOffset: 11,
+    });
+
+    this.platform02 = platform02;
+
+    /* ------------------ Platform 03 ------------------ */
+    const platform03 = generateWalkableSurface(this, {
+      // sprite configuration
+      xStartPosition: 16 * 12,
+      yStartPosition: this.gameViewportHeight - 16 * 10,
+      length: 22,
+      tileset: "grass_02",
+      centerTileIndex: [2, 3],
+      rightTileIndex: [4],
+      // collision box configuration
+      xStartPositionCollisionOffset: 0,
+      yStartPositionCollisionOffset: 6,
+      collisionBoxHeightOffset: 11,
+    });
+
+    this.platform03 = platform03;
+
+    /* ------------------ Collisions ------------------ */
+    addOneWayPlatformCollider(this, this.player, this.platform01.collisionBox); // platform 01
+    addOneWayPlatformCollider(this, this.player, this.platform02.collisionBox); // platform 02
+    addOneWayPlatformCollider(this, this.player, this.platform03.collisionBox); // platform 03
+  }
+
   update() {
-    // reset horizontal velocity each frame
-    this.player.body.setVelocityX(0);
+    /* ------------------ Player Movement ------------------ */
+    if (!this.player?.body) return; // safety check
+
+    const body = this.player.body;
+
+    const moveSpeed = 150;
+    const jumpSpeed = 275;
 
     // horizontal movement
+    body.setVelocityX(0); // reset horizontal velocity each frame
     if (this.keys.left.isDown) {
-      this.player.body.setVelocityX(-this.speed);
+      body.setVelocityX(-moveSpeed);
     } else if (this.keys.right.isDown) {
-      this.player.body.setVelocityX(this.speed);
+      body.setVelocityX(moveSpeed);
     }
 
-    // jump - only allow jumping when the player is touching the ground or a platform
-    if (this.keys.jump.isDown && this.player.body.blocked.down) {
-      this.player.body.setVelocityY(this.jumpForce);
+    // jump
+    if (this.keys.jump.isDown && body.onFloor()) {
+      body.setVelocityY(-jumpSpeed);
     }
   }
 }

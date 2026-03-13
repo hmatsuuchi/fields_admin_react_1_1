@@ -54,8 +54,6 @@ function DisplayOne() {
           if (response) {
             /* set student data */
             setStudentData(response.data);
-
-            console.log(response.data);
             /* fetch recent checkins */
             fetchRecentCheckins();
           }
@@ -81,7 +79,7 @@ function DisplayOne() {
 
               /* create a map of he new checkins by ID for quick lookup */
               const newCheckinsMap = new Map(
-                newCheckins.map((checkin) => [checkin.id, checkin])
+                newCheckins.map((checkin) => [checkin.id, checkin]),
               );
 
               /* Filter out items not in the new response and add new ones */
@@ -90,8 +88,8 @@ function DisplayOne() {
                 .concat(
                   newCheckins.filter(
                     (checkin) =>
-                      !prevCheckins.some((prev) => prev.id === checkin.id) // Add new items not already in prevCheckins
-                  )
+                      !prevCheckins.some((prev) => prev.id === checkin.id), // Add new items not already in prevCheckins
+                  ),
                 );
 
               /* Sort the updated checkins by date_time_created */
@@ -124,10 +122,13 @@ function DisplayOne() {
     };
 
     /* run focusOnInput and reset UUID input every 5 minutes */
-    const intervalId = setInterval(() => {
-      focusOnInput();
-      setUUIDInput("");
-    }, 5 * 60 * 1000);
+    const intervalId = setInterval(
+      () => {
+        focusOnInput();
+        setUUIDInput("");
+      },
+      5 * 60 * 1000,
+    );
 
     /* fetches recent checkins */
     fetchRecentCheckins();
@@ -178,8 +179,8 @@ function DisplayOne() {
                 {moduloCount === 9
                   ? `next lesson`
                   : moduloCount !== 0
-                  ? `${10 - moduloCount} lessons`
-                  : "level up!"}
+                    ? `${10 - moduloCount} lessons`
+                    : "level up!"}
               </div>
             </div>
           </div>

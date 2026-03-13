@@ -17,4 +17,9 @@ $grey: #3a3939;
 
   display: grid;
   place-content: center;
+
+  .game-container {
+    width: 100vw;
+    height: 100vh;
+  }
 }

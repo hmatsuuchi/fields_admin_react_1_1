@@ -42,8 +42,7 @@ $grey: #3a3939;
 
     width: calc(100vw - 2rem);
     max-width: 550px;
-    // height: calc(100svh - 2rem);
-    // max-height: 1020px;
+    height: 100svh;
     max-height: calc(100svh - 2rem);
 
     border-radius: 0.5rem;
@@ -56,7 +55,7 @@ $grey: #3a3939;
     background-color: #ffffff;
 
     display: grid;
-    grid-template-rows: 3rem auto;
+    grid-template-rows: 3rem 1fr;
 
     .attendance-update-card-header {
       border-top-right-radius: 0.5rem;
