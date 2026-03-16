@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="664.63281"
+   height="728.70148"
+   viewBox="0 0 664.63284 728.70146"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer-MC1"
+     transform="translate(-4650.9725,-656.62537)">
+    <path
+       id="rect7-5"
+       style="fill:#ffffff;stroke:none;stroke-width:100;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:stroke fill markers"
+       d="m 4830.3026,656.62539 c -11.08,0 -20,8.92 -20,20 v 141.49219 h 345.9726 V 676.62539 c 0,-11.08 -8.92,-20 -20,-20 z" />
+    <path
+       id="rect6"
+       style="fill:#ffffff;stroke:none;stroke-width:100;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:stroke fill markers"
+       d="m 4670.9725,868.95547 c -11.08,0 -20,8.92 -20,20 v 326.00393 c 0,11.08 8.92,20 20,20 h 89.3301 v -180.3672 c 0,-22.16 17.84,-40 40,-40 h 365.9726 c 22.16,0 40,17.84 40,40 v 180.3672 h 89.3301 c 11.08,0 20,-8.92 20,-20 V 888.95547 c 0,-11.08 -8.92,-20 -20,-20 z" />
+    <path
+       id="rect7"
+       style="fill:#ffffff;stroke:none;stroke-width:100;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:stroke fill markers"
+       d="m 4830.3026,1064.5924 c -11.08,0 -20,8.92 -20,20 v 280.7344 c 0,11.08 8.92,20 20,20 h 305.9726 c 11.08,0 20,-8.92 20,-20 v -280.7344 c 0,-11.08 -8.92,-20 -20,-20 z m 37.3711,52.6738 h 231.2324 c 11.08,0 20,7.9942 20,17.9238 0,9.9297 -8.92,17.9239 -20,17.9239 h -231.2324 c -11.08,0 -20,-7.9942 -20,-17.9239 0,-9.9296 8.92,-17.9238 20,-17.9238 z m 0,89.7695 h 231.2324 c 11.08,0 20,7.9942 20,17.9239 0,9.9296 -8.92,17.9238 -20,17.9238 h -231.2324 c -11.08,0 -20,-7.9942 -20,-17.9238 0,-9.9297 8.92,-17.9239 20,-17.9239 z m 0,89.7696 h 231.2324 c 11.08,0 20,7.9942 20,17.9238 0,9.9296 -8.92,17.9238 -20,17.9238 h -231.2324 c -11.08,0 -20,-7.9942 -20,-17.9238 0,-9.9296 8.92,-17.9238 20,-17.9238 z" />
+  </g>
+</svg>

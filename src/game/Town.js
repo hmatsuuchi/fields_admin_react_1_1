@@ -33,6 +33,13 @@ export default class Town extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    /* ------------------ Background Images ------------------ */
+    // Main Island Foundation
+    this.load.image(
+      "main_island_foundation_background",
+      "/game_assets/backgrounds/main_island_foundation.png",
+    );
   }
 
   /* -------------------------------------------- */
@@ -45,12 +52,12 @@ export default class Town extends Phaser.Scene {
     this.gameViewportHeight = this.sys.game.config.height;
     this.gameViewportWidth = this.sys.game.config.width;
 
-    /* ------------------ Platform 01 - Grass ------------------ */
+    /* ------------------ Main Island - Platform ------------------ */
     const platform01 = generateWalkableSurface(this, {
       // sprite configuration
-      xStartPosition: 16 * 13,
-      yStartPosition: this.gameViewportHeight - 16 * 10,
-      length: 16,
+      xStartPosition: 16 * 13, // px
+      yStartPosition: this.gameViewportHeight - 16 * 10, // px
+      length: 16, // number of tiles
       tileset: "grass_02",
       centerTileIndex: [2, 3],
       rightTileIndex: [4],
@@ -61,8 +68,19 @@ export default class Town extends Phaser.Scene {
     });
 
     this.platform01 = platform01;
+    this.platform01.layer.setDepth(11);
 
-    /* ------------------ Platform 02 - Dock ------------------ */
+    /* ------------------ Main Island - Foundation Background ------------------ */
+    this.mainIslandFoundationBackground = this.add
+      .image(
+        16 * 11,
+        this.gameViewportHeight - 16 * 10,
+        "main_island_foundation_background",
+      )
+      .setOrigin(0, 0)
+      .setDepth(10);
+
+    /* ------------------ Dock - Platform ------------------ */
     const platform02 = generateWalkableSurface(this, {
       // sprite configuration
       xStartPosition: 16 * 10,
@@ -78,8 +96,9 @@ export default class Town extends Phaser.Scene {
     });
 
     this.platform02 = platform02;
+    this.platform02.layer.setDepth(11);
 
-    /* ------------------ Platform 03 - Cliff ------------------ */
+    /* ------------------ Cliff - Platform ------------------ */
     const platform03 = generateWalkableSurface(this, {
       // sprite configuration
       xStartPosition: 16 * 25,
@@ -95,7 +114,7 @@ export default class Town extends Phaser.Scene {
     });
 
     this.platform03 = platform03;
-
+    this.platform03.layer.setDepth(11);
     /* ------------------ Water/Sky ------------------ */
 
     this.environment = generateWaterSky(this, {

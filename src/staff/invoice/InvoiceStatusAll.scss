@@ -80,6 +80,29 @@ $grey: #3a3939;
         background-repeat: no-repeat;
       }
 
+      .invoice-print-button {
+        position: absolute;
+        top: 0;
+        left: calc(17% + 2.8rem + 0.5rem);
+
+        cursor: pointer;
+
+        width: 2.8rem;
+        height: 2.8rem;
+
+        border-radius: 0 0 0.6rem 0.6rem;
+        border-top: none;
+
+        box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
+
+        background-color: $teal;
+
+        background-image: url("InvoiceStatusAll/img/print_icon.svg");
+        background-size: 65% auto;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+      }
+
       .invoice-header {
         font-size: 1.35rem;
 

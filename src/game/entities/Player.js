@@ -13,7 +13,8 @@ export function createPlayer(scene, config = {}) {
 
   const player = scene.add
     .rectangle(x, y, width, height, 0x000000)
-    .setOrigin(0, 1);
+    .setOrigin(0, 1)
+    .setDepth(11);
 
   scene.physics.add.existing(player);
   player.body.setCollideWorldBounds(true);

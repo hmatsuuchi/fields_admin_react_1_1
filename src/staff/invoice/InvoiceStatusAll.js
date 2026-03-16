@@ -308,6 +308,12 @@ function InvoiceStatusAll({
     fetchInvoicesAll(studentId);
   };
 
+  // handles clicks to invoice print button
+  const handleClicksToInvoicePrintButton = (invoiceId) => {
+    const printPath = `/staff/invoice/print/${invoiceId}`;
+    window.open(printPath, "_blank");
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -350,6 +356,12 @@ function InvoiceStatusAll({
                         `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
                       )
                     }
+                  />
+
+                  {/* invoice print button */}
+                  <div
+                    className="invoice-print-button"
+                    onClick={() => handleClicksToInvoicePrintButton(invoice.id)}
                   />
                   <div className="invoice-header">
                     <div>{invoice.customer_name}</div>

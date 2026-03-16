@@ -30,6 +30,7 @@ import AttendanceCreate from "./staff/attendance/AttendanceCreate";
 import InvoiceListAll from "./staff/invoice/InvoiceListAll";
 import InvoiceStatusAll from "./staff/invoice/InvoiceStatusAll";
 import InvoiceCreate from "./staff/invoice/InvoiceCreate";
+import InvoicePrint from "./staff/invoice/InvoicePrint";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -247,7 +248,7 @@ function App() {
 
         {/* STAFF ROUTES - STUDENTS - STUDENT PROFILE DETAILS */}
         <Route
-          path="/staff/students/profiles/details/:profileId"
+          path="/staff/students/profiles/details/:profileId/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <StudentProfilesDetails
@@ -431,6 +432,21 @@ function App() {
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <InvoiceCreate
                 csrfToken={csrfToken}
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - INVOICE - PRINT */}
+        <Route
+          path="/staff/invoice/print/:invoiceId/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <InvoicePrint
                 backButtonText={backButtonText}
                 backButtonLink={backButtonLink}
                 displayBackButton={displayBackButton}

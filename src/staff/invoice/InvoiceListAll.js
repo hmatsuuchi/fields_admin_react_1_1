@@ -99,6 +99,7 @@ function InvoiceListAll({
     ]);
   }, [invoicesAll, filterParametersApplied]);
 
+  // fetches invoices with parameters
   const fetchInvoicesAllWithParameters = async (studentId) => {
     try {
       await instance
@@ -120,6 +121,7 @@ function InvoiceListAll({
     }
   };
 
+  // handles clicks to display student only button
   const handleClicksToDisplayStudentOnlyButton = (studentId, studentName) => {
     // resets filter parameters
     setFilterParameters({
@@ -149,6 +151,12 @@ function InvoiceListAll({
 
     // fetches invoices
     fetchInvoicesAllWithParameters(studentId);
+  };
+
+  // handles clicks to invoice print button
+  const handleClicksToInvoicePrintButton = (invoiceId) => {
+    const printPath = `/staff/invoice/print/${invoiceId}`;
+    window.open(printPath, "_blank");
   };
 
   /* ---------------------------------------- */
@@ -183,6 +191,12 @@ function InvoiceListAll({
                         `${invoice.student.last_name_kanji} ${invoice.student.first_name_kanji}`,
                       )
                     }
+                  />
+
+                  {/* invoice print button */}
+                  <div
+                    className="invoice-print-button"
+                    onClick={() => handleClicksToInvoicePrintButton(invoice.id)}
                   />
 
                   <div className="customer-info-container">
