@@ -34,7 +34,8 @@ function InvoicePrint() {
           })
           .then((response) => {
             setInvoiceData(response.data);
-            window.print();
+            // window.print();
+            console.log(response.data);
           });
       } catch (e) {
         console.log(e);
@@ -103,7 +104,7 @@ function InvoicePrint() {
         </div>
         <div className="title-value-container">
           <div className="title">発行日</div>
-          <div className="value">{invoiceData.issued_date}</div>
+          <div className="value">{invoiceData.creation_date}</div>
         </div>
         <div className="title-value-container">
           <div className="title">合計</div>
@@ -154,12 +155,7 @@ function InvoicePrint() {
             <div className="rate">{item.rate.toLocaleString("ja-JP")}円</div>
             <div className="tax-rate">{item.tax_rate}%</div>
             <div className="line-total">
-              {(
-                item.quantity *
-                item.rate *
-                (1 + item.tax_rate / 100)
-              ).toLocaleString("ja-JP")}
-              円
+              {(item.quantity * item.rate).toLocaleString("ja-JP")}円
             </div>
           </div>
         ))}
