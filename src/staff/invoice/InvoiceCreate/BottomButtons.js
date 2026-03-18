@@ -24,7 +24,7 @@ function BottomButtons({
   /* calculates default tax rate based on default tax type */
   function calculateDefaultTaxRate(taxesList, taxesDefault) {
     const defaultTaxObject = taxesList.find(
-      (taxItem) => taxItem.id === taxesDefault
+      (taxItem) => taxItem.id === taxesDefault,
     );
     if (defaultTaxObject) {
       return defaultTaxObject.rate;
@@ -34,7 +34,13 @@ function BottomButtons({
   }
 
   const resetInvoiceData = () => {
-    const dateToday = new Date().toISOString().slice(0, 10);
+    // today
+    const today = new Date();
+
+    const dateToday = today.toISOString().slice(0, 10);
+
+    // get the date object for the first day of the next month to set as the default creation date
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
 
     /* resets invoice data state to initial state */
     setInvoiceData({
@@ -45,8 +51,8 @@ function BottomButtons({
       customer_address_line_1: "",
       customer_address_line_2: "",
 
-      year: parseInt(dateToday.slice(0, 4)), // defaults to current year
-      month: parseInt(dateToday.slice(5, 7)), // defaults to current month
+      year: nextMonth.getFullYear(), // default to year of next month
+      month: nextMonth.getMonth() + 1, // default to next month
       transfer_date: "",
       creation_date: dateToday, // default to today's date
       paid_date: "",

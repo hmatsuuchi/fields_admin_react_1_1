@@ -23,6 +23,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-name"
           value={invoiceData.customer_name}
+          placeholder="生徒名前"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,
@@ -34,6 +35,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-post-code"
           value={invoiceData.customer_postal_code}
+          placeholder="郵便番号"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,
@@ -45,6 +47,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-prefecture"
           value={invoiceData.customer_prefecture}
+          placeholder="県名"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,
@@ -56,6 +59,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-city"
           value={invoiceData.customer_city}
+          placeholder="市区町村"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,
@@ -67,6 +71,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-address-line-1"
           value={invoiceData.customer_address_line_1}
+          placeholder="住所一行目"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,
@@ -78,6 +83,7 @@ function CustomerManualInput({ invoiceData, setInvoiceData }) {
           type="text"
           id="customer-address-line-2"
           value={invoiceData.customer_address_line_2}
+          placeholder="住所二行目"
           onChange={(e) =>
             setInvoiceData({
               ...invoiceData,

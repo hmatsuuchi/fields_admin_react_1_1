@@ -12,32 +12,45 @@ $grey: #3a3939;
 #invoice-create {
   margin-top: 2.75rem;
 
+  margin-bottom: 20rem;
+
   display: grid;
   justify-items: center;
 
-  #customer-input-section {
+  .invoice-create-container {
+    background-color: #ffffff;
+
+    width: calc(100% - 4rem);
+    max-width: calc(1200px - 4rem);
+
     padding: 1rem;
 
-    width: calc(100% - 2rem);
-    max-width: calc(1100px - 2rem);
+    margin-top: 1rem;
 
-    display: grid;
-    grid-row-gap: 1rem;
+    #customer-input-section {
+      padding: 1rem;
 
-    .section-header {
-      font-size: 0.9rem;
-      color: $grey;
-      text-align: right;
+      width: calc(100% - 2rem);
+      max-width: calc(1100px - 2rem);
 
-      border-bottom: solid 1px $grey;
+      display: grid;
+      grid-row-gap: 1rem;
 
-      margin-bottom: 0.5rem;
+      .section-header {
+        font-size: 0.9rem;
+        color: $grey;
+        text-align: right;
 
-      width: 100%;
+        border-bottom: solid 1px $grey;
+
+        margin-bottom: 0.5rem;
+
+        width: 100%;
+      }
     }
-  }
 
-  & .display-none {
-    display: none;
+    & .display-none {
+      display: none;
+    }
   }
 }

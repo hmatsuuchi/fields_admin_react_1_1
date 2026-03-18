@@ -58,7 +58,7 @@ function InvoiceCreate({
     customer_address_line_1: "",
     customer_address_line_2: "",
 
-    year: dateToday.getFullYear(), // default to this year
+    year: nextMonth.getFullYear(), // default to this year
     month: nextMonth.getMonth() + 1, // default to next month
     creation_date: dateToday.toISOString().slice(0, 10), // default to today's date
     transfer_date: "",
@@ -88,51 +88,53 @@ function InvoiceCreate({
   return (
     <Fragment>
       <section id="invoice-create">
-        <div id="customer-input-section">
-          {/* select the associated customer from a search field and dropdown menu */}
-          <CustomerSelect
-            setDisableToolbarButtons={setDisableToolbarButtons}
+        <div className="invoice-create-container card">
+          <div id="customer-input-section">
+            {/* select the associated customer from a search field and dropdown menu */}
+            <CustomerSelect
+              setDisableToolbarButtons={setDisableToolbarButtons}
+              invoiceData={invoiceData}
+              setInvoiceData={setInvoiceData}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedCustomerData={selectedCustomerData}
+              setSelectedCustomerData={setSelectedCustomerData}
+            />
+
+            {/* manually input customer data */}
+            <CustomerManualInput
+              invoiceData={invoiceData}
+              setInvoiceData={setInvoiceData}
+            />
+
+            {/* manually input creation/transfer date */}
+            <CreationTransferDateManualInput
+              invoiceData={invoiceData}
+              setInvoiceData={setInvoiceData}
+            />
+          </div>
+          <div id="invoice-line-items-section">
+            <InvoiceLineItems
+              invoiceData={invoiceData}
+              setInvoiceData={setInvoiceData}
+              serviceTypeList={serviceTypeList}
+              setServiceTypeList={setServiceTypeList}
+              taxesList={taxesList}
+              setTaxesList={setTaxesList}
+              taxesDefault={taxesDefault}
+              setTaxesDefault={setTaxesDefault}
+            />
+          </div>
+          <BottomButtons
+            csrfToken={csrfToken}
             invoiceData={invoiceData}
             setInvoiceData={setInvoiceData}
-            searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            selectedCustomerData={selectedCustomerData}
             setSelectedCustomerData={setSelectedCustomerData}
-          />
-
-          {/* manually input customer data */}
-          <CustomerManualInput
-            invoiceData={invoiceData}
-            setInvoiceData={setInvoiceData}
-          />
-
-          {/* manually input creation/transfer date */}
-          <CreationTransferDateManualInput
-            invoiceData={invoiceData}
-            setInvoiceData={setInvoiceData}
-          />
-        </div>
-        <div id="invoice-line-items-section">
-          <InvoiceLineItems
-            invoiceData={invoiceData}
-            setInvoiceData={setInvoiceData}
-            serviceTypeList={serviceTypeList}
-            setServiceTypeList={setServiceTypeList}
             taxesList={taxesList}
-            setTaxesList={setTaxesList}
             taxesDefault={taxesDefault}
-            setTaxesDefault={setTaxesDefault}
           />
         </div>
-        <BottomButtons
-          csrfToken={csrfToken}
-          invoiceData={invoiceData}
-          setInvoiceData={setInvoiceData}
-          setSearchTerm={setSearchTerm}
-          setSelectedCustomerData={setSelectedCustomerData}
-          taxesList={taxesList}
-          taxesDefault={taxesDefault}
-        />
       </section>
       <InvoiceCreateToolbar
         disableToolbarButtons={disableToolbarButtons}

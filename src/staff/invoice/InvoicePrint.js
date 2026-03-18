@@ -77,6 +77,22 @@ function InvoicePrint() {
     };
   }, []);
 
+  // converts date to Japanese format (e.g. 2024年6月1日)
+  const formatDateToJapanese = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}年${month}月${day}日`;
+  };
+
+  // converts date to Japanese day of week
+  const getJapaneseDayOfWeek = (dateString) => {
+    const date = new Date(dateString);
+    const daysOfWeek = ["日", "月", "火", "水", "木", "金", "土"];
+    return daysOfWeek[date.getDay()];
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -85,7 +101,7 @@ function InvoicePrint() {
     <div id="invoice-print-container">
       <div className="header-container">
         <div className="year-month">
-          {`明細書 ${invoiceData.year}年${invoiceData.month}月`}
+          {`明細書 ${invoiceData.year}年${invoiceData.month}月分`}
         </div>
         <div className="fields-container">
           <div className="fields">フィールズ英会話</div>
@@ -104,7 +120,7 @@ function InvoicePrint() {
         </div>
         <div className="title-value-container">
           <div className="title">発行日</div>
-          <div className="value">{invoiceData.creation_date}</div>
+          <div className="value">{`${formatDateToJapanese(invoiceData.creation_date)} (${getJapaneseDayOfWeek(invoiceData.creation_date)})`}</div>
         </div>
         <div className="title-value-container">
           <div className="title">合計</div>
@@ -133,15 +149,15 @@ function InvoicePrint() {
         {invoiceData.transfer_date ? (
           <div className="title-value-container">
             <div className="title">引落日</div>
-            <div className="value">{invoiceData.transfer_date}</div>
+            <div className="value">{`${formatDateToJapanese(invoiceData.transfer_date)} (${getJapaneseDayOfWeek(invoiceData.transfer_date)})`}</div>
           </div>
         ) : null}
       </div>
       <div className="divider-line" />
       <div className="invoice-items-container">
         <div className="invoice-item-header-container">
-          <div className="service-type">サービス内容</div>
-          <div className="description">詳細</div>
+          <div className="service-type">種類</div>
+          <div className="description">内容</div>
           <div className="quantity">数量</div>
           <div className="rate">単価</div>
           <div className="tax-rate">税率</div>
