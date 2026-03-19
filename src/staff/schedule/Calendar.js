@@ -87,7 +87,7 @@ function Calendar({
 
       /* get day of week container */
       const dayOfWeekContainer = document.querySelector(
-        `#day-of-week-container-${currentDayOfWeekAdjusted}`
+        `#day-of-week-container-${currentDayOfWeekAdjusted}`,
       );
 
       dayOfWeekContainer.scrollIntoView();
@@ -117,7 +117,7 @@ function Calendar({
     const jumpToHighlightedEvent = () => {
       if (highlightedEventId !== null) {
         const eventElement = document.querySelector(
-          `[data-event_id="${highlightedEventId}"]`
+          `[data-event_id="${highlightedEventId}"]`,
         );
 
         if (eventElement) {
@@ -250,7 +250,7 @@ function Calendar({
   useEffect(() => {
     /* gets all day of week elements to observer */
     const elementsToObserve = document.querySelectorAll(
-      ".day-of-week-container"
+      ".day-of-week-container",
     );
 
     /* attaches observer instances */
@@ -274,13 +274,13 @@ function Calendar({
               /* removes day of week from visible days of week */
               setVisibleDaysOfWeek((prevDays) => {
                 return prevDays.filter(
-                  (id) => id !== parseInt(entry.target.id.split("-")[4])
+                  (id) => id !== parseInt(entry.target.id.split("-")[4]),
                 );
               });
             }
           });
         },
-        { root: null, rootMargin: "0px 0px 6000px 0px", threshold: 0.1 }
+        { root: null, rootMargin: "0px 0px 6000px 0px", threshold: 0.05 },
       );
 
       /* starts observing elements */
@@ -399,7 +399,7 @@ function Calendar({
   function handleNextDayButtonClick() {
     const calendarContainer = document.getElementById("calendar-container");
     const dayOfWeekContainer = calendarContainer.getElementsByClassName(
-      "day-of-week-container"
+      "day-of-week-container",
     )[0];
 
     calendarContainer.scrollBy({
@@ -413,7 +413,7 @@ function Calendar({
   function handlePreviousDayButtonClick() {
     const calendarContainer = document.getElementById("calendar-container");
     const dayOfWeekContainer = calendarContainer.getElementsByClassName(
-      "day-of-week-container"
+      "day-of-week-container",
     )[0];
 
     calendarContainer.scrollBy({
@@ -458,7 +458,7 @@ function Calendar({
     const dayOfWeekInteger = e.target.id.split("-")[1];
 
     const dayOfWeekContainer = document.querySelector(
-      `#day-of-week-container-${dayOfWeekInteger}`
+      `#day-of-week-container-${dayOfWeekInteger}`,
     );
 
     dayOfWeekContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -649,12 +649,12 @@ function Calendar({
                                                 student.status === 1
                                                   ? " pre-enrolled"
                                                   : student.status === 2
-                                                  ? " enrolled"
-                                                  : student.status === 3
-                                                  ? " short-absence"
-                                                  : student.status === 4
-                                                  ? " long-absence"
-                                                  : " unknown"
+                                                    ? " enrolled"
+                                                    : student.status === 3
+                                                      ? " short-absence"
+                                                      : student.status === 4
+                                                        ? " long-absence"
+                                                        : " unknown"
                                               }`}
                                             ></div>
                                             <div className="student-name-kanji">
