@@ -34,8 +34,7 @@ function InvoicePrint() {
           })
           .then((response) => {
             setInvoiceData(response.data);
-            // window.print();
-            console.log(response.data);
+            window.print();
           });
       } catch (e) {
         console.log(e);

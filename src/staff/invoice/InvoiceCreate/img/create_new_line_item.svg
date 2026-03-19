@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="109.3335"
+   height="109.33331"
+   viewBox="0 0 109.3335 109.33331"
+   sodipodi:docname="Fields Admin Assets.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath78">
+      <path
+         d="M 0,768 H 1366 V 0 H 0 Z"
+         transform="translate(-180,-447.00001)"
+         id="path78" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="0.54917507"
+     inkscape:cx="2684.0257"
+     inkscape:cy="1342.9233"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer-MC1"
+     showgrid="false">
+    <inkscape:page
+       x="-4.6477365e-14"
+       y="0"
+       width="109.3335"
+       height="109.33331"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     id="layer-MC1"
+     inkscape:groupmode="layer"
+     inkscape:label="Toolbar Icons"
+     transform="translate(-4395.4686,-226.28894)">
+    <g
+       inkscape:groupmode="layer"
+       id="layer3"
+       inkscape:label="Other Icons">
+      <path
+         id="path77"
+         d="m 0,0 h -29 v 29 c 0,3.313 -2.687,6 -6,6 -3.313,0 -6,-2.687 -6,-6 V 0 h -29 c -3.313,0 -6,-2.687 -6,-6 0,-3.313 2.687,-6 6,-6 h 29 v -29 c 0,-3.313 2.687,-6 6,-6 3.313,0 6,2.687 6,6 v 29 H 0 c 3.313,0 6,2.687 6,6 0,3.313 -2.687,6 -6,6"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(1.3333333,0,0,-1.3333333,4496.8021,272.95555)"
+         clip-path="url(#clipPath78)" />
+    </g>
+  </g>
+</svg>

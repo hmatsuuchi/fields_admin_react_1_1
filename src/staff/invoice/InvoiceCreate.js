@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 /* CSS */
 import "./InvoiceCreate.scss";
 /* COMPONENTS */
@@ -73,6 +73,12 @@ function InvoiceCreate({
     line_items: [],
   });
 
+  const [subtotalTaxTotal, setSubtotalTaxTotal] = useState({
+    subtotal: 0,
+    tax: 0,
+    total: 0,
+  });
+
   const [serviceTypeList, setServiceTypeList] = React.useState([]);
   const [taxesList, setTaxesList] = React.useState([]);
   const [taxesDefault, setTaxesDefault] = React.useState("");
@@ -80,6 +86,18 @@ function InvoiceCreate({
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
   /* ----------------------------------------------- */
+
+  useEffect(() => {
+    let subtotal = 0;
+    let tax = 0;
+    let total = 0;
+    invoiceData.line_items.forEach((item) => {
+      subtotal += item.quantity * item.rate;
+      tax += item.quantity * item.rate * (item.tax_rate / 100);
+      total += item.quantity * item.rate * (1 + item.tax_rate / 100);
+    });
+    setSubtotalTaxTotal({ subtotal, tax, total });
+  }, [invoiceData]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -124,6 +142,20 @@ function InvoiceCreate({
               taxesDefault={taxesDefault}
               setTaxesDefault={setTaxesDefault}
             />
+          </div>
+          <div className="invoice-totals-container">
+            <div className="subtotal-label">小計</div>
+            <div className="subtotal">
+              {subtotalTaxTotal.subtotal.toLocaleString("ja-JP")}円
+            </div>
+            <div className="tax-label">消費税</div>
+            <div className="tax">
+              {subtotalTaxTotal.tax.toLocaleString("ja-JP")}円
+            </div>
+            <div className="total-label">合計</div>
+            <div className="total">
+              {subtotalTaxTotal.total.toLocaleString("ja-JP")}円
+            </div>
           </div>
           <BottomButtons
             csrfToken={csrfToken}

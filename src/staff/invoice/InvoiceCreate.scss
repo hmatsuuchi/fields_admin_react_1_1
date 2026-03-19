@@ -27,11 +27,12 @@ $grey: #3a3939;
 
     margin-top: 1rem;
 
+    display: grid;
+
     #customer-input-section {
       padding: 1rem;
 
       width: calc(100% - 2rem);
-      max-width: calc(1100px - 2rem);
 
       display: grid;
       grid-row-gap: 1rem;
@@ -51,6 +52,25 @@ $grey: #3a3939;
 
     & .display-none {
       display: none;
+    }
+
+    .invoice-totals-container {
+      justify-self: right;
+
+      margin: 1rem 0 4rem 0;
+
+      font-size: 1.1rem;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-row-gap: 0.25rem;
+      grid-column-gap: 0.5rem;
+      justify-items: right;
+
+      .total-label,
+      .total {
+        font-weight: 500;
+      }
     }
   }
 }

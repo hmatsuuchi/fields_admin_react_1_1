@@ -40,7 +40,7 @@ body.invoice-print {
     align-items: center;
 
     .year-month {
-      font-size: 33px;
+      font-size: 30px;
       font-weight: 500;
     }
 
@@ -49,14 +49,14 @@ body.invoice-print {
       justify-items: right;
 
       .fields {
-        font-size: 21px;
+        font-size: 18px;
         font-weight: 500;
 
         margin-bottom: 3mm;
       }
 
       .fields-info {
-        font-size: 16px;
+        font-size: 14px;
       }
     }
   }
@@ -84,11 +84,16 @@ body.invoice-print {
         padding-left: 2mm;
       }
 
+      .title,
+      .value {
+        font-size: 14px;
+      }
+
       .total {
         justify-self: right;
         padding-right: 2mm;
 
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 400;
       }
     }
@@ -144,7 +149,7 @@ body.invoice-print {
     padding: 0 2.5mm;
     margin-top: 20mm;
 
-    font-size: 18px;
+    font-size: 16px;
 
     display: grid;
     grid-auto-flow: column;

@@ -65,7 +65,7 @@ function InvoiceLineItems({
   /* calculates default tax rate based on default tax type */
   function calculateDefaultTaxRate(taxesList, taxesDefault) {
     const defaultTaxObject = taxesList.find(
-      (taxItem) => taxItem.id === taxesDefault
+      (taxItem) => taxItem.id === taxesDefault,
     );
     if (defaultTaxObject) {
       return defaultTaxObject.rate;
@@ -123,7 +123,7 @@ function InvoiceLineItems({
       setInvoiceData({
         ...invoiceData,
         line_items: invoiceData.line_items.filter(
-          (item, index) => index !== elementIndex
+          (item, index) => index !== elementIndex,
         ),
       });
     }
@@ -140,7 +140,7 @@ function InvoiceLineItems({
           return (
             <div key={`invoice-item-${index}`} className="line-item-container">
               <div
-                className="delete-line-item-button"
+                className={`delete-line-item-button${invoiceData.line_items.length === 1 ? " disabled" : ""}`}
                 onClick={() => {
                   handleClicksToDeleteLineItemButton(index);
                 }}
@@ -157,7 +157,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, service_type: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   })
                 }
@@ -185,7 +185,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, description: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   });
                 }}
@@ -203,7 +203,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, quantity: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   });
                 }}
@@ -221,7 +221,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, rate: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   });
                 }}
@@ -238,7 +238,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, tax_type: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   });
                 }}
@@ -263,7 +263,7 @@ function InvoiceLineItems({
                       (lineItem, lineIndex) =>
                         lineIndex === index
                           ? { ...lineItem, tax_rate: e.target.value }
-                          : lineItem
+                          : lineItem,
                     ),
                   });
                 }}
@@ -279,7 +279,9 @@ function InvoiceLineItems({
       <div
         id="add-invoice-line-item-container"
         onClick={handleClicksToCreateNewLineItemButton}
-      ></div>
+      >
+        <div className="icon"></div>
+      </div>
     </Fragment>
   );
 }

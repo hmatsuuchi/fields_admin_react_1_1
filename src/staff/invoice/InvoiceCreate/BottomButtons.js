@@ -94,6 +94,9 @@ function BottomButtons({
       address_2: "",
     });
 
+    // scrolls to top of page
+    window.scrollTo(0, 0);
+
     /* return focus to student select input field */
     const studentSelectInputField = document.getElementById("customer-search");
     if (studentSelectInputField) {

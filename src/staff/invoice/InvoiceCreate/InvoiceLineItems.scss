@@ -23,7 +23,8 @@ $grey: #3a3939;
 
 #invoice-line-items-section {
   width: calc(100% - 2rem);
-  max-width: calc(1100px - 2rem);
+
+  padding: 0 1rem;
 
   display: grid;
   grid-row-gap: 1rem;
@@ -42,7 +43,18 @@ $grey: #3a3939;
 
       cursor: pointer;
 
-      background-color: pink;
+      background-image: url("../InvoiceCreate/img/delete_x.svg");
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+    }
+
+    .delete-line-item-button.disabled {
+      cursor: default;
+
+      pointer-events: none;
+
+      opacity: 0.5;
     }
 
     input {
@@ -91,11 +103,22 @@ $grey: #3a3939;
 }
 
 #add-invoice-line-item-container {
-  margin-bottom: 5rem;
-
   cursor: pointer;
 
-  width: 100%;
-  height: 2rem;
-  background-color: pink;
+  display: grid;
+  justify-content: center;
+
+  .icon {
+    height: 28px;
+    width: 28px;
+
+    background-color: $teal;
+
+    border-radius: 26px;
+
+    background-image: url("../InvoiceCreate/img/create_new_line_item.svg");
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+  }
 }
