@@ -64,8 +64,6 @@ function StagedChanges({
   };
 
   const handleClicksToConfirmButton = () => {
-    console.log(stagedChanges);
-
     // send stagedChanges to backend to update invoices
     const batchUpdateInvoiceStatus = async () => {
       // disable screen and toolbar

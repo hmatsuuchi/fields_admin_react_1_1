@@ -168,3 +168,14 @@ body.invoice-print {
     }
   }
 }
+
+#invoice-print-container-second-page {
+  width: calc(210mm - 16mm);
+  height: calc(297mm - 16mm);
+
+  padding: 8mm;
+
+  .student-name-romaji {
+    font-size: 14px;
+  }
+}
