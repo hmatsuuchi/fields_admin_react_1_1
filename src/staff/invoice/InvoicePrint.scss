@@ -9,127 +9,102 @@ $light-grey: #adadad;
 $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
-body.invoice-print {
-  background-color: #ffffff;
-}
-
-#navigation.invoice-print {
-  display: none;
-}
-
-#invoice-print-container {
-  width: calc(210mm - 16mm);
-  height: calc(297mm - 16mm);
-
-  padding: 8mm;
-
-  .divider-line {
-    margin: 7.5mm 0;
-
-    border-top: 1px solid #000000;
+@media screen {
+  #invoice-print-container,
+  #invoice-print-container-second-page {
+    display: none;
   }
+}
 
-  .header-container {
-    padding: 0 2.5mm;
+@media print {
+  #invoice-print-container {
+    width: calc(210mm - 16mm);
+    height: calc(297mm - 16mm);
 
-    margin-top: 10mm;
+    padding: 8mm;
 
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: space-between;
-    align-items: center;
+    .divider-line {
+      margin: 7.5mm 0;
 
-    .year-month {
-      font-size: 30px;
-      font-weight: 500;
+      border-top: 1px solid #000000;
     }
 
-    .fields-container {
-      display: grid;
-      justify-items: right;
+    .header-container {
+      padding: 0 2.5mm;
 
-      .fields {
-        font-size: 18px;
+      margin-top: 10mm;
+
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .year-month {
+        font-size: 30px;
         font-weight: 500;
-
-        margin-bottom: 3mm;
       }
 
-      .fields-info {
-        font-size: 14px;
+      .fields-container {
+        display: grid;
+        justify-items: right;
+
+        .fields {
+          font-size: 18px;
+          font-weight: 500;
+
+          margin-bottom: 3mm;
+        }
+
+        .fields-info {
+          font-size: 14px;
+        }
       }
     }
-  }
 
-  .invoice-container {
-    margin: 0 2.5mm;
+    .invoice-container {
+      margin: 0 2.5mm;
 
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    grid-auto-flow: row;
-    grid-row-gap: 7mm;
-    grid-column-gap: 7mm;
-
-    .title-value-container {
       display: grid;
-      align-content: start;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-auto-flow: row;
+      grid-row-gap: 7mm;
+      grid-column-gap: 7mm;
 
-      .title {
-        background-color: #e0e0e0;
+      .title-value-container {
+        display: grid;
+        align-content: start;
 
-        padding: 0.5mm 1mm;
-      }
+        .title {
+          background-color: #e0e0e0;
 
-      .value {
-        padding-left: 2mm;
-      }
+          padding: 0.5mm 1mm;
+        }
 
-      .title,
-      .value {
-        font-size: 14px;
-      }
+        .value {
+          padding-left: 2mm;
+        }
 
-      .total {
-        justify-self: right;
-        padding-right: 2mm;
+        .title,
+        .value {
+          font-size: 14px;
+        }
 
-        font-size: 24px;
-        font-weight: 400;
+        .total {
+          justify-self: right;
+          padding-right: 2mm;
+
+          font-size: 24px;
+          font-weight: 400;
+        }
       }
     }
-  }
 
-  .invoice-item-header-container {
-    font-size: 14px;
-
-    background-color: #e0e0e0;
-
-    padding: 0.7mm 1mm;
-
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 10fr 16fr 2fr 4fr 2fr 4fr; // service type, description, quantity, rate, tax rate, line total
-    grid-column-gap: 4mm;
-
-    .quantity,
-    .rate,
-    .tax-rate,
-    .line-total {
-      justify-self: right;
-    }
-  }
-
-  .invoice-items-container {
-    padding: 0 2.5mm;
-
-    display: grid;
-    grid-row-gap: 5mm;
-
-    .invoice-item-container {
+    .invoice-item-header-container {
       font-size: 14px;
 
-      width: calc(100% - 2mm);
-      padding: 0 1mm;
+      background-color: #e0e0e0;
+
+      padding: 0.7mm 1mm;
 
       display: grid;
       grid-auto-flow: column;
@@ -143,39 +118,65 @@ body.invoice-print {
         justify-self: right;
       }
     }
-  }
 
-  .tax-and-total-container {
-    padding: 0 2.5mm;
-    margin-top: 20mm;
+    .invoice-items-container {
+      padding: 0 2.5mm;
 
-    font-size: 16px;
+      display: grid;
+      grid-row-gap: 5mm;
 
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: right;
-    justify-items: right;
-    grid-column-gap: 5mm;
+      .invoice-item-container {
+        font-size: 14px;
 
-    .label {
-      grid-column: 1;
+        width: calc(100% - 2mm);
+        padding: 0 1mm;
+
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 10fr 16fr 2fr 4fr 2fr 4fr; // service type, description, quantity, rate, tax rate, line total
+        grid-column-gap: 4mm;
+
+        .quantity,
+        .rate,
+        .tax-rate,
+        .line-total {
+          justify-self: right;
+        }
+      }
     }
 
-    .subtotal,
-    .tax,
-    .total {
-      grid-column: 2;
+    .tax-and-total-container {
+      padding: 0 2.5mm;
+      margin-top: 20mm;
+
+      font-size: 16px;
+
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: right;
+      justify-items: right;
+      grid-column-gap: 5mm;
+
+      .label {
+        grid-column: 1;
+      }
+
+      .subtotal,
+      .tax,
+      .total {
+        grid-column: 2;
+      }
     }
   }
-}
 
-#invoice-print-container-second-page {
-  width: calc(210mm - 16mm);
-  height: calc(297mm - 16mm);
+  #invoice-print-container-second-page {
+    width: calc(210mm - 16mm);
+    height: calc(297mm - 16mm);
 
-  padding: 8mm;
+    padding: 8mm;
 
-  .student-name-romaji {
-    font-size: 14px;
+    .student-name-romaji {
+      font-size: 14px;
+    }
   }
 }

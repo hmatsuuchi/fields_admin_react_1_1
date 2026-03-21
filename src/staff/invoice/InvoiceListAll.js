@@ -5,6 +5,7 @@ import instance from "../../axios/axios_authenticated";
 import "./InvoiceListAll.scss";
 /* COMPONENTS */
 import InvoiceListAllToolbar from "../../staff/toolbar/invoice/InvoiceListAllToolbar";
+import InvoicePrint from "./InvoicePrint";
 /* LOADING SPINNER */
 import LoadingSpinner from "../micro/LoadingSpinner";
 
@@ -45,6 +46,9 @@ function InvoiceListAll({
 
   // display descriptors
   const [displayDescriptors, setDisplayDescriptors] = useState([]);
+
+  // invoice ID for printing
+  const [invoiceIdForPrinting, setInvoiceIdForPrinting] = useState(null);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -155,8 +159,7 @@ function InvoiceListAll({
 
   // handles clicks to invoice print button
   const handleClicksToInvoicePrintButton = (invoiceId) => {
-    const printPath = `/staff/invoice/print/${invoiceId}`;
-    window.open(printPath, "_blank");
+    setInvoiceIdForPrinting(invoiceId);
   };
 
   /* ---------------------------------------- */
@@ -338,6 +341,8 @@ function InvoiceListAll({
         setInvoicesAll={setInvoicesAll}
         setContentLoading={setContentLoading}
       />
+
+      <InvoicePrint invoiceId={invoiceIdForPrinting} />
     </Fragment>
   );
 }

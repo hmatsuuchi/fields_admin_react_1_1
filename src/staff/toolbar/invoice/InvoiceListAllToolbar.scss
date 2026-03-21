@@ -126,3 +126,10 @@ $grey: #3a3939;
 #invoice-list-all-toolbar.disable-toolbar-buttons {
   pointer-events: none;
 }
+
+/* For printing */
+@media print {
+  #invoice-list-all-toolbar {
+    display: none;
+  }
+}

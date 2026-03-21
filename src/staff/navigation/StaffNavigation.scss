@@ -348,3 +348,10 @@ nav.staff-navigation.nav-active.nav-animating {
 #close-navigation.nav-animating {
   pointer-events: none;
 }
+
+/* For printing */
+@media print {
+  nav.staff-navigation {
+    display: none;
+  }
+}

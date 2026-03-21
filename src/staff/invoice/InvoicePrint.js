@@ -3,15 +3,12 @@ import React, { useEffect, Fragment } from "react";
 import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./InvoicePrint.scss";
-// React Router DOM
-import { useParams } from "react-router-dom";
 
-function InvoicePrint() {
+function InvoicePrint({ invoiceId }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
-  const { invoiceId } = useParams();
   const [invoiceData, setInvoiceData] = React.useState(null);
   const [invoiceTotal, setInvoiceTotal] = React.useState({
     subtotal: 0,
@@ -42,7 +39,7 @@ function InvoicePrint() {
     };
 
     // drives code
-    fetchInvoiceData();
+    invoiceId && fetchInvoiceData();
   }, [invoiceId]);
 
   // runs when invoiceData state is updated
@@ -56,25 +53,13 @@ function InvoicePrint() {
         subtotal += item.quantity * item.rate;
         totalTax += item.quantity * item.rate * (item.tax_rate / 100);
       });
-      setInvoiceTotal({ subtotal, totalTax, total });
+      setInvoiceTotal({
+        subtotal: Math.round(subtotal),
+        totalTax: Math.round(totalTax),
+        total: Math.round(total),
+      });
     }
   }, [invoiceData]);
-
-  // applies print styles when component is mounted, and removes them when component is unmounted
-  useEffect(() => {
-    document.body.classList.add("invoice-print");
-    const navigation = document.getElementById("navigation");
-    if (navigation) {
-      navigation.classList.add("invoice-print");
-    }
-
-    return () => {
-      document.body.classList.remove("invoice-print");
-      if (navigation) {
-        navigation.classList.remove("invoice-print");
-      }
-    };
-  }, []);
 
   // converts date to Japanese format (e.g. 2024年6月1日)
   const formatDateToJapanese = (dateString) => {

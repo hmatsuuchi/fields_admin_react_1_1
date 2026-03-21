@@ -239,3 +239,10 @@ $grey: #3a3939;
     }
   }
 }
+
+/* For printing */
+@media print {
+  #invoice-list-all {
+    display: none;
+  }
+}
