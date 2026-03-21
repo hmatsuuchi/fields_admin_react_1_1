@@ -4,7 +4,7 @@ import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./InvoicePrint.scss";
 
-function InvoicePrint({ invoiceId }) {
+function InvoicePrint({ invoiceId, setInvoiceIdForPrinting }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -32,6 +32,7 @@ function InvoicePrint({ invoiceId }) {
           .then((response) => {
             setInvoiceData(response.data);
             window.print();
+            setInvoiceIdForPrinting(null);
           });
       } catch (e) {
         console.log(e);
@@ -40,7 +41,7 @@ function InvoicePrint({ invoiceId }) {
 
     // drives code
     invoiceId && fetchInvoiceData();
-  }, [invoiceId]);
+  }, [invoiceId, setInvoiceIdForPrinting]);
 
   // runs when invoiceData state is updated
   useEffect(() => {

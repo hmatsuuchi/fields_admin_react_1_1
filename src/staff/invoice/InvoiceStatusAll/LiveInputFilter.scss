@@ -98,3 +98,9 @@ $grey: #3a3939;
     }
   }
 }
+
+@media print {
+  #live-input-filter {
+    display: none;
+  }
+}

@@ -5,6 +5,7 @@ import instance from "../../axios/axios_authenticated";
 import "./InvoiceStatusAll.scss";
 /* COMPONENTS */
 import InvoiceStatusAllToolbar from "../toolbar/invoice/InvoiceStatusAllToolbar";
+import InvoicePrint from "./InvoicePrint";
 import StagedChanges from "./InvoiceStatusAll/StagedChanges";
 /* LIVE INPUT FILTER */
 import LiveInputFilter from "./InvoiceStatusAll/LiveInputFilter";
@@ -76,6 +77,9 @@ function InvoiceStatusAll({
   const [liveFilterTextInput, setLiveFilterTextInput] = useState("");
   const [liveFilterTextInputIsOpen, setLiveFilterTextInputIsOpen] =
     useState(false);
+
+  // invoice ID for printing
+  const [invoiceIdForPrinting, setInvoiceIdForPrinting] = useState(null);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -310,8 +314,7 @@ function InvoiceStatusAll({
 
   // handles clicks to invoice print button
   const handleClicksToInvoicePrintButton = (invoiceId) => {
-    const printPath = `/staff/invoice/print/${invoiceId}`;
-    window.open(printPath, "_blank");
+    setInvoiceIdForPrinting(invoiceId);
   };
 
   /* ---------------------------------------- */
@@ -582,6 +585,12 @@ function InvoiceStatusAll({
         setTextFilterInput={setTextFilterInput}
         setContentLoading={setContentLoading}
       />
+
+      <InvoicePrint
+        invoiceId={invoiceIdForPrinting}
+        setInvoiceIdForPrinting={setInvoiceIdForPrinting}
+      />
+
       <div id="overlay" className={sendingChanges ? "active" : ""} />
     </Fragment>
   );

@@ -164,3 +164,9 @@ $grey: #3a3939;
 #invoice-status-all-toolbar.disable-toolbar-buttons {
   pointer-events: none;
 }
+
+@media print {
+  #invoice-status-all-toolbar {
+    display: none;
+  }
+}

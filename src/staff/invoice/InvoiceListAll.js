@@ -342,7 +342,10 @@ function InvoiceListAll({
         setContentLoading={setContentLoading}
       />
 
-      <InvoicePrint invoiceId={invoiceIdForPrinting} />
+      <InvoicePrint
+        invoiceId={invoiceIdForPrinting}
+        setInvoiceIdForPrinting={setInvoiceIdForPrinting}
+      />
     </Fragment>
   );
 }
