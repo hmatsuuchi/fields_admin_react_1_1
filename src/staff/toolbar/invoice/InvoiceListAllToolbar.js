@@ -222,7 +222,7 @@ function InvoiceListAllToolbar({
           tabIndex={1}
         />
         <button
-          className="filter-results-button"
+          className="filter-results-button text-filter-button"
           onClick={handleClicksToTextFilterButton}
           tabIndex={2}
         ></button>
@@ -271,7 +271,7 @@ function InvoiceListAllToolbar({
           <option value={12}>12月</option>
         </select>
         <button
-          className="filter-results-button"
+          className="filter-results-button date-filter-button"
           onClick={handleClicksToDateFilterButton}
           tabIndex={5}
         ></button>

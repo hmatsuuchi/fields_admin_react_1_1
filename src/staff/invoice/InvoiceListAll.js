@@ -133,6 +133,7 @@ function InvoiceListAll({
       year: "",
       month: "",
       display_student_only_id: studentId,
+      text_filter: "",
     });
 
     // sets filter parameters for text descriptor
@@ -203,7 +204,7 @@ function InvoiceListAll({
                   />
 
                   <div className="customer-info-container">
-                    <div>{invoice.customer_name}</div>
+                    <div className="customer-name">{invoice.customer_name}</div>
                     <div>〒{invoice.customer_postal_code}</div>
                     <div>
                       {invoice.customer_prefecture}
@@ -218,7 +219,9 @@ function InvoiceListAll({
                   <div className="invoice-details-container">
                     <div>作成日: {invoice.creation_date}</div>
                     <div>支払方法: {invoice.payment_method.name}</div>
-                    <div>振込日: {invoice.transfer_date}</div>
+                    {invoice.transfer_date !== null ? (
+                      <div>振込日: {invoice.transfer_date}</div>
+                    ) : null}
                   </div>
                   <div className="invoice-status-container">
                     <div
@@ -249,8 +252,9 @@ function InvoiceListAll({
 
                   <div className="invoice-items-container">
                     <div className="invoice-item column-header-container">
-                      <div>種類</div>
-                      <div>内容</div>
+                      <div className="combined-description">種類/内容</div>
+                      <div className="independent-description">種類</div>
+                      <div className="independent-description">内容</div>
                       <div className="invoice-item-number">数量</div>
                       <div className="invoice-item-number">単価</div>
                       <div className="invoice-item-number">税率</div>
@@ -264,8 +268,10 @@ function InvoiceListAll({
 
                       return (
                         <div className="invoice-item" key={item.id}>
-                          <div>{item.service_type.name}</div>
-                          <div>{item.description}</div>
+                          <div className="service-type">
+                            {item.service_type.name}
+                          </div>
+                          <div className="description">{item.description}</div>
                           <div className="invoice-item-number">
                             {item.quantity}
                           </div>

@@ -36,6 +36,7 @@ $grey: #3a3939;
 
     input.text-filter-input {
       height: 2rem;
+      width: calc(100% - 2.6rem);
       max-width: 15rem;
 
       border: none;
@@ -57,6 +58,8 @@ $grey: #3a3939;
     }
 
     select {
+      display: none;
+
       background-color: #ffffff;
 
       border: solid 1px #000000;
@@ -84,6 +87,8 @@ $grey: #3a3939;
     }
 
     .vertical-divider-thin {
+      display: none;
+
       width: 1px;
       height: 100%;
 
@@ -108,15 +113,23 @@ $grey: #3a3939;
       background-size: auto 65%;
     }
 
+    .date-filter-button {
+      display: none;
+    }
+
+    .text-filter-button {
+      display: none;
+    }
+
     .number-of-results {
-      width: 4.1rem;
+      width: 3rem;
 
       text-align: center;
 
       margin-left: 0.5rem;
 
       color: #ffffff;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 500;
     }
   }
@@ -125,6 +138,40 @@ $grey: #3a3939;
 /* prevents clicks to the toolbar before API call is complete */
 #invoice-list-all-toolbar.disable-toolbar-buttons {
   pointer-events: none;
+}
+
+@media screen and (min-width: 450px) {
+  #invoice-list-all-toolbar {
+    .toolbar-right-side-container {
+      .text-filter-button {
+        display: inline;
+      }
+
+      .number-of-results {
+        font-size: 1.1rem;
+
+        width: 4.1rem;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 700px) {
+  #invoice-list-all-toolbar {
+    .toolbar-right-side-container {
+      .vertical-divider-thin {
+        display: inline;
+      }
+
+      select {
+        display: inline;
+      }
+
+      .date-filter-button {
+        display: inline;
+      }
+    }
+  }
 }
 
 /* For printing */

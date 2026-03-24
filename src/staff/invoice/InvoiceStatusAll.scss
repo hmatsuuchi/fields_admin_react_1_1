@@ -39,9 +39,13 @@ $grey: #3a3939;
     display: grid;
     grid-row-gap: 1rem;
     align-content: start;
+    justify-content: center;
 
     .invoice-container {
       display: none;
+
+      width: calc(100vw - 5rem);
+      max-width: 1200px;
 
       position: relative;
 
@@ -160,6 +164,8 @@ $grey: #3a3939;
           box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3);
 
           border-radius: 0.8rem;
+
+          cursor: pointer;
 
           display: grid;
           justify-content: space-between;
