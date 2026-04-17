@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 // CSS
 import "./Overview.scss";
 // COMPONENTS
-import IncompleteAttendanceForAllInstructors from "./overview/IncompleteAttendanceForAllInstructors";
+import AttendanceAlerts from "./overview/AttendanceAlerts";
+import OverviewToolbar from "../toolbar/dashboard/OverviewToolbar";
 
 function Overview() {
   /* ------------------------------------------- */
@@ -18,9 +19,14 @@ function Overview() {
   /* ------------------------------------------- */
 
   return (
-    <div id="overview-primary-container">
-      <IncompleteAttendanceForAllInstructors />
-    </div>
+    <Fragment>
+      <div id="overview-section">
+        <div id="overview-primary-container">
+          <AttendanceAlerts />
+        </div>
+      </div>
+      <OverviewToolbar />
+    </Fragment>
   );
 }
 
