@@ -170,8 +170,8 @@ function InvoiceCreate({
           />
         </div>
       </section>
-      <CustomerAttendance invoiceData={invoiceData} />
-      <CustomerInvoices invoiceData={invoiceData} />
+      <CustomerAttendance associatedStudentId={invoiceData["student"]} />
+      <CustomerInvoices associatedStudentId={invoiceData["student"]} />
       <InvoiceCreateToolbar
         disableToolbarButtons={disableToolbarButtons}
         backButtonText={backButtonText}

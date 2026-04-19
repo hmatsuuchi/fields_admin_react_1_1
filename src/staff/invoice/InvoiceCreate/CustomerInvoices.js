@@ -6,7 +6,7 @@ import instance from "../../../axios/axios_authenticated";
 /* LOADING SPINNER */
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
-function CustomerInvoices({ invoiceData }) {
+function CustomerInvoices({ associatedStudentId }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -37,7 +37,7 @@ function CustomerInvoices({ invoiceData }) {
           .get(
             "api/invoices/invoices/invoices_for_student_for_invoice_create/",
             {
-              params: { student_id: invoiceData.id },
+              params: { student_id: associatedStudentId },
             },
           )
           .then((response) => {
@@ -57,7 +57,7 @@ function CustomerInvoices({ invoiceData }) {
     clearTimeout(fetchInvoiceRecordsTimerRef.current);
 
     // sets a new timer
-    if (invoiceData && invoiceData.id) {
+    if (associatedStudentId) {
       fetchInvoiceRecordsTimerRef.current = setTimeout(() => {
         fetchStudentInvoiceRecords();
       }, 1500);
@@ -67,7 +67,7 @@ function CustomerInvoices({ invoiceData }) {
     return () => {
       clearTimeout(fetchInvoiceRecordsTimerRef.current);
     };
-  }, [invoiceData]);
+  }, [associatedStudentId]);
 
   // toggles invoices drawer
   const toggleInvoicesDrawer = () => {
@@ -95,9 +95,11 @@ function CustomerInvoices({ invoiceData }) {
                 <div>{`${record.year}年${record.month}月`}</div>
                 <div>{`${record.invoice_total.toLocaleString()}円`}</div>
                 <div>{`${record.payment_method === 1 ? "月謝袋" : "引き落とし"}`}</div>
+                <div className="status-label">発行</div>
                 <div
                   className={`invoice-status-button${record.issued_date ? " issued" : ""}`}
                 />
+                <div className="status-label">支払</div>
                 <div
                   className={`invoice-status-button${record.paid_date ? " paid" : ""}`}
                 />

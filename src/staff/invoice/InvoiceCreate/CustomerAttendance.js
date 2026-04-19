@@ -6,7 +6,7 @@ import instance from "../../../axios/axios_authenticated";
 /* LOADING SPINNER */
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
-function CustomerAttendance({ invoiceData }) {
+function CustomerAttendance({ associatedStudentId }) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -36,7 +36,7 @@ function CustomerAttendance({ invoiceData }) {
           .get(
             "api/attendance/attendance/attendance_for_student_for_invoice/",
             {
-              params: { student_id: invoiceData.id },
+              params: { student_id: associatedStudentId },
             },
           )
           .then((response) => {
@@ -56,7 +56,7 @@ function CustomerAttendance({ invoiceData }) {
     clearTimeout(fetchAttendanceRecordsTimerRef.current);
 
     // sets a new timer
-    if (invoiceData && invoiceData.id) {
+    if (associatedStudentId) {
       fetchAttendanceRecordsTimerRef.current = setTimeout(() => {
         fetchStudentAttendanceRecords();
       }, 1500);
@@ -66,7 +66,7 @@ function CustomerAttendance({ invoiceData }) {
     return () => {
       clearTimeout(fetchAttendanceRecordsTimerRef.current);
     };
-  }, [invoiceData]);
+  }, [associatedStudentId]);
 
   // converts date to Japanese format
   const convertDateToJapaneseFormat = (dateString) => {
