@@ -8,6 +8,8 @@ import CustomerManualInput from "./InvoiceCreate/CustomerManualInput";
 import CreationTransferDateManualInput from "./InvoiceCreate/CreationTransferDateManualInput";
 import InvoiceLineItems from "./InvoiceCreate/InvoiceLineItems";
 import BottomButtons from "./InvoiceCreate/BottomButtons";
+import CustomerAttendance from "./InvoiceCreate/CustomerAttendance";
+import CustomerInvoices from "./InvoiceCreate/CustomerInvoices";
 
 function InvoiceCreate({
   csrfToken,
@@ -168,6 +170,8 @@ function InvoiceCreate({
           />
         </div>
       </section>
+      <CustomerAttendance invoiceData={invoiceData} />
+      <CustomerInvoices invoiceData={invoiceData} />
       <InvoiceCreateToolbar
         disableToolbarButtons={disableToolbarButtons}
         backButtonText={backButtonText}

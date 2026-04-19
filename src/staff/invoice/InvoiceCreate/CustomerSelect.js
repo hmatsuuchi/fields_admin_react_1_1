@@ -60,6 +60,8 @@ function CustomerSelect({
         console.log(e);
       }
     };
+
+    // drives code
     fetchCustomerList();
   }, [setDisableToolbarButtons]);
 
