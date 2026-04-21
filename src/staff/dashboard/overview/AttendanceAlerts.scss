@@ -80,33 +80,26 @@ $attendance-record-gaps: clamp(2px, 0.8cqw, 10px);
             }
           }
 
-          .attendance-record-container.flagged {
+          .attendance-record-container.attention-flag {
             background-color: rgba(255, 222, 125, 0.3);
             border: solid 2px $deep-yellow;
           }
+
+          .attendance-record-container.alert-flag {
+            background-color: rgba(246, 65, 108, 0.3);
+            border: solid 2px $red;
+          }
         }
       }
+    }
+
+    .loading-spinner-container {
+      margin-top: 0;
+      margin-bottom: 2rem;
     }
   }
 
   .card {
     padding: 1rem;
-  }
-}
-
-@media screen and (min-width: 325px) {
-  #attendance-alerts-section {
-    .primary-container {
-      .instructor-container {
-        .day-of-week-container {
-          .day-container {
-            .attendance-records-data-container {
-              .attendance-record-container {
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }

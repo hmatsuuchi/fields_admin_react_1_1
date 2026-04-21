@@ -27,6 +27,10 @@ $grey: #3a3939;
   }
 }
 
+#monthly-revenue-section {
+  grid-column: 2 / 4;
+}
+
 @media screen and (min-width: 600px) {
   #overview-section {
     #overview-primary-container {

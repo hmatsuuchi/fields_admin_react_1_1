@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./AttendanceAlerts.scss";
+/* COMPONENTS */
+import LoadingSpinner from "../../micro/LoadingSpinner";
 
 function AttendanceAlerts() {
   /* ------------------------------------------- */
@@ -11,6 +13,7 @@ function AttendanceAlerts() {
   /* ------------------------------------------- */
 
   const [analytics, setAnalytics] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -21,11 +24,12 @@ function AttendanceAlerts() {
       .get("api/alerts/alerts/attendance_alerts/analyze/")
       .then((response) => {
         if (response) {
-          console.log(response.data.analytics);
           setAnalytics(response.data.analytics);
+          setIsLoading(false);
         }
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error("Error fetching data:", error);
       });
   };
@@ -34,7 +38,7 @@ function AttendanceAlerts() {
     analyzeAttendance();
   }, []);
 
-  const dayOfWeekToString = ["月", "火", "水", "木", "金", "土", "日"];
+  const dayOfWeekToString = ["日", "月", "火", "水", "木", "金", "土"];
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -63,7 +67,7 @@ function AttendanceAlerts() {
                           {dayRecord.attendance_records_for_day_of_week.map(
                             (attendanceRecord, recordIndex) => (
                               <div
-                                className={`attendance-record-container${attendanceRecord.flagged || attendanceRecord.incomplete_records !== 0 ? " flagged" : ""}`}
+                                className={`attendance-record-container${attendanceRecord.incomplete_records !== 0 ? " alert-flag" : attendanceRecord.flagged ? " attention-flag" : ""}`}
                                 key={recordIndex}
                               >
                                 <div className="date">
@@ -83,6 +87,7 @@ function AttendanceAlerts() {
               </div>
             </div>
           ))}
+        {isLoading ? <LoadingSpinner /> : null}
       </div>
     </div>
   );
