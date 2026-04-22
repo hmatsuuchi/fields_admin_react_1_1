@@ -16,6 +16,8 @@ import {
   LineElement,
   LineController,
 } from "chart.js";
+/* COMPONENTS */
+import LoadingSpinner from "../../micro/LoadingSpinner";
 
 function MonthlyRevenue() {
   /* ------------------------------------------- */
@@ -23,6 +25,7 @@ function MonthlyRevenue() {
   /* ------------------------------------------- */
 
   const [monthlyRevenueData, setMonthlyRevenueData] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -39,7 +42,8 @@ function MonthlyRevenue() {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   /* runs on component mount */
@@ -170,8 +174,10 @@ function MonthlyRevenue() {
 
   return (
     <div id="monthly-revenue-section" onClick={fetchRevenueByMonth}>
-      <div className="revenue-chart-container">
-        {monthlyRevenueData.length > 0 ? (
+      <div className="revenue-chart-container card">
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : monthlyRevenueData.length > 0 ? (
           <Line data={chartData} options={chartOptions} />
         ) : null}
       </div>
