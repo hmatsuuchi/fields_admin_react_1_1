@@ -44,7 +44,7 @@ $grey: #3a3939;
 
   .customer-attendance-container {
     width: 32rem;
-    height: 16rem;
+    height: 13rem;
 
     border: solid 1px $light-grey;
     border-bottom: none;
@@ -143,6 +143,6 @@ $grey: #3a3939;
   }
 
   &.open {
-    top: calc(100vh - 17rem - 1.5rem - 2px);
+    top: calc(100vh - 13rem - 1.75rem - 1rem - 2px);
   }
 }

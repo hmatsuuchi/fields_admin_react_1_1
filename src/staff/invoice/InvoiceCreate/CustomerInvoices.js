@@ -43,6 +43,7 @@ function CustomerInvoices({ associatedStudentId }) {
           .then((response) => {
             if (response) {
               setCustomerInvoiceRecords(response.data.invoice_records);
+              console.log(response.data.invoice_records);
             }
           });
       } catch (e) {
@@ -92,17 +93,36 @@ function CustomerInvoices({ associatedStudentId }) {
           {!isLoading ? (
             customerInvoiceRecords.map((record) => (
               <div className="customer-invoice-record" key={record.id}>
-                <div>{`${record.year}年${record.month}月`}</div>
-                <div>{`${record.invoice_total.toLocaleString()}円`}</div>
-                <div>{`${record.payment_method === 1 ? "月謝袋" : "引き落とし"}`}</div>
-                <div className="status-label">発行</div>
-                <div
-                  className={`invoice-status-button${record.issued_date ? " issued" : ""}`}
-                />
-                <div className="status-label">支払</div>
-                <div
-                  className={`invoice-status-button${record.paid_date ? " paid" : ""}`}
-                />
+                <div className="year">{`${record.year}年${record.month}月`}</div>
+                <div className="payment-method">{`${record.payment_method === 1 ? "月謝袋" : "引き落とし"}`}</div>
+                <div className="status-container">
+                  <div className="status-label">発行</div>
+                  <div
+                    className={`invoice-status-button${record.issued_date ? " issued" : ""}`}
+                  />
+                  <div className="status-label">支払</div>
+                  <div
+                    className={`invoice-status-button${record.paid_date ? " paid" : ""}`}
+                  />
+                </div>
+                <div className="invoice-items-container">
+                  {record.invoice_items.map((item) => {
+                    return (
+                      <div className="invoice-item" key={item.id}>
+                        <div className="service-type">
+                          {item.service_type_verbose}
+                        </div>
+                        <div className="description">{item.description}</div>
+                        <div className="quantity">{item.quantity}</div>
+                        <div className="rate">{item.rate.toLocaleString()}</div>
+                        <div className="subtotal">
+                          {item.subtotal.toLocaleString()}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="invoice-total">{`${record.invoice_total.toLocaleString()}円`}</div>
               </div>
             ))
           ) : (

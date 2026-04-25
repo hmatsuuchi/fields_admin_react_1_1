@@ -31,6 +31,8 @@ import InvoiceListAll from "./staff/invoice/InvoiceListAll";
 import InvoiceStatusAll from "./staff/invoice/InvoiceStatusAll";
 import InvoiceCreate from "./staff/invoice/InvoiceCreate";
 import InvoicePrint from "./staff/invoice/InvoicePrint";
+// COMPONENTS - ACCOUNTING
+import JounalEntryCreate from "./staff/accounting/JounalEntryCreate";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -447,6 +449,22 @@ function App() {
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
               <InvoicePrint
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - ACCOUNTING - JOURNAL ENTRY CREATE */}
+        <Route
+          path="/staff/accounting/journal/create/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <JounalEntryCreate
+                csrfToken={csrfToken}
                 backButtonText={backButtonText}
                 backButtonLink={backButtonLink}
                 displayBackButton={displayBackButton}

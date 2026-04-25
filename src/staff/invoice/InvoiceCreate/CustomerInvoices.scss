@@ -44,7 +44,7 @@ $grey: #3a3939;
 
   .customer-invoices-container {
     width: 32rem;
-    height: 16rem;
+    height: 13rem;
 
     border: solid 1px $light-grey;
     border-bottom: none;
@@ -73,8 +73,6 @@ $grey: #3a3939;
     align-content: start;
 
     .customer-invoice-record {
-      height: 1.8rem;
-
       background-color: #ffffff;
 
       border: solid 1px $light-grey;
@@ -88,39 +86,111 @@ $grey: #3a3939;
       grid-auto-flow: column;
       grid-column-gap: 0.25rem;
       align-items: center;
-      grid-template-columns: 5.2rem 4.8rem auto 2rem 1.5rem 2rem 1.5rem;
+      justify-content: space-between;
+      grid-template-columns: 1fr 1fr auto;
 
-      .status-label {
-        justify-self: right;
+      .year,
+      .payment-method {
+        grid-row: 1;
       }
 
-      .invoice-status-button {
-        width: 1.5rem;
-        height: 1.5rem;
+      .payment-method {
+        justify-self: left;
 
-        border-radius: 50%;
+        background-color: $grey;
 
-        background-color: $pre-enrolled;
+        color: #ffffff;
+
+        font-size: 0.8rem;
+        font-weight: 500;
+
+        padding: 0.2rem 0.75rem;
+        border-radius: 99rem;
+      }
+
+      .status-container {
+        grid-row: 1;
 
         display: grid;
-        place-content: center;
+        grid-auto-flow: column;
+        justify-content: right;
+        grid-column-gap: 0.4rem;
+        grid-template-columns: 2rem 1.5rem 2rem 1.5rem;
 
-        &::before {
-          content: "未";
-
-          color: #ffffff;
-
-          font-size: 0.9rem;
-          font-weight: 500;
+        .status-label {
+          justify-self: right;
         }
 
-        &.issued,
-        &.paid {
-          background-color: $teal;
+        .invoice-status-button {
+          width: 1.5rem;
+          height: 1.5rem;
+
+          border-radius: 50%;
+
+          background-color: $pre-enrolled;
+
+          display: grid;
+          place-content: center;
+
           &::before {
-            content: "済";
+            content: "未";
+
+            color: #ffffff;
+
+            font-size: 0.9rem;
+            font-weight: 500;
+          }
+
+          &.issued,
+          &.paid {
+            background-color: $teal;
+            &::before {
+              content: "済";
+            }
           }
         }
+      }
+
+      .invoice-items-container {
+        border-top: solid 1px $light-grey;
+
+        margin-top: 0.4rem;
+        padding-top: 0.35rem;
+
+        font-size: 0.75rem;
+
+        grid-column: 1 / 4;
+        grid-row: 2;
+
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 0.25rem;
+
+        .invoice-item {
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-columns: 6fr 8fr 1fr 2fr 2fr;
+
+          .service-type,
+          .description {
+            justify-self: left;
+          }
+
+          .quantity,
+          .rate,
+          .subtotal {
+            justify-self: right;
+          }
+        }
+      }
+
+      .invoice-total {
+        margin-top: 0.75rem;
+
+        font-size: 1rem;
+
+        grid-row: 3;
+        justify-self: right;
       }
     }
   }
@@ -131,6 +201,6 @@ $grey: #3a3939;
   }
 
   &.open {
-    top: calc(100vh - 17rem - 1.5rem - 2px);
+    top: calc(100vh - 13rem - 1.75rem - 1rem - 2px);
   }
 }
