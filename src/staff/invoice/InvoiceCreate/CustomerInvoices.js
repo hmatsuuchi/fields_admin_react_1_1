@@ -43,7 +43,6 @@ function CustomerInvoices({ associatedStudentId }) {
           .then((response) => {
             if (response) {
               setCustomerInvoiceRecords(response.data.invoice_records);
-              console.log(response.data.invoice_records);
             }
           });
       } catch (e) {

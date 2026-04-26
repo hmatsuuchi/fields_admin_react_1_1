@@ -33,6 +33,8 @@ import InvoiceCreate from "./staff/invoice/InvoiceCreate";
 import InvoicePrint from "./staff/invoice/InvoicePrint";
 // COMPONENTS - ACCOUNTING
 import JounalEntryCreate from "./staff/accounting/JounalEntryCreate";
+import AccountsSummary from "./staff/accounting/AccountsSummary";
+import AccountTransactions from "./staff/accounting/AccountTransactions";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/Dashboard";
@@ -470,6 +472,26 @@ function App() {
                 displayBackButton={displayBackButton}
                 setDisplayBackButton={setDisplayBackButton}
               />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - ACCOUNTING - ACCOUNTS SUMMARY */}
+        <Route
+          path="/staff/accounting/accounts/summary/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <AccountsSummary />
+            </StaffProtectedRoute>
+          }
+        ></Route>
+
+        {/* STAFF ROUTES - ACCOUNTING - ACCOUNT TRANSACTIONS */}
+        <Route
+          path="/staff/accounting/account/transactions/:accountId/"
+          element={
+            <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
+              <AccountTransactions />
             </StaffProtectedRoute>
           }
         ></Route>

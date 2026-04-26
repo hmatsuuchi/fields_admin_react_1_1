@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 /* AXIOS */
 import instance from "../../axios/axios_authenticated";
 /* CSS */
@@ -19,22 +19,48 @@ function JounalEntryCreate({
 
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
+  const [accountChoices, setAccountChoices] = useState([]);
+
   const [journalData, setJournalData] = React.useState({
     date: "",
     description: "",
     reference: "",
-    lines: [{ account: "", side: "", amount: "" }],
+    lines: [
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+      { account: "", amount_debit: "", amount_credit: "" },
+    ],
   });
 
-  // const sampleData = {
-  //   date: "2026-04-23",
-  //   description: "Monthly rent payment",
-  //   reference: "REF-001",
-  //   lines: [
-  //     { account: 2, side: "CREDIT", amount: 300000 },
-  //     { account: 6, side: "DEBIT", amount: 300000 },
-  //   ],
-  // };
+  const [convertedJournalData, setConvertedJournalData] = useState({});
+
+  useEffect(() => {
+    setConvertedJournalData({
+      date: journalData.date,
+      description: journalData.description,
+      reference: journalData.reference,
+      lines: journalData.lines
+        .filter(
+          (line) => line.account && (line.amount_debit || line.amount_credit),
+        )
+        .map((line) => ({
+          account: line.account,
+          side: line.amount_debit && !line.amount_credit ? "DEBIT" : "CREDIT",
+          amount: line.amount_debit ? line.amount_debit : line.amount_credit,
+        })),
+    });
+  }, [journalData]);
+
+  useEffect(() => {
+    console.log(convertedJournalData);
+  }, [convertedJournalData]);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -47,7 +73,7 @@ function JounalEntryCreate({
         await instance
           .post(
             "api/accounting/accounting/journal_entries/create/",
-            journalData,
+            convertedJournalData,
             {
               headers: {
                 "X-CSRFToken": csrfToken,
@@ -69,9 +95,38 @@ function JounalEntryCreate({
     createJournalEntry();
   };
 
-  useState(() => {
-    // enables the toolbar after the component mounts
-    setDisableToolbarButtons(false);
+  // updates the values of a journal line
+  const updateLineField = (index, field, value) => {
+    setJournalData((prev) => ({
+      ...prev,
+      lines: prev.lines.map((line, i) =>
+        i === index ? { ...line, [field]: value } : line,
+      ),
+    }));
+  };
+
+  // fetches list of accounts for dropdown menu
+  useEffect(() => {
+    const fetchAccountList = async () => {
+      try {
+        await instance
+          .get("api/accounting/accounting/accounts/list/")
+          .then((response) => {
+            if (response) {
+              setAccountChoices(response.data);
+
+              setDisableToolbarButtons(false);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+        window.alert("Error creating journal entry. Please try again.");
+        setDisableToolbarButtons(false);
+      }
+    };
+
+    // drives code
+    fetchAccountList();
   }, []);
 
   /* ---------------------------------------- */
@@ -82,7 +137,79 @@ function JounalEntryCreate({
     <Fragment>
       <section id="journal-entry-create-section">
         <div className="journal-entry-create-container card">
-          <div className="journal-entry-create-body"></div>
+          <div className="journal-entry-create-body">
+            <input
+              value={journalData.date}
+              className="date"
+              type="date"
+              onChange={(e) => {
+                setJournalData((prev) => ({ ...prev, date: e.target.value }));
+              }}
+            />
+            <input
+              placeholder="REF-001"
+              value={journalData.reference}
+              className="reference"
+              type="text"
+              onChange={(e) => {
+                setJournalData((prev) => ({
+                  ...prev,
+                  reference: e.target.value,
+                }));
+              }}
+            />
+            <input
+              placeholder="内容"
+              value={journalData.description}
+              className="description"
+              type="text"
+              onChange={(e) => {
+                setJournalData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }));
+              }}
+            />
+          </div>
+          <div className="journal-lines-container">
+            {journalData.lines.map((line, index) => (
+              <div className="journal-line" key={index}>
+                <select
+                  value={line.account}
+                  className="line-account"
+                  onChange={(e) =>
+                    updateLineField(index, "account", e.target.value)
+                  }
+                >
+                  <option value="">-------</option>
+                  {accountChoices.map((account) => (
+                    <option key={account.id} value={account.id}>
+                      {account.name_japanese}
+                    </option>
+                  ))}
+                </select>
+                <div className="amount-container">
+                  <input
+                    placeholder="金額（借方）"
+                    value={line.amount_debit}
+                    className="line-amount-debit"
+                    onChange={(e) =>
+                      updateLineField(index, "amount_debit", e.target.value)
+                    }
+                  />
+
+                  <input
+                    placeholder="金額（貸方）"
+                    value={line.amount_credit}
+                    className="line-amount-credit"
+                    onChange={(e) =>
+                      updateLineField(index, "amount_credit", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
           <div className="bottom-buttons-container">
             <div
               className="create-journal-entry-button"
