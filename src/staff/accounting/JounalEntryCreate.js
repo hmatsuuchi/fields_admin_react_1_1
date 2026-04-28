@@ -21,7 +21,7 @@ function JounalEntryCreate({
 
   const [accountChoices, setAccountChoices] = useState([]);
 
-  const [journalData, setJournalData] = React.useState({
+  const journalDataDefault = {
     date: "",
     description: "",
     reference: "",
@@ -37,7 +37,9 @@ function JounalEntryCreate({
       { account: "", amount_debit: "", amount_credit: "" },
       { account: "", amount_debit: "", amount_credit: "" },
     ],
-  });
+  };
+
+  const [journalData, setJournalData] = React.useState(journalDataDefault);
 
   const [convertedJournalData, setConvertedJournalData] = useState({});
 
@@ -57,10 +59,6 @@ function JounalEntryCreate({
         })),
     });
   }, [journalData]);
-
-  useEffect(() => {
-    console.log(convertedJournalData);
-  }, [convertedJournalData]);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -82,7 +80,8 @@ function JounalEntryCreate({
           )
           .then((response) => {
             if (response) {
-              console.log(response);
+              window.alert("Journal entry created successfully!");
+              setJournalData(journalDataDefault);
             }
           });
       } catch (e) {

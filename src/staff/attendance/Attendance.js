@@ -314,7 +314,6 @@ function Attendance({
             if (response) {
               /* set attendances */
               setAttendances(response.data.attendance);
-
               /* activate page */
               activatePage();
             }
@@ -479,6 +478,10 @@ function Attendance({
       insertScheduleBreakElementsAndSort(attendances),
     );
   }, [attendances, setAttendancesWithScheduleBreaks]);
+
+  useEffect(() => {
+    console.log(attendances);
+  }, [attendances]);
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
