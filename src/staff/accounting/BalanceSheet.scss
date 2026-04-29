@@ -9,13 +9,13 @@ $light-grey: #adadad;
 $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
-#account-transactions-section {
+#balance-sheet-section {
   margin-top: 3.75rem;
 
   display: grid;
   justify-content: center;
 
-  .account-transactions-container {
+  .balance-sheet-container {
     width: calc(100vw - 4rem);
     max-width: 800px;
 
@@ -24,11 +24,14 @@ $grey: #3a3939;
     display: grid;
     grid-row-gap: 0.5rem;
 
-    .transaction-container {
+    .account-container {
+      border-bottom: solid 1px $light-grey;
+
+      font-size: 0.9rem;
+
       display: grid;
       grid-auto-flow: column;
-      grid-template-columns: 1fr 5fr 10fr 1fr 1fr 1fr;
-      grid-column-gap: 1rem;
+      justify-content: space-between;
     }
   }
 }

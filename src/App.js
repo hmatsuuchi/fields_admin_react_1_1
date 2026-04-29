@@ -33,7 +33,7 @@ import InvoiceCreate from "./staff/invoice/InvoiceCreate";
 import InvoicePrint from "./staff/invoice/InvoicePrint";
 // COMPONENTS - ACCOUNTING
 import JounalEntryCreate from "./staff/accounting/JounalEntryCreate";
-import AccountsSummary from "./staff/accounting/AccountsSummary";
+import BalanceSheet from "./staff/accounting/BalanceSheet";
 import AccountTransactions from "./staff/accounting/AccountTransactions";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
@@ -476,12 +476,19 @@ function App() {
           }
         ></Route>
 
-        {/* STAFF ROUTES - ACCOUNTING - ACCOUNTS SUMMARY */}
+        {/* STAFF ROUTES - ACCOUNTING - BALANCE SHEET */}
         <Route
-          path="/staff/accounting/accounts/summary/"
+          path="/staff/accounting/balance_sheet/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <AccountsSummary />
+              <BalanceSheet
+                backButtonText={backButtonText}
+                setBackButtonText={setBackButtonText}
+                backButtonLink={backButtonLink}
+                setBackButtonLink={setBackButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
             </StaffProtectedRoute>
           }
         ></Route>
@@ -491,7 +498,12 @@ function App() {
           path="/staff/accounting/account/transactions/:accountId/"
           element={
             <StaffProtectedRoute isAuth={isAuth} isStaff={isStaff}>
-              <AccountTransactions />
+              <AccountTransactions
+                backButtonText={backButtonText}
+                backButtonLink={backButtonLink}
+                displayBackButton={displayBackButton}
+                setDisplayBackButton={setDisplayBackButton}
+              />
             </StaffProtectedRoute>
           }
         ></Route>

@@ -4,15 +4,25 @@ import { useParams } from "react-router-dom";
 import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./AccountTransactions.scss";
+/* COMPONENTS */
+import AccountTransactionsToolbar from "../toolbar/accounting/AccountTransactionsToolbar";
 
-function AccountTransactions() {
+function AccountTransactions({
+  backButtonText,
+  backButtonLink,
+  displayBackButton,
+  setDisplayBackButton,
+}) {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
 
   const { accountId } = useParams();
 
+  const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
+
   const [accountTransactionsData, setAccountTransactionsData] = useState([]);
+  const [accountType, setAccountType] = useState("");
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -30,11 +40,14 @@ function AccountTransactions() {
           })
           .then((response) => {
             if (response) {
-              setAccountTransactionsData(response.data);
+              setAccountTransactionsData(response.data.transactions);
+              setAccountType(response.data.account_type);
+              setDisableToolbarButtons(false);
             }
           });
       } catch (e) {
         console.log(e);
+        setDisableToolbarButtons(false);
       }
     };
 
@@ -42,15 +55,17 @@ function AccountTransactions() {
     fetchAccountTransactions();
   }, [accountId]);
 
-  const transactionsWithBalance = [...accountTransactionsData]
-    .reverse()
-    .reduce((acc, transaction, index) => {
-      const prev = index === 0 ? 0 : acc[index - 1].balance;
-      const amount = Number(transaction.amount);
-      const delta = transaction.side === "DEBIT" ? amount : -amount;
-      return [...acc, { ...transaction, balance: prev + delta }];
-    }, [])
-    .reverse();
+  const generateIntegerSign = (transaction_side) => {
+    if (accountType === "ASSET" || accountType === "EXPENSE") {
+      return transaction_side === "DEBIT" ? "" : "-";
+    } else if (
+      accountType === "LIABILITY" ||
+      accountType === "EQUITY" ||
+      accountType === "REVENUE"
+    ) {
+      return transaction_side === "CREDIT" ? "" : "-";
+    }
+  };
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -59,20 +74,26 @@ function AccountTransactions() {
   return (
     <Fragment>
       <section id="account-transactions-section">
-        <div className="account-transactions-container">
-          {transactionsWithBalance.map((transaction) => (
+        <div className="account-transactions-container card">
+          {accountTransactionsData.map((transaction) => (
             <div key={transaction.id} className="transaction-container">
               <div>{transaction.id}</div>
               <div>{transaction.date}</div>
               <div>{transaction.description}</div>
               <div>{transaction.reference}</div>
-              <div>{transaction.side}</div>
-              <div>{transaction.amount.toLocaleString()}</div>
-              <div>{transaction.balance.toLocaleString()}</div>
+              <div>{`${generateIntegerSign(transaction.side)}${transaction.amount.toLocaleString()}`}</div>
+              <div>{transaction.running_balance.toLocaleString()}</div>
             </div>
           ))}
         </div>
       </section>
+      <AccountTransactionsToolbar
+        disableToolbarButtons={disableToolbarButtons}
+        backButtonText={backButtonText}
+        backButtonLink={backButtonLink}
+        displayBackButton={displayBackButton}
+        setDisplayBackButton={setDisplayBackButton}
+      />
     </Fragment>
   );
 }

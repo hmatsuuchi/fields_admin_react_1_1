@@ -479,10 +479,6 @@ function Attendance({
     );
   }, [attendances, setAttendancesWithScheduleBreaks]);
 
-  useEffect(() => {
-    console.log(attendances);
-  }, [attendances]);
-
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
