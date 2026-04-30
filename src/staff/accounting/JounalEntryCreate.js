@@ -38,10 +38,13 @@ function JounalEntryCreate({
       { account: "", amount_debit: "", amount_credit: "" },
     ],
   };
-
   const [journalData, setJournalData] = React.useState(journalDataDefault);
-
   const [convertedJournalData, setConvertedJournalData] = useState({});
+
+  const [debitCreditTotals, setDebitCreditTotals] = useState({
+    debit: 0,
+    credit: 0,
+  });
 
   useEffect(() => {
     setConvertedJournalData({
@@ -59,6 +62,21 @@ function JounalEntryCreate({
         })),
     });
   }, [journalData]);
+
+  // updates debit and credit totals whenever journal lines are updated
+  useEffect(() => {
+    const debitTotal = journalData.lines.reduce(
+      (total, line) =>
+        total + (line.amount_debit ? parseFloat(line.amount_debit) : 0),
+      0,
+    );
+    const creditTotal = journalData.lines.reduce(
+      (total, line) =>
+        total + (line.amount_credit ? parseFloat(line.amount_credit) : 0),
+      0,
+    );
+    setDebitCreditTotals({ debit: debitTotal, credit: creditTotal });
+  }, [journalData.lines]);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -96,6 +114,7 @@ function JounalEntryCreate({
 
   // updates the values of a journal line
   const updateLineField = (index, field, value) => {
+    // updates journalData with new value for specified line and field
     setJournalData((prev) => ({
       ...prev,
       lines: prev.lines.map((line, i) =>
@@ -208,6 +227,24 @@ function JounalEntryCreate({
                 </div>
               </div>
             ))}
+            <div
+              className={`debit-credit-totals-line${debitCreditTotals.debit !== debitCreditTotals.credit ? " mismatch" : ""}`}
+            >
+              <div className="debit-total">
+                {debitCreditTotals.debit.toLocaleString()}
+              </div>
+              <div className="credit-total">
+                {debitCreditTotals.credit.toLocaleString()}
+              </div>
+            </div>
+            <div className="debit-credit-totals-line">
+              <div className="debit-breakdown">
+                {`(${(debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.debit - debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })})`}
+              </div>
+              <div className="credit-breakdown">
+                {`(${(debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.credit - debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })})`}
+              </div>
+            </div>
           </div>
           <div className="bottom-buttons-container">
             <div

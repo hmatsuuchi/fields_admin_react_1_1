@@ -22,7 +22,7 @@ function AccountTransactions({
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
   const [accountTransactionsData, setAccountTransactionsData] = useState([]);
-  const [accountType, setAccountType] = useState("");
+  const [accountData, setAccountData] = useState(null);
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -41,7 +41,7 @@ function AccountTransactions({
           .then((response) => {
             if (response) {
               setAccountTransactionsData(response.data.transactions);
-              setAccountType(response.data.account_type);
+              setAccountData(response.data.account_data);
               setDisableToolbarButtons(false);
             }
           });
@@ -56,6 +56,8 @@ function AccountTransactions({
   }, [accountId]);
 
   const generateIntegerSign = (transaction_side) => {
+    if (!accountData) return "";
+    const accountType = accountData.account_type;
     if (accountType === "ASSET" || accountType === "EXPENSE") {
       return transaction_side === "DEBIT" ? "" : "-";
     } else if (
@@ -75,14 +77,21 @@ function AccountTransactions({
     <Fragment>
       <section id="account-transactions-section">
         <div className="account-transactions-container card">
+          {accountData ? (
+            <div className="account-title">
+              {`${accountData.account_name_japanese} (${accountData.account_code})`}
+            </div>
+          ) : null}
           {accountTransactionsData.map((transaction) => (
             <div key={transaction.id} className="transaction-container">
               <div>{transaction.id}</div>
               <div>{transaction.date}</div>
-              <div>{transaction.description}</div>
               <div>{transaction.reference}</div>
-              <div>{`${generateIntegerSign(transaction.side)}${transaction.amount.toLocaleString()}`}</div>
-              <div>{transaction.running_balance.toLocaleString()}</div>
+              <div>{transaction.description}</div>
+              <div className="currency">{`${generateIntegerSign(transaction.side)}${transaction.amount.toLocaleString()}`}</div>
+              <div className="currency">
+                {transaction.running_balance.toLocaleString()}
+              </div>
             </div>
           ))}
         </div>
