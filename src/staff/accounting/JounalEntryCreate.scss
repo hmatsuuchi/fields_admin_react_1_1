@@ -99,7 +99,9 @@ $grey: #3a3939;
 
         .debit-breakdown,
         .credit-breakdown {
-          font-size: 0.9rem;
+          grid-row: 2;
+
+          font-size: 0.85rem;
           font-weight: 400;
         }
       }

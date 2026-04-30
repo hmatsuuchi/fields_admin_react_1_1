@@ -33,9 +33,6 @@ function JounalEntryCreate({
       { account: "", amount_debit: "", amount_credit: "" },
       { account: "", amount_debit: "", amount_credit: "" },
       { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
     ],
   };
   const [journalData, setJournalData] = React.useState(journalDataDefault);
@@ -233,16 +230,15 @@ function JounalEntryCreate({
               <div className="debit-total">
                 {debitCreditTotals.debit.toLocaleString()}
               </div>
+              <div className="debit-breakdown">
+                {`${(debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.debit - debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })}`}
+              </div>
               <div className="credit-total">
                 {debitCreditTotals.credit.toLocaleString()}
               </div>
-            </div>
-            <div className="debit-credit-totals-line">
-              <div className="debit-breakdown">
-                {`(${(debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.debit - debitCreditTotals.debit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })})`}
-              </div>
+
               <div className="credit-breakdown">
-                {`(${(debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.credit - debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })})`}
+                {`${(debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })} + ${(debitCreditTotals.credit - debitCreditTotals.credit / 1.1).toLocaleString("ja-JP", { maximumFractionDigits: 0 })}`}
               </div>
             </div>
           </div>
