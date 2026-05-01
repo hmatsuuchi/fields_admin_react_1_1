@@ -151,7 +151,7 @@ function BalanceSheet({
           </div>
 
           <div className="balance-sheet-accounts-container">
-            <div className="section-title">負債及び純資産合計</div>
+            <div className="section-title">合計</div>
             <div className="account-container">
               <div className="account-name">資産合計</div>
               <div className="account-balance">
@@ -210,13 +210,18 @@ function BalanceSheet({
             </div>
           </div>
           <div className="balance-sheet-accounts-container expenses">
-            <div className="section-title">
-              {totalRevenues - totalExpenses > 0 ? "当期純利益" : "当期純損失"}
+            <div className="section-title">合計</div>
+            <div className="account-container">
+              <div className="account-name">
+                {totalRevenues - totalExpenses > 0
+                  ? "当期純利益"
+                  : "当期純損失"}
+              </div>
+              <div className="account-balance">
+                {(totalRevenues - totalExpenses).toLocaleString()}
+              </div>
             </div>
-
-            <div
-              className={`section-total${totalRevenues - totalExpenses < 0 ? " loss" : ""}`}
-            >
+            <div className="section-total">
               {(totalRevenues - totalExpenses).toLocaleString()}
             </div>
           </div>
