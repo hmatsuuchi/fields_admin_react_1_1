@@ -27,7 +27,21 @@ $grey: #3a3939;
   }
 }
 
+#attendance-alerts-section {
+  grid-row: 1 / 4;
+
+  align-self: start;
+}
+
 #monthly-revenue-section {
+  grid-column: 2 / 4;
+}
+
+#monthly-revenue-breakdown-section {
+  grid-column: 2 / 4;
+}
+
+#monthly-revenue-breakdown-bar-section {
   grid-column: 2 / 4;
 }
 

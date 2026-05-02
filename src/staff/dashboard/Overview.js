@@ -5,6 +5,7 @@ import "./Overview.scss";
 import AttendanceAlerts from "./overview/AttendanceAlerts";
 import MonthlyRevenue from "./overview/MonthlyRevenue";
 import OverviewToolbar from "../toolbar/dashboard/OverviewToolbar";
+import MonthlyRevenueBreakdown from "./overview/MonthlyRevenueBreakdown";
 
 function Overview() {
   /* ------------------------------------------- */
@@ -25,6 +26,7 @@ function Overview() {
         <div id="overview-primary-container">
           <AttendanceAlerts />
           <MonthlyRevenue />
+          <MonthlyRevenueBreakdown />
         </div>
       </div>
       <OverviewToolbar />

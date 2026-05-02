@@ -78,9 +78,19 @@ function AccountTransactions({
       <section id="account-transactions-section">
         <div className="account-transactions-container card">
           {accountData ? (
-            <div className="account-title">
-              {`${accountData.account_name_japanese} (${accountData.account_code})`}
-            </div>
+            <Fragment>
+              <div className="account-title">
+                {`${accountData.account_name_japanese} (${accountData.account_code})`}
+              </div>
+              <div className="transaction-container">
+                <div className="header">ID</div>
+                <div className="header">Date</div>
+                <div className="header">Reference</div>
+                <div className="header">Description</div>
+                <div className="header currency-header">Amount</div>
+                <div className="header currency-header">Balance</div>
+              </div>
+            </Fragment>
           ) : null}
           {accountTransactionsData.map((transaction) => (
             <div key={transaction.id} className="transaction-container">
@@ -89,7 +99,9 @@ function AccountTransactions({
               <div>{transaction.reference}</div>
               <div>{transaction.description}</div>
               <div className="currency">{`${generateIntegerSign(transaction.side)}${transaction.amount.toLocaleString()}`}</div>
-              <div className="currency">
+              <div
+                className={`currency${transaction.running_balance < 0 ? " negative" : ""}`}
+              >
                 {transaction.running_balance.toLocaleString()}
               </div>
             </div>

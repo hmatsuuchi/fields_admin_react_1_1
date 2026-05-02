@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 /* AXIOS */
 import instance from "../../../axios/axios_authenticated";
 /* CSS */
-import "./MonthlyRevenue.scss";
+import "./MonthlyRevenueBreakdown.scss";
 /* CHART JS */
 import { Line } from "react-chartjs-2";
 import {
@@ -19,7 +19,7 @@ import {
 /* COMPONENTS */
 import LoadingSpinner from "../../micro/LoadingSpinner";
 
-function MonthlyRevenue() {
+function MonthlyRevenueBreakdown() {
   /* ------------------------------------------- */
   /* ------------------ STATE ------------------ */
   /* ------------------------------------------- */
@@ -34,7 +34,7 @@ function MonthlyRevenue() {
   /* fetches revenue by month data from the API */
   const fetchRevenueByMonth = () => {
     instance
-      .get("api/dashboard/dashboard/overview/revenue_by_month/")
+      .get("api/dashboard/dashboard/overview/revenue_breakdown_by_month/")
       .then((response) => {
         if (response) {
           setMonthlyRevenueData(response.data.monthly_revenue_data);
@@ -72,8 +72,23 @@ function MonthlyRevenue() {
     ),
     datasets: [
       {
-        label: "入金済",
-        data: monthlyRevenueData.map((dataPoint) => dataPoint.paid_revenue),
+        label: "授業料",
+        data: monthlyRevenueData.map((dataPoint) => dataPoint.lesson_revenue),
+        borderColor: "rgba(0, 184, 169, 0.7)", // legend outline color
+        backgroundColor: "rgba(0, 184, 169, 0.7)", // legend background color
+        type: "line",
+        yAxisID: "y",
+        pointRadius: 3,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(0, 184, 169, 0.7)", // dot outline color
+        pointBorderColor: "rgba(0, 184, 169, 0.7)", // dot background color
+        fill: false,
+      },
+      {
+        label: "入会金",
+        data: monthlyRevenueData.map(
+          (dataPoint) => dataPoint.entrance_fee_revenue,
+        ),
         borderColor: "rgba(253, 188, 0, 0.7)", // legend outline color
         backgroundColor: "rgba(253, 188, 0, 0.7)", // legend background color
         type: "line",
@@ -85,8 +100,23 @@ function MonthlyRevenue() {
         fill: false,
       },
       {
-        label: "未入金",
-        data: monthlyRevenueData.map((dataPoint) => dataPoint.unpaid_revenue),
+        label: "教材費",
+        data: monthlyRevenueData.map(
+          (dataPoint) => dataPoint.teaching_materials_revenue,
+        ),
+        borderColor: "rgba(253, 188, 0, 0.7)", // legend outline color
+        backgroundColor: "rgba(253, 188, 0, 0.7)", // legend background color
+        type: "line",
+        yAxisID: "y",
+        pointRadius: 3,
+        borderWidth: 2,
+        pointBackgroundColor: "rgba(253, 188, 0, 0.7)", // dot outline color
+        pointBorderColor: "rgba(253, 188, 0, 0.7)", // dot background color
+        fill: false,
+      },
+      {
+        label: "割引",
+        data: monthlyRevenueData.map((dataPoint) => dataPoint.discounts_given),
         borderColor: "rgba(246, 65, 108, 0.7)", // legend outline color
         backgroundColor: "rgba(246, 65, 108, 0.7)", // legend background color
         type: "line",
@@ -98,18 +128,16 @@ function MonthlyRevenue() {
         fill: false,
       },
       {
-        label: "合計",
-        data: monthlyRevenueData.map(
-          (dataPoint) => dataPoint.unpaid_revenue + dataPoint.paid_revenue,
-        ),
-        borderColor: "rgba(0, 184, 169, 0.7)", // legend outline color
-        backgroundColor: "rgba(0, 184, 169, 0.7)", // legend background color
+        label: "返金",
+        data: monthlyRevenueData.map((dataPoint) => dataPoint.refunds_given),
+        borderColor: "rgba(246, 65, 108, 0.7)", // legend outline color
+        backgroundColor: "rgba(246, 65, 108, 0.7)", // legend background color
         type: "line",
         yAxisID: "y",
         pointRadius: 3,
         borderWidth: 2,
-        pointBackgroundColor: "rgba(0, 184, 169, 0.7)", // dot outline color
-        pointBorderColor: "rgba(0, 184, 169, 0.7)", // dot background color
+        pointBackgroundColor: "rgba(246, 65, 108, 0.7)", // dot outline color
+        pointBorderColor: "rgba(246, 65, 108, 0.7)", // dot background color
         fill: false,
       },
     ],
@@ -186,7 +214,7 @@ function MonthlyRevenue() {
   /* ---------------------------------------- */
 
   return (
-    <div id="monthly-revenue-section" onClick={fetchRevenueByMonth}>
+    <div id="monthly-revenue-breakdown-section" onClick={fetchRevenueByMonth}>
       <div className="revenue-chart-container card">
         {isLoading ? (
           <LoadingSpinner />
@@ -198,4 +226,4 @@ function MonthlyRevenue() {
   );
 }
 
-export default MonthlyRevenue;
+export default MonthlyRevenueBreakdown;
