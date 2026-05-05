@@ -20,11 +20,13 @@ function JounalEntryCreate({
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
   const [accountChoices, setAccountChoices] = useState([]);
+  const [contactChoices, setContactChoices] = useState([]);
 
   const journalDataDefault = {
     date: "",
     description: "",
     reference: "",
+    contact: "",
     lines: [
       { account: "", amount_debit: "", amount_credit: "" },
       { account: "", amount_debit: "", amount_credit: "" },
@@ -43,11 +45,16 @@ function JounalEntryCreate({
     credit: 0,
   });
 
+  /* ----------------------------------------------- */
+  /* ------------------ FUNCTIONS ------------------ */
+  /* ----------------------------------------------- */
+
   useEffect(() => {
     setConvertedJournalData({
       date: journalData.date,
       description: journalData.description,
       reference: journalData.reference,
+      contact: journalData.contact,
       lines: journalData.lines
         .filter(
           (line) => line.account && (line.amount_debit || line.amount_credit),
@@ -74,10 +81,6 @@ function JounalEntryCreate({
     );
     setDebitCreditTotals({ debit: debitTotal, credit: creditTotal });
   }, [journalData.lines]);
-
-  /* ----------------------------------------------- */
-  /* ------------------ FUNCTIONS ------------------ */
-  /* ----------------------------------------------- */
 
   const handleClicksToCreateJournalEntryButton = () => {
     /* send journal entry data to backend via Axios instance */
@@ -144,6 +147,30 @@ function JounalEntryCreate({
     fetchAccountList();
   }, []);
 
+  // fetches list of contacts for dropdown menu
+  useEffect(() => {
+    const fetchContactList = async () => {
+      try {
+        await instance
+          .get("api/accounting/accounting/contacts/list/")
+          .then((response) => {
+            if (response) {
+              setContactChoices(response.data);
+
+              setDisableToolbarButtons(false);
+            }
+          });
+      } catch (e) {
+        console.log(e);
+        window.alert("Error creating journal entry. Please try again.");
+        setDisableToolbarButtons(false);
+      }
+    };
+
+    // drives code
+    fetchContactList();
+  }, []);
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -153,6 +180,23 @@ function JounalEntryCreate({
       <section id="journal-entry-create-section">
         <div className="journal-entry-create-container card">
           <div className="journal-entry-create-body">
+            <select
+              value={journalData.contact}
+              className="journal"
+              onChange={(e) => {
+                setJournalData((prev) => ({
+                  ...prev,
+                  contact: e.target.value,
+                }));
+              }}
+            >
+              <option value="">-------</option>
+              {contactChoices.map((contact) => (
+                <option key={contact.id} value={contact.id}>
+                  {contact.name}
+                </option>
+              ))}
+            </select>
             <input
               value={journalData.date}
               className="date"

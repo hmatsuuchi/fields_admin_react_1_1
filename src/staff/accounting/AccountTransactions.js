@@ -69,6 +69,19 @@ function AccountTransactions({
     }
   };
 
+  const convertContactType = (contactType) => {
+    switch (contactType) {
+      case "EMPLOYEE":
+        return "Employee";
+      case "SUPPLIER":
+        return "Supplier";
+      case "CUSTOMER":
+        return "Customer";
+      default:
+        return contactType;
+    }
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -86,6 +99,7 @@ function AccountTransactions({
                 <div className="header">ID</div>
                 <div className="header">Date</div>
                 <div className="header">Reference</div>
+                <div className="header">Contact</div>
                 <div className="header">Description</div>
                 <div className="header currency-header">Amount</div>
                 <div className="header currency-header">Balance</div>
@@ -97,6 +111,12 @@ function AccountTransactions({
               <div>{transaction.id}</div>
               <div>{transaction.date}</div>
               <div>{transaction.reference}</div>
+              <div className="contact-container">
+                <div className="contact-name">{transaction.contact_name}</div>
+                <div className="contact-type">
+                  {convertContactType(transaction.contact_type)}
+                </div>
+              </div>
               <div>{transaction.description}</div>
               <div className="currency">{`${generateIntegerSign(transaction.side)}${transaction.amount.toLocaleString()}`}</div>
               <div
