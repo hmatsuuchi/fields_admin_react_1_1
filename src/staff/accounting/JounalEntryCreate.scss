@@ -16,6 +16,11 @@ $grey: #3a3939;
   display: grid;
   justify-items: center;
 
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .journal-entry-create-container {
     width: calc(100% - 4rem);
     max-width: 800px;
@@ -24,6 +29,21 @@ $grey: #3a3939;
 
     display: grid;
     grid-row-gap: 1rem;
+
+    input,
+    select {
+      padding: 0.3rem;
+
+      border: solid 1px #000000;
+      border-radius: 0.3rem;
+
+      font-size: 1rem;
+      font-weight: 400;
+
+      &:focus {
+        outline: solid 2px $grey;
+      }
+    }
 
     .journal-entry-create-body {
       display: grid;
@@ -35,6 +55,7 @@ $grey: #3a3939;
       }
 
       .reference {
+        justify-self: right;
         grid-column: 2;
         width: 300px;
       }

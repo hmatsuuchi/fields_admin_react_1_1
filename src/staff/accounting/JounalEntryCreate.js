@@ -19,6 +19,8 @@ function JounalEntryCreate({
 
   const [disableToolbarButtons, setDisableToolbarButtons] = useState(true);
 
+  const [disablePage, setDisablePage] = useState(false);
+
   const [accountChoices, setAccountChoices] = useState([]);
   const [contactChoices, setContactChoices] = useState([]);
 
@@ -85,6 +87,9 @@ function JounalEntryCreate({
   const handleClicksToCreateJournalEntryButton = () => {
     /* send journal entry data to backend via Axios instance */
     const createJournalEntry = async () => {
+      // disables page
+      setDisablePage(true);
+
       try {
         await instance
           .post(
@@ -98,12 +103,15 @@ function JounalEntryCreate({
           )
           .then((response) => {
             if (response) {
-              window.alert("Journal entry created successfully!");
               setJournalData(journalDataDefault);
+              setDisablePage(false);
+              window.document.getElementById("contact-select-dropdown").focus();
+              console.log("Success...");
             }
           });
       } catch (e) {
         console.log(e);
+        setDisablePage(false);
         window.alert("Error creating journal entry. Please try again.");
       }
     };
@@ -171,16 +179,30 @@ function JounalEntryCreate({
     fetchContactList();
   }, []);
 
+  // submits journal entry data when user presses Enter key
+  const submitDataOnEnter = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleClicksToCreateJournalEntryButton();
+    }
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
 
   return (
     <Fragment>
-      <section id="journal-entry-create-section">
+      <section
+        id="journal-entry-create-section"
+        className={disablePage ? "disabled" : ""}
+      >
         <div className="journal-entry-create-container card">
           <div className="journal-entry-create-body">
             <select
+              id="contact-select-dropdown"
+              autoFocus
+              tabIndex={1}
               value={journalData.contact}
               className="journal"
               onChange={(e) => {
@@ -189,6 +211,7 @@ function JounalEntryCreate({
                   contact: e.target.value,
                 }));
               }}
+              onKeyDown={submitDataOnEnter}
             >
               <option value="">-------</option>
               {contactChoices.map((contact) => (
@@ -198,15 +221,18 @@ function JounalEntryCreate({
               ))}
             </select>
             <input
+              tabIndex={2}
               value={journalData.date}
               className="date"
               type="date"
               onChange={(e) => {
                 setJournalData((prev) => ({ ...prev, date: e.target.value }));
               }}
+              onKeyDown={submitDataOnEnter}
             />
             <input
               placeholder="REF-001"
+              tabIndex={3}
               value={journalData.reference}
               className="reference"
               type="text"
@@ -216,9 +242,11 @@ function JounalEntryCreate({
                   reference: e.target.value,
                 }));
               }}
+              onKeyDown={submitDataOnEnter}
             />
             <input
               placeholder="内容"
+              tabIndex={4}
               value={journalData.description}
               className="description"
               type="text"
@@ -228,17 +256,20 @@ function JounalEntryCreate({
                   description: e.target.value,
                 }));
               }}
+              onKeyDown={submitDataOnEnter}
             />
           </div>
           <div className="journal-lines-container">
             {journalData.lines.map((line, index) => (
               <div className="journal-line" key={index}>
                 <select
+                  tabIndex={5 + index * 2}
                   value={line.account}
                   className="line-account"
                   onChange={(e) =>
                     updateLineField(index, "account", e.target.value)
                   }
+                  onKeyDown={submitDataOnEnter}
                 >
                   <option value="">-------</option>
                   {accountChoices.map((account) => (
@@ -249,21 +280,25 @@ function JounalEntryCreate({
                 </select>
                 <div className="amount-container">
                   <input
+                    tabIndex={6 + index * 2}
                     placeholder="金額（借方）"
                     value={line.amount_debit}
                     className="line-amount-debit"
                     onChange={(e) =>
                       updateLineField(index, "amount_debit", e.target.value)
                     }
+                    onKeyDown={submitDataOnEnter}
                   />
 
                   <input
+                    tabIndex={7 + index * 2}
                     placeholder="金額（貸方）"
                     value={line.amount_credit}
                     className="line-amount-credit"
                     onChange={(e) =>
                       updateLineField(index, "amount_credit", e.target.value)
                     }
+                    onKeyDown={submitDataOnEnter}
                   />
                 </div>
               </div>
