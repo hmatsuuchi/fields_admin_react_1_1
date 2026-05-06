@@ -32,11 +32,6 @@ function JounalEntryCreate({
     lines: [
       { account: "", amount_debit: "", amount_credit: "" },
       { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
-      { account: "", amount_debit: "", amount_credit: "" },
     ],
   };
   const [journalData, setJournalData] = React.useState(journalDataDefault);
@@ -180,10 +175,53 @@ function JounalEntryCreate({
   }, []);
 
   // submits journal entry data when user presses Enter key
-  const submitDataOnEnter = (e) => {
+  const handleKeyDownWhileInputFocus = (e) => {
+    // submits data if Enter key is pressed while focus is on any of the input fields
     if (e.key === "Enter") {
       e.preventDefault();
       handleClicksToCreateJournalEntryButton();
+    }
+
+    // creates new line if user presses tab key while focus is on the last input field of the last journal line
+    if (
+      e.key === "Tab" &&
+      !e.shiftKey &&
+      e.target.classList.contains("line-amount-credit")
+    ) {
+      const journalLines = document.querySelectorAll(".journal-line");
+      const lastCreditInput = journalLines[
+        journalLines.length - 1
+      ]?.querySelector(".line-amount-credit");
+      if (e.target === lastCreditInput) {
+        addNewLine();
+      }
+    }
+  };
+
+  // adds new journal line when user clicks "add new line" button
+  const addNewLine = () => {
+    if (journalData.lines.length < 10) {
+      setJournalData((prev) => ({
+        ...prev,
+        lines: [
+          ...prev.lines,
+          { account: "", amount_debit: "", amount_credit: "" },
+        ],
+      }));
+    }
+  };
+
+  // deletes journal line when user clicks "X" button on the line (except for the first 2 lines, which are the default number of lines)
+  const handleClicksToDeleteLineButton = (e) => {
+    if (e.target.classList.contains("delete-line-item-button")) {
+      const lineIndex = Array.from(
+        document.querySelectorAll(".delete-line-item-button"),
+      ).indexOf(e.target);
+
+      setJournalData((prev) => ({
+        ...prev,
+        lines: prev.lines.filter((line, index) => index !== lineIndex),
+      }));
     }
   };
 
@@ -211,7 +249,7 @@ function JounalEntryCreate({
                   contact: e.target.value,
                 }));
               }}
-              onKeyDown={submitDataOnEnter}
+              onKeyDown={handleKeyDownWhileInputFocus}
             >
               <option value="">-------</option>
               {contactChoices.map((contact) => (
@@ -228,7 +266,7 @@ function JounalEntryCreate({
               onChange={(e) => {
                 setJournalData((prev) => ({ ...prev, date: e.target.value }));
               }}
-              onKeyDown={submitDataOnEnter}
+              onKeyDown={handleKeyDownWhileInputFocus}
             />
             <input
               placeholder="REF-001"
@@ -242,7 +280,7 @@ function JounalEntryCreate({
                   reference: e.target.value,
                 }));
               }}
-              onKeyDown={submitDataOnEnter}
+              onKeyDown={handleKeyDownWhileInputFocus}
             />
             <input
               placeholder="内容"
@@ -256,12 +294,19 @@ function JounalEntryCreate({
                   description: e.target.value,
                 }));
               }}
-              onKeyDown={submitDataOnEnter}
+              onKeyDown={handleKeyDownWhileInputFocus}
             />
           </div>
           <div className="journal-lines-container">
             {journalData.lines.map((line, index) => (
-              <div className="journal-line" key={index}>
+              <div
+                className={`journal-line${journalData.lines.length <= 2 ? " disable-cross" : ""}`}
+                key={index}
+              >
+                <div
+                  className="delete-line-item-button"
+                  onClick={handleClicksToDeleteLineButton}
+                />
                 <select
                   tabIndex={5 + index * 2}
                   value={line.account}
@@ -269,7 +314,7 @@ function JounalEntryCreate({
                   onChange={(e) =>
                     updateLineField(index, "account", e.target.value)
                   }
-                  onKeyDown={submitDataOnEnter}
+                  onKeyDown={handleKeyDownWhileInputFocus}
                 >
                   <option value="">-------</option>
                   {accountChoices.map((account) => (
@@ -287,7 +332,7 @@ function JounalEntryCreate({
                     onChange={(e) =>
                       updateLineField(index, "amount_debit", e.target.value)
                     }
-                    onKeyDown={submitDataOnEnter}
+                    onKeyDown={handleKeyDownWhileInputFocus}
                   />
 
                   <input
@@ -298,11 +343,12 @@ function JounalEntryCreate({
                     onChange={(e) =>
                       updateLineField(index, "amount_credit", e.target.value)
                     }
-                    onKeyDown={submitDataOnEnter}
+                    onKeyDown={handleKeyDownWhileInputFocus}
                   />
                 </div>
               </div>
             ))}
+            <div className="add-new-line-button" onClick={addNewLine} />
             <div
               className={`debit-credit-totals-line${debitCreditTotals.debit !== debitCreditTotals.credit ? " mismatch" : ""}`}
             >
