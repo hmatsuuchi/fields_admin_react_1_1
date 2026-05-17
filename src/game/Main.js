@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
-import Town from "./Town";
+import FirstIsland from "./FirstIsland";
 // AXIOS
 import instance from "../axios/axios_authenticated";
 // EVENT BUS
@@ -32,7 +32,7 @@ function Main() {
     const phaserConfig = {
       type: Phaser.AUTO,
       backgroundColor: "#ffffff",
-      scene: [Town],
+      scene: [FirstIsland],
       width: canvasBaseWidth,
       height: canvasBaseHeight,
       pixelArt: true,

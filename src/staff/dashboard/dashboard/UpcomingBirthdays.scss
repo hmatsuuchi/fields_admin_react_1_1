@@ -10,10 +10,12 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #upcoming-birthdays {
-  grid-row: 5;
+  align-self: start;
+
+  grid-row: 6;
 
   .upcoming-birthdays-container {
-    height: 26.5rem;
+    max-height: 37.5rem;
 
     overflow-y: scroll;
 
@@ -90,19 +92,20 @@ $grey: #3a3939;
 
 @media screen and (min-width: 600px) {
   #upcoming-birthdays {
-    grid-row: 4;
+    grid-row: 5;
   }
 }
 
 @media screen and (min-width: 900px) {
   #upcoming-birthdays {
-    grid-row: 21 / 31;
+    grid-row: 7 / 12;
     grid-column: 1;
   }
 }
 
 @media screen and (min-width: 1200px) {
   #upcoming-birthdays {
-    grid-row: 3 / 7;
+    grid-row: 1 / 10;
+    grid-column: 4;
   }
 }

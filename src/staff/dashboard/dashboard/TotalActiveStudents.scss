@@ -156,7 +156,7 @@ $over-1200px-vw: 3.3vw;
 
 @media screen and (min-width: 900px) {
   #total-active-students {
-    grid-row: 11 / 21;
+    grid-row: 4 / 7;
     grid-column: 1;
 
     .total-active-students-content-container {
@@ -198,8 +198,8 @@ $over-1200px-vw: 3.3vw;
 
 @media screen and (min-width: 1200px) {
   #total-active-students {
-    grid-row: 1 / 3;
-    grid-column: 4;
+    grid-row: 5 / 9;
+    grid-column: 1;
 
     .total-active-students-content-container {
       .data-container {
