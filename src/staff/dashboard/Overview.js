@@ -6,6 +6,7 @@ import AttendanceAlerts from "./overview/AttendanceAlerts";
 import MonthlyRevenue from "./overview/MonthlyRevenue";
 import OverviewToolbar from "../toolbar/dashboard/OverviewToolbar";
 import MonthlyRevenueBreakdown from "./overview/MonthlyRevenueBreakdown";
+import LifetimeData from "./overview/LifetimeData";
 
 function Overview() {
   /* ------------------------------------------- */
@@ -27,6 +28,7 @@ function Overview() {
           <AttendanceAlerts />
           <MonthlyRevenue />
           <MonthlyRevenueBreakdown />
+          <LifetimeData />
         </div>
       </div>
       <OverviewToolbar />

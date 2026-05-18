@@ -45,6 +45,11 @@ $grey: #3a3939;
   grid-column: 2 / 4;
 }
 
+#lifetime-data-section {
+  grid-row: 1;
+  grid-column: 4;
+}
+
 @media screen and (min-width: 600px) {
   #overview-section {
     #overview-primary-container {
