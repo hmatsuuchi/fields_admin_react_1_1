@@ -16,9 +16,16 @@ $grey: #3a3939;
   align-items: start;
 
   .lifetime-data-container {
+    min-height: 32rem;
+
     display: grid;
     padding: 1rem;
     grid-row-gap: 1rem;
+
+    .loading-spinner-container {
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
 
     .section-divider {
       margin-top: 0.2rem;
