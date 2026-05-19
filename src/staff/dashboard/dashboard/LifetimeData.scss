@@ -1,0 +1,129 @@
+$teal: #00b8a8;
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: #ffde7d;
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: #fdbc00;
+$light-grey: #adadad;
+$medium-grey: #5f5f5f;
+$grey: #3a3939;
+
+#lifetime-data-section-dashboard {
+  grid-row: 6;
+
+  display: grid;
+  align-items: start;
+
+  .lifetime-data-container {
+    display: grid;
+    padding: 1rem;
+    grid-row-gap: 1rem;
+
+    .loading-spinner-container {
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+
+    .section-divider {
+      margin-top: 0.2rem;
+
+      height: 1px;
+
+      background-color: $light-grey;
+    }
+
+    .title-data-container {
+      display: grid;
+      grid-row-gap: 0.25rem;
+      justify-items: center;
+
+      .title {
+        font-size: 0.9rem;
+      }
+
+      .data {
+        font-size: 1.6rem;
+      }
+
+      .historical-data-container {
+        font-size: 1rem;
+
+        background-color: $yellow;
+
+        padding: 0.4rem 1.4rem;
+
+        border-radius: 99rem;
+
+        display: grid;
+        place-items: center;
+
+        .date {
+          font-size: 0.8rem;
+          font-style: italic;
+        }
+
+        .data {
+          font-size: 1rem;
+        }
+
+        &.match {
+          background-color: $teal;
+
+          color: #ffffff;
+
+          .date,
+          .data {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #lifetime-data-section-dashboard {
+    .lifetime-data-container {
+      grid-template-columns: repeat(2, 1fr);
+
+      .section-divider {
+        grid-column: 1 / 3;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #lifetime-data-section-dashboard {
+    grid-column: 1;
+    grid-row: 5;
+
+    .lifetime-data-container {
+      grid-template-columns: 1fr;
+
+      .section-divider {
+        grid-column: 1 / 2;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 900px) {
+  #lifetime-data-section-dashboard {
+    grid-row: 7 / 12;
+
+    .lifetime-data-container {
+      min-height: 32rem;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #lifetime-data-section-dashboard {
+    align-items: stretch;
+
+    grid-column: 4;
+    grid-row: 1 / 9;
+  }
+}

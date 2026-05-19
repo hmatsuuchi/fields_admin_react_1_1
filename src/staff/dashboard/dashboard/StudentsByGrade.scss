@@ -38,14 +38,14 @@ $grey: #3a3939;
 
 @media screen and (min-width: 900px) {
   #students-by-grade.component-primary-container {
-    grid-row: 9 / 13;
+    grid-row: 9 / 14;
     grid-column: 2 / 4;
   }
 }
 
 @media screen and (min-width: 1200px) {
   #students-by-grade.component-primary-container {
-    grid-row: 11;
+    grid-row: 13;
     grid-column: 2 / 4;
 
     .students-by-grade-data-container {

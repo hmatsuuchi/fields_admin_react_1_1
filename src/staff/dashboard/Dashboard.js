@@ -10,6 +10,7 @@ import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
 // import AtRiskStudents from "./dashboard/AtRiskStudents";
 import UpcomingBirthdays from "./dashboard/UpcomingBirthdays";
 import StudentsByGrade from "./dashboard/StudentsByGrade";
+import LifetimeData from "./dashboard/LifetimeData";
 
 function Dashboard({
   backButtonText,
@@ -53,6 +54,7 @@ function Dashboard({
           />
           <TotalActiveStudentsHistory />
           <StudentsByGrade />
+          <LifetimeData />
         </div>
       </div>
       <DashboardToolbar
