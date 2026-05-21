@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import instance_public from "../axios/axios_public.js";
 import instance_authenticated from "../axios/axios_authenticated.js";
 // Components
-import LoadingSpinner from "../staff/micro/LoadingSpinner.js";
+import LoadingSpinner from "../staff/micro/LoadingSpinner.jsx";
 // CSS
 import "./Login.scss";
 // Images
@@ -87,7 +87,7 @@ function Login({
 
                 if (
                   staffRedirectParameters.some((i) =>
-                    loggedInUserGroups.includes(i)
+                    loggedInUserGroups.includes(i),
                   )
                 ) {
                   // set staff prop

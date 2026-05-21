@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 /* CSS */
 import "./InvoiceCreate.scss";
 /* COMPONENTS */
-import InvoiceCreateToolbar from "../../staff/toolbar/invoice/InvoiceCreateToolbar";
+import InvoiceCreateToolbar from "../toolbar/invoice/InvoiceCreateToolbar";
 import CustomerSelect from "./InvoiceCreate/CustomerSelect";
 import CustomerManualInput from "./InvoiceCreate/CustomerManualInput";
 import CreationTransferDateManualInput from "./InvoiceCreate/CreationTransferDateManualInput";

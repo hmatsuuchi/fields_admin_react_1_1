@@ -4,7 +4,7 @@ import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./JounalEntryCreate.scss";
 /* COMPONENTS */
-import JournalEntryCreateToolbar from "../../staff/toolbar/accounting/JournalEntryCreateToolbar";
+import JournalEntryCreateToolbar from "../toolbar/accounting/JournalEntryCreateToolbar";
 
 function JounalEntryCreate({
   csrfToken,

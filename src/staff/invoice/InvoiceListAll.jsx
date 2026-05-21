@@ -4,7 +4,7 @@ import instance from "../../axios/axios_authenticated";
 /* CSS */
 import "./InvoiceListAll.scss";
 /* COMPONENTS */
-import InvoiceListAllToolbar from "../../staff/toolbar/invoice/InvoiceListAllToolbar";
+import InvoiceListAllToolbar from "../toolbar/invoice/InvoiceListAllToolbar";
 import InvoicePrint from "./InvoicePrint";
 /* LOADING SPINNER */
 import LoadingSpinner from "../micro/LoadingSpinner";
