@@ -3,6 +3,8 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import instance from "../../axios/axios_authenticated";
 // CSS
 import "./DisplayOne.scss";
+// MQTT
+import mqtt from "mqtt";
 
 function DisplayOne() {
   /* ------------------------------------------- */
@@ -12,6 +14,7 @@ function DisplayOne() {
   const [UUIDInput, setUUIDInput] = useState("");
   const [studentData, setStudentData] = useState(null);
   const [recentCheckins, setRecentCheckins] = useState(null);
+  const [disableInput, setDisableInput] = useState(true);
   const timeoutIdRef = useRef(null);
 
   /* ------------------------------------------- */
@@ -24,8 +27,20 @@ function DisplayOne() {
     setStudentData(null);
   };
 
+  useEffect(() => {
+    if (!disableInput) {
+      document.getElementById("uuid-input").focus();
+    }
+  }, [disableInput]);
+
   /* fetches student data */
   const fetchStudentData = async (event) => {
+    /* disables UUID input field for 3 seconds to prevent multiple rapid submissions */
+    setDisableInput(true);
+    setTimeout(() => {
+      setDisableInput(false);
+    }, 3000);
+
     /* prevents the page from refreshing */
     event.preventDefault();
 
@@ -56,6 +71,8 @@ function DisplayOne() {
             setStudentData(response.data);
             /* fetch recent checkins */
             fetchRecentCheckins();
+            /* rotates stepper motor */
+            triggerStepperMotor();
           }
         });
     } catch (e) {
@@ -133,9 +150,52 @@ function DisplayOne() {
     /* fetches recent checkins */
     fetchRecentCheckins();
 
+    /* re-enables UUID input field */
+    setDisableInput(false);
+
     /* cleanup interval on component unmount */
     return () => clearInterval(intervalId);
   }, []);
+
+  /* triggers stepper motor to rotate when student checks in */
+  const triggerStepperMotor = async () => {
+    const BROKER_HOST = "eec04871.ala.asia-southeast1.emqxsl.com";
+    const BROKER_PORT = 8084;
+    const USERNAME = "esp32_client";
+    const PASSWORD = "@lasW4A@&Q1LWrOBuLoACEmbWoHN64iI";
+    const TOPIC = "esp32/stepper";
+
+    const direction = Math.random() < 0.5 ? 1 : -1;
+    const degrees = Math.floor(Math.random() * 360) + 180;
+
+    // Connect to EMQX
+    const url = `wss://${BROKER_HOST}:${BROKER_PORT}/mqtt`;
+
+    const client = mqtt.connect(url, {
+      username: USERNAME,
+      password: PASSWORD,
+      clientId: "web_" + Math.random().toString(16).slice(2),
+      clean: true,
+      reconnectPeriod: 3000,
+    });
+
+    client.on("connect", () => {
+      const payload = JSON.stringify({ degrees, direction });
+      client.publish(TOPIC, payload, { qos: 1 }, (err) => {
+        if (err) console.log(err.message);
+        else
+          console.log(
+            `✅ Sent: ${degrees}° ${direction === 1 ? "Clockwise" : "Counterclockwise"}`,
+          );
+        client.end(); // close connection after sending
+      });
+    });
+
+    client.on("error", (err) => {
+      console.log(err);
+      client.end();
+    });
+  };
 
   /* ------------------------------------------- */
   /* ------------------- JSX ------------------- */
@@ -237,6 +297,7 @@ function DisplayOne() {
           value={UUIDInput}
           onChange={(e) => setUUIDInput(e.target.value)}
           autoComplete="off"
+          disabled={disableInput}
         ></input>
       </form>
 
