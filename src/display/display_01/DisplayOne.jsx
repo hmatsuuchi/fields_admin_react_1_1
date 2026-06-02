@@ -25,6 +25,7 @@ function DisplayOne() {
   const resetScreen = () => {
     setUUIDInput("");
     setStudentData(null);
+    document.getElementById("uuid-input").focus();
   };
 
   useEffect(() => {
@@ -35,11 +36,11 @@ function DisplayOne() {
 
   /* fetches student data */
   const fetchStudentData = async (event) => {
-    /* disables UUID input field for 3 seconds to prevent multiple rapid submissions */
+    /* disables UUID input field for 5 seconds to prevent multiple rapid submissions */
     setDisableInput(true);
     setTimeout(() => {
       setDisableInput(false);
-    }, 3000);
+    }, 5000);
 
     /* prevents the page from refreshing */
     event.preventDefault();
