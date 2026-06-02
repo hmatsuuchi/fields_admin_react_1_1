@@ -146,42 +146,15 @@ function AttendanceContainer({
 
     const updateAttendanceRecordStatus = async () => {
       try {
-        await instance
-          .put(
-            "api/attendance/attendance/update_attendance_record_status/",
-            data,
-            {
-              headers: {
-                "X-CSRFToken": csrfToken,
-              },
+        await instance.put(
+          "api/attendance/attendance/update_attendance_record_status/",
+          data,
+          {
+            headers: {
+              "X-CSRFToken": csrfToken,
             },
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              // rerun analysis of student's attendance records to predict churn
-              const anylizeStudentToPredictChurn = async () => {
-                try {
-                  await instance.get(
-                    `api/analytics/analytics/ml_predict_for_attendance_record/${attendanceRecordId}/`,
-                    data,
-                    {
-                      headers: {
-                        "X-CSRFToken": csrfToken,
-                      },
-                    },
-                  );
-                } catch (error) {
-                  console.error(
-                    "Error predicting churn for student based on attendance record:",
-                    error,
-                  );
-                }
-              };
-
-              // drives code
-              anylizeStudentToPredictChurn();
-            }
-          });
+          },
+        );
       } catch (e) {
         console.log(e);
         window.alert("エラーが発生しました。");

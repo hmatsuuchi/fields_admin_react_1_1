@@ -113,8 +113,6 @@ function StudentContainer({
       return studentToAddId === student.id;
     });
 
-    console.log(studentToAdd);
-
     setAttendanceStudentsSelected((prevStudents) => {
       if (!prevStudents.includes(studentToAdd)) {
         return [...prevStudents, studentToAdd];
@@ -151,8 +149,6 @@ function StudentContainer({
 
         /* push new attendance record to array */
         record.attendance_records.push(newAttendanceRecord);
-
-        console.log(record.attendance_records);
 
         return record;
       }
