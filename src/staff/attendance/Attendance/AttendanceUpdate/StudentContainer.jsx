@@ -38,7 +38,7 @@ function StudentContainer({
       !preventJumpToFirstSelectedStudent
     ) {
       const firstSelectedStudent = document.getElementById(
-        `student-id-${attendanceStudentsSelected[0].id}`
+        `student-id-${attendanceStudentsSelected[0].id}`,
       );
       const selectContainer = document.getElementById("select-container");
 
@@ -70,12 +70,12 @@ function StudentContainer({
             (student.last_name_romaji + student.first_name_romaji)
               .toLowerCase()
               .includes(
-                studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+                studentSearch.toLowerCase().replace(" ", "").replace(",", ""),
               ) ||
             (student.first_name_romaji + student.last_name_romaji)
               .toLowerCase()
               .includes(
-                studentSearch.toLowerCase().replace(" ", "").replace(",", "")
+                studentSearch.toLowerCase().replace(" ", "").replace(",", ""),
               ) ||
             student.last_name_romaji
               .toLowerCase()
@@ -96,7 +96,7 @@ function StudentContainer({
               .toLowerCase()
               .includes(studentSearch.toLowerCase())
           );
-        })
+        }),
     );
   }, [studentSearch, studentChoices, setStudentsFiltered]);
 
@@ -112,6 +112,8 @@ function StudentContainer({
     const studentToAdd = studentChoices.find((student) => {
       return studentToAddId === student.id;
     });
+
+    console.log(studentToAdd);
 
     setAttendanceStudentsSelected((prevStudents) => {
       if (!prevStudents.includes(studentToAdd)) {
@@ -132,6 +134,7 @@ function StudentContainer({
         /* add new attendance record to array */
         const newAttendanceRecord = {
           id: tempId,
+          grade_verbose: studentToAdd.grade_verbose,
           student: {
             id: studentToAdd.id,
             last_name_kanji: studentToAdd.last_name_kanji,
@@ -148,6 +151,8 @@ function StudentContainer({
 
         /* push new attendance record to array */
         record.attendance_records.push(newAttendanceRecord);
+
+        console.log(record.attendance_records);
 
         return record;
       }
@@ -269,12 +274,12 @@ function StudentContainer({
                         student.status === 1
                           ? " pre-enrolled"
                           : student.status === 2
-                          ? " enrolled"
-                          : student.status === 3
-                          ? " short-absence"
-                          : student.status === 4
-                          ? " long-absence"
-                          : " unknown"
+                            ? " enrolled"
+                            : student.status === 3
+                              ? " short-absence"
+                              : student.status === 4
+                                ? " long-absence"
+                                : " unknown"
                       }`}
                     ></div>
                     <div className="student-name-kanji">
