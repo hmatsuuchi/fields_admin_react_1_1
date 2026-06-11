@@ -28,26 +28,32 @@ $grey: #3a3939;
 }
 
 #attendance-alerts-section {
-  grid-row: 1 / 4;
+  grid-row: 1 / 13;
 
   align-self: start;
 }
 
 #monthly-revenue-section {
   grid-column: 2 / 4;
+  grid-row: 1 / 6;
 }
 
 #monthly-revenue-breakdown-section {
   grid-column: 2 / 4;
-}
-
-#monthly-revenue-breakdown-bar-section {
-  grid-column: 2 / 4;
+  grid-row: 6 / 11;
 }
 
 #lifetime-data-section {
-  grid-row: 1;
   grid-column: 4;
+  grid-row: 1 / 8;
+
+  display: grid;
+  align-content: stretch;
+}
+
+#instructor-data-section {
+  grid-column: 4;
+  grid-row: 8 / 14;
 }
 
 @media screen and (min-width: 600px) {

@@ -7,6 +7,7 @@ import MonthlyRevenue from "./overview/MonthlyRevenue";
 import OverviewToolbar from "../toolbar/dashboard/OverviewToolbar";
 import MonthlyRevenueBreakdown from "./overview/MonthlyRevenueBreakdown";
 import LifetimeData from "./overview/LifetimeData";
+import InstructorData from "./overview/InstructorData";
 
 function Overview() {
   /* ------------------------------------------- */
@@ -29,6 +30,7 @@ function Overview() {
           <MonthlyRevenue />
           <MonthlyRevenueBreakdown />
           <LifetimeData />
+          <InstructorData />
         </div>
       </div>
       <OverviewToolbar />
