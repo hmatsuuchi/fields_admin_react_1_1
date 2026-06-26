@@ -37,7 +37,7 @@ import BalanceSheet from "./staff/accounting/BalanceSheet";
 import AccountTransactions from "./staff/accounting/AccountTransactions";
 // COMPONENTS - CUSTOMER
 import CustomerNavigation from "./customer/navigation/CustomerNavigation";
-import CustomerDashboard from "./customer/Dashboard";
+import CustomerDashboard from "./customer/dashboard/Dashboard";
 // COMPONENTS - DISPLAY - GENERAL
 import DisplayDashboard from "./display/dashboard/Dashboard";
 // COMPONENTS - DISPLAY - GAME

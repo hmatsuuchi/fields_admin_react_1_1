@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 /* AXIOS */
 import instance from "../../../axios/axios_authenticated";
 /* CSS */
