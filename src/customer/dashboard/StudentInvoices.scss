@@ -1,5 +1,130 @@
-#testdiv {
-  width: 100%;
-  height: 10rem;
-  background-color: lightblue;
+$teal: rgb(0, 184, 169);
+$beige: #f8f3d4;
+$red: rgb(246, 65, 108);
+$yellow: rgb(255, 222, 125);
+
+$grey-dark: rgb(50, 50, 50);
+$grey-medium: rgb(100, 100, 100);
+$grey-light: rgb(150, 150, 150);
+$grey-lighter: rgb(200, 200, 200);
+
+// palette 1
+$p1-blue-1: #1a3263;
+$p1-blue-2: #547792;
+$p1-orange-1: #fab95b;
+$p1-grey-1: #e8e2db;
+
+// palette 2
+$p2-blue-1: #154d71;
+$p2-blue-2: #1c6ea4;
+$p2-blue-3: #33a1e0;
+$p2-yellow-1: #fff9af;
+
+// palette 3
+$p3-green-1: #edf1d6;
+$p3-green-2: #9dc08b;
+$p3-green-3: #609966;
+$p3-green-4: #40513b;
+
+#student-invoice-section {
+  .student-invoice-container {
+    aspect-ratio: 1 / 1;
+
+    background-color: #ffffff;
+
+    display: grid;
+    align-content: start;
+
+    .customer-card-content {
+      display: grid;
+      grid-row-gap: 1rem;
+
+      .student-tabs {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: center;
+        justify-items: center;
+        grid-column-gap: 0.3rem;
+
+        .tab {
+          cursor: pointer;
+
+          user-select: none;
+
+          padding: 0 0.2rem 0.1rem 0.2rem;
+
+          border-bottom: solid 2px $p1-grey-1;
+
+          transition: border-bottom-color 400ms ease-out;
+
+          font-size: 1rem;
+
+          &.selected {
+            border-bottom: solid 2px $p1-blue-1;
+
+            pointer-events: none;
+          }
+        }
+
+        &.single {
+          .tab {
+            font-size: 1rem;
+          }
+        }
+
+        &.quadruple {
+          .tab {
+            font-size: 0.8rem;
+          }
+        }
+
+        &.too-many {
+          .tab {
+            font-size: 0.58rem;
+          }
+        }
+      }
+
+      .invoice-data-container {
+        display: grid;
+
+        .student-invoice-data {
+          display: none;
+          grid-column-gap: 0.25rem;
+          grid-template-columns: 2fr repeat(12, 1fr);
+          grid-row-gap: 0.25rem;
+
+          &.selected {
+            display: grid;
+          }
+
+          .year-header,
+          .month-footer {
+            justify-self: center;
+
+            font-size: 0.75rem;
+          }
+
+          .invoice-month-container {
+            aspect-ratio: 1 / 1;
+
+            border-radius: 100%;
+
+            background-color: $p1-grey-1;
+
+            display: grid;
+            align-items: space-between;
+
+            &.paid {
+              background-color: $p2-blue-2;
+            }
+
+            &.unpaid {
+              background-color: $p1-orange-1;
+            }
+          }
+        }
+      }
+    }
+  }
 }

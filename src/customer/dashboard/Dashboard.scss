@@ -1,7 +1,42 @@
+$teal: rgb(0, 184, 168);
+$beige: #f8f3d4;
+$red: #f6416c;
+$yellow: rgb(255, 222, 125);
+
+$grey-dark: rgb(50, 50, 50);
+$grey-medium: rgb(100, 100, 100);
+$grey-light: rgb(150, 150, 150);
+
 #customer-dashboard-section {
-  background-color: pink;
+  .customer-dashboard-container {
+    background-color: rgb(235, 235, 235);
 
-  margin-top: 2.75rem;
+    min-height: calc(150vh);
 
-  padding: 1rem;
+    padding-bottom: 40rem;
+
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    grid-row-gap: 1rem;
+
+    .customer-card {
+      background-color: #ffffff;
+
+      border-radius: 1.5rem;
+
+      width: calc(100vw - 4rem);
+
+      padding: 1rem;
+
+      display: grid;
+      grid-row-gap: 1rem;
+      align-items: start;
+
+      .customer-card-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+    }
+  }
 }

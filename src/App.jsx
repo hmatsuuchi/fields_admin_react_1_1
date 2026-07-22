@@ -36,7 +36,6 @@ import JounalEntryCreate from "./staff/accounting/JounalEntryCreate";
 import BalanceSheet from "./staff/accounting/BalanceSheet";
 import AccountTransactions from "./staff/accounting/AccountTransactions";
 // COMPONENTS - CUSTOMER
-import CustomerNavigation from "./customer/navigation/CustomerNavigation";
 import CustomerDashboard from "./customer/dashboard/Dashboard";
 // COMPONENTS - DISPLAY - GENERAL
 import DisplayDashboard from "./display/dashboard/Dashboard";
@@ -160,9 +159,7 @@ function App() {
           setBackButtonLink={setBackButtonLink}
           setDisplayBackButton={setDisplayBackButton}
         />
-      ) : (
-        isAuth && isCustomer && <CustomerNavigation />
-      )}
+      ) : null}
       <Routes>
         {/* AUTHENTICATION ROUTES - DASHBOARD */}
         <Route path="/" element={<Navigate replace to="/staff/dashboard/" />} />
