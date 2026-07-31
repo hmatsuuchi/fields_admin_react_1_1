@@ -7,7 +7,7 @@ import StudentChurn from "./dashboard/StudentChurn";
 import TotalActiveStudents from "./dashboard/TotalActiveStudents";
 import TotalActiveStudentsHistory from "./dashboard/TotalActiveStudentsHistory";
 import DashboardToolbar from "../toolbar/dashboard/DashboardToolbar";
-// import AtRiskStudents from "./dashboard/AtRiskStudents";
+import AtRiskStudents from "./dashboard/AtRiskStudents";
 import UpcomingBirthdays from "./dashboard/UpcomingBirthdays";
 import StudentsByGrade from "./dashboard/StudentsByGrade";
 import LifetimeData from "./dashboard/LifetimeData";
@@ -43,18 +43,24 @@ function Dashboard({
     <Fragment>
       <div id="dashboard-primary-container-scroll-container">
         <div id="dashboard-primary-container">
-          <IncompleteAttendanceForInstructor />
-          <StudentChurn />
-          <TotalActiveStudents />
-          {/* <AtRiskStudents /> */}
-          <UpcomingBirthdays
-            setBackButtonText={setBackButtonText}
-            setBackButtonLink={setBackButtonLink}
-            setDisplayBackButton={setDisplayBackButton}
-          />
-          <TotalActiveStudentsHistory />
-          <StudentsByGrade />
-          <LifetimeData />
+          <div id="column-1" className="dashboard-column">
+            <IncompleteAttendanceForInstructor />
+            <TotalActiveStudents />
+            <UpcomingBirthdays
+              setBackButtonText={setBackButtonText}
+              setBackButtonLink={setBackButtonLink}
+              setDisplayBackButton={setDisplayBackButton}
+            />
+          </div>
+          <div id="column-2" className="dashboard-column">
+            <StudentChurn />
+            <TotalActiveStudentsHistory />
+            <StudentsByGrade />
+          </div>
+          <div id="column-3" className="dashboard-column">
+            <LifetimeData />
+            <AtRiskStudents />
+          </div>
         </div>
       </div>
       <DashboardToolbar

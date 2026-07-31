@@ -1,0 +1,68 @@
+$teal: #00b8a9;
+$beige: rgb(248, 243, 212);
+$red: rgb(246, 65, 108);
+$yellow: rgb(255, 222, 125);
+$deep-yellow: #ffcb31;
+
+$pre-enrolled: rgb(253, 188, 0);
+$light-grey: rgb(173, 173, 173);
+$medium-grey: rgb(95, 95, 95);
+$grey: rgb(58, 57, 57);
+
+$over-300px-rem: 1.5rem;
+$over-300px-vw: 15vw;
+$over-600px-rem: 2.3rem;
+$over-600px-vw: 6.75vw;
+$over-900px-rem: 2.3rem;
+$over-900px-vw: 4.5vw;
+$over-1200px-rem: 2.9rem;
+$over-1200px-vw: 3.3vw;
+
+#at-risk-students {
+  display: grid;
+
+  .data-container {
+    display: grid;
+    grid-row-gap: 1rem;
+    grid-auto-flow: row;
+
+    .student-container {
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.5rem;
+
+      border: solid 2px $pre-enrolled;
+      background-color: rgba(253, 188, 0, 0.2);
+
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+
+      .student-name-kanji {
+        font-size: 1.1rem;
+      }
+
+      .student-name-katakana,
+      .student-name-romaji {
+        font-size: 0.85rem;
+      }
+
+      .churn-probability {
+        place-self: center;
+
+        font-size: 1.3rem;
+
+        grid-column: 2;
+        grid-row: 1 / 4;
+      }
+
+      &.high-risk {
+        border: solid 2px $red;
+        background-color: rgba(246, 65, 108, 0.2);
+      }
+    }
+  }
+
+  .loading-spinner-container {
+    margin-top: 0;
+    margin-bottom: 4rem;
+  }
+}

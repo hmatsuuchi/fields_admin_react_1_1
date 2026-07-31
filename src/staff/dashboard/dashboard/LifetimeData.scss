@@ -10,8 +10,6 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #lifetime-data-section-dashboard {
-  grid-row: 6;
-
   display: grid;
   align-items: start;
 
@@ -96,9 +94,6 @@ $grey: #3a3939;
 
 @media screen and (min-width: 600px) {
   #lifetime-data-section-dashboard {
-    grid-column: 1;
-    grid-row: 5;
-
     .lifetime-data-container {
       grid-template-columns: 1fr;
 
@@ -111,8 +106,6 @@ $grey: #3a3939;
 
 @media screen and (min-width: 900px) {
   #lifetime-data-section-dashboard {
-    grid-row: 7 / 12;
-
     .lifetime-data-container {
       min-height: 32rem;
     }
@@ -122,8 +115,5 @@ $grey: #3a3939;
 @media screen and (min-width: 1200px) {
   #lifetime-data-section-dashboard {
     align-items: stretch;
-
-    grid-column: 4;
-    grid-row: 1 / 9;
   }
 }

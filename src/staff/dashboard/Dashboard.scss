@@ -20,33 +20,41 @@ $grey: #3a3939;
   justify-items: center;
 
   #dashboard-primary-container {
-    padding: 1rem;
-    padding-bottom: 15rem;
+    margin-top: 1rem;
+    margin-bottom: 15rem;
 
-    width: calc(100% - 2rem);
+    width: calc(100% - 2rem + 2px);
 
     display: grid;
-    grid-column-gap: 1rem;
     grid-row-gap: 1rem;
+    grid-column-gap: 1rem;
+    align-items: start;
 
-    .component-primary-container {
-      padding: 1rem;
-
-      border: solid 1px $light-grey;
-      border-radius: 0.3rem;
-
-      box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
-
-      background-color: #ffffff;
-
+    .dashboard-column {
       display: grid;
-      align-content: start;
+      grid-column-gap: 1rem;
+      grid-row-gap: 1rem;
+      grid-auto-flow: row;
 
-      .component-title {
-        font-size: 1.1rem;
-        font-weight: 500;
+      .component-primary-container {
+        padding: 1rem;
 
-        margin-bottom: 1rem;
+        border: solid 1px $light-grey;
+        border-radius: 0.3rem;
+
+        box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
+
+        background-color: #ffffff;
+
+        display: grid;
+        align-content: start;
+
+        .component-title {
+          font-size: 1.1rem;
+          font-weight: 500;
+
+          margin-bottom: 1rem;
+        }
       }
     }
   }
@@ -55,23 +63,57 @@ $grey: #3a3939;
 @media screen and (min-width: 600px) {
   #dashboard-primary-container {
     grid-template-columns: repeat(2, 1fr);
+
+    #column-1 {
+      grid-column: 1;
+    }
+
+    #column-2 {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+
+    #column-3 {
+      grid-column: 2;
+    }
   }
 }
 
 @media screen and (min-width: 900px) {
   #dashboard-primary-container {
     grid-template-columns: repeat(3, 1fr);
+
+    #column-1 {
+      grid-column: 1;
+    }
+
+    #column-2 {
+      grid-column: 2 / 4;
+      grid-row: 1 / 3;
+    }
+
+    #column-3 {
+      grid-column: 1;
+    }
   }
 }
 
 @media screen and (min-width: 1200px) {
-  #dashboard-primary-container-scroll-container {
-    // justify-items: center;
+  #dashboard-primary-container {
+    grid-template-columns: repeat(4, 1fr);
 
-    #dashboard-primary-container {
-      grid-template-columns: repeat(4, 1fr);
+    max-width: 1300px;
 
-      max-width: 1300px;
+    #column-1 {
+      grid-column: 1;
+    }
+
+    #column-2 {
+      grid-column: 2 / 4;
+    }
+
+    #column-3 {
+      grid-column: 4;
     }
   }
 }

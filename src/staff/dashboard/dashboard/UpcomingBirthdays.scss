@@ -10,10 +10,6 @@ $medium-grey: #5f5f5f;
 $grey: #3a3939;
 
 #upcoming-birthdays {
-  align-self: start;
-
-  grid-row: 7;
-
   .upcoming-birthdays-container {
     max-height: 37.5rem;
 
@@ -87,25 +83,5 @@ $grey: #3a3939;
     .no-upcoming-birthdays {
       text-align: center;
     }
-  }
-}
-
-@media screen and (min-width: 600px) {
-  #upcoming-birthdays {
-    grid-row: 5;
-  }
-}
-
-@media screen and (min-width: 900px) {
-  #upcoming-birthdays {
-    grid-row: 12 / 17;
-    grid-column: 1;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  #upcoming-birthdays {
-    grid-row: 9 / 19;
-    grid-column: 4;
   }
 }
