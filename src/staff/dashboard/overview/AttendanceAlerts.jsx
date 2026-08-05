@@ -21,7 +21,7 @@ function AttendanceAlerts() {
 
   const analyzeAttendance = () => {
     instance
-      .get("api/alerts/alerts/attendance_alerts/analyze/")
+      .get("api/dashboard/dashboard/overview/attendance_for_all_instructors/")
       .then((response) => {
         if (response) {
           setAnalytics(response.data.analytics);
