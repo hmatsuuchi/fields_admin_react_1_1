@@ -23,40 +23,43 @@ $over-1200px-vw: 3.3vw;
 
   .data-container {
     display: grid;
-    grid-row-gap: 1rem;
+    grid-row-gap: 0.75rem;
     grid-auto-flow: row;
 
     .student-container {
-      padding: 0.4rem 0.5rem;
-      border-radius: 0.5rem;
-
-      border: solid 2px $pre-enrolled;
-      background-color: rgba(253, 188, 0, 0.2);
-
       display: grid;
-      grid-template-columns: 3fr 1fr;
 
       .student-name-kanji {
-        font-size: 1.1rem;
+        font-size: 1rem;
       }
 
-      .student-name-katakana,
-      .student-name-romaji {
-        font-size: 0.85rem;
+      .student-name-katakana {
+        font-size: 0.8rem;
       }
 
       .churn-probability {
-        place-self: center;
+        justify-self: right;
+        align-self: center;
 
-        font-size: 1.3rem;
+        border-radius: 0.3rem;
+
+        padding: 0.1rem 0.5rem;
+
+        font-size: 0.9rem;
+
+        background-color: $yellow;
 
         grid-column: 2;
-        grid-row: 1 / 4;
+        grid-row: 1 / 3;
       }
 
       &.high-risk {
-        border: solid 2px $red;
-        background-color: rgba(246, 65, 108, 0.2);
+        .churn-probability {
+          color: #ffffff;
+          font-weight: 500;
+
+          background-color: $red;
+        }
       }
     }
   }

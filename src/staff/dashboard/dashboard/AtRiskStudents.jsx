@@ -24,7 +24,6 @@ function AtRiskStudents() {
       .get("api/dashboard/dashboard/at_risk_students/")
       .then((response) => {
         if (response) {
-          console.log(response.data.at_risk_students);
           setAtRiskStudents(response.data.at_risk_students);
         }
       })
@@ -53,7 +52,7 @@ function AtRiskStudents() {
           {atRiskStudents && atRiskStudents.length > 0 ? (
             atRiskStudents.map((student) => (
               <div
-                className={`student-container${student.churn_probability > 0.7 ? " high-risk" : ""}`}
+                className={`student-container${student.churn_probability >= 0.75 ? " high-risk" : ""}`}
                 key={student.id}
               >
                 <div className="student-name-kanji">
@@ -62,11 +61,8 @@ function AtRiskStudents() {
                 <div className="student-name-katakana">
                   {`${student.student.last_name_katakana} ${student.student.first_name_katakana}`}
                 </div>
-                <div className="student-name-romaji">
-                  {`${student.student.last_name_romaji}, ${student.student.first_name_romaji}`}
-                </div>
                 <div className="churn-probability">
-                  {(student.churn_probability * 100).toFixed(1)}%
+                  <div>{(student.churn_probability * 100).toFixed(1)}%</div>
                 </div>
               </div>
             ))
