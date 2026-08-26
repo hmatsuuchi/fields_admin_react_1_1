@@ -49,7 +49,9 @@ function Dashboard() {
           <TopBar
             customerLastNameKanji={customerProfileData?.last_name_kanji}
           />
-          <StudentInvoices />
+          <div className="widget-container">
+            <StudentInvoices />
+          </div>
         </div>
       </section>
     </Fragment>

@@ -27,14 +27,13 @@ $p3-green-3: #609966;
 $p3-green-4: #40513b;
 
 #student-invoice-section {
+  grid-column: 1;
+  grid-row: 1;
+
+  aspect-ratio: 1 / 1;
+  width: 100%;
+
   .student-invoice-container {
-    aspect-ratio: 1 / 1;
-
-    background-color: #ffffff;
-
-    display: grid;
-    align-content: start;
-
     .customer-card-content {
       display: grid;
       grid-row-gap: 1rem;
@@ -57,7 +56,7 @@ $p3-green-4: #40513b;
 
           transition: border-bottom-color 400ms ease-out;
 
-          font-size: 1rem;
+          font-size: 0.9rem;
 
           &.selected {
             border-bottom: solid 2px $p1-blue-1;
@@ -112,8 +111,8 @@ $p3-green-4: #40513b;
 
             background-color: $p1-grey-1;
 
-            display: grid;
-            align-items: space-between;
+            position: relative;
+            display: inline-block;
 
             &.paid {
               background-color: $p2-blue-2;
@@ -122,6 +121,31 @@ $p3-green-4: #40513b;
             &.unpaid {
               background-color: $p1-orange-1;
             }
+
+            .invoice-tooltip {
+              visibility: hidden;
+              opacity: 0;
+              background: #333;
+              color: #fff;
+              font-size: 0.75rem;
+              font-weight: 500;
+              padding: 4px 8px;
+              border-radius: 4px;
+              white-space: nowrap;
+
+              /* position above the element */
+              position: absolute;
+              bottom: calc(100% + 6px);
+              left: 50%;
+              transform: translateX(-50%);
+
+              transition: opacity 0.5s ease;
+              pointer-events: none;
+            }
+          }
+          .invoice-month-container:hover .invoice-tooltip {
+            visibility: visible;
+            opacity: 1;
           }
         }
       }

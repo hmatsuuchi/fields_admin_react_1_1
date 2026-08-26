@@ -85,14 +85,13 @@ function StudentInvoices() {
                     <div
                       key={index}
                       className={`student-invoice-data ${selectedStudentIndex === index ? "selected" : ""}`}
-                      onClick={() => setSelectedStudentIndex(index)}
                     >
                       {Array.from(
                         { length: endingYear - startingYear + 1 },
                         (_, yi) => {
                           const year = endingYear - yi;
                           return (
-                            <Fragment>
+                            <Fragment key={yi}>
                               <div className="year-header">{`${year}`}</div>
                               {Array.from({ length: 12 }, (_, mi) => {
                                 const month = mi + 1;
@@ -116,7 +115,13 @@ function StudentInvoices() {
                                   <div
                                     key={`${year}-${month}`}
                                     className={`invoice-month-container${invoiceForCell && invoiceForCell.paid_date ? " paid" : invoiceForCell && !invoiceForCell.paid_date ? " unpaid" : ""}`}
-                                  ></div>
+                                  >
+                                    <span className="invoice-tooltip">
+                                      {invoiceTotal !== null
+                                        ? `${invoiceTotal.toLocaleString()}円`
+                                        : "0円"}
+                                    </span>
+                                  </div>
                                 );
                               })}
                             </Fragment>
