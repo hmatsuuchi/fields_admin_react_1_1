@@ -64,6 +64,9 @@ function AtRiskStudents() {
                 <div className="churn-probability">
                   <div>{(student.churn_probability * 100).toFixed(1)}%</div>
                 </div>
+                <div
+                  className={`trend${student.trend ? ` ${student.trend}` : ""}`}
+                ></div>
               </div>
             ))
           ) : (

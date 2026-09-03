@@ -9,9 +9,11 @@ $grey-light: rgb(150, 150, 150);
 
 #top-bar-section {
   .top-bar-container {
-    width: calc(100vw - 2rem);
+    width: calc(100vw - 1rem);
 
     padding: 1rem;
+
+    box-sizing: border-box;
 
     display: grid;
     justify-items: center;
