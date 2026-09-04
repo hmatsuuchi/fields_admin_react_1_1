@@ -70,14 +70,17 @@ $over-1200px-vw: 3.3vw;
 
         &.up::before {
           content: "↑";
+          color: $red;
         }
 
         &.no_change::before {
           content: "→";
+          color: rgb(100, 100, 100);
         }
 
         &.down::before {
           content: "↓";
+          color: $teal;
         }
       }
 
