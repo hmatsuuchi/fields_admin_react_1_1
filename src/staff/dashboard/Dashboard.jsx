@@ -59,7 +59,11 @@ function Dashboard({
           </div>
           <div id="column-3" className="dashboard-column">
             <LifetimeData />
-            <AtRiskStudents />
+            <AtRiskStudents
+              setBackButtonText={setBackButtonText}
+              setBackButtonLink={setBackButtonLink}
+              setDisplayBackButton={setDisplayBackButton}
+            />
           </div>
         </div>
       </div>
