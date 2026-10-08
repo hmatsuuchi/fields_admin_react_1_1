@@ -151,11 +151,13 @@ function Attendance({
               const instructor = primaryInstructorChoices.find(
                 (item) => item.id === instructorId,
               );
+
               setActivePrimaryInstructor(instructor);
 
               /* selected date */
               const selectedDate =
                 userPreferences.pref_attendance_selected_date;
+
               setAttendanceDate(selectedDate);
               setAttendanceDateDisplay(selectedDate);
 

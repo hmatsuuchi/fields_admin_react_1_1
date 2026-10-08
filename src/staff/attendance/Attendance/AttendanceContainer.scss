@@ -111,7 +111,7 @@ $grey: #3a3939;
 
       .attendance-record {
         display: grid;
-        grid-template-columns: auto 3rem;
+        grid-template-columns: auto calc(2rem + 1px + 4px);
 
         .student-name-kanji {
           cursor: pointer;
@@ -191,5 +191,44 @@ $grey: #3a3939;
 
   .schedule-break-container.card {
     box-shadow: none;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #attendance-container {
+    .attendance {
+      .attendance-records-container {
+        .attendance-record {
+          grid-template-columns: auto 7.75rem calc(2rem + 1px + 4px);
+          grid-column-gap: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 500px) {
+  #attendance-container {
+    .attendance {
+      .attendance-records-container {
+        .attendance-record {
+          grid-template-columns: auto 7.75rem calc(2rem + 1px + 4px);
+          grid-column-gap: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 550px) {
+  #attendance-container {
+    .attendance {
+      .attendance-records-container {
+        .attendance-record {
+          grid-template-columns: auto 7.75rem calc(2rem + 1px + 4px);
+          grid-column-gap: 2rem;
+        }
+      }
+    }
   }
 }

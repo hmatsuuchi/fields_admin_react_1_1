@@ -7,6 +7,8 @@ import "./AttendanceContainer.scss";
 import { useNavigate } from "react-router-dom";
 /* timeout id for updateAttendanceRecordStatus*/
 let timeoutMap = new Map();
+/* attendance notes */
+import AttendanceRecordNotes from "./AttendanceRecordNotes";
 
 function AttendanceContainer({
   csrfToken,
@@ -225,6 +227,12 @@ function AttendanceContainer({
                     onClick={handleClicksToStudentName}
                   >{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
                   <div className="student-name-romaji">{`${attendanceRecord.student.last_name_romaji}, ${attendanceRecord.student.first_name_romaji}`}</div>
+                  <AttendanceRecordNotes
+                    lastNameKanji={attendanceRecord.student.last_name_kanji}
+                    firstNameKanji={attendanceRecord.student.first_name_kanji}
+                    eventName={record.linked_class.event_name}
+                    date={attendanceDate}
+                  />
                   <div
                     className={`student-attendance-status ${attendanceStatusIntegerToCssClass(
                       attendanceRecord.status,
