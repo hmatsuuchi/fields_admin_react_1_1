@@ -194,13 +194,26 @@ $grey: #3a3939;
   }
 }
 
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 350px) {
+  #attendance-container {
+    .attendance {
+      .attendance-records-container {
+        .attendance-record {
+          grid-template-columns: auto 6rem calc(2rem + 1px + 4px);
+          grid-column-gap: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 400px) {
   #attendance-container {
     .attendance {
       .attendance-records-container {
         .attendance-record {
           grid-template-columns: auto 7.75rem calc(2rem + 1px + 4px);
-          grid-column-gap: 1rem;
+          grid-column-gap: 0.75rem;
         }
       }
     }

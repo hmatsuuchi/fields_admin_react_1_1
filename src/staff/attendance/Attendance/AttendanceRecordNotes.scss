@@ -14,11 +14,10 @@ $grey: #3a3939;
 
   width: 100%;
 
-  margin-top: 0.25rem;
-
   display: grid;
   grid-auto-flow: column;
-  justify-content: space-around;
+  justify-content: end;
+  grid-column-gap: 0.5rem;
 
   .lesson-note,
   .homework-note,
@@ -85,8 +84,8 @@ $grey: #3a3939;
   .notes-content-container {
     width: calc(100vw - 2rem);
     max-width: 550px;
-    height: 100svh;
-    max-height: calc(100svh - 2rem);
+    height: 100vh;
+    max-height: calc(100vh - 2rem);
 
     border-radius: 0.5rem;
 
@@ -167,6 +166,7 @@ $grey: #3a3939;
           width: 100%;
 
           font-size: 1rem;
+          font-family: "Noto Sans JP", sans-serif;
 
           border: solid 1px $medium-grey;
           border-radius: 0.3rem;
@@ -185,7 +185,32 @@ $grey: #3a3939;
       }
 
       .button-container {
-        background-color: pink;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+
+        .cancel-button,
+        .save-button {
+          padding: 0.5rem 1rem;
+
+          border: none;
+          border-radius: 0.5rem;
+
+          font-size: 1.2rem;
+          font-weight: 400;
+
+          cursor: pointer;
+
+          color: #ffffff;
+        }
+
+        .cancel-button {
+          background-color: $grey;
+        }
+
+        .save-button {
+          background-color: $teal;
+        }
       }
     }
   }
@@ -195,8 +220,47 @@ $grey: #3a3939;
   display: grid;
 }
 
+@media screen and (min-width: 350px) {
+  .attendance-record-notes-container {
+    grid-column: 2;
+    grid-row: 1 / 4;
+
+    margin-top: -0.1rem;
+
+    align-self: center;
+    justify-self: center;
+
+    justify-content: space-between;
+    grid-column-gap: 0.15rem;
+
+    .lesson-note,
+    .homework-note,
+    .student-note {
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+  }
+}
+
 @media screen and (min-width: 400px) {
   .attendance-record-notes-container {
+    grid-column: 2;
+    grid-row: 1 / 4;
+
+    margin-top: -0.1rem;
+
+    align-self: center;
+    justify-self: center;
+
+    justify-content: space-between;
+
+    .lesson-note,
+    .homework-note,
+    .student-note {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
     .notes-overlay {
       .notes-content-container {
         .notes-header {
@@ -208,20 +272,6 @@ $grey: #3a3939;
         }
       }
     }
-  }
-}
-
-@media screen and (min-width: 450px) {
-  .attendance-record-notes-container {
-    grid-column: 2;
-    grid-row: 1 / 4;
-
-    margin-top: -0.1rem;
-
-    align-self: center;
-    justify-self: center;
-
-    justify-content: space-between;
   }
 }
 

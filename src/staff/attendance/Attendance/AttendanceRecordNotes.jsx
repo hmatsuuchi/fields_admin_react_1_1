@@ -37,6 +37,12 @@ function AttendanceRecordNotes({
     return `${month}月${day}日`;
   };
 
+  // save notes
+  const saveNotes = () => {
+    console.log("Saving notes");
+    // Implement the save functionality here
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -76,7 +82,12 @@ function AttendanceRecordNotes({
               <textarea />
             </div>
             <div className="button-container">
-              CANCEL and SAVE buttons go here
+              <button className="cancel-button" onClick={closeNotesSection}>
+                キャンセル
+              </button>
+              <button className="save-button" onClick={saveNotes}>
+                保存
+              </button>
             </div>
           </div>
         </div>
