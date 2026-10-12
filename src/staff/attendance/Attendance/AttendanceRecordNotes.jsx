@@ -1,31 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+/* Axios */
+import instance from "../../../axios/axios_authenticated";
 /* CSS */
 import "./AttendanceRecordNotes.scss";
 
 function AttendanceRecordNotes({
+  csrfToken,
   lastNameKanji,
   firstNameKanji,
   eventName,
   date,
+  attendanceRecordId,
+  studentId,
+  lessonNote: initialLessonNote,
+  homeworkNote: initialHomeworkNote,
+  studentNote: initialStudentNote,
 }) {
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
   /* ---------------------------------------------- */
   const [isNotesSectionOpen, setIsNotesSectionOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [lessonNote, setLessonNote] = useState(
+    initialLessonNote ? initialLessonNote : "",
+  );
+  const [homeworkNote, setHomeworkNote] = useState(
+    initialHomeworkNote ? initialHomeworkNote : "",
+  );
+  const [studentNote, setStudentNote] = useState(
+    initialStudentNote ? initialStudentNote : "",
+  );
+
+  const [noteToFocus, setNoteToFocus] = useState("");
+
+  const lessonNoteRef = useRef();
+  const homeworkNoteRef = useRef();
+  const studentNoteRef = useRef();
+  const notesAtOpenRef = useRef(null);
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
   /* ---------------------------------------------- */
 
-  // open notes section
-  const openNotesSection = () => {
-    console.log("Opening notes section");
+  // open notes section and focus on the notes content container
+  const openNotesSection = (noteType) => {
+    notesAtOpenRef.current = { lessonNote, homeworkNote, studentNote };
+    setNoteToFocus(noteType);
     setIsNotesSectionOpen(true);
   };
 
   // close notes section
-  const closeNotesSection = () => {
-    console.log("Closing notes section");
+  const closeNotesSection = (discardChanges = true) => {
+    if (isSaving && discardChanges) return;
+
+    if (discardChanges && notesAtOpenRef.current) {
+      setLessonNote(notesAtOpenRef.current.lessonNote);
+      setHomeworkNote(notesAtOpenRef.current.homeworkNote);
+      setStudentNote(notesAtOpenRef.current.studentNote);
+    }
+
+    notesAtOpenRef.current = null;
     setIsNotesSectionOpen(false);
   };
 
@@ -38,26 +73,80 @@ function AttendanceRecordNotes({
   };
 
   // save notes
-  const saveNotes = () => {
-    console.log("Saving notes");
-    // Implement the save functionality here
+  const saveNotes = async () => {
+    setIsSaving(true);
+
+    const data = {
+      attendance_record_id: attendanceRecordId,
+      student_id: studentId,
+      lesson_note: lessonNote,
+      homework_note: homeworkNote,
+      student_note: studentNote,
+    };
+    try {
+      const response = await instance.post(
+        "api/attendance/attendance/add_edit_attendance_record_note/",
+        data,
+        {
+          headers: {
+            "X-CSRFToken": csrfToken,
+          },
+        },
+      );
+      if (response.status === 200) {
+        closeNotesSection(false);
+      }
+      setIsSaving(false);
+    } catch (e) {
+      // remove the dimming effect
+      setIsSaving(false);
+
+      console.log(e);
+      window.alert("エラーが発生しました。");
+    }
   };
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
 
+  useEffect(() => {
+    if (!isNotesSectionOpen) return;
+
+    const refs = {
+      lesson: lessonNoteRef,
+      homework: homeworkNoteRef,
+      student: studentNoteRef,
+    };
+
+    const textarea = refs[noteToFocus]?.current;
+    if (!textarea) return;
+
+    textarea.focus();
+    const cursorPosition = textarea.value.length;
+    textarea.setSelectionRange(cursorPosition, cursorPosition);
+  }, [isNotesSectionOpen, noteToFocus]);
+
   return (
     <div className="attendance-record-notes-container">
-      <div className="lesson-note" onClick={openNotesSection}></div>
-      <div className="homework-note" onClick={openNotesSection}></div>
-      <div className="student-note" onClick={openNotesSection}></div>
       <div
-        className={`notes-overlay ${isNotesSectionOpen ? "active" : ""}`}
-        onClick={closeNotesSection}
+        className={`lesson-note${lessonNote ? " complete" : ""}`}
+        onClick={() => openNotesSection("lesson")}
+      ></div>
+      <div
+        className={`homework-note${homeworkNote ? " complete" : ""}`}
+        onClick={() => openNotesSection("homework")}
+      ></div>
+      <div
+        className={`student-note${studentNote ? " complete" : ""}`}
+        onClick={() => openNotesSection("student")}
+      ></div>
+      <div
+        className={`notes-overlay${isSaving ? " saving" : ""} ${isNotesSectionOpen ? " active" : ""}`}
+        onClick={() => closeNotesSection()}
       >
         <div
-          className="notes-content-container"
+          className={`notes-content-container${isSaving ? " saving" : ""}`}
           onClick={(event) => event.stopPropagation()}
         >
           <div className="notes-header">
@@ -66,23 +155,41 @@ function AttendanceRecordNotes({
               <div className="date">{`${formatDate(date)}`}</div>
               <div className="event">{`${eventName}`}</div>
             </div>
-            <div className="exit-button" onClick={closeNotesSection}></div>
+            <div
+              className="exit-button"
+              onClick={() => closeNotesSection()}
+            ></div>
           </div>
           <div className="notes-body">
             <div className="lesson-note-container">
               <div className="note-type-title">レッスン内容</div>
-              <textarea />
+              <textarea
+                ref={lessonNoteRef}
+                value={lessonNote}
+                onChange={(e) => setLessonNote(e.target.value)}
+              />
             </div>
             <div className="homework-note-container">
               <div className="note-type-title">宿題</div>
-              <textarea />
+              <textarea
+                ref={homeworkNoteRef}
+                value={homeworkNote}
+                onChange={(e) => setHomeworkNote(e.target.value)}
+              />
             </div>
             <div className="student-note-container">
               <div className="note-type-title">フィードバック</div>
-              <textarea />
+              <textarea
+                ref={studentNoteRef}
+                value={studentNote}
+                onChange={(e) => setStudentNote(e.target.value)}
+              />
             </div>
             <div className="button-container">
-              <button className="cancel-button" onClick={closeNotesSection}>
+              <button
+                className="cancel-button"
+                onClick={() => closeNotesSection()}
+              >
                 キャンセル
               </button>
               <button className="save-button" onClick={saveNotes}>

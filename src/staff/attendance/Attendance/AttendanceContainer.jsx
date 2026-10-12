@@ -228,10 +228,20 @@ function AttendanceContainer({
                   >{`${attendanceRecord.student.last_name_katakana} ${attendanceRecord.student.first_name_katakana}`}</div>
                   <div className="student-name-romaji">{`${attendanceRecord.student.last_name_romaji}, ${attendanceRecord.student.first_name_romaji}`}</div>
                   <AttendanceRecordNotes
+                    csrfToken={csrfToken}
                     lastNameKanji={attendanceRecord.student.last_name_kanji}
                     firstNameKanji={attendanceRecord.student.first_name_kanji}
                     eventName={record.linked_class.event_name}
                     date={attendanceDate}
+                    attendanceRecordId={attendanceRecord.id}
+                    studentId={attendanceRecord.student.id}
+                    lessonNote={attendanceRecord.attendance_record_lesson_note}
+                    homeworkNote={
+                      attendanceRecord.attendance_record_homework_note
+                    }
+                    studentNote={
+                      attendanceRecord.attendance_record_student_note
+                    }
                   />
                   <div
                     className={`student-attendance-status ${attendanceStatusIntegerToCssClass(

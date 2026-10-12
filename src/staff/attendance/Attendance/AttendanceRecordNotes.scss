@@ -73,7 +73,7 @@ $grey: #3a3939;
   left: 0;
 
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
 
   background-color: rgba(0, 0, 0, 0.5);
 
@@ -84,8 +84,8 @@ $grey: #3a3939;
   .notes-content-container {
     width: calc(100vw - 2rem);
     max-width: 550px;
-    height: 100vh;
-    max-height: calc(100vh - 2rem);
+    height: 100svh;
+    max-height: calc(100svh - 2rem);
 
     border-radius: 0.5rem;
 
@@ -214,10 +214,23 @@ $grey: #3a3939;
       }
     }
   }
+
+  .notes-content-container.saving {
+    filter: brightness(0.85);
+    pointer-events: none;
+    user-select: none;
+    cursor: auto;
+  }
 }
 
 .notes-overlay.active {
   display: grid;
+}
+
+.notes-overlay.saving {
+  pointer-events: none;
+  user-select: none;
+  cursor: auto;
 }
 
 @media screen and (min-width: 350px) {

@@ -316,6 +316,7 @@ function Attendance({
             if (response) {
               /* set attendances */
               setAttendances(response.data.attendance);
+              console.log(response.data.attendance);
               /* activate page */
               activatePage();
             }
@@ -360,6 +361,7 @@ function Attendance({
             if (response) {
               /* set attendance records */
               setAttendances(response.data.attendance);
+              console.log(response.data.attendance);
 
               /* activate page */
               activatePage();
