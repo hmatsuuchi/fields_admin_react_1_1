@@ -170,6 +170,36 @@ $grey: #3a3939;
           }
         }
       }
+      .attendance-record-notes-container {
+        grid-column: 1 / -1;
+        grid-row: 2;
+
+        margin-top: 1rem;
+
+        border-top: solid 1px $light-grey;
+        padding-top: 0.5rem;
+
+        width: 100%;
+
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 0.25rem;
+
+        .note-container {
+          display: grid;
+          grid-auto-flow: row;
+
+          .note-title {
+            font-weight: 500;
+          }
+
+          .note-text {
+            font-size: 0.9rem;
+            margin: 0 1rem;
+            white-space: pre-line;
+          }
+        }
+      }
     }
   }
 }

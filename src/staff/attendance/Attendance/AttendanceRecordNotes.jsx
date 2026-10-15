@@ -86,12 +86,20 @@ function AttendanceRecordNotes({
   const saveNotes = async () => {
     setIsSaving(true);
 
+    const trimmedLessonNote = lessonNote.trim();
+    const trimmedHomeworkNote = homeworkNote.trim();
+    const trimmedStudentNote = studentNote.trim();
+
+    setLessonNote(trimmedLessonNote);
+    setHomeworkNote(trimmedHomeworkNote);
+    setStudentNote(trimmedStudentNote);
+
     const data = {
       attendance_record_id: attendanceRecordId,
       student_id: studentId,
-      lesson_note: lessonNote,
-      homework_note: homeworkNote,
-      student_note: studentNote,
+      lesson_note: trimmedLessonNote,
+      homework_note: trimmedHomeworkNote,
+      student_note: trimmedStudentNote,
     };
     try {
       const response = await instance.post(

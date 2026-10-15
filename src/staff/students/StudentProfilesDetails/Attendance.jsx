@@ -94,6 +94,7 @@ function Attendance({
           .then((response) => {
             if (response) {
               setAttendances(response.data.attendance_records);
+              console.log(response.data.attendance_records);
             }
           });
       } catch (e) {
@@ -104,8 +105,9 @@ function Attendance({
 
   /* JUMP TO ATTENDANCE DAY AND INSTRUCTOR */
   const jumpToAttendanceDateAndInstructor = (event) => {
-    const attendanceDate = event.target.getAttribute("date");
-    const attendanceInstructorId = event.target.getAttribute("instructor_id");
+    const attendanceDate = event.currentTarget.getAttribute("date");
+    const attendanceInstructorId =
+      event.currentTarget.getAttribute("instructor_id");
 
     /* updates user preferences for attendance date and instructor */
     const updateUserPreferences = async (userPreferencesArray) => {
@@ -118,7 +120,7 @@ function Attendance({
               headers: {
                 "X-CSRFToken": csrfToken,
               },
-            }
+            },
           )
           .then((response) => {
             if (response.status === 200) {
@@ -143,10 +145,10 @@ function Attendance({
                 formatNameForButton({
                   last_name_kanji: profileLastNameKanji,
                   first_name_kanji: profileFirstNameKanji,
-                })
+                }),
               );
               setBackButtonLink(
-                `/staff/students/profiles/details/${profileId}`
+                `/staff/students/profiles/details/${profileId}`,
               );
               setDisplayBackButton(true);
 
@@ -165,6 +167,14 @@ function Attendance({
       pref_attendance_selected_instructor: attendanceInstructorId,
     });
   };
+
+  /* checks if a record has any notes */
+  const hasNotes = (record) =>
+    !!(
+      record.attendance_record_lesson_note ||
+      record.attendance_record_homework_note ||
+      record.attendance_record_student_note
+    );
 
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
@@ -201,18 +211,18 @@ function Attendance({
                   />
                   <div className="attendance-date">
                     {convertDateToJapanese(
-                      attendance_record.attendance_reverse_relationship[0].date
+                      attendance_record.attendance_reverse_relationship[0].date,
                     )}
                   </div>
                   <div className="attendance-start-time">
                     {`${attendance_record.attendance_reverse_relationship[0].start_time.slice(
                       0,
-                      5
+                      5,
                     )} ~ ${calculateEndTime(
                       attendance_record.attendance_reverse_relationship[0]
                         .start_time,
                       attendance_record.attendance_reverse_relationship[0]
-                        .linked_class.event_type.duration
+                        .linked_class.event_type.duration,
                     )}`}
                   </div>
                   <div className="attendance-event-name">
@@ -231,12 +241,40 @@ function Attendance({
                     studentAttendanceClass[attendance_record.status]
                   }`}`}
                 />
+                {hasNotes(attendance_record) ? (
+                  <div className="attendance-record-notes-container">
+                    {attendance_record.attendance_record_lesson_note ? (
+                      <div className="note-container">
+                        <div className="note-title">レッスン内容</div>
+                        <div className="note-text">
+                          {attendance_record.attendance_record_lesson_note}
+                        </div>
+                      </div>
+                    ) : null}
+                    {attendance_record.attendance_record_homework_note ? (
+                      <div className="note-container">
+                        <div className="note-title">宿題</div>
+                        <div className="note-text">
+                          {attendance_record.attendance_record_homework_note}
+                        </div>
+                      </div>
+                    ) : null}
+                    {attendance_record.attendance_record_student_note ? (
+                      <div className="note-container">
+                        <div className="note-title">フィードバック</div>
+                        <div className="note-text">
+                          {attendance_record.attendance_record_student_note}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div key={attendance_record.id} className="record-container">
                 {`MISSING RELATED ATTENDANCE [ATTENDANCE RECORD ID: ${attendance_record.id}]`}
               </div>
-            )
+            ),
           )}
         </div>
       </div>
