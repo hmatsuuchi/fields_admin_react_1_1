@@ -34,6 +34,14 @@ function AttendanceRecordNotes({
 
   const [noteToFocus, setNoteToFocus] = useState("");
 
+  const hasUnsavedChanges = () => {
+    return (
+      notesAtOpenRef.current?.lessonNote !== lessonNote ||
+      notesAtOpenRef.current?.homeworkNote !== homeworkNote ||
+      notesAtOpenRef.current?.studentNote !== studentNote
+    );
+  };
+
   const lessonNoteRef = useRef();
   const homeworkNoteRef = useRef();
   const studentNoteRef = useRef();
@@ -48,6 +56,8 @@ function AttendanceRecordNotes({
     notesAtOpenRef.current = { lessonNote, homeworkNote, studentNote };
     setNoteToFocus(noteType);
     setIsNotesSectionOpen(true);
+
+    console.log(notesAtOpenRef.current);
   };
 
   // close notes section
@@ -106,10 +116,7 @@ function AttendanceRecordNotes({
     }
   };
 
-  /* ---------------------------------------- */
-  /* -----------------  JSX ----------------- */
-  /* ---------------------------------------- */
-
+  // jumps to the note textarea that should be focused when the notes section is opened
   useEffect(() => {
     if (!isNotesSectionOpen) return;
 
@@ -126,6 +133,10 @@ function AttendanceRecordNotes({
     const cursorPosition = textarea.value.length;
     textarea.setSelectionRange(cursorPosition, cursorPosition);
   }, [isNotesSectionOpen, noteToFocus]);
+
+  /* ---------------------------------------- */
+  /* -----------------  JSX ----------------- */
+  /* ---------------------------------------- */
 
   return (
     <div className="attendance-record-notes-container">
@@ -159,6 +170,13 @@ function AttendanceRecordNotes({
               className="exit-button"
               onClick={() => closeNotesSection()}
             ></div>
+          </div>
+          <div
+            className={`save-status-indicator-container${hasUnsavedChanges() ? " unsaved-changes" : ""}`}
+          >
+            <div className="saved-message">すべて保存済み</div>
+            <div className="unsaved-message">未保存の変更があります</div>
+            <div className="save-status-indicator" />
           </div>
           <div className="notes-body">
             <div className="lesson-note-container">

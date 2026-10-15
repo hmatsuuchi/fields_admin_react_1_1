@@ -96,7 +96,7 @@ $grey: #3a3939;
     margin: 1rem;
 
     display: grid;
-    grid-template-rows: 3rem 1fr;
+    grid-template-rows: 3rem auto 1fr;
 
     background-color: #ffffff;
 
@@ -149,8 +149,48 @@ $grey: #3a3939;
       }
     }
 
+    .save-status-indicator-container {
+      padding: 0.5rem;
+
+      font-size: 0.8rem;
+
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 0.25rem;
+
+      justify-content: end;
+      align-items: center;
+
+      .save-status-indicator {
+        background-color: $teal;
+
+        height: 1rem;
+        width: 1rem;
+
+        border-radius: 50%;
+      }
+
+      .unsaved-message {
+        display: none;
+      }
+    }
+
+    .save-status-indicator-container.unsaved-changes {
+      .save-status-indicator {
+        background-color: $red;
+      }
+
+      .saved-message {
+        display: none;
+      }
+
+      .unsaved-message {
+        display: block;
+      }
+    }
+
     .notes-body {
-      padding: 1rem;
+      padding: 0 1rem 1rem 1rem;
 
       display: grid;
       grid-template-rows: auto auto auto 3rem;
