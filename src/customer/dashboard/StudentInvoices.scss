@@ -93,6 +93,9 @@ $p3-green-4: #40513b;
 
         .student-invoice-data {
           display: none;
+
+          opacity: 0;
+
           grid-column-gap: 0.25rem;
           grid-template-columns: 2fr repeat(12, 1fr);
           grid-row-gap: 0.25rem;
@@ -100,6 +103,17 @@ $p3-green-4: #40513b;
 
           &.selected {
             display: grid;
+
+            animation: fadeIn 1000ms forwards;
+          }
+
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
           }
 
           .year-header,
