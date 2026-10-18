@@ -6,6 +6,7 @@ import "./Dashboard.scss";
 // COMPONENTS
 import TopBar from "./TopBar";
 import StudentInvoices from "./StudentInvoices";
+import StudentAttendance from "./StudentAttendance";
 
 function Dashboard() {
   /* ------------------------------------------- */
@@ -51,6 +52,7 @@ function Dashboard() {
           />
           <div className="widget-container">
             <StudentInvoices />
+            <StudentAttendance />
           </div>
         </div>
       </section>

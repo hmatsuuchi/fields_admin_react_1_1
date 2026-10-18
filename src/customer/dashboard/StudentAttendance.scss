@@ -1,0 +1,42 @@
+$teal: rgb(0, 184, 169);
+$beige: #f8f3d4;
+$red: rgb(246, 65, 108);
+$yellow: rgb(255, 222, 125);
+
+$grey-dark: rgb(50, 50, 50);
+$grey-medium: rgb(100, 100, 100);
+$grey-light: rgb(150, 150, 150);
+$grey-lighter: rgb(200, 200, 200);
+
+// palette 1
+$p1-blue-1: #1a3263;
+$p1-blue-2: #547792;
+$p1-orange-1: #fab95b;
+$p1-grey-1: #e8e2db;
+
+// palette 2
+$p2-blue-1: #154d71;
+$p2-blue-2: #1c6ea4;
+$p2-blue-3: #33a1e0;
+$p2-yellow-1: #fff9af;
+
+// palette 3
+$p3-green-1: #edf1d6;
+$p3-green-2: #9dc08b;
+$p3-green-3: #609966;
+$p3-green-4: #40513b;
+
+#student-attendance-section {
+  grid-column: 1;
+  grid-row: 2;
+
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  #student-attendance-section {
+    grid-column: 2 / 4;
+    grid-row: 1 / 3;
+  }
+}

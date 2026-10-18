@@ -118,7 +118,7 @@ function StudentInvoices() {
                                   >
                                     <span className="invoice-tooltip">
                                       {invoiceTotal !== null
-                                        ? `${invoiceTotal.toLocaleString()}円`
+                                        ? `${Math.round(invoiceTotal).toLocaleString()}円`
                                         : "0円"}
                                     </span>
                                   </div>
@@ -139,6 +139,12 @@ function StudentInvoices() {
                 })
               : null}
           </div>
+        </div>
+        <div className="invoice-status-key-container">
+          <div className="status-indicator paid" />
+          <div className="key-text">払済</div>
+          <div className="status-indicator unpaid" />
+          <div className="key-text">未払</div>
         </div>
       </div>
     </section>
