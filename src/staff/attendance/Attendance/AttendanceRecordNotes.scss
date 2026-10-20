@@ -192,8 +192,17 @@ $grey: #3a3939;
     .notes-body {
       padding: 0 1rem 1rem 1rem;
 
+      overflow-y: scroll;
+
+      ::-webkit-scrollbar {
+        display: none; // Chrome, Safari
+      }
+
+      scrollbar-width: none; // Firefox
+      -ms-overflow-style: none; // Older Edge and IE
+
       display: grid;
-      grid-template-rows: repeat(3, auto) 3rem;
+      grid-template-rows: repeat(3, auto);
       grid-row-gap: 1rem;
 
       .lesson-note-container,
@@ -211,7 +220,7 @@ $grey: #3a3939;
         }
 
         textarea {
-          min-height: 0;
+          min-height: 7rem;
           height: 100%;
           width: 100%;
 
@@ -243,34 +252,35 @@ $grey: #3a3939;
           white-space: pre-line;
         }
       }
+    }
+    .button-container {
+      padding: 1rem;
 
-      .button-container {
-        display: grid;
-        grid-auto-flow: column;
-        justify-content: space-between;
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: space-between;
 
-        .cancel-button,
-        .save-button {
-          padding: 0.5rem 1rem;
+      .cancel-button,
+      .save-button {
+        padding: 0.5rem 1rem;
 
-          border: none;
-          border-radius: 0.5rem;
+        border: none;
+        border-radius: 0.5rem;
 
-          font-size: 1.2rem;
-          font-weight: 400;
+        font-size: 1.2rem;
+        font-weight: 400;
 
-          cursor: pointer;
+        cursor: pointer;
 
-          color: #ffffff;
-        }
+        color: #ffffff;
+      }
 
-        .cancel-button {
-          background-color: $grey;
-        }
+      .cancel-button {
+        background-color: $grey;
+      }
 
-        .save-button {
-          background-color: $teal;
-        }
+      .save-button {
+        background-color: $teal;
       }
     }
   }

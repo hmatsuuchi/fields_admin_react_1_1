@@ -227,17 +227,17 @@ function AttendanceRecordNotes({
                 {previousNote?.attendance_record_student_note}
               </div>
             </div>
-            <div className="button-container">
-              <button
-                className="cancel-button"
-                onClick={() => closeNotesSection()}
-              >
-                キャンセル
-              </button>
-              <button className="save-button" onClick={saveNotes}>
-                保存
-              </button>
-            </div>
+          </div>
+          <div className="button-container">
+            <button
+              className="cancel-button"
+              onClick={() => closeNotesSection()}
+            >
+              キャンセル
+            </button>
+            <button className="save-button" onClick={saveNotes}>
+              保存
+            </button>
           </div>
         </div>
       </div>
