@@ -14,6 +14,7 @@ function AttendanceContainer({
   csrfToken,
   attendances,
   setAttendances,
+  previousAttendances,
   attendancesWithScheduleBreaks,
   showAttendanceContainer,
   setShowAttendanceUpdateContainer,
@@ -235,6 +236,8 @@ function AttendanceContainer({
                     date={attendanceDate}
                     attendanceRecordId={attendanceRecord.id}
                     studentId={attendanceRecord.student.id}
+                    linkedClassId={record.linked_class.id}
+                    previousAttendances={previousAttendances}
                     lessonNote={attendanceRecord.attendance_record_lesson_note}
                     homeworkNote={
                       attendanceRecord.attendance_record_homework_note

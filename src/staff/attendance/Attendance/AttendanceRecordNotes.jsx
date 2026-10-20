@@ -12,9 +12,11 @@ function AttendanceRecordNotes({
   date,
   attendanceRecordId,
   studentId,
+  linkedClassId,
   lessonNote: initialLessonNote,
   homeworkNote: initialHomeworkNote,
   studentNote: initialStudentNote,
+  previousAttendances,
 }) {
   /* ---------------------------------------------- */
   /* ------------- ATTENDANCE - STATE ------------- */
@@ -56,8 +58,6 @@ function AttendanceRecordNotes({
     notesAtOpenRef.current = { lessonNote, homeworkNote, studentNote };
     setNoteToFocus(noteType);
     setIsNotesSectionOpen(true);
-
-    console.log(notesAtOpenRef.current);
   };
 
   // close notes section
@@ -142,6 +142,13 @@ function AttendanceRecordNotes({
     textarea.setSelectionRange(cursorPosition, cursorPosition);
   }, [isNotesSectionOpen, noteToFocus]);
 
+  const previousNote = previousAttendances.find((attendance) =>
+    attendance.linked_class_id === linkedClassId &&
+    attendance.student_id === studentId
+      ? attendance
+      : null,
+  );
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -194,6 +201,9 @@ function AttendanceRecordNotes({
                 value={lessonNote}
                 onChange={(e) => setLessonNote(e.target.value)}
               />
+              <div className="previous-note-container">
+                {previousNote?.attendance_record_lesson_note}
+              </div>
             </div>
             <div className="homework-note-container">
               <div className="note-type-title">宿題</div>
@@ -202,6 +212,9 @@ function AttendanceRecordNotes({
                 value={homeworkNote}
                 onChange={(e) => setHomeworkNote(e.target.value)}
               />
+              <div className="previous-note-container">
+                {previousNote?.attendance_record_homework_note}
+              </div>
             </div>
             <div className="student-note-container">
               <div className="note-type-title">フィードバック</div>
@@ -210,6 +223,9 @@ function AttendanceRecordNotes({
                 value={studentNote}
                 onChange={(e) => setStudentNote(e.target.value)}
               />
+              <div className="previous-note-container">
+                {previousNote?.attendance_record_student_note}
+              </div>
             </div>
             <div className="button-container">
               <button

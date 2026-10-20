@@ -26,13 +26,11 @@ function Dashboard() {
       .then((response) => {
         if (response) {
           setCustomerProfileData(response.data.customer_profile);
-          console.log(response.data.customer_profile);
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-      })
-      .finally(() => console.log("fetchCustomerProfileData() completed"));
+      });
   };
 
   /* runs on component mount */

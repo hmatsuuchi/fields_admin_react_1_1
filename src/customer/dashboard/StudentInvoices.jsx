@@ -23,13 +23,11 @@ function StudentInvoices() {
       .then((response) => {
         if (response) {
           setInvoiceData(response.data.student_invoices);
-          console.log(response.data.student_invoices);
         }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-      })
-      .finally(() => console.log("fetchInvoiceData() completed"));
+      });
   };
 
   /* runs on component mount */

@@ -208,11 +208,61 @@ $p3-green-4: #40513b;
 @media (min-width: 600px) {
   #student-invoice-section {
     .student-invoice-container {
+      .customer-card-content {
+        .student-tabs {
+          &.single {
+            .tab {
+              font-size: 0.95rem;
+            }
+          }
+
+          &.quadruple {
+            .tab {
+              font-size: 0.75rem;
+            }
+          }
+
+          &.too-many {
+            .tab {
+              font-size: 0.53rem;
+            }
+          }
+        }
+      }
+
       .invoice-status-key-container {
         font-size: clamp(0.8rem, 2vw, 1rem);
 
         .status-indicator {
           width: clamp(0.85rem, 2vw, 1.4rem);
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 650px) {
+  #student-invoice-section {
+    .student-invoice-container {
+      .customer-card-content {
+        .student-tabs {
+          &.single {
+            .tab {
+              font-size: 1rem;
+            }
+          }
+
+          &.quadruple {
+            .tab {
+              font-size: 0.8rem;
+            }
+          }
+
+          &.too-many {
+            .tab {
+              font-size: 0.58rem;
+            }
+          }
         }
       }
     }

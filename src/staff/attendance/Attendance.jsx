@@ -73,6 +73,7 @@ function Attendance({
 
   /* ATTENDANCE DATA */
   const [attendances, setAttendances] = useState([]);
+  const [previousAttendances, setPreviousAttendances] = useState([]);
   const [attendancesWithScheduleBreaks, setAttendancesWithScheduleBreaks] =
     useState([]);
 
@@ -316,7 +317,7 @@ function Attendance({
             if (response) {
               /* set attendances */
               setAttendances(response.data.attendance);
-              console.log(response.data.attendance);
+              setPreviousAttendances(response.data.previous_attendance);
               /* activate page */
               activatePage();
             }
@@ -361,7 +362,7 @@ function Attendance({
             if (response) {
               /* set attendance records */
               setAttendances(response.data.attendance);
-              console.log(response.data.attendance);
+              setPreviousAttendances(response.data.previous_attendance);
 
               /* activate page */
               activatePage();
@@ -518,6 +519,7 @@ function Attendance({
           setShowAttendanceUpdateContainer={setShowAttendanceUpdateContainer}
           attendances={attendances}
           setAttendances={setAttendances}
+          previousAttendances={previousAttendances}
           attendancesWithScheduleBreaks={attendancesWithScheduleBreaks}
           attendanceDate={attendanceDate}
           setEventIdSelected={setEventIdSelected}
