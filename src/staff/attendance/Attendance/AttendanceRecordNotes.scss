@@ -192,7 +192,38 @@ $grey: #3a3939;
     .notes-body {
       padding: 0 1rem 1rem 1rem;
 
-      overflow-y: scroll;
+      border-top: 2px solid transparent;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.15s;
+
+      overflow-y: auto;
+
+      // fade to transparent effect for top and bottom edges
+      --fade: 0px;
+      --fade-top: 0px;
+      --fade-bottom: 0px;
+
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--fade-top),
+        #000 calc(100% - var(--fade-bottom)),
+        transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--fade-top),
+        #000 calc(100% - var(--fade-bottom)),
+        transparent 100%
+      );
+
+      &.has-top {
+        --fade-top: 32px;
+      }
+      &.has-bottom {
+        --fade-bottom: 32px;
+      }
 
       ::-webkit-scrollbar {
         display: none; // Chrome, Safari

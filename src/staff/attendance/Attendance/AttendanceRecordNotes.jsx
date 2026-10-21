@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 /* Axios */
 import instance from "../../../axios/axios_authenticated";
 /* CSS */
@@ -48,6 +48,10 @@ function AttendanceRecordNotes({
   const homeworkNoteRef = useRef();
   const studentNoteRef = useRef();
   const notesAtOpenRef = useRef(null);
+
+  // reference to the notes body container for overflow detection
+  const bodyRef = useRef(null);
+  const [edges, setEdges] = useState({ top: false, bottom: false });
 
   /* ---------------------------------------------- */
   /* -----------------  FUNCTIONS ----------------- */
@@ -149,6 +153,27 @@ function AttendanceRecordNotes({
       : null,
   );
 
+  // detect if the notes body is overflowing and update the state accordingly
+  const update = useCallback(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const top = el.scrollTop > 1; // content hidden above
+    const bottom = el.scrollTop + el.clientHeight < el.scrollHeight - 1; // content hidden below
+    setEdges((prev) =>
+      prev.top === top && prev.bottom === bottom ? prev : { top, bottom },
+    );
+  }, []);
+
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    Array.from(el.children).forEach((c) => ro.observe(c));
+    update();
+    return () => ro.disconnect();
+  }, [update]);
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -193,7 +218,11 @@ function AttendanceRecordNotes({
             <div className="unsaved-message">未保存の変更があります</div>
             <div className="save-status-indicator" />
           </div>
-          <div className="notes-body">
+          <div
+            ref={bodyRef}
+            onScroll={update}
+            className={`notes-body ${edges.top ? "has-top" : ""} ${edges.bottom ? "has-bottom" : ""}`}
+          >
             <div className="lesson-note-container">
               <div className="note-type-title">レッスン内容</div>
               <textarea
