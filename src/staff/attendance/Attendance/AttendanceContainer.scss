@@ -116,6 +116,8 @@ $grey: #3a3939;
         .student-name-kanji {
           cursor: pointer;
 
+          font-size: 0.95rem;
+
           grid-row: 1;
           grid-column: 1;
         }
@@ -214,6 +216,24 @@ $grey: #3a3939;
         .attendance-record {
           grid-template-columns: auto 7.75rem calc(2rem + 1px + 4px);
           grid-column-gap: 0.75rem;
+
+          .student-name-kanji {
+            font-size: 1.1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 450px) {
+  #attendance-container {
+    .attendance {
+      .attendance-records-container {
+        .attendance-record {
+          .student-name-kanji {
+            font-size: 1.2rem;
+          }
         }
       }
     }
