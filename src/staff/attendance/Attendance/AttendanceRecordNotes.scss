@@ -84,7 +84,6 @@ $grey: #3a3939;
   .notes-content-container {
     width: calc(100vw - 2rem);
     max-width: 550px;
-    height: 100svh;
     max-height: calc(100svh - 2rem);
 
     border-radius: 0.5rem;
@@ -235,13 +234,14 @@ $grey: #3a3939;
       display: grid;
       grid-template-rows: repeat(3, auto);
       grid-row-gap: 1rem;
+      align-content: start;
 
       .lesson-note-container,
       .homework-note-container,
       .student-note-container {
         display: grid;
-        grid-template-rows: auto minmax(0, 1fr) auto;
         grid-row-gap: 0.1rem;
+        align-content: start;
 
         .note-type-title {
           align-self: start;
@@ -251,9 +251,10 @@ $grey: #3a3939;
         }
 
         textarea {
-          min-height: 7rem;
-          height: 100%;
+          min-height: 4rem;
           width: 100%;
+
+          field-sizing: content;
 
           font-size: 1rem;
           font-family: "Noto Sans JP", sans-serif;
@@ -274,9 +275,8 @@ $grey: #3a3939;
         }
 
         .previous-note-container {
-          font-size: 0.9rem;
-
-          align-self: end;
+          font-size: 1rem;
+          font-style: italic;
 
           padding: 0.2rem 0.5rem;
 

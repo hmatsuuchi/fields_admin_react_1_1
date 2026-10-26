@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 /* AXIOS */
 import instance from "../../axios/axios_authenticated";
 // CSS
@@ -11,6 +11,10 @@ function StudentAttendance() {
 
   const [attendanceData, setAttendanceData] = useState(null);
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(0);
+
+  // reference to the notes body container for overflow detection
+  const bodyRefs = useRef(new Map());
+  const [edges, setEdges] = useState({});
 
   /* ----------------------------------------------- */
   /* ------------------ FUNCTIONS ------------------ */
@@ -45,6 +49,53 @@ function StudentAttendance() {
     5: "too-many",
   };
 
+  // detect if the notes body is overflowing and update the state accordingly
+  const update = useCallback((index, el) => {
+    if (!el) return;
+
+    const top = el.scrollTop > 1;
+    const bottom = el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+
+    setEdges((prev) => {
+      const current = prev[index] ?? {};
+      if (current.top === top && current.bottom === bottom) return prev;
+      return { ...prev, [index]: { top, bottom } };
+    });
+  }, []);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      bodyRefs.current.forEach((el, index) => update(index, el));
+    });
+
+    bodyRefs.current.forEach((el) => observer.observe(el));
+    bodyRefs.current.forEach((el, index) => update(index, el));
+
+    return () => observer.disconnect();
+  }, [attendanceData, update]);
+
+  const statusClassConverter = {
+    2: "unknown",
+    3: "present",
+    4: "absent",
+  };
+
+  const dayOfWeek = (dateString) => {
+    const date = new Date(dateString);
+
+    const dayOfWeekJapanese = {
+      0: "日曜日",
+      1: "月曜日",
+      2: "火曜日",
+      3: "水曜日",
+      4: "木曜日",
+      5: "金曜日",
+      6: "土曜日",
+    };
+
+    return dayOfWeekJapanese[date.getDay()];
+  };
+
   /* ---------------------------------------- */
   /* -----------------  JSX ----------------- */
   /* ---------------------------------------- */
@@ -77,24 +128,45 @@ function StudentAttendance() {
                   return (
                     <div
                       key={index}
-                      className={`student-attendance-record-data ${selectedStudentIndex === index ? "selected" : ""}`}
+                      ref={(el) => {
+                        if (el) bodyRefs.current.set(index, el);
+                        else bodyRefs.current.delete(index);
+                      }}
+                      onScroll={(event) => update(index, event.currentTarget)}
+                      className={`student-attendance-record-data ${
+                        selectedStudentIndex === index ? "selected" : ""
+                      } ${edges[index]?.top ? "has-top" : ""} ${
+                        edges[index]?.bottom ? "has-bottom" : ""
+                      }`}
                     >
                       {student.attendance_records &&
                       student.attendance_records.length > 0 ? (
                         student.attendance_records.map(
                           (record, recordIndex) => (
-                            <div key={recordIndex}>
-                              {`attendancep[0].linked_class.event_type.name: ${record.attendance_reverse_relationship[0].linked_class.event_type.name}`}
+                            <div className="record-container" key={recordIndex}>
+                              {`Event Name: ${record.attendance_reverse_relationship[0].linked_class.event_name}`}
                               <br />
-                              {`attendance.linked_class.start_time: ${record.attendance_reverse_relationship[0].linked_class.start_time}`}
+                              {`Event Start Time: ${record.attendance_reverse_relationship[0].linked_class.start_time}`}
                               <br />
-                              {`attendance.linked_class.primary_instructor: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor}`}
+                              {`Instructor Last Name: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.last_name_kanji}`}
                               <br />
-                              {`attendance.linked_class.event_type: ${record.attendance_reverse_relationship[0].linked_class.event_type}`}
+                              {`Instructor First Name: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.first_name_kanji}`}
                               <br />
-                              {`attendance.date: ${record.attendance_reverse_relationship[0].date}`}
+                              {`Instructor Icon Stub: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.icon_stub}`}
                               <br />
-                              {`status: ${record.status}`}
+                              {`Event Type: ${record.attendance_reverse_relationship[0].linked_class.event_type.name}`}
+                              <br />
+                              {`Attendance Date: ${record.attendance_reverse_relationship[0].date}`}
+                              <br />
+                              {`Attendance Day of Week: ${dayOfWeek(record.attendance_reverse_relationship[0].date)}`}
+                              <br />
+                              {`Attendance Status: ${statusClassConverter[record.status]}`}
+                              <br />
+                              {`Lesson Note: ${record.lesson_note}`}
+                              <br />
+                              {`Homework Note: ${record.homework_note}`}
+                              <br />
+                              {`Student Note: ${record.student_note}`}
                             </div>
                           ),
                         )
