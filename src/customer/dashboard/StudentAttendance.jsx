@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-/* AXIOS */
+// AXIOS
 import instance from "../../axios/axios_authenticated";
 // CSS
 import "./StudentAttendance.scss";
+// COMPONENTS
+import LoadingSpinner from "./LoadingSpinner";
 
 function StudentAttendance() {
   /* ------------------------------------------- */
@@ -80,20 +82,32 @@ function StudentAttendance() {
     4: "absent",
   };
 
-  const dayOfWeek = (dateString) => {
+  // converts date string to Japanese formatted date
+  const formatDateJapanese = (dateString) => {
     const date = new Date(dateString);
 
     const dayOfWeekJapanese = {
-      0: "日曜日",
-      1: "月曜日",
-      2: "火曜日",
-      3: "水曜日",
-      4: "木曜日",
-      5: "金曜日",
-      6: "土曜日",
+      0: "日",
+      1: "月",
+      2: "火",
+      3: "水",
+      4: "木",
+      5: "金",
+      6: "土",
     };
 
-    return dayOfWeekJapanese[date.getDay()];
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 (${dayOfWeekJapanese[date.getDay()]})`;
+  };
+
+  // formats start time and duration
+  const formatStartEndTime = (startTime, duration) => {
+    const [hours, minutes] = startTime.split(":").map(Number);
+
+    const totalMinutes = (hours * 60 + minutes + duration) % (24 * 60);
+
+    return `${startTime.slice(0, 5)} ~ ${String(Math.floor(totalMinutes / 60)).padStart(2, "0")}:${String(
+      totalMinutes % 60,
+    ).padStart(2, "0")}`;
   };
 
   /* ---------------------------------------- */
@@ -104,81 +118,118 @@ function StudentAttendance() {
     <section id="student-attendance-section">
       <div className="student-attendance-container customer-card">
         <div className="customer-card-title">出欠履歴</div>
-        <div className="customer-card-content">
-          <div
-            className={`student-tabs ${attendanceData ? numberOfStudentsClass[attendanceData.length] || "" : ""}`}
-          >
-            {attendanceData && attendanceData.length > 0
-              ? attendanceData.map((student, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`tab${selectedStudentIndex === index ? " selected" : ""}`}
-                      onClick={() => setSelectedStudentIndex(index)}
-                    >
-                      {`${student.last_name_kanji} ${student.first_name_kanji}`}
-                    </div>
-                  );
-                })
-              : null}
+        {attendanceData ? (
+          <div className="customer-card-content">
+            <div
+              className={`student-tabs ${attendanceData ? numberOfStudentsClass[attendanceData.length] || "" : ""}`}
+            >
+              {attendanceData && attendanceData.length > 0
+                ? attendanceData.map((student, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`tab${selectedStudentIndex === index ? " selected" : ""}`}
+                        onClick={() => setSelectedStudentIndex(index)}
+                      >
+                        {`${student.last_name_kanji} ${student.first_name_kanji}`}
+                      </div>
+                    );
+                  })
+                : null}
+            </div>
+            <div className="attendance-records-data-container">
+              {attendanceData && attendanceData.length > 0
+                ? attendanceData.map((student, index) => {
+                    return (
+                      <div
+                        key={index}
+                        ref={(el) => {
+                          if (el) bodyRefs.current.set(index, el);
+                          else bodyRefs.current.delete(index);
+                        }}
+                        onScroll={(event) => update(index, event.currentTarget)}
+                        className={`student-attendance-record-data ${
+                          selectedStudentIndex === index ? "selected" : ""
+                        } ${edges[index]?.top ? "has-top" : ""} ${
+                          edges[index]?.bottom ? "has-bottom" : ""
+                        }`}
+                      >
+                        {student.attendance_records &&
+                        student.attendance_records.length > 0 ? (
+                          student.attendance_records.map(
+                            (record, recordIndex) => (
+                              <div
+                                className="record-container"
+                                key={recordIndex}
+                              >
+                                <div
+                                  className="instructor-icon"
+                                  style={{
+                                    backgroundImage: `url("/img/instructors/${record.attendance_reverse_relationship[0].linked_class.primary_instructor.icon_stub}")`,
+                                  }}
+                                />
+                                <div className="event-date">{`${formatDateJapanese(record.attendance_reverse_relationship[0].date)}`}</div>
+                                <div className="event-start-end-time">
+                                  {formatStartEndTime(
+                                    record.attendance_reverse_relationship[0]
+                                      .linked_class.start_time,
+                                    record.attendance_reverse_relationship[0]
+                                      .linked_class.event_type.duration,
+                                  )}
+                                </div>
+                                <div className="event-name-type">
+                                  {`${record.attendance_reverse_relationship[0].linked_class.event_name}（${
+                                    record.attendance_reverse_relationship[0]
+                                      .linked_class.event_type.name
+                                  }）`}
+                                </div>
+                                <div className="instructor-name">{`${record.attendance_reverse_relationship[0].linked_class.primary_instructor.last_name_kanji}先生`}</div>
+                                <div
+                                  className={`attendance-status ${statusClassConverter[record.status]}`}
+                                ></div>
+                                {record.lesson_note ? (
+                                  <div className="note-container">
+                                    <div className="note-title">
+                                      レッスン内容
+                                    </div>
+                                    <div className="lesson-note">
+                                      {record.lesson_note}
+                                    </div>
+                                    {record.homework_note ? (
+                                      <div className="note-container">
+                                        <div className="note-title">宿題</div>
+                                        <div className="homework-note">
+                                          {record.homework_note}
+                                        </div>
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                ) : null}
+                                {record.student_note ? (
+                                  <div className="note-container">
+                                    <div className="note-title">
+                                      フィードバック
+                                    </div>
+                                    <div className="student-note">
+                                      {record.student_note}
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </div>
+                            ),
+                          )
+                        ) : (
+                          <div>No attendance records</div>
+                        )}
+                      </div>
+                    );
+                  })
+                : null}
+            </div>
           </div>
-          <div className="attendance-records-data-container">
-            {attendanceData && attendanceData.length > 0
-              ? attendanceData.map((student, index) => {
-                  return (
-                    <div
-                      key={index}
-                      ref={(el) => {
-                        if (el) bodyRefs.current.set(index, el);
-                        else bodyRefs.current.delete(index);
-                      }}
-                      onScroll={(event) => update(index, event.currentTarget)}
-                      className={`student-attendance-record-data ${
-                        selectedStudentIndex === index ? "selected" : ""
-                      } ${edges[index]?.top ? "has-top" : ""} ${
-                        edges[index]?.bottom ? "has-bottom" : ""
-                      }`}
-                    >
-                      {student.attendance_records &&
-                      student.attendance_records.length > 0 ? (
-                        student.attendance_records.map(
-                          (record, recordIndex) => (
-                            <div className="record-container" key={recordIndex}>
-                              {`Event Name: ${record.attendance_reverse_relationship[0].linked_class.event_name}`}
-                              <br />
-                              {`Event Start Time: ${record.attendance_reverse_relationship[0].linked_class.start_time}`}
-                              <br />
-                              {`Instructor Last Name: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.last_name_kanji}`}
-                              <br />
-                              {`Instructor First Name: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.first_name_kanji}`}
-                              <br />
-                              {`Instructor Icon Stub: ${record.attendance_reverse_relationship[0].linked_class.primary_instructor.icon_stub}`}
-                              <br />
-                              {`Event Type: ${record.attendance_reverse_relationship[0].linked_class.event_type.name}`}
-                              <br />
-                              {`Attendance Date: ${record.attendance_reverse_relationship[0].date}`}
-                              <br />
-                              {`Attendance Day of Week: ${dayOfWeek(record.attendance_reverse_relationship[0].date)}`}
-                              <br />
-                              {`Attendance Status: ${statusClassConverter[record.status]}`}
-                              <br />
-                              {`Lesson Note: ${record.lesson_note}`}
-                              <br />
-                              {`Homework Note: ${record.homework_note}`}
-                              <br />
-                              {`Student Note: ${record.student_note}`}
-                            </div>
-                          ),
-                        )
-                      ) : (
-                        <div>No attendance records</div>
-                      )}
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        </div>
+        ) : (
+          <LoadingSpinner />
+        )}
       </div>
     </section>
   );

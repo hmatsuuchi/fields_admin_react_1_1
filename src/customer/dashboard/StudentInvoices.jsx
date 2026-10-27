@@ -3,6 +3,8 @@ import React, { useState, useEffect, Fragment } from "react";
 import instance from "../../axios/axios_authenticated";
 // CSS
 import "./StudentInvoices.scss";
+// COMPONENTS
+import LoadingSpinner from "./LoadingSpinner";
 
 function StudentInvoices() {
   /* ------------------------------------------- */
@@ -71,71 +73,73 @@ function StudentInvoices() {
               : null}
           </div>
           <div className="invoice-data-container">
-            {invoiceData && invoiceData.length > 0
-              ? invoiceData.map((student, index) => {
-                  // caculate startingYear and endingYear for each student based on invoice data
-                  const invoiceYears =
-                    student.invoices?.map((inv) => inv.year) ?? [];
-                  const startingYear = Math.min(...invoiceYears);
-                  const endingYear = Math.max(...invoiceYears);
+            {invoiceData ? (
+              invoiceData.map((student, index) => {
+                // caculate startingYear and endingYear for each student based on invoice data
+                const invoiceYears =
+                  student.invoices?.map((inv) => inv.year) ?? [];
+                const startingYear = Math.min(...invoiceYears);
+                const endingYear = Math.max(...invoiceYears);
 
-                  return (
-                    <div
-                      key={index}
-                      className={`student-invoice-data ${selectedStudentIndex === index ? "selected" : ""}`}
-                    >
-                      {Array.from(
-                        { length: endingYear - startingYear + 1 },
-                        (_, yi) => {
-                          const year = endingYear - yi;
-                          return (
-                            <Fragment key={yi}>
-                              <div className="year-header">{`${year}`}</div>
-                              {Array.from({ length: 12 }, (_, mi) => {
-                                const month = mi + 1;
-                                const invoiceForCell = student.invoices?.find(
-                                  (inv) =>
-                                    inv.year === year && inv.month === month,
-                                );
-                                const invoiceTotal = invoiceForCell
-                                  ? invoiceForCell.invoiceitem_set.reduce(
-                                      (sum, item) =>
-                                        sum +
-                                        item.quantity * item.rate +
-                                        (item.quantity *
-                                          item.rate *
-                                          item.tax_rate) /
-                                          100,
-                                      0,
-                                    )
-                                  : null;
-                                return (
-                                  <div
-                                    key={`${year}-${month}`}
-                                    className={`invoice-month-container${invoiceForCell && invoiceForCell.paid_date ? " paid" : invoiceForCell && !invoiceForCell.paid_date ? " unpaid" : ""}`}
-                                  >
-                                    <span className="invoice-tooltip">
-                                      {invoiceTotal !== null
-                                        ? `${Math.round(invoiceTotal).toLocaleString()}円`
-                                        : "0円"}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                            </Fragment>
-                          );
-                        },
-                      )}
-                      <div className="year-header" />
-                      {Array.from({ length: 12 }, (_, mi) => (
-                        <div key={mi} className="month-footer">
-                          {mi + 1}
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })
-              : null}
+                return (
+                  <div
+                    key={index}
+                    className={`student-invoice-data ${selectedStudentIndex === index ? "selected" : ""}`}
+                  >
+                    {Array.from(
+                      { length: endingYear - startingYear + 1 },
+                      (_, yi) => {
+                        const year = endingYear - yi;
+                        return (
+                          <Fragment key={yi}>
+                            <div className="year-header">{`${year}`}</div>
+                            {Array.from({ length: 12 }, (_, mi) => {
+                              const month = mi + 1;
+                              const invoiceForCell = student.invoices?.find(
+                                (inv) =>
+                                  inv.year === year && inv.month === month,
+                              );
+                              const invoiceTotal = invoiceForCell
+                                ? invoiceForCell.invoiceitem_set.reduce(
+                                    (sum, item) =>
+                                      sum +
+                                      item.quantity * item.rate +
+                                      (item.quantity *
+                                        item.rate *
+                                        item.tax_rate) /
+                                        100,
+                                    0,
+                                  )
+                                : null;
+                              return (
+                                <div
+                                  key={`${year}-${month}`}
+                                  className={`invoice-month-container${invoiceForCell && invoiceForCell.paid_date ? " paid" : invoiceForCell && !invoiceForCell.paid_date ? " unpaid" : ""}`}
+                                >
+                                  <span className="invoice-tooltip">
+                                    {invoiceTotal !== null
+                                      ? `${Math.round(invoiceTotal).toLocaleString()}円`
+                                      : "0円"}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </Fragment>
+                        );
+                      },
+                    )}
+                    <div className="year-header" />
+                    {Array.from({ length: 12 }, (_, mi) => (
+                      <div key={mi} className="month-footer">
+                        {mi + 1}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })
+            ) : (
+              <LoadingSpinner />
+            )}
           </div>
         </div>
         <div className="invoice-status-key-container">

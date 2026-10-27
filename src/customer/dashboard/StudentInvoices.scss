@@ -91,6 +91,10 @@ $p3-green-4: #40513b;
       .invoice-data-container {
         display: grid;
 
+        .customer-loading-spinner-container {
+          margin-top: 20%;
+        }
+
         .student-invoice-data {
           display: none;
 
